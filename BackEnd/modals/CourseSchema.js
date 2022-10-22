@@ -4,7 +4,8 @@ const connection = require('../config/database');
 const CourseSchema = new mongoose.Schema({
   title: 
   {type:String,
-    required:true
+    required:true,
+    unique:true
   },
   subtitle:
   {type:String,
@@ -21,10 +22,7 @@ const CourseSchema = new mongoose.Schema({
   subject:  {type:String,
     required:true
   },
-  instructor: { id: String, name: String },
-  rating:
-  {type:Number
-  },
+
 
 
 
