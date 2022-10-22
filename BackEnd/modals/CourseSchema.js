@@ -50,7 +50,7 @@ const CourseSchema = new mongoose.Schema({
 /* 
 */
 
-const Course = connection.model('CourseSchema', CourseSchema);
+const Course = connection.model('Course', CourseSchema);
 
 
 module.exports = Course;

@@ -51,7 +51,7 @@ const AdminSchema = new mongoose.Schema({
 /* 
 */
 
-const Admin = connection.model('AdminSchema', AdminSchema);
+const Admin = connection.model('Admin', AdminSchema);
 
 
 module.exports = Admin;

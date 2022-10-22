@@ -49,7 +49,7 @@ const instSchema = new mongoose.Schema({
 /* 
 */
 
-const instructer = connection.model('instSchema', instSchema);
+const instructer = connection.model('instructor', instSchema);
 
 
 module.exports = instructer;

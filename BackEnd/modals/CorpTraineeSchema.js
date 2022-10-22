@@ -49,7 +49,7 @@ const CorpSchema = new mongoose.Schema({
 /* 
 */
 
-const CorpTrainee = connection.model('CorpSchema', CorpSchema);
+const CorpTrainee = connection.model('CorporateTrainee', CorpSchema);
 
 
 module.exports = CorpTrainee;
