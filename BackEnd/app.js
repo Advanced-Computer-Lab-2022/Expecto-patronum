@@ -73,7 +73,6 @@ app.get("/", (req, res) => {
 app.use('/Auth', AuthRoute);
 app.use('/Courses', CoursesRoute);
 app.use('/Admin', AdminRoute);
-
 app.use('/instructors', instrucerRoute);
 app.use('/Users', UsersRoute);
 app.use('/CorpTrainee', CorpTraineeRoute);

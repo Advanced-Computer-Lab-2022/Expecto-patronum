@@ -2,32 +2,11 @@ const mongoose = require('mongoose');
 const connection = require('../config/database');
 
 const CorpSchema = new mongoose.Schema({
-  username: {
+  userID: {
     type: String,
-    required:true,
-    unique:true
-   },
-   email:{
-     type: String,
-     required:true,
-     unique:true 
-   },
-   hash:{
-     type: String,
-     required:true,
-   } ,
-   salt:{
-     type: String,
-     required:true,
-   } ,
-   firstName:{
-     type: String,
-     required:true,
-   } ,
-   lastName: {
-     type: String,
-     required:true,
-   },
+    required: true,
+    unique: true
+  },
 
 
 

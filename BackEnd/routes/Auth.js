@@ -6,6 +6,49 @@ const genPassword = require('../lib/passwordUtils').genPassword;
 const { Passport } = require('passport');
 const { isAuth } = require('./AuthMiddleware');
 const User = require('../modals/UserScheme');
+const Admin = require('../modals/AdminSchema');
+const instructer = require('../modals/instructorsSchema');
+const CorpTrainee = require('../modals/CorpTraineeSchema');
+
+
+
+
+function CheckUserType(user) {
+    console.log(user.Role);
+    let RoleTable = '';
+    if (user.Role === "Admin") {
+        console.log("I am admin");
+        RoleTable = new Admin({
+            userID: user._id
+
+        });
+
+    }
+    else if (user.Role === "instructer") {
+        RoleTable = new instructer({
+            userID: user._id
+
+        });
+
+    }
+    else if (user.Role === "CorpTrainee") {
+        RoleTable = new CorpTrainee({
+            userID: user._id
+
+        });
+
+    }
+    if (RoleTable !== '') {
+        try {
+            RoleTable.save()
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+
+}
 
 /**
  * -------------- POST ROUTES ----------------
@@ -24,13 +67,22 @@ router.post('/register', (req, res, next) => {
         username: req.body.username,
         hash: hash,
         salt: salt,
-        admin: true
+        email: req.body.email,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        Role: req.body.Role
     });
 
-    newUser.save()
-        .then((user) => {
-            console.log(user);
-        });
+    try {
+
+        newUser.save()
+            .then((user) => {
+                CheckUserType(user);
+
+            });
+    } catch (err) {
+        console.log(err)
+    };
 
     res.redirect('/Auth/login');
 });

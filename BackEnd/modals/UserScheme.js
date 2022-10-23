@@ -3,31 +3,36 @@ const connection = require('../config/database');
 
 const UserSchema = new mongoose.Schema({
   username: {
-   type: String,
-   required:true,
-   unique:true
+    type: String,
+    required: true,
+    unique: true
   },
-  email:{
+  email: {
     type: String,
-    required:true,
-    unique:true 
+    required: true,
+    unique: true
   },
-  hash:{
+  hash: {
     type: String,
-    required:true,
-  } ,
-  salt:{
+    required: true,
+  },
+  salt: {
     type: String,
-    required:true,
-  } ,
-  firstName:{
+    required: true,
+  },
+  firstName: {
     type: String,
-    required:true,
-  } ,
+    required: true,
+  },
   lastName: {
     type: String,
-    required:true,
+    required: true,
   },
+  Role: {
+    type: String,
+    enum: ['User', 'Admin', 'instructer', 'CorpTrainee'],
+    default: 'User'
+  }
 });
 
 /* 
