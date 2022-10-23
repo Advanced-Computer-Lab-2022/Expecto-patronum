@@ -15,7 +15,6 @@ var AdminRoute = require('./routes/Admin');
 
 
 const connection = require('./config/database');
-const { isAuth } = require('./routes/AuthMiddleware');
 
 // Package documentation - https://www.npmjs.com/package/connect-mongo
 const MongoStore = require('connect-mongo')(session);

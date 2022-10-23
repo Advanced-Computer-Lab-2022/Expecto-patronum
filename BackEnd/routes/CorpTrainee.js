@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const connection = require('../config/database');
-const { isAuth } = require('./AuthMiddleware');
 const CorpTraineeTable = require('../modals/CorpTraineeSchema');
 
 
