@@ -16,20 +16,42 @@ router.put("/viewCourses", async (req, res, next) => {
   res.status(200).send(Courses);
 });
 
-//  router.put("/filterCourses", async (req, res, next) => {
-//   var Subject1 = new String(JSON.stringify( req.body.subject));
-//    var Pri = req.body.price;
-//    if(Subject1.length!=0){
-//     const Courses = await CourseTable.find({subject: Subject1 });
-//      res.status(200).send(Courses);
-//    }
-//    else{
-//      const Courses = await CourseTable.find({price: Pri});
-//      res.status(200).send(Courses);
+ router.put("/filterCourses", async (req, res, next) => {
+  var Subject1 =  req.body.subject ? req.body.subject :null;
+   var price_min = req.body.price_min? req.body.price_min : 0;
+   var price_max = req.body.price_max? req.body.price_max : 0;
+   if(price_min==0 && price_max==0 && Subject1==null){
+    const Courses = await CourseTable.find();
+    res.status(200).send(Courses);
+   }
+   else{
+    if(price_min==0 && price_max==0){
+        const Courses = await CourseTable.find({subject: Subject1 });
+        res.status(200).send(Courses);
+    }
+    else if(Subject1==null ){
+        if(price_max==0){
+          const Courses = await CourseTable.find({price:{ $gt: price_min}});
+          res.status(200).send(Courses);
+        }
+        else{
+        const Courses = await CourseTable.find({price:{ $gt: price_min, $lt: price_max }});
+        res.status(200).send(Courses);
+      }
+    }
+    else{
+        if(price_max==0){
+          const Courses = await CourseTable.find({price: { $gt: price_min},subject: Subject1});
+          res.status(200).send(Courses);
+        }
+        else{
+          const Courses = await CourseTable.find({price: { $gt: price_min, $lt: price_max },subject: Subject1});
+          res.status(200).send(Courses);
+        }
+    }
+  }
 
-//    }
-
-//  });
+ });
 
 
 module.exports = router;
