@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const connection = require('../config/database');
 
-const AdminSchema = new mongoose.Schema({
+const instSchema = new mongoose.Schema({
   username: {
     type: String,
     required:true,
@@ -31,8 +31,6 @@ const AdminSchema = new mongoose.Schema({
 
 
 
-
-
   //courses 
   // refrence embeeded  , 
   /* 
@@ -51,7 +49,7 @@ const AdminSchema = new mongoose.Schema({
 /* 
 */
 
-const Admin = connection.model('Admin', AdminSchema);
+const instructer = connection.model('instructor', instSchema);
 
 
-module.exports = Admin;
+module.exports = instructer;
