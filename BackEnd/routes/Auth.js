@@ -4,13 +4,11 @@ const passwordUtils = require('../lib/passwordUtils');
 const connection = require('../config/database');
 const genPassword = require('../lib/passwordUtils').genPassword;
 const { Passport } = require('passport');
-const { isAuth } = require('./AuthMiddleware');
 const User = require('../modals/UserScheme');
 const Admin = require('../modals/AdminSchema');
 const instructer = require('../modals/instructorsSchema');
 const CorpTrainee = require('../modals/CorpTraineeSchema');
-
-
+const { isAuth } = require('../middleware/AuthMiddleware');
 
 
 function CheckUserType(user) {
@@ -57,12 +55,12 @@ function CheckUserType(user) {
 // TODO
 router.post('/login', passport.authenticate('local', { failureRedirect: '/Auth/login-failure', successRedirect: '/Auth/login-success' }));
 
-// TODO
+// TODO 
+
 router.post('/register', (req, res, next) => {
     const saltHash = genPassword(req.body.password);
     const salt = saltHash.salt;
     const hash = saltHash.hash;
-
     const newUser = new User({
         username: req.body.username,
         hash: hash,
