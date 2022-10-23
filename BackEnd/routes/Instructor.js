@@ -11,12 +11,13 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/viewCourses", async (req, res, next) => {
+  var CurrentPage = req.query.page? req.query.page:1;
   try {
     let queryCond = {};
     if (req.query.instructorID) {
       queryCond.instructorID = req.query.instructorID;
     }
-    const Courses = await CourseTable.find(queryCond);
+    const Courses = await CourseTable.find(queryCond,{title:1,_id:0});
 
     res.json(Courses);
 
@@ -28,6 +29,7 @@ router.get("/viewCourses", async (req, res, next) => {
 
  router.get("/filterCourses", async (req, res, next) => {
   let queryCond = {};
+  var CurrentPage = req.query.page? req.query.page:1;
   if (req.query.price) {
     queryCond.price = req.query.price;
     let queryStr = JSON.stringify( queryCond.price);
@@ -50,7 +52,7 @@ router.get("/viewCourses", async (req, res, next) => {
 
  router.get("/searchCourses", async (req, res, next) => {
   let queryCond = {};
-
+  var CurrentPage = req.query.page? req.query.page:1;
   if (req.query.title) {
     queryCond.title = req.query.title;
   }
@@ -58,7 +60,7 @@ router.get("/viewCourses", async (req, res, next) => {
     queryCond.instructorID = req.query.instructorID;
   }
   if(req.query.subject) {
-      queryCond.subject = req.query.instructorID;
+      queryCond.subject = req.query.subject;
   }
   try {
     const Courses = await CourseTable.find(queryCond);
@@ -69,43 +71,21 @@ router.get("/viewCourses", async (req, res, next) => {
   
 });
 
+router.post('/addCourse', (req, res, next) => {
+  const newCourse = new CourseTable({
+      title: req.body.title,
+      subtitle: req.body.subtitle,
+      summary: req.body.summary,
+      subject: req.body.subject,
+      price: req.body.price,
+      instructorID: req.body.instructorID
+  });
+
+  try {
+    newCourse.save();
+  } catch (err) {
+      console.log(err)
+  };
+});
 
 module.exports = router;
-
-
-  
-  // try {
-  //   if(price_min==0 && price_max==0 && Subject1==null){
-  //     const Courses = await CourseTable.find();
-  //     res.status(200).send(Courses);
-  //   }
-  //   else{
-  //     if(price_min==0 && price_max==0){
-          
-  //         const Courses = await CourseTable.find({instructorID: instID,subject: Subject1});
-  //         res.status(200).send(Courses);
-  //     }
-  //     else if(Subject1==null ){
-  //         if(price_max==0){
-  //           const Courses = await CourseTable.find({instructorID: instID,price:{ $gte: price_min}});
-  //           res.status(200).send(Courses);
-  //         }
-  //         else{
-  //         const Courses = await CourseTable.find({instructorID: instID,price:{ $gte: price_min, $lte: price_max }});
-  //         res.status(200).send(Courses);
-  //       }
-  //     }
-  //     else{
-  //         if(price_max==0){
-  //           const Courses = await CourseTable.find({instructorID: instID,price: { $gte: price_min},subject: Subject1});
-  //           res.status(200).send(Courses);
-  //         }
-  //         else{
-  //           const Courses = await CourseTable.find({instructorID: instID,price: { $gte: price_min, $lte: price_max },subject: Subject1});
-  //           res.status(200).send(Courses);
-  //         }
-  //     }
-  //   }
-  // } catch (err) {
-  //   console.log(err);
-  // }
