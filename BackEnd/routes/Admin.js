@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const connection = require('../config/database');
-const Admin = require('../modals/AdminSchema');
+const Admin = require('../models/AdminSchema');
 
 
 router.get("/", (req, res) => {
-  res.send("Hello Admin");
+  res.send("Hello, Admin");
 })
 
 module.exports = router;

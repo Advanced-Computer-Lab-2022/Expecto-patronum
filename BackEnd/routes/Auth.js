@@ -4,33 +4,33 @@ const passwordUtils = require('../lib/passwordUtils');
 const connection = require('../config/database');
 const genPassword = require('../lib/passwordUtils').genPassword;
 const { Passport } = require('passport');
-const User = require('../modals/UserScheme');
-const Admin = require('../modals/AdminSchema');
-const instructer = require('../modals/instructorsSchema');
-const CorpTrainee = require('../modals/CorpTraineeSchema');
+const User = require('../models/UserSchema');
+const Admin = require('../models/AdminSchema');
+const Instructor = require('../models/InstructorSchema');
+const CorporateTrainee = require('../models/CorporateTraineeSchema');
 const { isAuth } = require('../middleware/AuthMiddleware');
 
 
 function CheckUserType(user) {
-    console.log(user.Role);
+    console.log(user.role);
     let RoleTable = '';
-    if (user.Role === "Admin") {
+    if (user.role === "Admin") {
         console.log("I am admin");
         RoleTable = new Admin({
             userID: user._id
-
         });
 
     }
-    else if (user.Role === "instructer") {
-        RoleTable = new instructer({
-            userID: user._id
-
+    else if (user.role === "Instructor") {
+        RoleTable = new Instructor({
+            userID: user._id,
+            firstname: user.firstname,
+            lastname: user.lastname,
         });
 
     }
-    else if (user.Role === "CorpTrainee") {
-        RoleTable = new CorpTrainee({
+    else if (user.role === "CorporateTrainee") {
+        RoleTable = new CorporateTrainee({
             userID: user._id
 
         });
@@ -68,7 +68,7 @@ router.post('/register', (req, res, next) => {
         email: req.body.email,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        Role: req.body.Role
+        role: req.body.role
     });
 
     try {
