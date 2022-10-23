@@ -17,35 +17,36 @@ router.put("/viewCourses", async (req, res, next) => {
 });
 
  router.put("/filterCourses", async (req, res, next) => {
+  var instID = req.body.instructorID;
   var Subject1 =  req.body.subject ? req.body.subject :null;
-   var price_min = req.body.price_min? req.body.price_min : 0;
-   var price_max = req.body.price_max? req.body.price_max : 0;
-   if(price_min==0 && price_max==0 && Subject1==null){
+  var price_min = req.body.price_min? req.body.price_min : 0;
+  var price_max = req.body.price_max? req.body.price_max : 0;
+  if(price_min==0 && price_max==0 && Subject1==null){
     const Courses = await CourseTable.find();
     res.status(200).send(Courses);
-   }
-   else{
+  }
+  else{
     if(price_min==0 && price_max==0){
-        const Courses = await CourseTable.find({subject: Subject1 });
+        const Courses = await CourseTable.find({instructorID: instID,subject: Subject1});
         res.status(200).send(Courses);
     }
     else if(Subject1==null ){
         if(price_max==0){
-          const Courses = await CourseTable.find({price:{ $gt: price_min}});
+          const Courses = await CourseTable.find({instructorID: instID,price:{ $gt: price_min}});
           res.status(200).send(Courses);
         }
         else{
-        const Courses = await CourseTable.find({price:{ $gt: price_min, $lt: price_max }});
+        const Courses = await CourseTable.find({instructorID: instID,price:{ $gt: price_min, $lt: price_max }});
         res.status(200).send(Courses);
       }
     }
     else{
         if(price_max==0){
-          const Courses = await CourseTable.find({price: { $gt: price_min},subject: Subject1});
+          const Courses = await CourseTable.find({instructorID: instID,price: { $gt: price_min},subject: Subject1});
           res.status(200).send(Courses);
         }
         else{
-          const Courses = await CourseTable.find({price: { $gt: price_min, $lt: price_max },subject: Subject1});
+          const Courses = await CourseTable.find({instructorID: instID,price: { $gt: price_min, $lt: price_max },subject: Subject1});
           res.status(200).send(Courses);
         }
     }
