@@ -14,7 +14,7 @@ const verifyCallback = (username, password, done) => {
 
   User.findOne({ username: username })
     .then((user) => {
-      if (!user) { return done(cnull, false) }
+      if (!user) { return done(null, false) }
 
       const isValid = validPassword(password, user.hash, user.salt);
 

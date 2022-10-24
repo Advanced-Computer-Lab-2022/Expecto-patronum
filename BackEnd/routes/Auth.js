@@ -22,6 +22,7 @@ function CheckUserType(user) {
 
     }
     else if (user.role === "Instructor") {
+        console.log("I am instructor");
         RoleTable = new Instructor({
             userID: user._id,
             firstname: user.firstname,
@@ -32,9 +33,7 @@ function CheckUserType(user) {
     else if (user.role === "CorporateTrainee") {
         RoleTable = new CorporateTrainee({
             userID: user._id
-
         });
-
     }
     if (RoleTable !== '') {
         try {
@@ -44,8 +43,6 @@ function CheckUserType(user) {
             console.log(err);
         }
     }
-
-
 }
 
 /**
@@ -66,17 +63,16 @@ router.post('/register', (req, res, next) => {
         hash: hash,
         salt: salt,
         email: req.body.email,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
         role: req.body.role
     });
 
     try {
 
         newUser.save()
-            .then((user) => {
-                CheckUserType(user);
-
+            .then((newUser) => {
+                CheckUserType(newUser);
             });
     } catch (err) {
         console.log(err)

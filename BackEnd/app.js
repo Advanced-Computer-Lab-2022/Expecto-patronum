@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require("cors");
 const session = require('express-session');
 var passport = require('passport');
 var crypto = require('crypto');
@@ -28,7 +29,18 @@ var app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
+  next();
+});
 
+app.use(cors({
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST"],
+    credentials: true,
+}));
 
 
 /**
@@ -44,8 +56,6 @@ app.use(session({
   store: sessionStore,
   unset: 'destroy',
   cookie: { maxAge: 14 * 24 * 3600000 }
-
-
 }))
 
 // TODO
@@ -57,6 +67,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+/**
+ * -------------- SERVER ----------------
+ */
+
+// Server listens on http://localhost:5000
+app.listen(5000, () => {
+  console.log("Server listening on port 5000");
+});
 
 /**
  * -------------- ROUTES ----------------
@@ -73,13 +92,3 @@ app.use('/User', UsersRoute);
 app.use('/CorporateTrainee', CorpTraineeRoute);
 
 // Imports all of the routes from ./routes/index.js
-
-
-/**
- * -------------- SERVER ----------------
- */
-
-// Server listens on http://localhost:3000
-app.listen(3000, () => {
-  console.log("Server listening on port 3000");
-});

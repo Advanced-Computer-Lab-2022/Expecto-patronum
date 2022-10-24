@@ -2,34 +2,32 @@ const mongoose = require('mongoose');
 const connection = require('../config/database');
 
 const CourseSchema = new mongoose.Schema({
-  title:
-  {
+  title: {
     type: String,
     required: true,
     unique: true
   },
-  subtitle:
-  {
+  subtitle: {
     type: String,
     required: true
   },
-  summary:
-  {
+  summary: {
     type: String,
     required: true
   },
-  price:
-  {
+  price: {
     type: Number,
     required: true
   },
-  subject:
-  {
+  subject: {
     type: String,
     required: true
   },
-  instructorID:
-  {
+  instructorID: {
+    type: String,
+    required: true
+  },
+  instructorName: {
     type: String,
     required: true
   },
