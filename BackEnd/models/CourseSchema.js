@@ -1,3 +1,4 @@
+const { json } = require('express');
 const mongoose = require('mongoose');
 const connection = require('../config/database');
 
@@ -30,6 +31,9 @@ const CourseSchema = new mongoose.Schema({
   instructorName: {
     type: String,
     required: true
+  },
+  rating: {
+    type: Object,
   },
 });
 
