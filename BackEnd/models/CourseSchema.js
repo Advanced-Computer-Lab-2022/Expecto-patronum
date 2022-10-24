@@ -76,6 +76,9 @@ const CourseSchema = new mongoose.Schema({
     //   / (this.one + this.two + this.three + this.four + this.five)
     // }
   },
+  rating: {
+    type: Object,
+  },
 });
 
 const Course = connection.model('Course', CourseSchema);
