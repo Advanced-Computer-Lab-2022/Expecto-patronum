@@ -17,7 +17,7 @@ router.get("/viewCourses", async (req, res, next) => {
     if (req.query.instructorID) {
       queryCond.instructorID = req.query.instructorID;
     }
-    const Courses = await CourseTable.find(queryCond,{title:1,_id:0});
+    const Courses = await CourseTable.find(queryCond,{title:1,_id:0}).skip((CurrentPage - 1) * 5).limit(5);
 
     res.json(Courses);
 
@@ -70,11 +70,8 @@ router.get("/viewCourses", async (req, res, next) => {
   // }
 
   var CurrentPage = req.query.page?req.query.page:1;
-  //  var x=await InstructorTable.find(
-  //    { $or:[{"firstname": { "$regex": req.query.search , "$options": "i" }},{"lastname": { "$regex":req.query.search, "$options": "i" }}]}  ).distinct('userID');
-  //  console.log(x);
-  var y= await CourseTable.find( 
-    { $or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }},{ instructorID: { $in : req.query.instructorID } }]})
+  var y= await CourseTable.find(
+    {"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
     .skip((CurrentPage - 1) * 5).limit(5);
   console.log(y);
   res.send(y);
@@ -98,4 +95,11 @@ router.post('/addCourse', (req, res, next) => {
   };
 });
 
+router.get('/viewname',async (req, res, next) => {
+  var x=await instructorTable.find({"userID":req.query.userID},{userID:0,_id:0});
+  console.log(x);
+  res.send(x);
+});
+
 module.exports = router;
+
