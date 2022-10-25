@@ -36,39 +36,34 @@ router.get("/viewCourses", async (req, res, next) => {
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|eq|ne)\b/g, match => `$${match}`);
     queryCond.price = JSON.parse(queryStr);
   }
-  if (req.query.instructorID) {
-    queryCond.instructorID = req.query.instructorID;
-  }
+  //if (req.query.instructorID) {
+   // queryCond.instructorID = req.query.instructorID;
+  //}
   if(req.query.subject) {
       queryCond.subject = req.query.subject;
+      console.log(queryCond.length);
   }
   try {
-    const Courses = await CourseTable.find(queryCond);
-    res.json(Courses);
+    if(Object.keys(queryCond).length === 0){
+      var y= await CourseTable.find(
+        {"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
+        .skip((CurrentPage - 1) * 5).limit(5);
+      console.log(y);
+      res.send(y);
+    }
+    else{
+    var y= await CourseTable.find(
+      {queryCond,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
+      .find(queryCond)
+      .skip((CurrentPage - 1) * 5).limit(5);
+    res.send(y);
+    }
   } catch (error) {
     console.log(error);
   }  
  });
 
  router.get("/searchCourses", async (req, res, next) => {
-  // let queryCond = {};
-  // var CurrentPage = req.query.page? req.query.page:1;
-  // if (req.query.title) {
-  //   queryCond.title = req.query.title;
-  // }
-  // if (req.query.instructorID) {
-  //   queryCond.instructorID = req.query.instructorID;
-  // }
-  // if(req.query.subject) {
-  //     queryCond.subject = req.query.subject;
-  // }
-  // try {
-  //   const Courses = await CourseTable.find(queryCond);
-  //   res.json(Courses);
-  // } catch (error) {
-  //   console.log(error);
-  // }
-
   var CurrentPage = req.query.page?req.query.page:1;
   var y= await CourseTable.find(
     {"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
@@ -97,7 +92,9 @@ router.post('/addCourse', (req, res, next) => {
 
 router.get('/viewname',async (req, res, next) => {
   var x=await instructorTable.find({"userID":req.query.userID},{userID:0,_id:0});
-  console.log(x);
+   var y=Object.values(x)[0] ;
+  console.log(z);
+  console.log(y);
   res.send(x);
 });
 
