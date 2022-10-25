@@ -26,12 +26,12 @@ router.get("/", (req, res) => {
 // })
 
 router.get("/getPrice",async (req, res) => {
-  var y=await CourseTable.find({"_id":req.query.id}).select("price");
+  var y=await Course.find({"_id":req.query.id}).select("price");
   console.log(y);
   res.send(y);
 })
 
-router.post("/CourseSearch", async (req, res) => {
+router.get("/CourseSearch", async (req, res) => {
 
   var PriceFilter = req.query.price;
   var RatingFilter = req.query.rating;
@@ -47,29 +47,64 @@ router.post("/CourseSearch", async (req, res) => {
 
   if(PriceFilter ==null && RatingFilter ==null && SubjectFilter==null){
     res.send({searchResults: searchResults});
+    
   }
   else{
-
     if(PriceFilter!=null && RatingFilter==null && SubjectFilter==null){
-      filterResults = await searchResults.find({price:{$lt:PriceFilter}}).skip((CurrentPage - 1) * 5).limit(5) ;
+      filterResults = await Course.find({price:{$lte:PriceFilter}}).
+      and({$or:[
+      {title: {$regex : userSearch, $options: "i"}}, 
+      {subject: {$regex : userSearch, $options: "i"}}, 
+      {instructorName: {$regex : userSearch, $options: "i"}} 
+      ]}).skip((CurrentPage - 1) * 5).limit(5) ;
     }
     else if(PriceFilter!=null && RatingFilter!=null && SubjectFilter==null){
-      filterResults = await searchResults.find({price:{$lt:PriceFilter}},{rating:RatingFilter}).skip((CurrentPage - 1) * 5).limit(5) ;
+      filterResults = await Course.find({price:{$lte:PriceFilter}},{rating:RatingFilter}).
+      and({$or:[
+      {title: {$regex : userSearch, $options: "i"}}, 
+      {subject: {$regex : userSearch, $options: "i"}}, 
+      {instructorName: {$regex : userSearch, $options: "i"}} 
+      ]}).skip((CurrentPage - 1) * 5).limit(5) ;
     }
     else if(PriceFilter!=null && RatingFilter==null && SubjectFilter!=null){
-      filterResults = await searchResults.find({price:{$lt:PriceFilter}},{subject:SubjectFilter}).skip((CurrentPage - 1) * 5).limit(5) ;
+      filterResults = await Course.find({price:{$lte:PriceFilter}},{subject:SubjectFilter}).
+      and({$or:[
+      {title: {$regex : userSearch, $options: "i"}}, 
+      {subject: {$regex : userSearch, $options: "i"}}, 
+      {instructorName: {$regex : userSearch, $options: "i"}} 
+      ]}).skip((CurrentPage - 1) * 5).limit(5) ;
     }
     else if(PriceFilter!=null && RatingFilter!=null && SubjectFilter!=null){
-      filterResults = await searchResults.find({price:{$lt:PriceFilter}},{rating:RatingFilter},{subject:SubjectFilter}).skip((CurrentPage - 1) * 5).limit(5) ; 
+      filterResults = await Course.find({price:{$lte:PriceFilter}},{rating:RatingFilter},{subject:SubjectFilter}).
+      and({$or:[
+      {title: {$regex : userSearch, $options: "i"}}, 
+      {subject: {$regex : userSearch, $options: "i"}}, 
+      {instructorName: {$regex : userSearch, $options: "i"}} 
+      ]}).skip((CurrentPage - 1) * 5).limit(5) ; 
     }
     else if(PriceFilter==null && RatingFilter!=null && SubjectFilter==null){
-      filterResults = await searchResults.find({rating:RatingFilter}).skip((CurrentPage - 1) * 5).limit(5) ;
+      filterResults = await Coourse.find({rating:RatingFilter}).
+      and({$or:[
+      {title: {$regex : userSearch, $options: "i"}}, 
+      {subject: {$regex : userSearch, $options: "i"}}, 
+      {instructorName: {$regex : userSearch, $options: "i"}} 
+      ]}).skip((CurrentPage - 1) * 5).limit(5) ;
     }
     else if(PriceFilter==null && RatingFilter!=null && SubjectFilter!=null){
-      filterResults = await searchResults.find({rating:RatingFilter},{subject:SubjectFilter}).skip((CurrentPage - 1) * 5).limit(5) ;
+      filterResults = await searchResults.Course({rating:RatingFilter},{subject:SubjectFilter}).
+      and({$or:[
+      {title: {$regex : userSearch, $options: "i"}}, 
+      {subject: {$regex : userSearch, $options: "i"}}, 
+      {instructorName: {$regex : userSearch, $options: "i"}} 
+      ]}).skip((CurrentPage - 1) * 5).limit(5) ;
     }
     else if(PriceFilter==null && RatingFilter==null && SubjectFilter!=null){
-      filterResults = await searchResults.find({subject:SubjectFilter}).skip((CurrentPage - 1) * 5).limit(5) ;
+      filterResults = await searchResults.find({subject:SubjectFilter}).
+      and({$or:[
+      {title: {$regex : userSearch, $options: "i"}}, 
+      {subject: {$regex : userSearch, $options: "i"}}, 
+      {instructorName: {$regex : userSearch, $options: "i"}} 
+      ]}).skip((CurrentPage - 1) * 5).limit(5) ;
     }
     res.send(filterResults);
   }
