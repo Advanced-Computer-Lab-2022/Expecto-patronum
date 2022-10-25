@@ -37,9 +37,9 @@ app.use(function (req, res, next) {
 });
 
 app.use(cors({
-    origin: ["http://localhost:3000"],
-    methods: ["GET", "POST"],
-    credentials: true,
+  origin: ["http://localhost:3000"],
+  methods: ["GET", "POST"],
+  credentials: true,
 }));
 
 
@@ -82,8 +82,10 @@ app.listen(5000, () => {
  */
 
 app.get("/", (req, res) => {
+
   res.send("Home page")
 })
+
 app.use('/Auth', AuthRoute);
 app.use('/Course', CoursesRoute);
 app.use('/Admin', AdminRoute);
