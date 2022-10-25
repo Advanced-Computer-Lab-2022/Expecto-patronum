@@ -50,6 +50,7 @@ router.get("/CourseSearch", async (req, res) => {
     
   }
   else{
+  //  searchResults=JSON.stringify(searchResults);
     if(PriceFilter!=null && RatingFilter==null && SubjectFilter==null){
       filterResults = await Course.find({price:{$lte:PriceFilter}}).
       and({$or:[
