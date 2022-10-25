@@ -93,8 +93,8 @@ router.post('/addCourse', (req, res, next) => {
 router.get('/viewname',async (req, res, next) => {
   var x=await instructorTable.find({"userID":req.query.userID},{userID:0,_id:0});
    var y=Object.values(x)[0] ;
-  console.log(z);
-  console.log(y);
+   var name = y.firstname+" "+ y.lastname;
+  console.log(name);
   res.send(x);
 });
 
