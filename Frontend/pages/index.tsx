@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import Hero from "../components/hero/Hero";
 
 const Home: NextPage = () => {
   return (
     <div>
-      <h1 className="bg-red-500">HIII</h1>
+      <Hero></Hero>
     </div>
   );
 };
