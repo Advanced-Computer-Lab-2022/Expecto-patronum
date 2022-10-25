@@ -51,6 +51,7 @@ router.get("/viewCourses", async (req, res, next) => {
  });
 
  router.get("/searchCourses", async (req, res, next) => {
+<<<<<<< Updated upstream
   let queryCond = {};
   var CurrentPage = req.query.page? req.query.page:1;
   if (req.query.title) {
@@ -68,6 +69,35 @@ router.get("/viewCourses", async (req, res, next) => {
   } catch (error) {
     console.log(error);
   }
+=======
+  // let queryCond = {};
+  // var CurrentPage = req.query.page? req.query.page:1;
+  // if (req.query.title) {
+  //   queryCond.title = req.query.title;
+  // }
+  // if (req.query.instructorID) {
+  //   queryCond.instructorID = req.query.instructorID;
+  // }
+  // if(req.query.subject) {
+  //     queryCond.subject = req.query.subject;
+  // }
+  // try {
+  //   const Courses = await CourseTable.find(queryCond);
+  //   res.json(Courses);
+  // } catch (error) {
+  //   console.log(error);
+  // }
+
+  var CurrentPage = req.query.page?req.query.page:1;
+  //  var x=await InstructorTable.find(
+  //    { $or:[{"firstname": { "$regex": req.query.search , "$options": "i" }},{"lastname": { "$regex":req.query.search, "$options": "i" }}]}  ).distinct('userID');
+  //  console.log(x);
+  var y= await CourseTable.find( 
+    { $or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }},{ instructorID: { $in : req.query.instructorID } }]})
+    .skip((CurrentPage - 1) * 5).limit(5);
+  console.log(y);
+  res.send(y);
+>>>>>>> Stashed changes
   
 });
 
@@ -78,7 +108,8 @@ router.post('/addCourse', (req, res, next) => {
       summary: req.body.summary,
       subject: req.body.subject,
       price: req.body.price,
-      instructorID: req.body.instructorID
+      instructorID: req.body.instructorID,
+      
   });
 
   try {
