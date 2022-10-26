@@ -77,7 +77,18 @@ const CourseSchema = new mongoose.Schema({
     // }
   },
   rating: {
-    type: Object,
+    one: Number,
+    two: Number,
+    three: Number,
+    four: Number,
+    five: Number,
+    avg:{ type: Number,
+      default: 0
+    // default: function() {
+    //   return (this.one +(this.two *2) + (this.three*3)+(this.four*4)+(this.five*5))
+    //   / (this.one + this.two + this.three + this.four + this.five)
+    // }
+  }
   },
 });
 
