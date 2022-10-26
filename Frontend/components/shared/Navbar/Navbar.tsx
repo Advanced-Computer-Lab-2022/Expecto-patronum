@@ -26,8 +26,10 @@ function Navbar() {
 
     return (
         <div className="flex justify-between items-center h-16 drop-shadow-lg shadow-lg bg-navbar">
-            <img className="h-full w-auto py-3 pl-12 inline-block align-middle" src="images/Expecto Patronum (White).png" />
-            <SearchBar />
+            <div className="flex" >
+                <img className="h-20 py-3 px-6" src="images/Expecto Patronum (White).png" />
+                <SearchBar />
+            </div>
             <div className="pr-14 flex justify-between items-center h-full" onMouseLeave={hide}>
                 <a className="text-navlink py-3 px-4 hover:scale-105 transition-all duration-300" href="" onMouseOver={(e) => autoMove(e)}>Services</a>
                 <a className="text-navlink py-3 px-4 hover:scale-105 transition-all duration-300" href="" onMouseOver={(e) => autoMove(e)}>Log in</a>
