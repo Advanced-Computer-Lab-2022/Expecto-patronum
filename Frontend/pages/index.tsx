@@ -1,11 +1,10 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
+import Navbar from "../components/shared/Navbar/Navbar";
 
 const Home: NextPage = () => {
   return (
     <div>
-      <h1 className="bg-red-500">HIII</h1>
+      <Navbar />
     </div>
   );
 };

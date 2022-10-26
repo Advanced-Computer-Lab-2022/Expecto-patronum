@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+body {
+    font-family: "Amino Alt";
+}
+
+@font-face {
+    src: url('../public/fonts/Amino-Alt\ 5/Amino Alt Medium.ttf') format('truetype');
+    font-family: "Amino Alt";
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
