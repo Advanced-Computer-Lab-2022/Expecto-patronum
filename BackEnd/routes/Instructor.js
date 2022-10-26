@@ -73,14 +73,22 @@ router.get("/viewCourses", async (req, res, next) => {
   
 });
 
-router.post('/addCourse', (req, res, next) => {
+router.post('/addCourse', async (req, res, next) => {
+
+  var x=await instructorTable.find({"userID":req.body.instructorID},{userID:0,_id:0});
+   var y=Object.values(x)[0] ;
+   console.log(y);
+   var name = y.firstname+" "+ y.lastname;
+   console.log(name);
+
   const newCourse = new CourseTable({
       title: req.body.title,
       subtitle: req.body.subtitle,
       summary: req.body.summary,
       subject: req.body.subject,
       price: req.body.price,
-      instructorID: req.body.instructorID
+      instructorID: req.body.instructorID,
+      instructorName : name
   });
 
   try {
