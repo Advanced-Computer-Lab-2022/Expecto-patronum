@@ -123,3 +123,15 @@ body {
 .Btn_side:hover {
   outline: 1px solid #1971c2;
 }
+.Shiny {
+  content: "";
+  position: absolute;
+  height: 100px;
+  width: 20px;
+  background-color: #f3f3f3;
+  box-shadow: 0 0 10px #fff;
+  filter: blur(1px);
+  opacity: 0.9;
+  transition: 0.7s;
+  transform: rotate(40deg) translateX(-60) translateY(-60);
+}
