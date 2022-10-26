@@ -47,9 +47,7 @@ router.get("/CourseSearch", async (req, res) => {
       { subject: { $regex: userSearch, $options: "i" } },
       { instructorName: { $regex: userSearch, $options: "i" } }]
     }).skip((CurrentPage - 1) * 5).limit(5);
-    res.send({ searchResults: searchResults });
-
-  }
+    res.send({ searchResults: searchResults });  }
   else {
     if (PriceFilter != null) {
       queryCondition.price = PriceFilter;
@@ -59,19 +57,11 @@ router.get("/CourseSearch", async (req, res) => {
     }
     if (SubjectFilter != null) {
       if( typeof SubjectFilter === 'string') {
-        // console.log(0);
         queryCondition.subject = SubjectFilter;
+        console.log(queryCondition);
       }else{
-        filterResults = await Course.find({
-          $or: [{ title: { $regex: userSearch, $options: "i" } },
-          { subject: { $regex: userSearch, $options: "i" } },
-          { instructorName: { $regex: userSearch, $options: "i" } }]
-        }).
-          and(queryCondition).and({ subject: { $in : SubjectFilter } })
-          .skip((CurrentPage - 1) * 5).limit(5);
-          // console.log(1);
-        return res.send(filterResults);
-        
+        queryCondition.subject= {$in:SubjectFilter};
+        // console.log(queryCondition); 
       }
     }
     filterResults = await Course.find({
@@ -82,8 +72,6 @@ router.get("/CourseSearch", async (req, res) => {
       and(queryCondition)
       .skip((CurrentPage - 1) * 5).limit(5);
     res.send(filterResults);
-    // console.log(0);
-    
   }
 })
 
