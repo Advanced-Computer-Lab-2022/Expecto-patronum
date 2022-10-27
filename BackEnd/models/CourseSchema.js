@@ -32,6 +32,7 @@ const CourseSchema = new mongoose.Schema({
   //     type: mongoose.Types.ObjectId,
   //     ref:'InstructorSchema'
   // },
+  //linking users to exercises && rating
   courseHours: {
     type: Number,
     required: true
