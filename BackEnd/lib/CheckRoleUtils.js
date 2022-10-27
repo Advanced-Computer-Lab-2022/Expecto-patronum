@@ -29,12 +29,13 @@ module.exports = function CheckUserType(user) {
     });
   }
   if (RoleTable !== '') {
-    try {
-      RoleTable.save()
+    RoleTable.save((err, newData) => {
+      if (err) {
+        console.log(err)
+      }
+    })
 
-    } catch (err) {
-      console.log(err);
-    }
+
   }
 }
 
