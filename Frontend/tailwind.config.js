@@ -19,6 +19,8 @@ module.exports = {
         'outline-width': 'outline-width',
         'width': 'width',
         'display': 'display',
+        'bottom': 'bottom',
+        'opacity': 'opacity',
       },
       screens: {
         'nv': '934px',
@@ -28,6 +30,16 @@ module.exports = {
         'md-max': {'max': '767px'},
         'sm-max': {'max': '639px'},
         'nv-max': {'max': '935px'},
+      },
+      zIndex: {
+        'behind': '-1',
+        'last': '-100',
+      },
+      spacing: {
+        '26': '6.5rem',
+      },
+      fontSize: {
+        'hover': "1.025rem",
       }
     },
   },
