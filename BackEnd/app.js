@@ -10,8 +10,8 @@ var CorpTraineeRoute = require('./routes/CorporateTrainee');
 var InstructorRoute = require('./routes/Instructor');
 var UsersRoute = require('./routes/User');
 var AdminRoute = require('./routes/Admin');
-
 const connection = require('./config/database');
+const { isAuth } = require('./middleware/AuthMiddleware');
 
 // Package documentation - https://www.npmjs.com/package/connect-mongo
 const MongoStore = require('connect-mongo')(session);
@@ -30,14 +30,14 @@ var app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5000');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
   next();
 });
 
 app.use(cors({
-  origin: ["http://localhost:3000"],
+  origin: ["http://localhost:5000"],
   methods: ["GET", "POST"],
   credentials: true,
 }));
@@ -81,10 +81,6 @@ app.listen(5000, () => {
  * -------------- ROUTES ----------------
  */
 
-app.get("/", (req, res) => {
-
-  res.send("Home page")
-})
 
 app.use('/Auth', AuthRoute);
 app.use('/Course', CoursesRoute);
@@ -92,5 +88,9 @@ app.use('/Admin', AdminRoute);
 app.use('/Instructor', InstructorRoute);
 app.use('/User', UsersRoute);
 app.use('/CorporateTrainee', CorpTraineeRoute);
+
+app.get("/CheckAuth", isAuth, (req, res) => {
+  res.send("HEY User")
+})
 
 // Imports all of the routes from ./routes/index.js

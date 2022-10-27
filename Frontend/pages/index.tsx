@@ -8,7 +8,7 @@ import Hero from "../components/hero/Hero";
 const Home: NextPage = () => {
   return (
     <div>
-      {/* <CourseCard></CourseCard> */}
+      <CourseCard></CourseCard>
       <Filter></Filter>
       <Filter></Filter>
       <Filter></Filter>
