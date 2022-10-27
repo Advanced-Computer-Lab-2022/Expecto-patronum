@@ -8,10 +8,6 @@ const CourseSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  subtitle: {
-    type: String,
-    required: true
-  },
   summary: {
     type: String,
     required: true
@@ -39,7 +35,27 @@ const CourseSchema = new mongoose.Schema({
   courseHours: {
     type: Number,
     required: true
-  },  
+  },
+  subtitles:[ {
+    header: String,
+    contents:[{
+      title: String,
+      video:String,
+      preview:Boolean,
+      duration:Number,
+      description: String
+    }],
+    totalMinutes: Number,
+  }], 
+  exercises:[{title:String,
+    questions:[{
+      question: String,
+      choices:[String],
+      answer:Number,
+      isVisible:Boolean,
+     }],
+    totalGrade:Number }]
+      ,
   rating: {
     one: Number,
     two: Number,
