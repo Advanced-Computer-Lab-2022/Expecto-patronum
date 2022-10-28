@@ -4,7 +4,7 @@ import CheckBox from "../shared/checkBox/CheckBox";
 
 type Props = {};
 
-const Filter = (props: Props) => {
+const FilterType = (props: Props) => {
   const [Clicked, SetClicked] = useState(false);
   return (
     <div className="w-40 mt-2">
@@ -40,12 +40,9 @@ const Filter = (props: Props) => {
         }
       >
         <CheckBox id="1"></CheckBox>
-        <CheckBox id="2"></CheckBox>
-        <CheckBox id="3"></CheckBox>
-        <CheckBox id="4"></CheckBox>
       </div>
     </div>
   );
 };
 
-export default Filter;
+export default FilterType;
