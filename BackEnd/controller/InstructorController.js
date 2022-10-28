@@ -12,7 +12,7 @@ async function viewCourses (req, res,next) {
       if (req.query.instructorID) {
         queryCond.instructorID = req.query.instructorID;
       }
-      const Courses = await CourseTable.find(queryCond,{title:1,_id:0}).skip((CurrentPage - 1) * 5).limit(5);
+      const Courses = await CourseTable.find(queryCond,{title:1}).skip((CurrentPage - 1) * 5).limit(5);
   
       res.json(Courses);
   
@@ -32,40 +32,54 @@ async function filterCourses (req, res, next) {
       queryStr = queryStr.replace(/\b(gt|gte|lt|lte|eq|ne)\b/g, match => `$${match}`);
       var Price = JSON.parse(queryStr);
     }
-    try {
-      if(req.query.subject || req.query.price ){
-        if(req.query.subject && req.query.price){
-  
-          var y= await CourseTable.find(
-            {"price": Price ,"subject": req.query.subject,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
-            .skip((CurrentPage - 1) * 5).limit(5);
-          console.log(y);
-          res.send(y);
-  
-        }
-        else if(req.query.price){
-          var y= await CourseTable.find(
-            {"price": Price ,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
-            .skip((CurrentPage - 1) * 5).limit(5);
-          console.log(y);
-          res.send(y);
+    if (req.query.search){
+      try {
+        if(req.query.subject || req.query.price ){
+          if(req.query.subject && req.query.price){
+    
+            var y= await CourseTable.find(
+              {"price": Price ,"subject": req.query.subject,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
+              .skip((CurrentPage - 1) * 5).limit(5);
+            console.log(y);
+            res.send(y);
+    
+          }
+          else if(req.query.price){
+            var y= await CourseTable.find(
+              {"price": Price ,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
+              .skip((CurrentPage - 1) * 5).limit(5);
+            console.log(y);
+            res.send(y);
+          }
+          else{
+            var y= await CourseTable.find(
+              {"subject": req.query.subject,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
+              .skip((CurrentPage - 1) * 5).limit(5);
+            console.log(y);
+            res.send(y);
+          }
         }
         else{
           var y= await CourseTable.find(
-            {"subject": req.query.subject,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
+            {"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
             .skip((CurrentPage - 1) * 5).limit(5);
-          console.log(y);
           res.send(y);
-        }
-      }
-      else{
+      }} catch (error) {
+        console.log(error);
+      } 
+
+    } 
+    else{
+      try {
         var y= await CourseTable.find(
-          {"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
+          {"price": Price ,"subject": req.query.subject,"instructorID": req.query.instructorID })
           .skip((CurrentPage - 1) * 5).limit(5);
+        console.log(y);
         res.send(y);
-    }} catch (error) {
-      console.log(error);
-    }  
+      } catch (error) {
+        console.log(error);
+      }
+    }
    };
 
   
