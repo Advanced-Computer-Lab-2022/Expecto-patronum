@@ -8,6 +8,7 @@ router.get("/", (req, res) => {
   res.send(CourseSearch("course1", CourseTable));
 })
 
+
 router.post("/", async (req, res) => {
 
   res.send("Added " + req.body.title + " Course");
@@ -26,15 +27,17 @@ router.post("/", async (req, res) => {
 })
 
 router.post("/CourseSearch", async (req, res) => {
-  
+
   const userSearch = req.body.user;
 
-  const searchResults = await Course.find({$or:[{title: {$regex : userSearch, $options: "i"}}, 
-                                                {subject: {$regex : userSearch, $options: "i"}}, 
-                                                {instructorName: {$regex : userSearch, $options: "i"}}
-                                               ]});
+  const searchResults = await Course.find({
+    $or: [{ title: { $regex: userSearch, $options: "i" } },
+    { subject: { $regex: userSearch, $options: "i" } },
+    { instructorName: { $regex: userSearch, $options: "i" } }
+    ]
+  });
 
-  res.send({searchResults: searchResults});
+  res.send({ searchResults: searchResults });
 })
 
 module.exports = router;

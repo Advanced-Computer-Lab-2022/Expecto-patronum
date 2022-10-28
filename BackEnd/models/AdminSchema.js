@@ -9,6 +9,9 @@ const AdminSchema = new mongoose.Schema({
   },
 });
 
+
+
+
 const Admin = connection.model('Admin', AdminSchema);
 
 

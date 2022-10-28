@@ -14,7 +14,7 @@ const CourseCard = (props: Props) => {
       onMouseLeave={() => {
         SetFlag(false);
       }}
-      className=" w-96 h-[28rem] px-10 pt-10  mt-20 mx-20   relative rounded-3xl shadow-lg 
+      className=" w-[22rem] h-[28rem] px-10 pt-10 relative rounded-3xl shadow-lg 
     bg-gradient-to-br from-amber-400/90  to-amber-300/90 
      ... cursor-pointer"
     >
@@ -66,7 +66,7 @@ const CourseCard = (props: Props) => {
           Architecture, Software Engineering, Theoretical Computer Science, Web
           Development
         </p>
-        <p className="text-sm text-black/90  ">32 hours | 50 lectures</p>
+        <p className="text-sm text-black/90  ">32 hours</p>
         <div className="flex w-100 justify-end">
           <div className="w-36 ">
             <Image
