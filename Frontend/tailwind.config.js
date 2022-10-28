@@ -14,6 +14,7 @@ module.exports = {
       },
       scale: {
         '160': '1.60',
+        '155': '1.55',
       },
       transitionProperty: {
         'outline-width': 'outline-width',
@@ -22,7 +23,8 @@ module.exports = {
         'bottom': 'bottom',
         'opacity': 'opacity',
         'transform': 'transform',
-        'navbar-anime': 'bottom, opacity'
+        'navbar-anime': 'bottom, opacity',
+        'top': 'top',
       },
       screens: {
         'nv': '934px',
