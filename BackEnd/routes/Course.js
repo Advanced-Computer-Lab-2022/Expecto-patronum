@@ -1,51 +1,59 @@
 const router = require('express').Router();
 const Course = require('../models/CourseSchema');
-const {CourseSearch,GetPrice,GetCourse}= require('../controller/CourseController')
+const { CourseSearch, GetPrice, GetCourse } = require('../controller/CourseController')
 
-router.get("/", async(req, res) => {
-  var subject="Node";
-  for(var i=1 ;i<=17;i++){
+router.get("/", async (req, res) => {
+  var subject = "Node";
+  for (var i = 1; i <= 17; i++) {
     const newCourse = new Course({
-      title: "CSEN"+i,
-      subtitles: [{header: "Introduction",
-                  contents:[{title:"intro",video:"url",preview:true,duration:120,description:"welcome"},
-                            {title:"test",video:"test",preview:false,duration:150,description:"test"} ],
-                   totalMinutes:400},
-                   {header: "JavaScript",
-                   contents:[{title:"Refreshing ",video:"url2",preview:true,duration:120,description:"welcome"},
-                             {title:"test",video:"test",preview:false,duration:150,description:"test"} ],
-                    totalMinutes:400}],
-      summary:"Work with one of the most in-demand web development programming languages",
-      price: 1200+(i*100),
+      title: "CSEN" + i,
+      subtitles: [{
+        header: "Introduction",
+        contents: [{ title: "intro", video: "url", preview: true, duration: 120, description: "welcome" },
+        { title: "test", video: "test", preview: false, duration: 150, description: "test" }],
+        totalMinutes: 400
+      },
+      {
+        header: "JavaScript",
+        contents: [{ title: "Refreshing ", video: "url2", preview: true, duration: 120, description: "welcome" },
+        { title: "test", video: "test", preview: false, duration: 150, description: "test" }],
+        totalMinutes: 400
+      }],
+      summary: "Work with one of the most in-demand web development programming languages",
+      price: 1200 + (i * 100),
       subject: subject,
       instructorID: "6355c99c51e5736570b1d0cd",
       instructorName: "david",
-      courseHours:120,
-      exercises:[{title:"Quiz 1",
-                  questions:
-                            [
-                              {question:"what about ur first oscar?",choices:["easy","what","about","it"],answer:0,isVisible:false},
-                              {question:"what about ur second oscar?",choices:["hard","what","about","it"],answer:0,isVisible:true},
-                          ]
-                ,totalGrade:100},
-                {title:"Quiz 2",
-                questions:
-                          [
-                            {question:"what about ur 3rd oscar?",choices:["easier","what","about","it"],answer:0,isVisible:false},
-                            {question:"what about ur 4th oscar?",choices:["harder","what","about","it"],answer:0,isVisible:true},
-                        ]
-              ,totalGrade:50},
-              ]
-            })
-  
+      courseHours: 120,
+      exercises: [{
+        title: "Quiz 1",
+        questions:
+          [
+            { question: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: 0, isVisible: false },
+            { question: "what about ur second oscar?", choices: ["hard", "what", "about", "it"], answer: 0, isVisible: true },
+          ]
+        , totalGrade: 100
+      },
+      {
+        title: "Quiz 2",
+        questions:
+          [
+            { question: "what about ur 3rd oscar?", choices: ["easier", "what", "about", "it"], answer: 0, isVisible: false },
+            { question: "what about ur 4th oscar?", choices: ["harder", "what", "about", "it"], answer: 0, isVisible: true },
+          ]
+        , totalGrade: 50
+      },
+      ]
+    })
+
     newCourse.save();
-    if(subject=="JavaScript"){
-      subject="Node";
-    }else{
-      subject="JavaScript";
+    if (subject == "JavaScript") {
+      subject = "Node";
+    } else {
+      subject = "JavaScript";
     }
-  }  
-return("CoursePage");
+  }
+  return ("CoursePage");
 })
 
 // router.post("/", async (req, res) => {
@@ -65,7 +73,7 @@ return("CoursePage");
 //   await Course.create(newCourse);
 // })
 
-router.get("/getPrice",GetPrice)
+router.get("/getPrice", GetPrice)
 
 router.get("/CourseSearch", CourseSearch);
 router.get("/GetCourse", GetCourse);
