@@ -1,5 +1,5 @@
 import React from "react";
-import { AiOutlineClose } from "react-icons/Ai";
+import { AiOutlineClose } from "react-icons/ai";
 
 type Props = {};
 
