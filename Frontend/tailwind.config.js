@@ -11,7 +11,7 @@ module.exports = {
         "navlink": "#D7D8DD",
         "navlink-bg": "#0088A8",
         "searchFocus": "#226679",
-        
+
       },
       scale: {
         '160': '1.60',
@@ -31,12 +31,12 @@ module.exports = {
       },
       screens: {
         'nv': '934px',
-        '2xl-max': {'max': '1535px'},
-        'xl-max': {'max': '1279px'},
-        'lg-max': {'max': '1023px'},
-        'md-max': {'max': '767px'},
-        'sm-max': {'max': '639px'},
-        'nv-max': {'max': '935px'},
+        '2xl-max': { 'max': '1535px' },
+        'xl-max': { 'max': '1279px' },
+        'lg-max': { 'max': '1023px' },
+        'md-max': { 'max': '767px' },
+        'sm-max': { 'max': '639px' },
+        'nv-max': { 'max': '935px' },
       },
       zIndex: {
         'behind': '-1',
