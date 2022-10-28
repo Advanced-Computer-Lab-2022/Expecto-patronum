@@ -135,3 +135,9 @@ body {
   transition: 0.7s;
   transform: rotate(40deg) translateX(-60) translateY(-60);
 }
+.gridSystem {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}

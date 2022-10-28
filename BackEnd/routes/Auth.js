@@ -14,9 +14,6 @@ const { register } = require('../controller/UserController');
 
 
 
-/**
- * -------------- POST ROUTES ----------------
- */
 
 // TODO
 router.post('/login', passport.authenticate('local'), (req, res) => {

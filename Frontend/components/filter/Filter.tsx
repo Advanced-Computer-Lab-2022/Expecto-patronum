@@ -10,7 +10,7 @@ const Filter = (props: Props) => {
     <div className="w-40 mt-2">
       <div
         onClick={() => SetClicked((prev) => !prev)}
-        className="flex justify-between items-center w-full border-t-2 border-black/40  pt-2  mb-4"
+        className="flex justify-between items-center w-full border-t-2 border-black/40  pt-2  mb-4 cursor-pointer"
       >
         <p className="text-lg font-semibold">Topic</p>
 
