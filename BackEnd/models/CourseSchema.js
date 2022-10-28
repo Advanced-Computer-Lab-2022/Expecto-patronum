@@ -20,18 +20,23 @@ const CourseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  instructorID: {
+  skills: {
+    type: String
+  },
+  level: {
     type: String,
-    required: true
+    enum: ['Beginner', 'Intermediate', 'Advanced', 'AllLevels'],
+    default: 'AllLevels',
+    required:true
   },
   instructorName: {
     type: String,
     required: true
   },  
-  // Instructor: {
-  //     type: mongoose.Types.ObjectId,
-  //     ref:'InstructorSchema'
-  // },
+  instructorID: {
+      type: mongoose.Types.ObjectId,
+      ref:'UserSchema'
+  },
   //linking users to exercises && rating
   courseHours: {
     type: Number,
@@ -55,7 +60,7 @@ const CourseSchema = new mongoose.Schema({
       answer:Number,
       isVisible:Boolean,
      }],
-    totalGrade:Number }]
+    totalGrade:Number}]
       ,
   rating: {
     one: Number,
@@ -65,11 +70,11 @@ const CourseSchema = new mongoose.Schema({
     five: Number,
     avg:{ type: Number,
       default: 0
-    // default: function() {
+  }
+    //   set: function() {
     //   return (this.one +(this.two *2) + (this.three*3)+(this.four*4)+(this.five*5))
     //   / (this.one + this.two + this.three + this.four + this.five)
     // }
-  }
   },
 });
 
