@@ -1,14 +1,12 @@
 import type { NextPage } from "next";
-import Head from "next/head";
 import Image from "next/image";
-import Filter from "../components/filter/Filter";
-import Hero from "../components/hero/Hero";
-import FilterTag from "../components/shared/filterTag/FilterTag";
+import Footer from "../components/shared/Footer/Footer";
+import Navbar from "../components/shared/Navbar/Navbar";
 
 const Home: NextPage = () => {
   return (
     <div>
-      <FilterTag></FilterTag>
+      <img style={{ width: "100%" }} src="/images/3azama.jpg" />
     </div>
   );
 };

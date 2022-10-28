@@ -5,37 +5,37 @@ type Props = {};
 
 const Hero = (props: Props) => {
   return (
-    <div className="SectionHome">
-      <div className="TextContainer">
+    <div>
+      <div>
         <h1>Learn a New Skill Everyday, Anytime, and Anywhere.</h1>
         <p>
           1000+ Courses covering all tech domains for you to learn and explore
-          new oppurtunities. Learn from Industry Experts and land your Dream
+          new opportunities. Learn from Industry Experts and land your Dream
           Job.
         </p>
-        <div className="BtnContainer">
+        <div>
           <button className="Btn Btn_main">Start Trial</button>
           <button className="Btn Btn_side">How it Works</button>
         </div>
-        <div className="TextInfoContainer">
-          <div className="TextInfo">
+        <div>
+          <div>
             <p>1000+</p>
             <p>Courses to </p>
             <p>Thoose from</p>
           </div>
-          <div className="TextInfo">
+          <div>
             <p>5000+</p>
             <p>Students</p>
             <p>Trained</p>
           </div>
-          <div className="TextInfo">
+          <div>
             <p>200+</p>
             <p>Professional</p>
             <p>Trainers</p>
           </div>
         </div>
       </div>
-      <div className="HeroImage">
+      <div>
         <Image
           src="/images/HeroImage1.png"
           width={45}
@@ -45,7 +45,7 @@ const Hero = (props: Props) => {
           layout="responsive"
           priority
         />
-        <div className={"RocketImage"}>
+        <div>
           <Image
             src="/images/Rocket3.png"
             width={45}
@@ -56,7 +56,7 @@ const Hero = (props: Props) => {
             priority
           />
         </div>
-        <div className="TrophyImage">
+        <div>
           <Image
             src="/images/Trophy.png"
             width={45}
@@ -67,7 +67,7 @@ const Hero = (props: Props) => {
             priority
           />
         </div>
-        <div className="EllipseLeft">
+        <div>
           <Image
             src="/images/Ellipse2.png"
             width={45}
@@ -78,7 +78,7 @@ const Hero = (props: Props) => {
             priority
           />
         </div>
-        <div className="EllipseRight">
+        <div>
           <Image
             src="/images/Ellipse3.png"
             width={45}
