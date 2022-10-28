@@ -15,6 +15,8 @@ module.exports = {
       scale: {
         '160': '1.60',
         '155': '1.55',
+        '135': '1.35',
+        '120': '1.2',
       },
       transitionProperty: {
         'outline-width': 'outline-width',
@@ -43,6 +45,9 @@ module.exports = {
         '26': '6.5rem',
         '700': '37rem',
         '18': '4.5rem',
+        '1.25': '0.325rem',
+        '6.5': '1.62rem',
+        '2.75': '0.675rem',
       },
       fontSize: {
         'hover': "1.025rem",

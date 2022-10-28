@@ -1,6 +1,6 @@
 import { type } from "os";
 import React, { useRef, useState, useEffect, createContext, useCallback } from "react";
-import SearchBar from "../../SearchBar/SearchBar";
+import SearchBar from "./SearchBar/SearchBar";
 import BurgerButton from "./BurgerButton/BurgerButton";
 
 interface ContextState {

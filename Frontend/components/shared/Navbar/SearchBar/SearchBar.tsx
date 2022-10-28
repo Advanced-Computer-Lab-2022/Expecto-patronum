@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useContext } from 'react'
 import { BiSearchAlt2 } from "react-icons/bi";
 import { GrFormClose, GrClose } from "react-icons/gr";
 import  { AiOutlineClose } from "react-icons/ai";
-import { curtainSearchSwitching } from "../shared/Navbar/Navbar";
+import { curtainSearchSwitching } from "../Navbar";
 
 type Props = {}
 
@@ -138,7 +138,7 @@ const SearchBar = (props: Props) => {
 
     setIsSearchToggled(false);
     setType("button");
-    
+
     const closeBtn = document.getElementById("close-btn");
 
     if(closeBtn != undefined)
