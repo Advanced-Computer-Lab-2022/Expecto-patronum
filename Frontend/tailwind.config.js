@@ -11,6 +11,7 @@ module.exports = {
         "navlink": "#D7D8DD",
         "navlink-bg": "#0088A8",
         "searchFocus": "#226679",
+        
       },
       scale: {
         '160': '1.60',
