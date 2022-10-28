@@ -21,6 +21,8 @@ module.exports = {
         'display': 'display',
         'bottom': 'bottom',
         'opacity': 'opacity',
+        'transform': 'transform',
+        'navbar-anime': 'bottom, opacity'
       },
       screens: {
         'nv': '934px',
@@ -37,6 +39,8 @@ module.exports = {
       },
       spacing: {
         '26': '6.5rem',
+        '700': '37rem',
+        '18': '4.5rem',
       },
       fontSize: {
         'hover': "1.025rem",

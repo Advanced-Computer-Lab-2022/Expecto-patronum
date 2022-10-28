@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 type Props = {
-    toggle: any
+    toggle: any,
 }
 
 const BurgerButton = (props: Props) => {
