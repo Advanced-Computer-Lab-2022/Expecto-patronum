@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react';
+import { curtainSearchSwitching } from "../Navbar";
 
 type Props = {
     toggle: any,
@@ -7,8 +8,23 @@ type Props = {
 const BurgerButton = (props: Props) => {
 
     const [isClicked, setIsClicked] = useState(false);
+    const {isSearchToggled, setIsSearchToggled, isCurtainOpen, setIsCurtainOpen} = useContext(curtainSearchSwitching);
+
+    useEffect(() => {
+        if(isSearchToggled && isClicked) {
+            document.getElementById("drawer-button")?.click();
+            setIsCurtainOpen(false);
+        }
+    },[isSearchToggled])
+
 
     function toggleX() {
+
+        // if(isSearchToggled && !isClicked) {
+        //    setIsSearchToggled(false);
+        // }
+
+        // setIsCurtainOpen(!isCurtainOpen);
 
         const ingredients = Array.from(document.getElementsByClassName("hamburger-ingredients") as HTMLCollectionOf<HTMLElement>);
 
@@ -85,7 +101,7 @@ const BurgerButton = (props: Props) => {
     }
 
     return (
-        <button className="drawer-button nv:hidden" onClick={toggleX} onMouseOver={changeWidth} onMouseLeave={returnToInitial} >
+        <button className="drawer-button nv:hidden" id='drawer-button' onClick={toggleX} onMouseOver={changeWidth} onMouseLeave={returnToInitial} >
             <hr className="hamburger-ingredients ing-1" />
             <hr className="hamburger-ingredients ing-2" />
             <hr className="hamburger-ingredients ing-3" />
