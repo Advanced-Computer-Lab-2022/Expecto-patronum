@@ -6,6 +6,25 @@ body {
   font-family: "Amino Alt";
 }
 
+.drawer-button {
+    transform: scale(1);
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
+    transition: all 0.2s linear;
+}
+
+.hamburger-ingredients {
+    background-color: #e6e6e6;
+    opacity: 100%;
+    margin: 7px auto;
+    width: 50px;
+    height: 2px;
+    border-radius: 10px;
+    display: block;
+    transition: all 0.2s linear;
+}
+
 @font-face {
   src: url("../public/fonts/Amino-Alt\ 5/Amino Alt Medium.ttf")
     format("truetype");
