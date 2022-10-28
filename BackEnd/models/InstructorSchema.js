@@ -4,9 +4,9 @@ const connection = require('../config/database');
 const InstructorSchema = new mongoose.Schema({
   userID:
   {
-    type: String,
-    required: true,
-    unique: true
+    type: mongoose.Types.ObjectId,
+    ref:'UserSchema',
+    unique:true
   },
   firstname:
   {

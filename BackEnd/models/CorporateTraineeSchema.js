@@ -3,8 +3,8 @@ const connection = require('../config/database');
 
 const CorporateTraineeSchema = new mongoose.Schema({
   userID: {
-    type: String,
-    required: true,
+    type: mongoose.Types.ObjectId,
+    ref:'UserSchema',
     unique: true
   },
 });
