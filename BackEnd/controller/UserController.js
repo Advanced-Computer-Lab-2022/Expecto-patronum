@@ -2,6 +2,7 @@ const CheckUserType = require("../lib/CheckRoleUtils");
 const { genPassword } = require("../lib/passwordUtils");
 const User = require('../models/UserSchema');
 const passport = require('passport');
+const CourseTable = require('../models/CourseSchema');
 
 function register(req, res) {
   const saltHash = genPassword(req.body.password);
@@ -41,4 +42,30 @@ function Logout(req, res) {
 
 }
 
-module.exports = { register, Logout }
+async function ViewAll(req,res){
+  try{
+    var allCourses=await CourseTable.find().select({ 
+      "title":1, "courseHours":1,"rating":1 
+    });
+    res.send(allCourses);
+  }
+  catch(error){
+
+  }
+
+
+}
+
+async function viewRatings(req,res){
+  try{
+    var ratings=await CourseTable.find().select({
+      "price":1,"title":1
+    }).sort({"price":"ascending"})
+    res.send(ratings)
+  }
+  catch(error){
+
+  }
+}
+
+module.exports = { register, Logout,ViewAll,viewRatings }
