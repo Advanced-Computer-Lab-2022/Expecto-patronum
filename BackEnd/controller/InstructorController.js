@@ -4,6 +4,9 @@ const User = require('../models/UserSchema');
 //const { isInstructor } = require('../middleware/RolesMiddleware');
 const CourseTable = require('../models/CourseSchema');
 const { query } = require('express');
+const countryToCurrency = require( 'country-to-currency' );
+const CC = require('currency-converter-lt');
+
 
 
 async function viewCourses (req, res,next) {
@@ -24,10 +27,11 @@ async function viewCourses (req, res,next) {
         subject: 1,
         summary:1
       });
-
+      
+      const unique = await CourseTable.distinct("subject",queryCond);
       var TotalCount=Courses.length;
       var searchResults= Courses.slice((CurrentPage - 1) * 5, CurrentPage * 5);
-      res.send({ Courses: searchResults ,TotalCount:TotalCount});
+      res.send({ Courses: searchResults ,TotalCount:TotalCount,subject: unique});
   
     } 
     catch (err) {
@@ -191,5 +195,20 @@ async function filterCourses (req, res, next) {
     };
   } ;
 
+ function getRate(req, res, next){
+  const country = req.query.country;
+  console.log(country);
+  const curr=  countryToCurrency[country];
+  console.log(curr);
+  let currencyConverter = new CC({from:"USD", to:curr, amount:1});
+  currencyConverter.convert().then((response) => {
+    console.log(response) //or do something else
+});
+  res.sendStatus(200);
+//   currencyConverter.convert(1).then((response) => {
+//     res.send(response); //or do something else
+// })
+
+}
  
-  module.exports = {viewCourses,filterCourses,addCourse};
+  module.exports = {viewCourses,filterCourses,addCourse,getRate};
