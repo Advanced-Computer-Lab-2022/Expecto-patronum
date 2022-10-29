@@ -3,7 +3,7 @@ const instructorTable = require('../models/InstructorSchema');
 const User = require('../models/UserSchema');
 //const { isInstructor } = require('../middleware/RolesMiddleware');
 const CourseTable = require('../models/CourseSchema');
-const { query } = require('express');
+const { query, response } = require('express');
 const countryToCurrency = require( 'country-to-currency' );
 const CC = require('currency-converter-lt');
 
@@ -195,19 +195,21 @@ async function filterCourses (req, res, next) {
     };
   } ;
 
- function getRate(req, res, next){
+async function getRate (req, res, next) {
   const country = req.query.country;
   const curr=  countryToCurrency[country];
   console.log(curr);
   let currencyConverter = new CC({from:"USD", to:curr, amount:1});
-  currencyConverter.convert().then((response) => {
-    console.log(response) //or do something else
+var rate= 1;
+await currencyConverter.rates().then((response) => {
+  rate = response;
 });
-  res.sendStatus(200);
-//   currencyConverter.convert(1).then((response) => {
-//     res.send(response); //or do something else
-// })
-
+console.log(rate);
+try {
+  res.send({rate});
+} catch (error) {
+  console.log(error);
 }
+};
  
   module.exports = {viewCourses,filterCourses,addCourse,getRate};
