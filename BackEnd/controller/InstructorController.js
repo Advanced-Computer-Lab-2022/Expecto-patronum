@@ -171,7 +171,36 @@ async function filterCourses (req, res, next) {
      console.log(y);
      var name = y.firstname+" "+ y.lastname;
      console.log(name);
-  
+    //  const subtitles = req.body.subtitles;
+    //  console.log(subtitles);
+
+    //  var sum = 0;
+    //  var sum1 = [];
+    //  var tempsum = 0;
+    //  const sum2 = [];
+    // for(var i =0;i< subtitles.length;i++){
+    //   var z = Object.values(subtitles)[i] ;
+    //   for(var j =0;j< z.contents.length;j++){
+    //     var w = Object.values(z.contents)[j] ;
+    //     sum1.push(w.duration);
+    //     console.log(w);
+    //   }
+    //   console.log(sum1);
+    //   for(var a = 0 ;a< sum1.length;a++){
+    //     var intvalue = Math.floor(a);
+    //     tempsum = tempsum + Object.values(sum1)[a];
+    //     if(a == sum1.length-1){
+    //       sum2.push(tempsum);
+    //     }
+    //   }
+    //   tempsum=0;
+    //   console.log(sum1);
+    //   sum1= [];
+    //   sum = sum + z.totalMinutes;
+    // }
+    // console.log(sum);
+    // console.log(sum2);
+    
     const newCourse = new CourseTable({
       instructorID: req.body.instructorID,
         title: req.body.title,
@@ -191,7 +220,7 @@ async function filterCourses (req, res, next) {
       newCourse.save();
       res.send(newCourse);
     } catch (err) {
-        console.log(err)
+        console.log(err);
     };
   } ;
 
