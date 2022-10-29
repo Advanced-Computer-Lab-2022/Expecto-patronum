@@ -15,9 +15,10 @@ const curtainSearchSwitching = createContext({} as ContextState);
 function Navbar() {
 
     const curtainRef = useRef<any>();
+    const parentRef = useRef<any>();
     const [isCurtainOpen, setIsCurtainOpen] = useState(false);
     const [isSearchToggled, setIsSearchToggled] = useState(false);
-    const [isResponsiveOn, setIsResponsiveOn] = useState(global.innerWidth < 935 ? true : false);
+    const [childWidth, setChildWidth] = useState(parentRef.current?.offsetWidth);
 
 
     function autoMove(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
@@ -29,7 +30,7 @@ function Navbar() {
             movableHover.style.left = e.currentTarget.offsetLeft.toString() + "px";
             movableHover.style.top = (e.currentTarget.offsetTop + 9).toString() + "px";
             movableHover.style.width = e.currentTarget.offsetWidth.toString() + "px";
-            movableHover.style.height = (e.currentTarget.offsetHeight - 20).toString() + "px";
+            movableHover.style.height = (e.currentTarget.offsetHeight - 18).toString() + "px";
         }
     }
 
@@ -46,7 +47,7 @@ function Navbar() {
     function toggleCurtain() {
         if(curtainRef != undefined) {
             if(!isCurtainOpen) {
-                curtainRef.current.style.bottom = "-104px";
+                curtainRef.current.style.bottom = "-115px";
                 curtainRef.current.style.opacity = "100%";
             } else {
                 curtainRef.current.style.bottom = "9rem";
@@ -64,20 +65,23 @@ function Navbar() {
   
   
     useEffect(() => {
-      global.addEventListener('resize', handleWindowResize);
+        global.addEventListener('resize', handleWindowResize);
+        global.addEventListener('load', handleWindowResize);
   
-      return () => {
-        global.removeEventListener('resize', handleWindowResize);
-      };
+        return () => {
+            global.removeEventListener('resize', handleWindowResize);
+            global.removeEventListener('load', handleWindowResize);
+        };
     }, [handleWindowResize]);
 
     useEffect(() => {
         windowSize < 935 ? "" : curtainRef.current.style.opacity = "100%";
+        windowSize < 935 ? setChildWidth(document.body.getBoundingClientRect().width) : setChildWidth("100%");
     }, [windowSize])
 
     return (
         <curtainSearchSwitching.Provider value={{isSearchToggled, setIsSearchToggled, isCurtainOpen, setIsCurtainOpen}} >
-            <div className="flex justify-between items-center nv:px-2 h-16 drop-shadow-lg shadow-lg bg-navbar">
+            <div ref={parentRef} className="flex justify-between items-center nv:px-2 h-16 drop-shadow-lg shadow-lg bg-navbar">
                 <div className="nv-max:absolute z-behind flex bg-navbar">
                     <img className="h-16 min-w-fit py-2 px-6" src="images/Expecto Patronum (White).png" />
                 </div>
@@ -86,11 +90,11 @@ function Navbar() {
                         <SearchBar />
                         <BurgerButton toggle={toggleCurtain} />
                     </div>
-                    <div ref={curtainRef} className="nv-max:relative z-10 transition-navbar-anime duration-1000 nv-max:bottom-36 nv-max:w-screen nv-max:bg-navbar" onMouseLeave={hide} onClick={toggleCurtain} >
+                    <div ref={curtainRef} style={{width: childWidth}} className="nv-max:relative nv-max:w-screen z-10 transition-navbar-anime duration-1000 nv-max:bottom-36 nv-max:bg-navbar" onMouseLeave={hide} onClick={toggleCurtain} >
                         <a className="text-navlink py-3 px-4 whitespace-nowrap z-10 relative nv-max:block transition-all duration-300" href="" onMouseOver={(e) => autoMove(e)}>Services</a>
                         <a className="text-navlink py-3 px-4 whitespace-nowrap z-10 relative nv-max:block transition-all duration-300" href="" onMouseOver={(e) => autoMove(e)}>Log in</a>
                         <a className="text-navlink py-3 px-4 whitespace-nowrap z-10 relative nv-max:block transition-all duration-300" href="" onMouseOver={(e) => autoMove(e)}>Sign up</a>
-                        <div id="movable-hover" className="absolute hidden right-0 z-last transition-all nv:z-behind nv-max:z-0 duration-200 bg-navlink-bg h-6 px-4 py-2 rounded-full"></div>
+                        <div id="movable-hover" className="absolute hidden right-0 z-last transition-all nv:z-behind nv-max:z-0 duration-200 bg-navlink-bg h-6 px-4 py-1 rounded-full"></div>
                     </div>
                 </div>
             </div>

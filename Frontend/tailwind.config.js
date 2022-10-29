@@ -2,12 +2,6 @@
 /** @type {import('tailwindcss').Config} */
 const plugin = require('tailwindcss/plugin')
 
-
-
-
-
-
-
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
@@ -55,8 +49,8 @@ module.exports = {
         '700': '37rem',
         '18': '4.5rem',
         '1.25': '0.325rem',
-        '6.5': '1.62rem',
-        '2.75': '0.675rem',
+        '6.5': '1.55rem',
+        '2.75': '0.7rem',
       },
       fontSize: {
         'hover': "1.025rem",

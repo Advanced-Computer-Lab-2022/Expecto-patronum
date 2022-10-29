@@ -20,8 +20,6 @@ const SearchBar = (props: Props) => {
   useEffect(() => {
     const closeBtn =  document.getElementById("close-btn");
 
-    console.log(isCurtainOpen, isSearchToggled);
-
     if(isCurtainOpen && isSearchToggled) {
       if(closeBtn != undefined) {
         closeBtn.click();
@@ -106,7 +104,6 @@ const SearchBar = (props: Props) => {
           setIsDisabled(false);
         }
       } else {
-        console.log(type);
         searchInputRef.current.style.display = "initial";
         searchInputRef.current.style.top = "85px";
         searchInputRef.current.style.transition = "top 1s";
@@ -119,7 +116,6 @@ const SearchBar = (props: Props) => {
         e.preventDefault();
       }
     } else {
-      console.log("non");
       if(searchValue === "") {
         setIsDisabled(true);
       } else {

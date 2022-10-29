@@ -20,12 +20,6 @@ const BurgerButton = (props: Props) => {
 
     function toggleX() {
 
-        // if(isSearchToggled && !isClicked) {
-        //    setIsSearchToggled(false);
-        // }
-
-        // setIsCurtainOpen(!isCurtainOpen);
-
         const ingredients = Array.from(document.getElementsByClassName("hamburger-ingredients") as HTMLCollectionOf<HTMLElement>);
 
         props.toggle();
