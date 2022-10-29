@@ -8,7 +8,7 @@ const Admin = require('../models/AdminSchema');
 const Instructor = require('../models/InstructorSchema');
 const CorporateTrainee = require('../models/CorporateTraineeSchema');
 const { isAuth } = require('../middleware/AuthMiddleware');
-const { Logout } = require('../controller/UserController');
+const { Logout, ViewAll, viewRatings } = require('../controller/UserController');
 const { register } = require('../controller/UserController');
 
 
@@ -28,6 +28,8 @@ router.get("/Check", isAuth, (req, res) => {
 router.post('/register', register)
 
 router.get('/logout', Logout);
+router.get('/ViewAll', ViewAll);
+router.get('/viewRatings', viewRatings);
 
 /**
 * -------------- GET ROUTES ----------------
