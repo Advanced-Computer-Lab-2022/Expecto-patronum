@@ -197,7 +197,6 @@ async function filterCourses (req, res, next) {
 
  function getRate(req, res, next){
   const country = req.query.country;
-  console.log(country);
   const curr=  countryToCurrency[country];
   console.log(curr);
   let currencyConverter = new CC({from:"USD", to:curr, amount:1});

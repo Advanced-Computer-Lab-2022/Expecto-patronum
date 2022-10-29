@@ -17,7 +17,7 @@ router.get("/viewCourses",viewCourses);
 
 router.post('/addCourse',addCourse);
 
-router.get("/rate",getRate);
+router.get("/countryRate",getRate);
 
 module.exports = router;
 
