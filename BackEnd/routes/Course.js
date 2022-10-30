@@ -75,7 +75,7 @@ router.get("/", async (req, res) => {
 
 router.get("/getPrice", GetPrice)
 
-router.get("/CourseSearch", CourseSearch);
+router.get("/", CourseSearch);
 router.get("/GetCourse", GetCourse);
 router.post("/CreateCourse", CreateCourse);
 

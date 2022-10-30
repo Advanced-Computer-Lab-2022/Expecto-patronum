@@ -19,6 +19,8 @@ async function CourseSearch(req, res) {
         title: 1,
         courseHours: 1,
         price: 1 ,
+        discount:1,
+        discountPrice:1,
         courseImage: 1,
         rating: 1,
         instructorName: 1,
@@ -32,7 +34,7 @@ async function CourseSearch(req, res) {
       res.send({ searchResults: searchResults ,TotalCount:TotalCount});  }
     else {
       if (PriceFilter != null) {
-        queryCondition.price = {$lte:PriceFilter};
+        queryCondition.discountPrice = {$lte:PriceFilter};
       }
       if (RatingFilter != null) {
         queryCondition.rating = RatingFilter;  
@@ -46,7 +48,22 @@ async function CourseSearch(req, res) {
           // console.log(queryCondition); 
         }
       }
-      AllfilterResults = await Course.find({
+      if(userSearch==null){
+        AllfilterResults = await Course.find(queryCondition).select({  _id: 1,
+          title: 1,
+          courseHours: 1,
+          price: 1 ,
+          discount:1,
+          discountPrice:1,
+          courseImage: 1,
+          rating: 1,
+          instructorName: 1,
+          subject: 1,
+          summary:1
+        });
+      }
+      else{
+      AlluserSearchfilterResults = await Course.find({
         $or: [{ title: { $regex: userSearch, $options: "i" } },
         { subject: { $regex: userSearch, $options: "i" } },
         { instructorName: { $regex: userSearch, $options: "i" } }]
@@ -56,13 +73,15 @@ async function CourseSearch(req, res) {
           title: 1,
           courseHours: 1,
           price: 1 ,
+          discount:1,
+          discountPrice:1,
           courseImage: 1,
           rating: 1,
           instructorName: 1,
           subject: 1,
           summary:1
         });
-        
+      }
         var TotalCount=AllfilterResults.length;
         var filterResults= AllfilterResults.slice((CurrentPage - 1) * 5, CurrentPage * 5);
       res.send({filterResults:filterResults,TotalCount:TotalCount});
