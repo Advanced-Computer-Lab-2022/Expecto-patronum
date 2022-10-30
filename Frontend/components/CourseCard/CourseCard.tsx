@@ -89,11 +89,10 @@ const CourseCard = (props: Props) => {
         <p className="text-sm text-black font-bold  ">
           {price * props.rate} LE
         </p>
-
         <div className="absolute bottom-0 right-10">
           <div className="w-36 ">
             <Image
-              src="/images/Brush.png"
+              src="https://i.ibb.co/kqgnCrP/Brush.png"
               width={45}
               height={45}
               alt={"CGP"}
