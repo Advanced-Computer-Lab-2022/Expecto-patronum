@@ -2,8 +2,7 @@ import Router, { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import DataContext from "../../context/DataContext";
 import FilterType from "./FilterType";
-import { InterfaceFilter } from "./InterfaceFilter";
-import { UseFilter } from "./UseFilter";
+import useFilter from "./UseFilter";
 
 type Props = {};
 
@@ -133,13 +132,13 @@ const FilterBar = (props: Props) => {
 
   useEffect(() => {
     if (router.query.rating || router.query.subject || router.query.price) {
-      ParamsToFilter();
+      useFilter("GetFromUrl");
     }
   }, [router.isReady]);
 
   useEffect(() => {
     if (FlagHelper) {
-      UseFilter("PushToUrl");
+      useFilter("PushToUrl");
       // if (
       //   Filter.Price.length !== 0 ||
       //   Filter.Rating.length !== 0 ||

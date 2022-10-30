@@ -1,8 +1,11 @@
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useContext } from "react";
 import DataContext from "../../context/DataContext";
 
-export function UseFilter(type: "GetFromUrl" | "PushToUrl") {
+export default function useFilter(type: "GetFromUrl" | "PushToUrl") {
+  const router = useRouter();
+  const { Filter, SetFilter } = useContext(DataContext);
+
   function PushUrl() {
     if (
       Filter.Price.length !== 0 ||
@@ -103,11 +106,11 @@ export function UseFilter(type: "GetFromUrl" | "PushToUrl") {
       router.push("/Courses");
     }
   }
-  const router = useRouter();
-  const { Filter, SetFilter } = useContext(DataContext);
+
   if ((type = "PushToUrl")) {
     PushUrl();
   } else {
     GetUrl();
   }
+  return true;
 }
