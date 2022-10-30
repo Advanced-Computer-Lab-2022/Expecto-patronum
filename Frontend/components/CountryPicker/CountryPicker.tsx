@@ -11,7 +11,7 @@ const CountryPicker = () => {
   };
   return (
     <ReactFlagsSelect
-    className="CountryPicker"
+    className="float-right"
     selected={selected}
     onSelect={(CountryCode)=>onSelectFlag(CountryCode)}
     searchable={true}

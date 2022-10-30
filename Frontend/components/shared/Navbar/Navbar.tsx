@@ -2,7 +2,6 @@ import { type } from "os";
 import React, { useRef, useState, createContext } from "react";
 import SearchBar from "./SearchBar/SearchBar";
 import BurgerButton from "./BurgerButton/BurgerButton";
-import { isMobileOnly } from 'react-device-detect';
 import CountryPicker from "../../CountryPicker/CountryPicker";
 
 interface ContextState {
@@ -42,11 +41,12 @@ function Navbar() {
                     <img className="h-16 min-w-fit py-2 px-6" src="images/Expecto Patronum (White).png" />
                 </div>
                 <div className="flex items-center">
-                    <div className="z-20">
+                    <div className="z-20 flex">
+                    <CountryPicker></CountryPicker>
                         <SearchBar />
                         <BurgerButton curtainRef={curtainRef} />
                     </div>
-                    <CountryPicker></CountryPicker>
+    
                     <div ref={curtainRef} className={"mob:w-screen nv-max-mob:w-fullscreen nv-max:relative z-10 transition-navbar-anime duration-1000 nv-max:bottom-36 nv-max:bg-navbar"} onMouseLeave={hide}>
                         <a className="navbar-link text-navlink py-3 px-4 nv-max:mx-1 whitespace-nowrap z-10 relative nv-max:block transition-all duration-300" href="" onMouseOver={(e) => autoMove(e)}>Services</a>
                         <a className="navbar-link text-navlink py-3 px-4 nv-max:mx-1 whitespace-nowrap z-10 relative nv-max:block transition-all duration-300" href="" onMouseOver={(e) => autoMove(e)}>Log in</a>
@@ -55,6 +55,7 @@ function Navbar() {
                     
                 
                 </div>
+            </div>
             </div>
         </curtainSearchSwitching.Provider>
     );

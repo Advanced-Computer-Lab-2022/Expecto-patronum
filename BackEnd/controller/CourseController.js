@@ -19,6 +19,8 @@ async function CourseSearch(req, res) {
         title: 1,
         courseHours: 1,
         price: 1 ,
+        discount:1,
+        discountPrice:1,
         courseImage: 1,
         rating: 1,
         instructorName: 1,
@@ -32,7 +34,7 @@ async function CourseSearch(req, res) {
       res.send({ searchResults: searchResults ,TotalCount:TotalCount});  }
     else {
       if (PriceFilter != null) {
-        queryCondition.price = {$lte:PriceFilter};
+        queryCondition.discountPrice = {$lte:PriceFilter};
       }
       if (RatingFilter != null) {
         queryCondition.rating = RatingFilter;  
@@ -51,6 +53,8 @@ async function CourseSearch(req, res) {
           title: 1,
           courseHours: 1,
           price: 1 ,
+          discount:1,
+          discountPrice:1,
           courseImage: 1,
           rating: 1,
           instructorName: 1,
@@ -69,6 +73,8 @@ async function CourseSearch(req, res) {
           title: 1,
           courseHours: 1,
           price: 1 ,
+          discount:1,
+          discountPrice:1,
           courseImage: 1,
           rating: 1,
           instructorName: 1,
