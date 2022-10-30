@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { curtainSearchSwitching } from "../Navbar";
 
 type Props = {
-    toggle: any,
+    curtainRef: any,
 }
 
 const BurgerButton = (props: Props) => {
@@ -20,11 +20,21 @@ const BurgerButton = (props: Props) => {
 
     function toggleX() {
 
+        // Toggles curtain when responsive
+        if(!isCurtainOpen) {
+            props.curtainRef.current.style.bottom = "-115px";
+            props.curtainRef.current.style.opacity = "100%";
+        } else {
+            props.curtainRef.current.style.bottom = "9rem";
+            props.curtainRef.current.style.opacity = "0%";
+        }
+        setIsCurtainOpen(!isCurtainOpen);
+
+        // Transform Burger shape to an X-shape
         const ingredients = Array.from(document.getElementsByClassName("hamburger-ingredients") as HTMLCollectionOf<HTMLElement>);
 
-        props.toggle();
-
         if(!isClicked) {
+
             transformIngredient(0, 45, 10, "top");
             transformIngredient(4, 45, 10, "bottom");
 
@@ -36,6 +46,8 @@ const BurgerButton = (props: Props) => {
             ingredients[2].style.width = "50px";
             ingredients[3].style.width = "50px";
         } else {
+            props.curtainRef.current.style.opacity = "100%";
+            
             transformIngredient(0, 0, 0, "top");
             transformIngredient(4, 0, 0, "bottom");
   
@@ -48,6 +60,7 @@ const BurgerButton = (props: Props) => {
         setIsClicked(!isClicked);
     }
   
+    //Helper function for transforming ingredients
     function transformIngredient(index: number, transformDeg: number, posValue: number, tb: String) {
 
         const ingredients = Array.from(document.getElementsByClassName("hamburger-ingredients") as HTMLCollectionOf<HTMLElement>);
@@ -61,6 +74,7 @@ const BurgerButton = (props: Props) => {
         }
     }
   
+    //Apply Burger Button animation on hover on whether closed or opened
     function changeWidth() {
 
         const ingredients = Array.from(document.getElementsByClassName("hamburger-ingredients") as HTMLCollectionOf<HTMLElement>);
@@ -78,6 +92,7 @@ const BurgerButton = (props: Props) => {
         }
     }
   
+    // Return to original shape depending on whether closed or opened
     function returnToInitial() {
         const ingredients = Array.from(document.getElementsByClassName("hamburger-ingredients") as HTMLCollectionOf<HTMLElement>);
 
@@ -88,7 +103,6 @@ const BurgerButton = (props: Props) => {
         } else {
             transformIngredient(0, 45, 13.5, "top");
             transformIngredient(4, 45, 13.5, "bottom");
-    
             transformIngredient(1, -45, 4.5, "top");
             transformIngredient(3, -45, 4.5, "bottom");
         }

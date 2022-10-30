@@ -68,14 +68,36 @@ async function CourseSearch(req, res) {
       res.send({filterResults:filterResults,TotalCount:TotalCount});
     }
 }
+
 async function GetPrice (req, res) {
   var y = await Course.find({ "_id": req.query.id }).select("price");
   console.log(y);
   res.send(y);
 }
+
 async function GetCourse (req, res) {
   var y = await Course.find({ "_id": req.query.id });
   console.log(y);
   res.send(y);
 }
-module.exports = {CourseSearch,GetPrice,GetCourse};
+
+async function CreateCourse(req, res) {
+  const result = await Course.create({
+    title: req.body.title,
+    subject: req.body.subject,
+    instructorName: req.body.instructorName,
+    price: req.body.price,
+    level: req.body.level,
+    courseHours: req.body.courseHours,
+    summary: req.body.summary
+    // skills: req.body.skills,
+    // rating: req.body.rating,
+    // exercises: req.body.exercises,
+    // subtitles: req.body.subtitles,
+  }).then(result => {return result});
+  console.log(req.body.level); 
+  res.send(result);
+}
+
+
+module.exports = {CourseSearch, GetPrice, GetCourse, CreateCourse};
