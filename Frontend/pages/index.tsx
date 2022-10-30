@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Image from "next/image";
+import { useEffect } from "react";
 import Footer from "../components/shared/Footer/Footer";
 import Navbar from "../components/shared/Navbar/Navbar";
 
