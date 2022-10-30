@@ -2,6 +2,7 @@ import { type } from "os";
 import React, { useRef, useState, useEffect, createContext, useCallback } from "react";
 import SearchBar from "./SearchBar/SearchBar";
 import BurgerButton from "./BurgerButton/BurgerButton";
+import CountryPicker from "../../CountryPicker/CountryPicker";
 
 interface ContextState {
     isCurtainOpen: any,
@@ -86,6 +87,7 @@ function Navbar() {
                         <SearchBar />
                         <BurgerButton toggle={toggleCurtain} />
                     </div>
+                    <CountryPicker></CountryPicker>
                     <div ref={curtainRef} className="nv-max:relative z-10 transition-navbar-anime duration-1000 nv-max:bottom-36 nv-max:w-screen nv-max:bg-navbar" onMouseLeave={hide} onClick={toggleCurtain} >
                         <a className="text-navlink py-3 px-4 whitespace-nowrap z-10 relative nv-max:block transition-all duration-300" href="" onMouseOver={(e) => autoMove(e)}>Services</a>
                         <a className="text-navlink py-3 px-4 whitespace-nowrap z-10 relative nv-max:block transition-all duration-300" href="" onMouseOver={(e) => autoMove(e)}>Log in</a>
