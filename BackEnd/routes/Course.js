@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const Course = require('../models/CourseSchema');
-const { CourseSearch, GetPrice, GetCourse } = require('../controller/CourseController')
+const { CourseSearch, GetPrice, GetCourse, CreateCourse } = require('../controller/CourseController')
 
 router.get("/", async (req, res) => {
   var subject = "Node";
-  for (var i = 1; i <= 17; i++) {
+  for (var i = 20; i <= 40; i++) {
     const newCourse = new Course({
       title: "CSEN" + i,
       subtitles: [{
@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
       summary: "Work with one of the most in-demand web development programming languages",
       price: 1200 + (i * 100),
       subject: subject,
-      instructorID: "6355c99c51e5736570b1d0cd",
+      instructorID: "635c5ba2958b232c7c8bdc8d",
       instructorName: "david",
       courseHours: 120,
       exercises: [{
@@ -77,5 +77,6 @@ router.get("/getPrice", GetPrice)
 
 router.get("/CourseSearch", CourseSearch);
 router.get("/GetCourse", GetCourse);
+router.post("/CreateCourse", CreateCourse);
 
 module.exports = router;
