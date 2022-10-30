@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import DataContext from "../../context/DataContext";
 import FilterType from "./FilterType";
 import { InterfaceFilter } from "./InterfaceFilter";
+import { UseFilter } from "./UseFilter";
 
 type Props = {};
 
@@ -74,6 +75,8 @@ const FilterBar = (props: Props) => {
     let subject: string[] = [];
     let rating: string[] = [];
     let price: string[] = [];
+    let page: string[] = [];
+    let keyword: string[] = [];
     let flag: boolean = false;
     if (router.query.subject) {
       flag = true;
@@ -99,8 +102,30 @@ const FilterBar = (props: Props) => {
         rating.push(router.query.rating);
       }
     }
+    if (router.query.page) {
+      flag = true;
+      if (typeof router.query.page == "object") {
+        rating = router.query.page;
+      } else {
+        page.push(router.query.page);
+      }
+    }
+    if (router.query.keyword) {
+      flag = true;
+      if (typeof router.query.keyword == "object") {
+        rating = router.query.keyword;
+      } else {
+        keyword.push(router.query.keyword);
+      }
+    }
     if (flag === true) {
-      SetFilter({ Subject: subject, Rating: rating, Price: price });
+      SetFilter({
+        Subject: subject,
+        Rating: rating,
+        Price: price,
+        Page: page,
+        Keyword: keyword,
+      });
     } else {
       router.push("/Courses");
     }
@@ -114,46 +139,44 @@ const FilterBar = (props: Props) => {
 
   useEffect(() => {
     if (FlagHelper) {
-      console.log("====================================");
-      console.log(" I A M H E R E");
-      console.log("====================================");
-      if (
-        Filter.Price.length !== 0 ||
-        Filter.Rating.length !== 0 ||
-        Filter.Subject.length !== 0
-      ) {
-        let Link = "/Courses";
-        if (Filter.Subject.length !== 0) {
-          Filter.Subject.forEach((item, index) => {
-            if (Link === "/Courses") {
-              Link = Link + "?" + "subject=" + item;
-            } else {
-              Link = Link + "&" + "subject=" + item;
-            }
-          });
-        }
-        if (Filter.Rating.length !== 0) {
-          Filter.Rating.forEach((item) => {
-            if (Link === "/Courses") {
-              Link = Link + "?" + "rating=" + item;
-            } else {
-              Link = Link + "&" + "rating=" + item;
-            }
-          });
-        }
-        if (Filter.Price.length !== 0) {
-          Filter.Price.forEach((item) => {
-            if (Link === "/Courses") {
-              Link = Link + "?" + "price=" + item;
-            } else {
-              Link = Link + "&" + "price=" + item;
-            }
-          });
-        }
-        router.push(Link);
-      } else {
-        router.push("/Courses");
-      }
+      UseFilter("PushToUrl");
+      // if (
+      //   Filter.Price.length !== 0 ||
+      //   Filter.Rating.length !== 0 ||
+      //   Filter.Subject.length !== 0
+      // ) {
+      //   let Link = "/Courses";
+      //   if (Filter.Subject.length !== 0) {
+      //     Filter.Subject.forEach((item, index) => {
+      //       if (Link === "/Courses") {
+      //         Link = Link + "?" + "subject=" + item;
+      //       } else {
+      //         Link = Link + "&" + "subject=" + item;
+      //       }
+      //     });
+      //   }
+      //   if (Filter.Rating.length !== 0) {
+      //     Filter.Rating.forEach((item) => {
+      //       if (Link === "/Courses") {
+      //         Link = Link + "?" + "rating=" + item;
+      //       } else {
+      //         Link = Link + "&" + "rating=" + item;
+      //       }
+      //     });
+      //   }
+      //   if (Filter.Price.length !== 0) {
+      //     Filter.Price.forEach((item) => {
+      //       if (Link === "/Courses") {
+      //         Link = Link + "?" + "price=" + item;
+      //       } else {
+      //         Link = Link + "&" + "price=" + item;
+      //       }
+      //     });
+      //   }
+      //   router.push(Link);
+      // } else {
+      //   router.push("/Courses");
+      // }
     } else {
       SetFlagHelper(true);
     }
