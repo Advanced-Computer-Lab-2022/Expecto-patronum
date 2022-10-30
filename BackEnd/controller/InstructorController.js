@@ -4,8 +4,6 @@ const User = require('../models/UserSchema');
 //const { isInstructor } = require('../middleware/RolesMiddleware');
 const CourseTable = require('../models/CourseSchema');
 const { query, response } = require('express');
-const countryToCurrency = require( 'country-to-currency' );
-const CC = require('currency-converter-lt');
 
 
 
@@ -25,7 +23,9 @@ async function viewCourses (req, res,next) {
         rating: 1,
         instructorName: 1,
         subject: 1,
-        summary:1
+        summary:1,
+        discount:1,
+        discountPrice:1
       });
       
       const unique = await CourseTable.distinct("subject",queryCond);
@@ -44,19 +44,19 @@ async function filterCourses (req, res, next) {
     let queryCond = {};
     var CurrentPage = req.query.page? req.query.page:1;
     if (req.query.price) {
-      queryCond.price = req.query.price;
-      let queryStr = JSON.stringify( queryCond.price);
+      queryCond.discountPrice = req.query.price;
+      let queryStr = JSON.stringify( queryCond.discountPrice);
       queryStr = queryStr.replace(/\b(gt|gte|lt|lte|eq|ne)\b/g, match => `$${match}`);
       var Price = JSON.parse(queryStr);
-      queryCond.price = Price;
+      queryCond.discountPrice = Price;
     }
-    if (req.query.search){
+    if (req.query.keyword){
       try {
         if(req.query.subject || req.query.price ){
           if(req.query.subject && req.query.price){
     
             var y= await CourseTable.find(
-              {"price": Price ,"subject": req.query.subject,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
+              {"discountPrice": Price ,"subject": req.query.subject,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.keyword , "$options": "i" }},{"subject": { "$regex": req.query.keyword , "$options": "i" }}]})
               .select({
                 _id: 1,
                 title: 1,
@@ -66,7 +66,9 @@ async function filterCourses (req, res, next) {
                 rating: 1,
                 instructorName: 1,
                 subject: 1,
-                summary:1
+                summary:1,  
+                discount:1,
+                discountPrice:1
               });
               var TotalCount=y.length;
               var searchResults= y.slice((CurrentPage - 1) * 5, CurrentPage * 5);
@@ -75,7 +77,7 @@ async function filterCourses (req, res, next) {
           }
           else if(req.query.price){
             var y= await CourseTable.find(
-              {"price": Price ,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
+              {"discountPrice": Price ,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.keyword , "$options": "i" }},{"subject": { "$regex": req.query.keyword , "$options": "i" }}]})
               .select({
                 _id: 1,
                 title: 1,
@@ -85,7 +87,9 @@ async function filterCourses (req, res, next) {
                 rating: 1,
                 instructorName: 1,
                 subject: 1,
-                summary:1
+                summary:1,
+                discount:1,
+                discountPrice:1
               });
               var TotalCount=y.length;
               var searchResults= y.slice((CurrentPage - 1) * 5, CurrentPage * 5);
@@ -93,7 +97,7 @@ async function filterCourses (req, res, next) {
           }
           else{
             var y= await CourseTable.find(
-              {"subject": req.query.subject,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
+              {"subject": req.query.subject,"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.keyword , "$options": "i" }},{"subject": { "$regex": req.query.keyword , "$options": "i" }}]})
               .select({
                 _id: 1,
                 title: 1,
@@ -103,7 +107,9 @@ async function filterCourses (req, res, next) {
                 rating: 1,
                 instructorName: 1,
                 subject: 1,
-                summary:1
+                summary:1,
+                discount:1,
+                discountPrice:1
               });
               var TotalCount=y.length;
               var searchResults= y.slice((CurrentPage - 1) * 5, CurrentPage * 5);
@@ -112,7 +118,7 @@ async function filterCourses (req, res, next) {
         }
         else{
           var y= await CourseTable.find(
-            {"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.search , "$options": "i" }},{"subject": { "$regex": req.query.search , "$options": "i" }}]})
+            {"instructorID": req.query.instructorID ,$or:[{"title": { "$regex": req.query.keyword , "$options": "i" }},{"subject": { "$regex": req.query.keyword , "$options": "i" }}]})
             .select({
               _id: 1,
               title: 1,
@@ -122,7 +128,9 @@ async function filterCourses (req, res, next) {
               rating: 1,
               instructorName: 1,
               subject: 1,
-              summary:1
+              summary:1,
+              discount:1,
+              discountPrice:1
             });
             var TotalCount=y.length;
             var searchResults= y.slice((CurrentPage - 1) * 5, CurrentPage * 5);
@@ -150,7 +158,9 @@ async function filterCourses (req, res, next) {
           rating: 1,
           instructorName: 1,
           subject: 1,
-          summary:1
+          summary:1,
+          discount:1,
+          discountPrice:1
         });
 
         var TotalCount=y.length;
@@ -213,7 +223,8 @@ async function filterCourses (req, res, next) {
         courseHours: req.body.courseHours,
         exercises:req.body.exercises,
         rating: req.body.rating,
-        instructorName : name
+        instructorName : name,
+        discountPrice:req.body.price
     });
   
     try {
@@ -223,22 +234,27 @@ async function filterCourses (req, res, next) {
         console.log(err);
     };
   } ;
-
-async function getRate (req, res, next) {
-  const country = req.query.country;
-  const curr=  countryToCurrency[country];
-  console.log(curr);
-  let currencyConverter = new CC({from:"USD", to:curr, amount:1});
-var rate= 1;
-await currencyConverter.rates().then((response) => {
-  rate = response;
-});
-console.log(rate);
-try {
-  res.send({rate});
-} catch (error) {
-  console.log(error);
-}
-};
  
-  module.exports = {viewCourses,filterCourses,addCourse,getRate};
+async function discount (req, res, next) {
+  const courseID = req.body.courseID;
+  var discount = req.body.discount;
+  discount = 1-(discount/100);
+   try {
+  const y = await CourseTable.find({"_id":courseID}).select({price:1});
+  var z = Object.values(y)[0] ;
+  var discountPrice = (z.price * discount);
+  
+  discountPrice = discountPrice.toFixed(2);
+  const x = await CourseTable.findByIdAndUpdate({"_id":courseID},{discount:req.body.discount, discountPrice: discountPrice },{new:true});
+   console.log(x);
+  res.status(200).json(x);
+
+   } catch (error) {
+       console.log(error);
+   }  
+
+
+};
+
+
+  module.exports = {viewCourses,filterCourses,addCourse,discount};
