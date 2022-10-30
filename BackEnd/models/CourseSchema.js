@@ -16,6 +16,15 @@ const CourseSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  discountPrice: {
+    type: Number,
+    required: true
+  },
+  discount: {
+    type: Number,
+    default: 0
+  },
+
   subject: {
     type: String,
     required: true
