@@ -2,7 +2,7 @@ const CheckUserType = require("../lib/CheckRoleUtils");
 const { genPassword } = require("../lib/passwordUtils");
 const User = require('../models/UserSchema');
 const passport = require('passport');
-const countryToCurrency = require( 'country-to-currency' );
+const countryToCurrency = require('country-to-currency');
 const CC = require('currency-converter-lt');
 
 function register(req, res) {
@@ -44,21 +44,20 @@ function Logout(req, res) {
 }
 
 
-async function getRate (req, res, next) {
+async function getRate(req, res, next) {
   const country = req.query.country;
-  const curr=  countryToCurrency[country];
-  console.log(curr);
-  let currencyConverter = new CC({from:"USD", to:curr, amount:1});
-var rate= 1;
-await currencyConverter.rates().then((response) => {
-  rate = response;
-});
-console.log(rate);
-try {
-  res.send({rate});
-} catch (error) {
-  console.log(error);
-}
+  const curr = countryToCurrency[country];
+  let currencyConverter = new CC({ from: "USD", to: curr, amount: 1 });
+  var rate = 1;
+  await currencyConverter.rates().then((response) => {
+    rate = response;
+  });
+  console.log(rate);
+  try {
+    res.send({ rate: rate, curr: curr });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-module.exports = { register, Logout , getRate }
+module.exports = { register, Logout, getRate }
