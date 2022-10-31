@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import CourseCard from "../components/CourseCard/CourseCard";
 import FilterBar from "../components/filter/FilterBar";
 import Hero from "../components/hero/Hero";
@@ -12,11 +12,12 @@ import { ApiUrl, BaseUrl } from "../constants/constants";
 import { CardData } from "../DataFestek";
 import Zew from "../components/shared/pagination/CompPagination";
 import axios from "axios";
+import CompPagination from "../components/shared/pagination/CompPagination";
 
 const Courses: NextPage<{ data: any }> = ({ data }) => {
   console.log(data);
-
   const { Filter, SetFilter } = useContext(DataContext);
+
   function SubjectSetter(Data: string) {
     if (Filter.Subject.includes(Data)) {
       SetFilter((prev) => {
@@ -115,7 +116,7 @@ const Courses: NextPage<{ data: any }> = ({ data }) => {
           })}
         </div>
 
-        <Zew></Zew>
+        <CompPagination />
       </div>
     </div>
   );

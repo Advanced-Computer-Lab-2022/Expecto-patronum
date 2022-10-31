@@ -6,12 +6,15 @@ import Head from "next/head";
 import Navbar from "../components/shared/Navbar/Navbar";
 import Footer from "../components/shared/Footer/Footer";
 import { DataProvider } from "../context/DataContext";
+import { useEffect } from "react";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Navbar></Navbar>
-      <Component {...pageProps} />
-      <Footer></Footer>
+      <DataProvider>
+        <Navbar></Navbar>
+        <Component {...pageProps} />
+        <Footer></Footer>
+      </DataProvider>
     </>
   );
 }
