@@ -6,6 +6,7 @@ interface Props {
     required?: boolean,
     placeholder?: string,
     style?: string,
+    inputDivStyle?: string,
     labelStyle?: string,
     enum?: Array<string>,
     title?: string,
@@ -16,6 +17,7 @@ const defaultProps: Props = {
     required: false,
     placeholder: '',
     style: '',
+    inputDivStyle: "",
     labelStyle: "",
     enum: [""],
     title: "",
@@ -47,7 +49,7 @@ const Input = React.forwardRef((props: Props, ref) => {
     const [characterLeft, setCharacterLeft] = useState(250);
 
     return (
-        <div className='p-2'> 
+        <div className={props.inputDivStyle + ' p-2'}> 
             <label ref={labelRef} className={props.labelStyle + ' create-course-input-label relative h-4 whitespace-nowrap block w-fit pointer-events-none rounded-lg top-7 text-gray-400 left-3 bg-navbar px-1'}>{props.placeholder}</label>
             <textarea ref={ref as any}  required onChange={(e) => setCharacterLeft(250 - e.target.value.length)} onFocus={moveLabel} onBlur={(e) => returnToInitial(e)} maxLength={250} className='create-course-input h-39 py-2 focus:outline-none resize-none w-full transition-bg text-white bg-transparent rounded-lg pl-2 shadow-lg border-2 border-navlink-bg'></textarea>
             <label className='relative text-sm text-gray-400 bottom-0 mr-3 float-right'>{characterLeft} character{characterLeft === 1 ? "": "s"} left</label>
@@ -62,8 +64,8 @@ const Input = React.forwardRef((props: Props, ref) => {
             <div className='row'>
                 {props.enum?.map((item) => {
                     return (
-                        <div key={item} className={props.style + ' col-3 text-center px-0 mx-0 py-2'}>
-                            <input ref={ref as any} type="radio" name={props.placeholder + "-button"} className={'checked:border-8 checked:border-navbar checked:bg-navlink-bg transition-all duration-300 h-8 w-8 bg-transparent shadow-radio-button rounded-half border-navlink-bg border-radio-border-width appearance-none'}></input>
+                        <div key={item} className={props.inputDivStyle + ' col-3 text-center px-0 mx-0 py-2'}>
+                            <input ref={ref as any} type="radio" name={props.placeholder + "-button"} className={props.style + ' checked:border-8 checked:border-navbar checked:bg-navlink-bg transition-all duration-300 h-8 w-8 bg-transparent shadow-radio-button rounded-half border-navlink-bg border-radio-border-width appearance-none'}></input>
                             <br />
                             <label className={props.labelStyle + ' pointer-events-none text-gray-400 text-xs h-4 px-1'}>{item}</label>
                         </div>
@@ -77,8 +79,8 @@ const Input = React.forwardRef((props: Props, ref) => {
   } else {
     
     return (
-        <div className='w-auto p-2 min-w-form-input'>
-            <label ref={labelRef} className={(props.required ? 'create-course-input-label': "") + props.labelStyle + ' relative whitespace-nowrap block w-fit pointer-events-none rounded-lg top-7 text-gray-400 h-4 left-2 bg-navbar px-1'}>{props.placeholder}</label>
+        <div className={props.inputDivStyle + ' w-auto p-2 min-w-form-input'}>
+            <label ref={labelRef} className={(props.required ? 'create-course-input-label ': "") + props.labelStyle + ' relative whitespace-nowrap block w-fit pointer-events-none rounded-lg top-7 text-gray-400 h-4 left-2 bg-navbar px-1'}>{props.placeholder}</label>
             <input ref={ref as any} type={props.type} onFocus={moveLabel} onBlur={(e) => returnToInitial(e)} className={props.style + (props.required ? ' create-course-input': "") + ' focus:outline-none appearance-none w-full transition-bg text-white bg-transparent rounded-lg pl-2 shadow-lg border-2 h-12 border-navlink-bg'}></input>
         </div>
     )

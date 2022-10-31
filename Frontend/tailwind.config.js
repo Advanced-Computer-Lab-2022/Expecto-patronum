@@ -85,6 +85,9 @@ module.exports = {
       },
       borderRadius: {
         'half': '50%',
+      },
+      minHeight: {
+        '40': '10rem',
       }
     },
   },

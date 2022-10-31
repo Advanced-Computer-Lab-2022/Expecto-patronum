@@ -1,7 +1,7 @@
 import React, { useState, useRef, forwardRef } from 'react';
 import axios from 'axios';
 import Input from '../components/Input/Input';
-import Exercises from '../components/shared/Exercises/Exercises';
+import Exercise from '../components/shared/Exercise/Exercise';
 
 type Props = {}
 
@@ -127,18 +127,20 @@ const CreateCourse = (props: Props) => {
 
         e.preventDefault();
 
-        axios.defaults.withCredentials = true;
-        response = await axios.post("http://localhost:5000/Course/CreateCourse", {
-            title: titleRef.current.value,
-            subject: subjectRef.current.value,
-            instructorName: instructorNameRef.current.value,
-            price: priceRef.current.value,
-            level: selectedRadio,
-            courseHours: courseHoursRef.current.value,
-            summary: summaryRef.current.value,
-        }).then(res => {return res.data});
+        console.log(exerciseRef.current.children[2]);
 
-        console.log(response);
+        // axios.defaults.withCredentials = true;
+        // response = await axios.post("http://localhost:5000/Course/CreateCourse", {
+        //     title: titleRef.current.value,
+        //     subject: subjectRef.current.value,
+        //     instructorName: instructorNameRef.current.value,
+        //     price: priceRef.current.value,
+        //     level: selectedRadio,
+        //     courseHours: courseHoursRef.current.value,
+        //     summary: summaryRef.current.value,
+        // }).then(res => {return res.data});
+
+        // console.log(response);
     }
 
 
@@ -169,17 +171,13 @@ const CreateCourse = (props: Props) => {
 
 
         <div style={{display: "none"}} className='row divide-y px-0 divide-gray-700 hidden tab mx-auto pt-10 bg-navbar rounded-t-2xl shadow-xl'>
-                <h1 className='text-center text-3xl pb-6 text-white'>Add Optional Information</h1>
-                
-                <div className="col-md-6 col-sm-8 ">
-                    <Input ref={subtitlesRef} placeholder={"Subtitles"} />
-                </div>
+            <h1 className='text-center text-3xl pb-6 text-white'>Add Exercises</h1>
+            <Exercise ref={exerciseRef} />
+        </div>
 
-                <div className='col-md-6 col-sm-8 '>
-                    <Exercises />
-                    {/* <Input ref={skillsRef} placeholder={"Skills"} />
-                    <Input ref={exerciseRef} placeholder={"Exercises"} /> */}
-                </div>
+        <div style={{display: "none"}} className='row divide-y px-0 divide-gray-700 hidden tab mx-auto pt-10 bg-navbar rounded-t-2xl shadow-xl'>
+            <h1 className='text-center text-3xl pb-6 text-white'>Add Subtitles</h1>
+            <Input ref={subtitlesRef} placeholder={"Subtitles"} />
         </div>
 
 
