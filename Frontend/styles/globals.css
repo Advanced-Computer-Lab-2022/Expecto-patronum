@@ -36,6 +36,14 @@ input[type=number] {
   border-radius: 20px;
 }
 
+@media (max-width: 935px) {
+  #country-picker {
+    position: absolute;
+    right: 150px;
+    top: 10px;
+  }
+}
+
 .drawer-button {
   transform: scale(1);
   position: absolute;

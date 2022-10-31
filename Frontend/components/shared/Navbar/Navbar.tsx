@@ -39,11 +39,11 @@ function Navbar() {
         <curtainSearchSwitching.Provider value={{isSearchToggled, setIsSearchToggled, isCurtainOpen, setIsCurtainOpen}} >
             <div ref={parentRef} className="relative z-50 flex justify-between items-center nv:px-2 h-16 drop-shadow-lg shadow-lg bg-navbar">
                 <div className="nv-max:absolute z-behind flex bg-navbar">
-                    <img className="h-16 w-48 py-2 px-6" src="/images/Expecto Patronum (White).png" />
+                    <img className="h-16 w-48 py-2 px-6 mob:hidden" src="/images/Expecto Patronum (White).png" />
                 </div>
                 <div className="flex items-center">
                     <div className="z-20 flex">
-                    <CountryPicker></CountryPicker>
+                        <CountryPicker></CountryPicker>
                         <SearchBar />
                         <BurgerButton curtainRef={curtainRef} />
                     </div>
