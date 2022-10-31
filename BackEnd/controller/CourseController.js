@@ -4,10 +4,10 @@ async function CourseSearch(req, res) {
   var PriceFilter = req.query.price;
   var RatingFilter = req.query.rating;
   var SubjectFilter = req.query.subject;
-  var userSearch = req.query.keyword;
+  var userSearch = req.query.keyword || "";
   var CurrentPage = req.query.page ? req.query.page : 1;
   var queryCondition = {};
-  var AllfilterResults = null;
+  // var AllfilterResults = null;
   var FinalResult = null;
 
   function Filter() {
@@ -26,17 +26,31 @@ async function CourseSearch(req, res) {
         // console.log(queryCondition); 
       }
     }
-    return queryCondition
 
 
   }
 
-  if (userSearch === null && Object.keys(queryCondition).length === 0) {
-    FinalResult = await Course.find();
+  Filter();
+  console.log(Object.keys(queryCondition).length)
+  console.log(userSearch);
+  if (userSearch === "" && Object.keys(queryCondition).length === 0) {
+    FinalResult = await Course.find().select({
+      _id: 1,
+      title: 1,
+      courseHours: 1,
+      price: 1,
+      discount: 1,
+      discountPrice: 1,
+      courseImage: 1,
+      rating: 1,
+      instructorName: 1,
+      subject: 1,
+      summary: 1
+
+    });;
   }
   else {
-    if (userSearch !== null && Object.keys(queryCondition).length !== 0) {
-      Filter();
+    if (userSearch !== "" && Object.keys(queryCondition).length !== 0) {
       FinalResult = await Course.find({
         $or: [{ title: { $regex: userSearch, $options: "i" } },
         { subject: { $regex: userSearch, $options: "i" } },
@@ -58,8 +72,7 @@ async function CourseSearch(req, res) {
 
 
     } else {
-      if (userSearch === null && Object.keys(queryCondition).length !== 0) {
-        Filter();
+      if (userSearch === "" && Object.keys(queryCondition).length !== 0) {
         FinalResult = await Course.find(queryCondition).select({
           _id: 1,
           title: 1,
@@ -76,7 +89,7 @@ async function CourseSearch(req, res) {
         });
       }
       else {
-        if (userSearch !== null && Object.keys(queryCondition).length === 0) {
+        if (userSearch !== "" && Object.keys(queryCondition).length === 0) {
           FinalResult = await Course.find({
             $or: [{ title: { $regex: userSearch, $options: "i" } },
             { subject: { $regex: userSearch, $options: "i" } },

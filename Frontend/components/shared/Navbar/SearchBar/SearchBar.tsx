@@ -173,6 +173,7 @@ const SearchBar = (props: Props) => {
         // }
       }
     }
+    e.preventDefault();
   }
 
   function closeSearch() {
@@ -192,7 +193,12 @@ const SearchBar = (props: Props) => {
   }
 
   return (
-    <form className="flex items-center w-full">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+      className="flex items-center w-full"
+    >
       <input
         id="search-value"
         ref={searchInputRef}
@@ -214,8 +220,8 @@ const SearchBar = (props: Props) => {
         ref={searchRef}
         type={type}
         disabled={isDisabled}
-        onMouseOver={disableCursor}
         onClick={(e) => toggleSearchInput(e)}
+        onMouseOver={disableCursor}
         className="rounded-full nv-max:absolute nv-max:right-24 nv-max:bg-white bg-navlink-bg p-2 relative right-8"
       >
         <BiSearchAlt2 className="text-white nv-max:text-navlink-bg scale-150 hover:scale-160 transition-all duration-200 rotate-90" />

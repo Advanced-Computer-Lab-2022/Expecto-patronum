@@ -1,6 +1,6 @@
 export const CardData = [{
   rating: {
-    avg: 0,
+    avg: 20,
   },
   _id: "635c5a9a57ad790fd013970A",
   title: "Modern Application Development with Node.js on AWS",
