@@ -1,6 +1,7 @@
 import React, { useState, useRef, forwardRef } from 'react';
 import axios from 'axios';
 import Input from '../components/Input/Input';
+import Exercises from '../components/shared/Exercises/Exercises';
 
 type Props = {}
 
@@ -170,13 +171,14 @@ const CreateCourse = (props: Props) => {
         <div style={{display: "none"}} className='row divide-y px-0 divide-gray-700 hidden tab mx-auto pt-10 bg-navbar rounded-t-2xl shadow-xl'>
                 <h1 className='text-center text-3xl pb-6 text-white'>Add Optional Information</h1>
                 
-                <div className="col">
+                <div className="col-md-6 col-sm-8 ">
                     <Input ref={subtitlesRef} placeholder={"Subtitles"} />
                 </div>
 
-                <div className='col'>
-                    <Input ref={skillsRef} placeholder={"Skills"} />
-                    <Input ref={exerciseRef} placeholder={"Exercises"} />
+                <div className='col-md-6 col-sm-8 '>
+                    <Exercises />
+                    {/* <Input ref={skillsRef} placeholder={"Skills"} />
+                    <Input ref={exerciseRef} placeholder={"Exercises"} /> */}
                 </div>
         </div>
 
@@ -184,27 +186,42 @@ const CreateCourse = (props: Props) => {
         <div id='icon-select' style={{display: "none"}} className='row divide-y px-0 divide-gray-700 items-center justify-center tab mx-auto pt-6 bg-navbar rounded-t-2xl shadow-xl'>
                 <h1 className='text-center text-3xl pb-4 text-white'>Choose Course Icon</h1>
                 <div className='px-4'>
-                    <div className='container overflow-y-scroll h-64 p-2'>
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                        <img className='w-20 h-20 hover:scale-105 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                    <div className='row overflow-y-scroll h-64 p-2'>
+                        <div className='col-4 col-md-2'>
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                        </div>
+                        <div className='col-4 col-md-2'>
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                        </div>
+                        <div className='col-4 col-md-2'>
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                        </div>
+                        <div className='col-4 col-md-2'>
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                        </div>
+                        <div className='col-4 col-md-2'>
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                        </div>
+                        <div className='col-4 col-md-2'>
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                            <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                        </div>
                     </div>
                 </div>
         </div>
