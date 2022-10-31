@@ -24,7 +24,7 @@ const Exercises = React.forwardRef((props: Props, ref) => {
   return (
     <QuestionCount.Provider value={{numberOfQuestions, setNumberOfQuestions}} >
       <div id='exercises' ref={ref as any}>
-        <Input style='focus:bg-gray-500 hover:bg-gray-500 border-x-0 border-t-0 rounded-b-none bg-gray-600 opacity-20' labelStyle="bg-transparent" placeholder='Exercise Title' />
+        <Input style='focus:bg-opacity-20 hover:bg-gray-500 hover:bg-opacity-20 border-x-0 border-t-0 rounded-b-none bg-gray-600 bg-opacity-20' labelStyle="bg-transparent" placeholder='Exercise Title' />
         <button type='button' onClick={generateExercise} className='hover:text-searchFocus ml-4 pb-1 text-navlink-bg block text-xs'>Add Question</button>
         <div id='exercises-section' className='h-auto min-h-40 max-h-96 border-2 rounded-lg mb-4 border-neutral-700 overflow-y-scroll'>
           {questions}

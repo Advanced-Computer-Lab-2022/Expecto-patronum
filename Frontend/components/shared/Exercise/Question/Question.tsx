@@ -70,7 +70,7 @@ const Question = React.forwardRef((props: Props, ref) => {
     return (
       <div className='text-center' ref={ref as any}>
           <div className='flex items-center text-center'>
-            <button type='button' onClick={removeElement} className='text-white mt-3 rounded-md bg-slate-600 p-2'><AiOutlineMinus /></button>
+            <button type='button' onClick={removeElement} className='text-white mt-3 mx-1 rounded-md bg-slate-600 p-2'><AiOutlineMinus /></button>
             <Input placeholder='Question' inputDivStyle='col w-screen pb-0' />
           </div>
           <div className='flex'>

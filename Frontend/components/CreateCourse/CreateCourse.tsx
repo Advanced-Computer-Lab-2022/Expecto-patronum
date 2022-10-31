@@ -1,14 +1,15 @@
 import React, { useState, useRef, forwardRef } from 'react';
 import axios from 'axios';
-import Input from '../components/Input/Input';
-import Exercise from '../components/shared/Exercise/Exercise';
+import Input from '../Input/Input';
+import Exercise from '../shared/Exercise/Exercise';
+import { IoMdClose } from "react-icons/io";
 
 type Props = {}
 
 var isReset = false;
 var response = null;
 
-const CreateCourse = (props: Props) => {
+const CreateCourse = React.forwardRef((props: Props, ref) => {
 
     const [index, setIndex] = useState<number>(0);
     const [selectedRadio, setSelectedRadio] = useState<string>("");
@@ -144,9 +145,16 @@ const CreateCourse = (props: Props) => {
     }
 
 
+    function closeCourseForm() {
+        const courseForm = document.getElementById("course-form");
+        if(courseForm != undefined) {
+            courseForm.classList.add("hidden");
+        }
+    }
+
   return (
-    <form id='course-form' className='row px-0 mx-auto 1030:w-3/4 nv-max:w-11/12 w-3/5 py-8' onSubmit={(e) => createCourse(e)} onChange={(e) => !isReset ? resetError(e): {}}>
-        
+    <form id='course-form' ref={ref as any} className='backdrop-blur-sm hidden mx-auto text-left h-screen z-10 nv-max:px-4 px-48 py-2 shadow-md' onSubmit={(e) => createCourse(e)} onChange={(e) => !isReset ? resetError(e): {}}>
+        <button type='button' onClick={closeCourseForm} className="text-white relative top-9 left-4 bg-red-600 hover:scale-160 scale-150 transition-all duration-200 rounded-full" ><IoMdClose /></button>
         <div className='row px-0 tab mx-auto pt-8 justify-center bg-navbar rounded-t-2xl shadow-xl'>
                 <h1 className='border-gray-700 border-b-px text-center text-3xl pb-2 text-white'>Add Course</h1>
                 
@@ -170,12 +178,12 @@ const CreateCourse = (props: Props) => {
         </div>
 
 
-        <div style={{display: "none"}} className='row divide-y px-0 divide-gray-700 hidden tab mx-auto pt-10 bg-navbar rounded-t-2xl shadow-xl'>
+        <div style={{display: "none"}} className='row w-full divide-y px-0 divide-gray-700 hidden tab mx-auto pt-10 bg-navbar rounded-t-2xl shadow-xl'>
             <h1 className='text-center text-3xl pb-6 text-white'>Add Exercises</h1>
             <Exercise ref={exerciseRef} />
         </div>
 
-        <div style={{display: "none"}} className='row divide-y px-0 divide-gray-700 hidden tab mx-auto pt-10 bg-navbar rounded-t-2xl shadow-xl'>
+        <div style={{display: "none"}} className='row w-full divide-y px-0 divide-gray-700 hidden tab mx-auto pt-10 bg-navbar rounded-t-2xl shadow-xl'>
             <h1 className='text-center text-3xl pb-6 text-white'>Add Subtitles</h1>
             <Input ref={subtitlesRef} placeholder={"Subtitles"} />
         </div>
@@ -224,7 +232,7 @@ const CreateCourse = (props: Props) => {
                 </div>
         </div>
 
-        <div className='mx-auto w-700 divide-y divide-gray-700 px-0 rounded-b-2xl bg-navbar'>
+        <div className='mx-auto w-full divide-y divide-gray-700 px-0 rounded-b-2xl bg-navbar'>
             <p id='error-message' className='text-red-700 h-auto text-center'></p>
 
             <div className='text-center pt-2 flex justify-center '>
@@ -250,6 +258,6 @@ const CreateCourse = (props: Props) => {
         </div>
     </form>
   )
-}
+})
 
 export default CreateCourse;
