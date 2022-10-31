@@ -2,9 +2,14 @@ import Image from "next/image";
 import React, { useState } from "react";
 import CheckBox from "../shared/checkBox/CheckBox";
 
-type Props = {};
+type Props = {
+  setter: Function;
+  data: { data: string[] };
+  title: string;
+  Choosen: string[];
+};
 
-const Filter = (props: Props) => {
+const FilterType = (props: Props) => {
   const [Clicked, SetClicked] = useState(false);
   return (
     <div className="w-40 mt-2">
@@ -12,7 +17,7 @@ const Filter = (props: Props) => {
         onClick={() => SetClicked((prev) => !prev)}
         className="flex justify-between items-center w-full border-t-2 border-black/40  pt-2  mb-4 cursor-pointer"
       >
-        <p className="text-lg font-semibold">Topic</p>
+        <p className="text-lg font-semibold">{props.title}</p>
 
         <div
           className={
@@ -39,13 +44,20 @@ const Filter = (props: Props) => {
             : "opacity-0 hidden ease-linear duration-75 "
         }
       >
-        <CheckBox id="1"></CheckBox>
-        <CheckBox id="2"></CheckBox>
-        <CheckBox id="3"></CheckBox>
-        <CheckBox id="4"></CheckBox>
+        {props.data.data.map((item, index) => {
+          return (
+            <CheckBox
+              key={index}
+              Choosen={props.Choosen}
+              title={props.title}
+              setter={props.setter}
+              id={item}
+            ></CheckBox>
+          );
+        })}
       </div>
     </div>
   );
 };
 
-export default Filter;
+export default FilterType;
