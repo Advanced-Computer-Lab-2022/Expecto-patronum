@@ -8,9 +8,9 @@ import Footer from "../components/shared/Footer/Footer";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Navbar></Navbar>
+      {/* <Navbar></Navbar> */}
       <Component {...pageProps} />
-      <Footer></Footer>
+      {/* <Footer></Footer> */}
     </>
   );
 }
