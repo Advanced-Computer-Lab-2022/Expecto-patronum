@@ -1,5 +1,6 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import DataContext from "../../context/DataContext";
 import Rating from "../shared/rating/Rating";
 
 type Props = {
@@ -33,6 +34,8 @@ const CourseCard = (props: Props) => {
   } = props.CardData;
 
   const [Flag, SetFlag] = useState(false);
+  const { Rate } = useContext(DataContext);
+
   return (
     <div
       onMouseEnter={() => {
@@ -87,7 +90,8 @@ const CourseCard = (props: Props) => {
         </p>
         <p className="text-sm text-black/90  ">{courseHours / 60} hours</p>
         <p className="text-sm text-black font-bold  ">
-          {price * props.rate} LE
+          {Math.floor(price * Rate.rate)}
+          {Rate.curr}
         </p>
         <div className="absolute bottom-0 right-10">
           <div className="w-36 ">

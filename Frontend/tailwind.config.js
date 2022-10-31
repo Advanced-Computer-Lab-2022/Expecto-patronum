@@ -55,6 +55,7 @@ module.exports = {
       spacing: {
         '26': '6.5rem',
         '700': '37rem',
+        '800': '55rem',
         '18': '4.5rem',
         '1.25': '0.325rem',
         '6.5': '1.55rem',
@@ -85,6 +86,9 @@ module.exports = {
       },
       borderRadius: {
         'half': '50%',
+      },
+      minHeight: {
+        '40': '10rem',
       }
     },
   },
