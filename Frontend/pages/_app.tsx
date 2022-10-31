@@ -9,9 +9,9 @@ import { DataProvider } from "../context/DataContext";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      {/* <Navbar></Navbar> */}
+      <Navbar></Navbar>
       <Component {...pageProps} />
-      {/* <Footer></Footer> */}
+      <Footer></Footer>
     </>
   );
 }
