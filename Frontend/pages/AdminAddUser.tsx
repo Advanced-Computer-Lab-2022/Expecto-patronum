@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import Input from '../components/Input/Input';
+import Input from '../components/shared/Input/Input';
 import SideBar from '../components/SideBar/SideBar';
 type Props = {}
 
