@@ -2,9 +2,12 @@ import Router, { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import DataContext from "../../context/DataContext";
 import FilterType from "./FilterType";
-import useFilter from "./UseFilter";
 
-type Props = {};
+type FilterProps = {
+  SubjectSetter: Function;
+  RatingSetter: Function;
+  PriceSetter: Function;
+};
 
 /*
  1) setting a filter then a get request is sent to the backend with this filter query to get 
@@ -17,7 +20,11 @@ the filters presistant i send it as a query in the link so when the page refresh
 
 */
 
-const FilterBar = (props: Props) => {
+const FilterBar: React.FC<FilterProps> = ({
+  SubjectSetter,
+  RatingSetter,
+  PriceSetter,
+}) => {
   const router = useRouter();
   const [FlagHelper, SetFlagHelper] = useState(false);
 
@@ -27,159 +34,130 @@ const FilterBar = (props: Props) => {
   let PriceData = { data: ["500", "1000", "2000", "3000", "4000"] };
   let RatingData = { data: ["5", "4", "3", "2", "1"] };
 
-  function SubjectSetter(Data: string) {
-    if (Filter.Subject.includes(Data)) {
-      SetFilter((prev) => {
-        let Array = prev.Subject.filter((item) => {
-          return item !== Data;
-        });
+  function FilterFunction(type: "GetFromUrl" | "PushToUrl") {
+    let Link = "/Courses";
 
-        return { ...prev, Subject: Array };
-      });
-    } else {
-      SetFilter((prev) => {
-        return { ...prev, Subject: [...prev.Subject, Data] };
-      });
-    }
-  }
-  function RatingSetter(Data: string) {
-    if (Filter.Rating.includes(Data)) {
-      SetFilter((prev) => {
-        let Array = prev.Rating.filter((item) => {
-          return item !== Data;
-        });
-        return { ...prev, Rating: Array };
-      });
-    } else {
-      SetFilter((prev) => {
-        return { ...prev, Rating: [...prev.Rating, Data] };
-      });
-    }
-  }
-  function PriceSetter(Data: string) {
-    if (Filter.Price.includes(Data)) {
-      SetFilter((prev) => {
-        let Array = prev.Price.filter((item) => {
-          return item !== Data;
-        });
-        return { ...prev, Price: Array };
-      });
-    } else {
-      SetFilter((prev) => {
-        return { ...prev, Price: [...prev.Price, Data] };
-      });
-    }
-  }
-  function ParamsToFilter() {
-    let subject: string[] = [];
-    let rating: string[] = [];
-    let price: string[] = [];
-    let page: string[] = [];
-    let keyword: string[] = [];
-    let flag: boolean = false;
-    if (router.query.subject) {
-      flag = true;
-      if (typeof router.query.subject == "object") {
-        subject = router.query.subject;
+    function CheckFilters(Filterdata: number | string[], QueryName: string) {
+      if (typeof Filterdata == "number") {
+        if (Link === "/Courses") {
+          Link = Link + "?" + QueryName + "=" + Filterdata;
+        } else {
+          Link = Link + "&" + QueryName + "=" + Filterdata;
+        }
       } else {
-        subject.push(router.query.subject);
+        if (Filterdata.length !== 0) {
+          Filterdata.forEach((item, index) => {
+            if (Link === "/Courses") {
+              Link = Link + "?" + QueryName + "=" + item;
+            } else {
+              Link = Link + "&" + QueryName + "=" + item;
+            }
+          });
+        }
       }
     }
-    if (router.query.price) {
-      flag = true;
-      if (typeof router.query.price == "object") {
-        price = router.query.price;
-      } else {
-        price.push(router.query.price);
-      }
-    }
-    if (router.query.rating) {
-      flag = true;
-      if (typeof router.query.rating == "object") {
-        rating = router.query.rating;
-      } else {
-        rating.push(router.query.rating);
-      }
-    }
-    if (router.query.page) {
-      flag = true;
-      if (typeof router.query.page == "object") {
-        rating = router.query.page;
-      } else {
-        page.push(router.query.page);
-      }
-    }
-    if (router.query.keyword) {
-      flag = true;
-      if (typeof router.query.keyword == "object") {
-        rating = router.query.keyword;
-      } else {
-        keyword.push(router.query.keyword);
-      }
-    }
-    if (flag === true) {
-      SetFilter({
-        Subject: subject,
-        Rating: rating,
-        Price: price,
-        Page: page,
-        Keyword: keyword,
-      });
-    } else {
-      router.push("/Courses");
-    }
-  }
 
-  useEffect(() => {
-    if (router.query.rating || router.query.subject || router.query.price) {
-      useFilter("GetFromUrl");
+    function PushUrl() {
+      if (
+        Filter.Price.length !== 0 ||
+        Filter.Rating.length !== 0 ||
+        Filter.Subject.length !== 0 ||
+        Filter.Page !== 1 ||
+        Filter.Keyword.length !== 0
+      ) {
+        CheckFilters(Filter.Subject, "subject");
+        CheckFilters(Filter.Rating, "rating");
+        CheckFilters(Filter.Price, "price");
+        CheckFilters(Filter.Page, "page");
+        CheckFilters(Filter.Keyword, "keyword");
+        router.push(Link);
+      } else {
+        router.push(Link);
+      }
     }
-  }, [router.isReady]);
+    function GetUrl() {
+      let subject: string[] = [];
+      let rating: string[] = [];
+      let price: string[] = [];
+      let page: number = 1;
+      let keyword: string[] = [];
+      let flag: boolean = false;
+      if (router.query.subject) {
+        flag = true;
+        if (typeof router.query.subject == "object") {
+          subject = router.query.subject;
+        } else {
+          subject.push(router.query.subject);
+        }
+      }
+      if (router.query.price) {
+        flag = true;
+        if (typeof router.query.price == "object") {
+          price = router.query.price;
+        } else {
+          price.push(router.query.price);
+        }
+      }
+      if (router.query.rating) {
+        flag = true;
+        if (typeof router.query.rating == "object") {
+          rating = router.query.rating;
+        } else {
+          rating.push(router.query.rating);
+        }
+      }
+      if (router.query.page) {
+        flag = true;
+        if (typeof router.query.page !== "object") {
+          page = parseInt(router.query.page);
+        }
+      }
+      if (router.query.keyword) {
+        flag = true;
+        if (typeof router.query.keyword == "object") {
+          keyword = router.query.keyword;
+        } else {
+          keyword.push(router.query.keyword);
+        }
+      }
+      if (flag === true) {
+        SetFilter({
+          Subject: subject,
+          Rating: rating,
+          Price: price,
+          Page: page,
+          Keyword: keyword,
+        });
+      } else {
+        router.push(Link);
+      }
+    }
+
+    if (type === "PushToUrl") {
+      PushUrl();
+    } else {
+      GetUrl();
+    }
+  }
 
   useEffect(() => {
-    if (FlagHelper) {
-      useFilter("PushToUrl");
-      // if (
-      //   Filter.Price.length !== 0 ||
-      //   Filter.Rating.length !== 0 ||
-      //   Filter.Subject.length !== 0
-      // ) {
-      //   let Link = "/Courses";
-      //   if (Filter.Subject.length !== 0) {
-      //     Filter.Subject.forEach((item, index) => {
-      //       if (Link === "/Courses") {
-      //         Link = Link + "?" + "subject=" + item;
-      //       } else {
-      //         Link = Link + "&" + "subject=" + item;
-      //       }
-      //     });
-      //   }
-      //   if (Filter.Rating.length !== 0) {
-      //     Filter.Rating.forEach((item) => {
-      //       if (Link === "/Courses") {
-      //         Link = Link + "?" + "rating=" + item;
-      //       } else {
-      //         Link = Link + "&" + "rating=" + item;
-      //       }
-      //     });
-      //   }
-      //   if (Filter.Price.length !== 0) {
-      //     Filter.Price.forEach((item) => {
-      //       if (Link === "/Courses") {
-      //         Link = Link + "?" + "price=" + item;
-      //       } else {
-      //         Link = Link + "&" + "price=" + item;
-      //       }
-      //     });
-      //   }
-      //   router.push(Link);
-      // } else {
-      //   router.push("/Courses");
-      // }
-    } else {
+    if (FlagHelper === false && router.isReady) {
+      if (
+        router.query.rating ||
+        router.query.subject ||
+        router.query.price ||
+        router.query.page ||
+        router.query.keyword
+      ) {
+        FilterFunction("GetFromUrl");
+      }
       SetFlagHelper(true);
     }
-  }, [Filter]);
+
+    if (FlagHelper) {
+      FilterFunction("PushToUrl");
+    }
+  }, [Filter, router.isReady]);
 
   return (
     <div className="mt-32 ">

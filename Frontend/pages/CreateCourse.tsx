@@ -143,8 +143,6 @@ const CreateCourse = (props: Props) => {
       .then((res) => {
         return res.data;
       });
-
-    console.log(response);
   }
 
   return (

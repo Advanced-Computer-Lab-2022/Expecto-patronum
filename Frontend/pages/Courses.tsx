@@ -6,19 +6,68 @@ import CourseCard from "../components/CourseCard/CourseCard";
 import FilterBar from "../components/filter/FilterBar";
 import Hero from "../components/hero/Hero";
 import FilterTag from "../components/shared/filterTag/FilterTag";
-import Pagination from "../components/shared/pagination/Pagination";
 import DataContext from "../context/DataContext";
 import { GetServerSideProps } from "next";
-import { BaseUrl } from "../constants/constants";
+import { ApiUrl, BaseUrl } from "../constants/constants";
 import { CardData } from "../DataFestek";
+import Zew from "../components/shared/pagination/CompPagination";
+import axios from "axios";
 
-const Courses: NextPage = (props) => {
+const Courses: NextPage<{ data: any }> = ({ data }) => {
+  console.log(data);
+
   const { Filter, SetFilter } = useContext(DataContext);
+  function SubjectSetter(Data: string) {
+    if (Filter.Subject.includes(Data)) {
+      SetFilter((prev) => {
+        let Array = prev.Subject.filter((item) => {
+          return item !== Data;
+        });
 
-  console.log(props);
+        return { ...prev, Subject: Array, Page: 1 };
+      });
+    } else {
+      SetFilter((prev) => {
+        return { ...prev, Subject: [...prev.Subject, Data], Page: 1 };
+      });
+    }
+  }
+  function RatingSetter(Data: string) {
+    if (Filter.Rating.includes(Data)) {
+      SetFilter((prev) => {
+        let Array = prev.Rating.filter((item) => {
+          return item !== Data;
+        });
+        return { ...prev, Rating: Array, Page: 1 };
+      });
+    } else {
+      SetFilter((prev) => {
+        return { ...prev, Rating: [...prev.Rating, Data], Page: 1 };
+      });
+    }
+  }
+  function PriceSetter(Data: string) {
+    if (Filter.Price.includes(Data)) {
+      SetFilter((prev) => {
+        let Array = prev.Price.filter((item) => {
+          return item !== Data;
+        });
+        return { ...prev, Price: Array, Page: 1 };
+      });
+    } else {
+      SetFilter((prev) => {
+        return { ...prev, Price: [...prev.Price, Data], Page: 1 };
+      });
+    }
+  }
+
   return (
     <div className="flex  justify-between mt-20 mx-10">
-      <FilterBar></FilterBar>
+      <FilterBar
+        SubjectSetter={SubjectSetter}
+        RatingSetter={RatingSetter}
+        PriceSetter={PriceSetter}
+      ></FilterBar>
 
       <div className="w-4/5">
         <h1 className="text-2xl font-medium mb-3">10559 results for Node</h1>
@@ -29,12 +78,7 @@ const Courses: NextPage = (props) => {
                 key={item}
                 tag={item}
                 Setter={(Data: string) => {
-                  SetFilter((prev) => {
-                    let Array = prev.Subject.filter((item) => {
-                      return item !== Data;
-                    });
-                    return { ...prev, Subject: Array };
-                  });
+                  SubjectSetter(Data);
                 }}
               ></FilterTag>
             );
@@ -45,12 +89,7 @@ const Courses: NextPage = (props) => {
                 key={item}
                 tag={item}
                 Setter={(Data: string) => {
-                  SetFilter((prev) => {
-                    let Array = prev.Rating.filter((item) => {
-                      return item !== Data;
-                    });
-                    return { ...prev, Rating: Array };
-                  });
+                  RatingSetter(Data);
                 }}
               ></FilterTag>
             );
@@ -61,12 +100,7 @@ const Courses: NextPage = (props) => {
                 key={item}
                 tag={item}
                 Setter={(Data: string) => {
-                  SetFilter((prev) => {
-                    let Array = prev.Price.filter((item) => {
-                      return item !== Data;
-                    });
-                    return { ...prev, Price: Array };
-                  });
+                  PriceSetter(Data);
                 }}
               ></FilterTag>
             );
@@ -75,10 +109,13 @@ const Courses: NextPage = (props) => {
 
         <div className="flex flex-wrap gap-10 gap-y-14 ">
           {CardData.map((item, index) => {
-            return <CourseCard rate={1.5} CardData={item}></CourseCard>;
+            return (
+              <CourseCard key={index} rate={1.5} CardData={item}></CourseCard>
+            );
           })}
         </div>
-        <Pagination></Pagination>
+
+        <Zew></Zew>
       </div>
     </div>
   );
@@ -88,10 +125,19 @@ const Courses: NextPage = (props) => {
 //   resolvedUrl,
 //   query,
 // }) => {
-//   let URL = BaseUrl + resolvedUrl;
+//   let data: [] = [];
 
-//   const res = await fetch(URL);
-//   const data: [] = await res.json();
+//   let URL = ApiUrl + resolvedUrl;
+//   console.log("====================================");
+//   console.log("hi");
+//   console.log("====================================");
+//   axios.get(URL).then((res: any) => {
+//     data = res.data;
+
+//     console.log("====================================");
+//     console.log(data);
+//     console.log("====================================");
+//   });
 
 //   return {
 //     props: {
@@ -99,5 +145,15 @@ const Courses: NextPage = (props) => {
 //     },
 //   };
 // };
+
+export async function getServerSideProps(UrlInfo: { resolvedUrl: string }) {
+  let res = await fetch(ApiUrl + UrlInfo.resolvedUrl);
+  let CoursesData = await res.json();
+  return {
+    props: {
+      data: CoursesData,
+    },
+  };
+}
 
 export default Courses;

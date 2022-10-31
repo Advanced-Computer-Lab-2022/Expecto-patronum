@@ -3,13 +3,16 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { GrFormClose, GrClose } from "react-icons/gr";
 import { IoMdClose } from "react-icons/io";
+import DataContext from "../../../../context/DataContext";
 import { curtainSearchSwitching } from "../Navbar";
 
 type Props = {};
 
 const SearchBar = (props: Props) => {
   const [isDisabled, setIsDisabled] = useState(true);
-  const [searchValue, setSearchValue] = useState("");
+  const { Filter, SetFilter } = useContext(DataContext);
+  const [searchValue, setSearchValue] = useState<string>("");
+
   const router = useRouter();
   const [type, setType] = useState<"submit" | "button" | "reset" | undefined>(
     global.innerWidth < 935 ? "button" : "submit"
@@ -39,6 +42,15 @@ const SearchBar = (props: Props) => {
   }, [isCurtainOpen]);
 
   // Convert Search button to open search instead of submit
+
+  useEffect(() => {
+    if (searchValue === "" && router.query.keyword) {
+      if (typeof router.query.keyword !== "object") {
+        setSearchValue(router.query.keyword);
+      }
+    }
+  }, [router.isReady]);
+
   useEffect(() => {
     if (isResponsiveOn) {
       searchRef.current.style.cursor = "initial";
@@ -113,6 +125,13 @@ const SearchBar = (props: Props) => {
         } else {
           setIsDisabled(false);
           ///////////////////////////////////////////
+          SetFilter((prev) => {
+            return {
+              ...prev,
+              Keyword: [searchValue],
+              Page: 1,
+            };
+          });
         }
       } else {
         searchInputRef.current.style.display = "initial";
@@ -132,19 +151,26 @@ const SearchBar = (props: Props) => {
       } else {
         setIsDisabled(false);
         //////////////////////
-        if (router.query.search) {
-          router.query.search = searchValue;
-        } else {
-          if (
-            router.query.subject ||
-            router.query.price ||
-            router.query.rating
-          ) {
-            router.push(router.asPath + "&keyword=" + searchValue);
-          } else {
-            router.push(router.asPath + "?keyword=" + searchValue);
-          }
-        }
+        SetFilter((prev) => {
+          return {
+            ...prev,
+            Keyword: [searchValue],
+            Page: 1,
+          };
+        });
+        // if (router.query.search) {
+        //   router.query.search = searchValue;
+        // } else {
+        //   if (
+        //     router.query.subject ||
+        //     router.query.price ||
+        //     router.query.rating
+        //   ) {
+        //     router.push(router.asPath + "&keyword=" + searchValue);
+        //   } else {
+        //     router.push(router.asPath + "?keyword=" + searchValue);
+        //   }
+        // }
       }
     }
   }

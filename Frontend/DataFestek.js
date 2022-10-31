@@ -89,3 +89,5 @@ export const CardData = [{
   skills:
     "Computer Programming, Python Programming, Statistical ProgrammingData Management, SQL, Databases, Extract, Transform, Load, Computer Networking, Network Model, Other Programming Languages, Computational Logic, Computer Programming Tools, Data Structures, Javascript",
 }]
+
+const totalHours = []

@@ -47,6 +47,7 @@ const FilterType = (props: Props) => {
         {props.data.data.map((item, index) => {
           return (
             <CheckBox
+              key={index}
               Choosen={props.Choosen}
               title={props.title}
               setter={props.setter}

@@ -8,7 +8,7 @@ interface InterfaceDataContext {
   SetFilter: React.Dispatch<React.SetStateAction<InterfaceFilter>>;
 }
 const defualtFilter = {
-  Filter: { Subject: [], Rating: [], Price: [], Page: [], Keyword: [] },
+  Filter: { Subject: [], Rating: [], Price: [], Page: 1, Keyword: [] },
   SetFilter: () => {},
 };
 
@@ -19,7 +19,7 @@ export const DataProvider: React.FC<PropsWithChildren> = ({ children }) => {
     Subject: [],
     Rating: [],
     Price: [],
-    Page: [],
+    Page: 1,
     Keyword: [],
   });
 
