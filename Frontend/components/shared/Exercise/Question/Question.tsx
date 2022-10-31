@@ -1,5 +1,5 @@
 import React, { ReactElement, useContext, useRef, useState } from 'react';
-import Input from '../../../Input/Input';
+import Input from '../../Input/Input';
 import Choice from '../Choice/Choice';
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { QuestionCount } from "../Exercise";

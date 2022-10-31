@@ -1,6 +1,6 @@
 import React, { useState, useRef, forwardRef } from 'react';
 import axios from 'axios';
-import Input from '../Input/Input';
+import Input from '../shared/Input/Input';
 import Exercise from '../shared/Exercise/Exercise';
 import { IoMdClose } from "react-icons/io";
 

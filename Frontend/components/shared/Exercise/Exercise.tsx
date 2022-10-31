@@ -1,5 +1,5 @@
 import React, { useState, useRef, ReactElement, createContext } from 'react';
-import Input from '../../Input/Input';
+import Input from '../Input/Input';
 import Question from './Question/Question';
 
 interface ContextState {
