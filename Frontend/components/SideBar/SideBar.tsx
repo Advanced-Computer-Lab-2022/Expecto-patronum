@@ -16,7 +16,7 @@ const SideBar = () => {;
   return (
     <aside className="w-64" aria-label="Sidebar">
     <div className="overflow-y-auto py-4 px-3 bg-gray-50 dark:bg-[#24252A]">
-    <a href="https://flowbite.com/" className="flex items-center pl-2.5 mb-5">
+    <a href="" className="flex items-center pl-2.5 mb-5">
          <img src="images/Expecto Patronum (White).png" className="mr-3 h-6 sm:h-7" alt="Flowbite Logo" />
          <span className="self-center text-m font-semibold whitespace-nowrap dark:text-white">Rodin Salem</span>
       </a>
