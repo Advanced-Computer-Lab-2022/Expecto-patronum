@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import CourseCard from "../components/CourseCard/CourseCard";
 import FilterBar from "../components/filter/FilterBar";
 import Hero from "../components/hero/Hero";
@@ -13,9 +13,27 @@ import { CardData } from "../DataFestek";
 import Zew from "../components/shared/pagination/CompPagination";
 import axios from "axios";
 import CompPagination from "../components/shared/pagination/CompPagination";
+import { CourseData } from "../Interface/CourseDataInterface";
+import Router, { useRouter } from "next/router";
 
-const Courses: NextPage<{ data: any }> = ({ data }) => {
-  console.log(data);
+export interface AllCoursesData {
+  data: {
+    FinalResult: [CourseData];
+    TotalCount: number;
+  };
+}
+
+const Courses: NextPage<AllCoursesData> = ({ data }) => {
+  const [Loading, SetLoading] = useState(false);
+
+  Router.events.on("routeChangeComplete", () => {
+    SetLoading(false);
+  });
+
+  Router.events.on("routeChangeStart", (url) => {
+    SetLoading(true);
+  });
+
   const { Filter, SetFilter } = useContext(DataContext);
 
   function SubjectSetter(Data: string) {
@@ -57,7 +75,7 @@ const Courses: NextPage<{ data: any }> = ({ data }) => {
       });
     } else {
       SetFilter((prev) => {
-        return { ...prev, Price: [...prev.Price, Data], Page: 1 };
+        return { ...prev, Price: [Data], Page: 1 };
       });
     }
   }
@@ -69,55 +87,61 @@ const Courses: NextPage<{ data: any }> = ({ data }) => {
         RatingSetter={RatingSetter}
         PriceSetter={PriceSetter}
       ></FilterBar>
-
-      <div className="w-4/5">
-        <h1 className="text-2xl font-medium mb-3">10559 results for Node</h1>
-        <div className="flex mb-8 gap-3">
-          {Filter.Subject.map((item, dex) => {
-            return (
-              <FilterTag
-                key={item}
-                tag={item}
-                Setter={(Data: string) => {
-                  SubjectSetter(Data);
-                }}
-              ></FilterTag>
-            );
-          })}
-          {Filter.Rating.map((item, index) => {
-            return (
-              <FilterTag
-                key={item}
-                tag={item}
-                Setter={(Data: string) => {
-                  RatingSetter(Data);
-                }}
-              ></FilterTag>
-            );
-          })}
-          {Filter.Price.map((item, index) => {
-            return (
-              <FilterTag
-                key={item}
-                tag={item}
-                Setter={(Data: string) => {
-                  PriceSetter(Data);
-                }}
-              ></FilterTag>
-            );
-          })}
+      {Loading ? (
+        <div className="w-full h-screen bg-white flex justify-center items-center">
+          {" Loading... "}
+          <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-24 w-24"></div>
         </div>
+      ) : (
+        <div className="w-4/5">
+          <h1 className="text-2xl font-medium mb-3">
+            {data.TotalCount} results for {Filter.Keyword}
+          </h1>
+          <div className="flex mb-8 gap-3">
+            {Filter.Subject.map((item, dex) => {
+              return (
+                <FilterTag
+                  key={item}
+                  tag={item}
+                  Setter={(Data: string) => {
+                    SubjectSetter(Data);
+                  }}
+                ></FilterTag>
+              );
+            })}
+            {Filter.Rating.map((item, index) => {
+              return (
+                <FilterTag
+                  key={item}
+                  tag={item}
+                  Setter={(Data: string) => {
+                    RatingSetter(Data);
+                  }}
+                ></FilterTag>
+              );
+            })}
+            {Filter.Price.map((item, index) => {
+              return (
+                <FilterTag
+                  key={item}
+                  tag={item}
+                  Setter={(Data: string) => {
+                    PriceSetter(Data);
+                  }}
+                ></FilterTag>
+              );
+            })}
+          </div>
 
-        <div className="flex flex-wrap gap-10 gap-y-14 ">
-          {CardData.map((item, index) => {
-            return (
-              <CourseCard key={index} rate={1.5} CardData={item}></CourseCard>
-            );
-          })}
+          <div className="flex flex-wrap gap-10 gap-y-14 ">
+            {data.FinalResult.map((item, index) => {
+              return <CourseCard key={index} CourseData={item}></CourseCard>;
+            })}
+          </div>
+
+          <CompPagination totalCount={data.TotalCount} />
         </div>
-
-        <CompPagination />
-      </div>
+      )}
     </div>
   );
 };

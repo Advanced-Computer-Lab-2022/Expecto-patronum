@@ -1,27 +1,14 @@
 import Image from "next/image";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import DataContext from "../../context/DataContext";
 import Rating from "../shared/rating/Rating";
+import { CourseData } from "../../Interface/CourseDataInterface";
 
-type Props = {
-  CardData: {
-    rating: { avg: number };
-    _id: string;
-    title: string;
-    summary: string;
-    subject: string;
-    price: number;
-    courseHours: number;
-    instructorName: string;
-    level: string;
-    skills: string;
-  };
-  rate: number;
-};
-
-const CourseCard = (props: Props) => {
+const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
   const {
     rating,
+    discount,
+    discountPrice,
     _id,
     title,
     summary,
@@ -29,12 +16,10 @@ const CourseCard = (props: Props) => {
     price,
     courseHours,
     instructorName,
-    level,
-    skills,
-  } = props.CardData;
+  } = CourseData;
 
   const [Flag, SetFlag] = useState(false);
-  const { Rate } = useContext(DataContext);
+  const { Rate, SetRate } = useContext(DataContext);
 
   return (
     <div
@@ -79,13 +64,13 @@ const CourseCard = (props: Props) => {
           <Rating rating={rating.avg}></Rating>
         </div>
         <div className="bg-white/60 inline-block text-center px-5 py-1 font-bold uppercase rounded-md mb-10">
-          {level}
+          Beginner
         </div>
         <h1 className="text-4xl w-4/5 font-bold line-clamp-2">{title}</h1>
         <p className="text-xs  text-black/90 mb-4 mt-1 ">{instructorName}</p>
         <p className="text-md mb-2 line-clamp-2 ">
           <span className="text-md  font-medium ">
-            Skills you will Gain:{skills}
+            Skills you will Gain:{summary}
           </span>
         </p>
         <p className="text-sm text-black/90  ">{courseHours / 60} hours</p>
