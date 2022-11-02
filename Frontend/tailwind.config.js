@@ -67,6 +67,10 @@ module.exports = {
         '39': '9.75rem',
         'fullscreen': 'calc(100vw - 16.667px)',
         'screen-2.5': '2.5vw',
+        '-50px': '-50px',
+        'initial': 'initial',
+        '22': '5.5rem',
+        '30': '7.5rem',
       },
       fontSize: {
         'hover': "1.025rem",

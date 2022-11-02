@@ -33,7 +33,7 @@ const CountryPicker = () => {
   return (
     <ReactFlagsSelect 
       id="country-picker"
-      className="mr-6"
+      className="mr-2"
       selected={selected}
       onSelect={(CountryCode) => onSelectFlag(CountryCode)}
       searchable={true}
