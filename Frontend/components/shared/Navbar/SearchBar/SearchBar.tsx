@@ -12,6 +12,7 @@ const SearchBar = (props: Props) => {
     const [isDisabled, setIsDisabled] = useState(true);
     const [searchValue, setSearchValue] = useState("");
 
+    const searchRef = useRef<any>();
     const searchInputRef = useRef<any>();
     const submitSearchRef = useRef<any>();
     const closeButtonRef = useRef<any>();
@@ -50,9 +51,10 @@ const SearchBar = (props: Props) => {
 
     const setDisableAndValue = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         
+        setSearchValue(e.target.value);
+
         (e.target.value === "") ? setIsDisabled(true): setIsDisabled(false);
         
-        setSearchValue(e.target.value);
     }
 
     function checkEmptySearch() {
@@ -63,33 +65,36 @@ const SearchBar = (props: Props) => {
 
     function openSearch() {
         
-        searchInputRef.current.classList.remove("nv-max:top-[-50px]");
-        searchInputRef.current.classList.add("nv-max:top-22");
+        setIsSearchOpen(true);
+
+        searchRef.current.classList.remove("nv-max:top-[-50px]");
+        searchRef.current.classList.add("nv-max:top-22");
 
         responsiveSearchButtonRef.current.classList.add("hidden");
 
         closeButtonRef.current.classList.remove("z-behind");
 
-        setIsSearchOpen(true);
+        searchInputRef.current.focus();
     }
 
     function closeSearch() {
+
+        setIsSearchOpen(false);
         
-        searchInputRef.current.classList.add("nv-max:top-[-50px]");
-        searchInputRef.current.classList.remove("nv-max:top-22");
+        searchRef.current.classList.add("nv-max:top-[-50px]");
+        searchRef.current.classList.remove("nv-max:top-22");
 
         responsiveSearchButtonRef.current.classList.remove("hidden");
 
         closeButtonRef.current.classList.add("z-1");
 
-        setIsSearchOpen(false);
     }
 
   return (
     <form className='flex items-center w-full z-40'>
 
-        <div ref={searchInputRef} className='nv-max:absolute z-20 flex relative nv-max:top-[-50px] nv-max:left-0 nv-max:right-0 max-w-lg nv-max:w-11/12 nv-max:mx-auto transition-all duration-1000'>
-            <input value={searchValue} onChange={setDisableAndValue} placeholder='Search for anything' className='rounded-full w-96 h-8 pl-2.5 nv-max:ml-12 text-white bg-navlink-bg placeholder:italic placeholder:text-sm placeholder-white tracking-wide placeholder-opacity-70 focus:outline focus:outline-2 outline-searchFocus'/>
+        <div ref={searchRef} className='nv-max:absolute z-20 flex relative nv-max:top-[-50px] nv-max:left-0 nv-max:right-0 max-w-lg nv-max:w-11/12 nv-max:mx-auto transition-all duration-1000'>
+            <input ref={searchInputRef} value={searchValue} onChange={setDisableAndValue} placeholder='Search for anything' className='rounded-full w-96 h-8 pl-2.5 nv-max:ml-12 text-white bg-navlink-bg placeholder:italic placeholder:text-sm placeholder-white tracking-wide placeholder-opacity-70 focus:outline focus:outline-2 outline-searchFocus'/>
             <button type='submit' ref={submitSearchRef} disabled={isDisabled} onClick={submit} onMouseOver={checkEmptySearch} className='rounded-full bg-navlink-bg text-white p-2 align-top relative right-8'>
                 <BiSearchAlt2 className='scale-150 hover:scale-160' />
             </button>
