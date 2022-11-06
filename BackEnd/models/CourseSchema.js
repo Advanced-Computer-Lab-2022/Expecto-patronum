@@ -51,28 +51,46 @@ const CourseSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  // exercises: [{
+  //   title: String,
+  //   questions: [{
+  //     question: String,
+  //     choices: [String],
+  //     answer: Number,
+  //     isVisible: Boolean,
+  //   }],
+  //   totalGrade: Number
+  // }],
   subtitles: [{
     header: String,
     contents: [{
-      title: String,
+      contentTitle: String,
       video: String,
       preview: Boolean,
       duration: Number,
-      description: String
+      description: String,
     }],
+    exercise: {
+      exerciseTitle: String,
+      questions: [{
+        question: String,
+        choices: [String],
+        answer: Number,
+        isVisible: Boolean,
+      }],
+      totalGrade: Number
+    },
     totalMinutes: Number,
   }],
-  exercises: [{
-    title: String,
+  finalExam: {
     questions: [{
       question: String,
       choices: [String],
       answer: Number,
       isVisible: Boolean,
     }],
-    totalGrade: Number
-  }]
-  ,
+    finalGrade: Number,
+  },
   rating: {
     one: Number,
     two: Number,
