@@ -1,11 +1,17 @@
-import React, { ReactElement, useContext, useRef, useState } from 'react';
+import React, { ReactElement, useContext, useRef, useState, createContext } from 'react';
 import Input from '../../Input/Input';
 import Choice from '../Choice/Choice';
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineMinus } from "react-icons/ai";
 import { QuestionCount } from "../Exercise";
 
-type Props = {}
+interface ContextState {
+  numberOfChoices: any,
+  setNumberOfChoices: any,
+}
 
+const ChoiceCount = createContext({} as ContextState);
+
+type Props = {}
 
 const Question = React.forwardRef((props: Props, ref) => {
 
@@ -68,7 +74,8 @@ const Question = React.forwardRef((props: Props, ref) => {
     return (<></>);
   } else {
     return (
-      <div className='text-center' ref={ref as any}>
+      <ChoiceCount.Provider value={{numberOfChoices, setNumberOfChoices}}>
+        <div className='text-center' ref={ref as any}>
           <div className='flex items-center text-center'>
             <button type='button' onClick={removeElement} className='text-white mt-3 mx-1 rounded-md bg-slate-600 p-2'><AiOutlineMinus /></button>
             <Input placeholder='Question' inputDivStyle='col w-screen pb-0' />
@@ -77,12 +84,14 @@ const Question = React.forwardRef((props: Props, ref) => {
             <button type='button' onClick={generateChoice} className='hover:text-searchFocus ml-14 mt-1 text-navlink-bg block text-xs'>Add Choice</button>
             <button type='button' onClick={removeChoice} className='hover:text-searchFocus ml-14 mt-1 text-navlink-bg block text-xs'>Remove Choice</button>
           </div>
-          {choices}
+          <div className='row w-full'>{choices}</div>
           <br />
           <label className='text-red-700' ref={maxChoicesRef}></label>
-      </div>
+        </div>
+      </ChoiceCount.Provider>
     )
   }
 })
 
 export default Question;
+export { ChoiceCount };
