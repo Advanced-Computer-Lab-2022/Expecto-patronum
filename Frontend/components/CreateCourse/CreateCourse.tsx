@@ -168,16 +168,17 @@ const CreateCourse = React.forwardRef((props: Props, ref) => {
 
   return (
         <form id='course-form' className='w-full sb-max:w-beside-sidebar mr-0 ml-auto' ref={ref as any} onSubmit={(e) => createCourse(e)} onChange={(e) => !isReset ? resetError(e): {}}>
-            <div className='row px-0 tab mx-auto justify-center shadow-xl'>
+            
+            <div className='tab row mx-0 justify-center shadow-xl'>
                         <Input ref={titleRef} required={true} placeholder={"Title*"} />
                         <Input ref={subjectRef} required={true} placeholder={"Subject*"} />
                         <Input ref={instructorNameRef} required={true} placeholder={"Instructor's Name*"} />
-                        <div className='row'>
-                            <div className='col-6'>
+                        <div className='row px-0'>
+                            <div className='col-6 px-0'>
                                 <label className='text-gray-400 absolute ml-4 mt-9 pt-px'>$</label>
-                                <Input type="number" ref={priceRef} labelStyle="ml-3" style='pl-6' required={true} placeholder={"Price*"} />
+                                <Input type="number" ref={priceRef} labelStyle="ml-3" style='pl-7' required={true} placeholder={"Price*"} />
                             </div>
-                            <div className='col-6'>
+                            <div className='col-6 px-0'>
                                 <Input type="number" ref={courseHoursRef} required={true} placeholder={"Course Hours*"} />
                             </div>
                         </div>
@@ -185,8 +186,8 @@ const CreateCourse = React.forwardRef((props: Props, ref) => {
                         <Input type='textarea' ref={summaryRef} required={true} placeholder={"Summary*"} />
             </div>
 
-            <div style={{display: "none"}} className='tab row w-full divide-y bg-navbar divide-gray-200 hidden'>
-                <h1 className='text-center text-3xl pb-6'>Add Subtitles</h1>
+            <div style={{display: "none"}} className='tab row w-full mx-0 divide-y divide-gray-200 hidden'>
+                <h1 className='text-center text-3xl py-6'>Add Subtitles</h1>
                 <SubtitleAlt subtitles={subtitles} setSubtitles={setSubtitles} />
             </div>
 
@@ -232,7 +233,7 @@ const CreateCourse = React.forwardRef((props: Props, ref) => {
                         </div>
                     </div>
             </div>
-            <div className='mx-auto w-full divide-y divide-gray-200 px-0 shadow-md'>
+            <div className='mx-auto divide-y divide-gray-200 px-0 shadow-md'>
                 <p id='error-message' className='text-red-700 h-auto text-center'></p>
 
                 <div className='text-center pt-2 flex justify-center '>

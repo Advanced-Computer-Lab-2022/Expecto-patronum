@@ -95,6 +95,9 @@ module.exports = {
       },
       minHeight: {
         '40': '10rem',
+      },
+      rotate: {
+        'negative-90': '-90deg',
       }
     },
   },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Input from '../../Input/Input';
 
 type Props = {
@@ -8,6 +8,8 @@ type Props = {
 }
 
 const ExerciseAlt = (props: Props) => {
+
+  const messageRef = useRef<any>();
 
   function setTitle(e: React.ChangeEvent<HTMLInputElement>) {
     const values = [...props.subtitles];
@@ -47,12 +49,31 @@ const ExerciseAlt = (props: Props) => {
 
   function addChoice(questionIndex: number) {
     const values = [...props.subtitles];
+
+    if(values[props.subtitleIndex].exercise.questions[questionIndex].choices.length === 3) {
+      const message = document.getElementById("message-" + questionIndex);
+      if(message != undefined) {
+        message.classList.remove("hidden");
+        message.innerHTML = "A question can have a maximum of 4 choices.";
+        setTimeout(() => { message.classList.add("hidden") }, 3000);
+      }
+      return;
+    }
     values[props.subtitleIndex].exercise.questions[questionIndex].choices.push("");
     props.setSubtitles(values);
   }
 
   function removeChoice(questionIndex: number, childIndex: number) {
     const values = [...props.subtitles];
+    if(values[props.subtitleIndex].exercise.questions[questionIndex].choices.length === 1) {
+      const message = document.getElementById("message-" + questionIndex);
+      if(message != undefined) {
+        message.classList.remove("hidden");
+        message.innerHTML = "A question cannot have less than 2 choices.";
+        setTimeout(() => { message.classList.add("hidden") }, 3000);
+      }
+      return;
+    }
     values[props.subtitleIndex].exercise.questions[questionIndex].choices.splice(childIndex, 1);
     props.setSubtitles(values);
   }
@@ -67,31 +88,38 @@ const ExerciseAlt = (props: Props) => {
     <div> 
       {
           <div>
-            <input className='border-2 border-black rounded-lg m-2' value={props.subtitles[props.subtitleIndex].exercise.title} onChange={e => setTitle(e)} />
-            {
-              props.subtitles[props.subtitleIndex].exercise.questions.map((q: any, questionIndex: number) => (
-                <div className='flex justify-center' key={questionIndex}>
-                  <Input value={q.question} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuestion(questionIndex, e)} placeholder='Enter Question' />
-                  <button type='button' onClick={() => addChoice(questionIndex)} className='bg-navlink-bg rounded-full text-white w-6'>+</button>
-      
-                  {
-                    q.choices.map((c: any, childIndex: number) => (
-                      <div key={childIndex}>
-                        <Input placeholder='Enter Choice' value={c} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setChoice(questionIndex, childIndex, e)} />
-                        <button type='button' onClick={() => removeChoice(questionIndex, childIndex)} className='bg-red-600 rounded-full text-white w-6'>-</button>
+            <Input placeholder='Exercise Title' value={props.subtitles[props.subtitleIndex].exercise.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e)} />
+            <div className='pl-3'>
+              {
+                props.subtitles[props.subtitleIndex].exercise.questions.map((q: any, questionIndex: number) => (
+                  <div key={questionIndex}>
+                    <div>
+                      <label className='relative top-14 right-5'>{questionIndex + 1})</label>
+                      <Input placeholder='Enter Question' value={q.question} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuestion(questionIndex, e)} />
+                      <button type='button' onClick={() => removeQuestion(questionIndex)} className='text-red-600 hover:text-red-500 text-xs relative bottom-1 left-6 h-0 whitespace-nowrap'>Remove Question</button>
+                      <button type='button' onClick={() => addChoice(questionIndex)} className='hover:text-black text-navlink-bg text-xs relative bottom-1 left-12 h-0 whitespace-nowrap'>Add Choice</button>
+                    </div>  
+                    <div className='row pl-4'>
+                      {
+                        q.choices.map((c: any, childIndex: number) => (
+                          <div className='col-6' key={childIndex}>
+                            <Input placeholder='Enter Choice' value={c} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setChoice(questionIndex, childIndex, e)} />
+                            <button type='button' onClick={() => removeChoice(questionIndex, childIndex)} className='text-red-600 hover:text-red-500 text-xs relative bottom-2 left-6 h-0 whitespace-nowrap'>Delete</button>
+                          </div>
+                        ))
+                      }
+                      <div className='col-6'>
+                        <Input placeholder='Correct Answer' value={q.answer} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCorrectAnswer(e, questionIndex)} labelStyle='left-1.5' style='border-lime-500' />
                       </div>
-                    ))
-                  }
-                  <input className='bg-lime-600 border-2 border-black rounded-lg m-2' value={q.answer} onChange={e => setCorrectAnswer(e, questionIndex)} />
-                  <button type='button' onClick={() => removeQuestion(questionIndex)} className='bg-black rounded-full text-white w-6'>-</button>
-                </div>
-              ))
-            }
-            <button type='button' onClick={addQuestion} className='bg-black rounded-full text-white w-6'>+</button>
+                      <p id={"message-" + questionIndex} className='hidden text-center relative bottom-3 text-red-600'></p>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+            <button type='button' onClick={addQuestion} className='hover:text-white text-navlink-bg text-xs mx-auto flex transition-all duration-200 hover:bg-navlink-bg border-navlink-bg border-px rounded-md p-2 whitespace-nowrap'>Add Question</button>
           </div>
       }      
-      <br />
-      <button>Check</button>
     </div>
   )
 }
