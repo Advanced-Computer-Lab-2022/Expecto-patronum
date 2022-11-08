@@ -118,33 +118,62 @@ const CreateCourse = React.forwardRef((props: Props, ref) => {
         isReset = true;
     }
 
-    const [subtitles, setSubtitles] = useState<any>(
-        [
+    const subtitle = {
+        header: "",
+        contents: [
             {
-                header: "",
-                contents: [
-                    {
-                        contentTitle: "",
-                        video: "",
-                        preview: false,
-                        duration: 0,
-                        description: "",
-                    }
-                ],
-                exercise: {
-                    exerciseTitle: "",
-                    questions: [
-                        {
-                            question: "",
-                            choices: [""],
-                            answer: "",
-                        }
-                    ],
-                },
-                totalMinutes: 0,
+                contentTitle: "",
+                video: "",
+                preview: false,
+                duration: 0,
+                description: "",
+            },
+            {
+                contentTitle: "",
+                video: "",
+                preview: false,
+                duration: 0,
+                description: "",
+            },
+            {
+                contentTitle: "",
+                video: "",
+                preview: false,
+                duration: 0,
+                description: "",
+            },
+            {
+                contentTitle: "",
+                video: "",
+                preview: false,
+                duration: 0,
+                description: "",
             }
-        ]
-    );
+        ],
+        exercise: {
+            exerciseTitle: "",
+            questions: [
+                {
+                    question: "",
+                    choices: [""],
+                    answer: "",
+                },
+                {
+                    question: "",
+                    choices: [""],
+                    answer: "",
+                },
+                {
+                    question: "",
+                    choices: [""],
+                    answer: "",
+                }
+            ],
+        },
+        totalMinutes: 0,
+    }
+
+    const [subtitles, setSubtitles] = useState<any>([subtitle, subtitle, subtitle]);
 
     async function createCourse(e: React.FormEvent<HTMLFormElement>) {
 
@@ -176,7 +205,7 @@ const CreateCourse = React.forwardRef((props: Props, ref) => {
                         <div className='row px-0'>
                             <div className='col-6 px-0'>
                                 <label className='text-gray-400 absolute ml-4 mt-9 pt-px'>$</label>
-                                <Input type="number" ref={priceRef} labelStyle="ml-3" style='pl-7' required={true} placeholder={"Price*"} />
+                                <Input type="number" ref={priceRef} labelStyle="ml-3" required={true} placeholder={"Price*"} />
                             </div>
                             <div className='col-6 px-0'>
                                 <Input type="number" ref={courseHoursRef} required={true} placeholder={"Course Hours*"} />
@@ -186,8 +215,8 @@ const CreateCourse = React.forwardRef((props: Props, ref) => {
                         <Input type='textarea' ref={summaryRef} required={true} placeholder={"Summary*"} />
             </div>
 
-            <div style={{display: "none"}} className='tab row w-full mx-0 divide-y divide-gray-200 hidden'>
-                <h1 className='text-center text-3xl py-6'>Add Subtitles</h1>
+            <div style={{display: "none"}} className='tab row w-full mx-0 divide-y bg-white divide-gray-200 hidden'>
+                <h1 className='text-center text-3xl py-6 bg-white relative z-10'>Add Subtitles</h1>
                 <SubtitleAlt subtitles={subtitles} setSubtitles={setSubtitles} />
             </div>
 

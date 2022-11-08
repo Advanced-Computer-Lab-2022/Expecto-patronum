@@ -18,6 +18,7 @@ module.exports = {
         "semi-transparent-border": "rgba(0, 136, 168, 0.5)",
       },
       scale: {
+        '200': '2',
         '160': '1.60',
         '155': '1.55',
         '135': '1.35',
@@ -70,6 +71,7 @@ module.exports = {
         'beside-sidebar': 'calc(100% - 3.5rem)',
         'screen-2.5': '2.5vw',
         '-50px': '-50px',
+        'negative-4': '-1rem',
         'initial': 'initial',
         '22': '5.5rem',
         '30': '7.5rem',
@@ -79,7 +81,8 @@ module.exports = {
       },
       minWidth: {
         'form-input': '8.9rem',
-        'form-page': '18.75rem,'
+        'form-page': '18.75rem',
+        '64': '16rem',
       },
       borderWidth: {
         'radio-width': '0.7vw',
@@ -98,6 +101,7 @@ module.exports = {
       },
       rotate: {
         'negative-90': '-90deg',
+        'negative-180': '-180deg',
       }
     },
   },

@@ -39,7 +39,7 @@ const InstructorSidebar = (props: Props) => {
     }
 
   return (
-    <div ref={sidebarRef} className='w-72 sb-max:w-14 text-left text-slate-200 text-xl py-4 px-2 bg-navbar flex border-r-px border-slate-700 flex-col sb-max:absolute sb-max:h-full static left-0 z-40'>
+    <div ref={sidebarRef} className='w-52 sb-max:w-14 text-left text-slate-200 text-lg py-4 px-2 bg-navbar flex border-r-px border-slate-700 flex-col sb-max:absolute sb-max:h-full static left-0 z-40'>
         <button onClick={toggleSidebar} className='relative left-2 mb-4 rounded-md w-fit p-0.5 bg-opacity-50 hover:bg-slate-600 hover:scale-160 transition-all duration-200 scale-150 hidden sb-max:block' ><GiHamburgerMenu /></button>
         <ul onMouseLeave={hide}>
           <li className='w-full z-10 relative' onMouseOver={autoMove}>

@@ -27,12 +27,12 @@ div::-webkit-scrollbar-track {
 }
 
 div::-webkit-scrollbar-thumb {
-  background-color: rgba(200, 200, 200, .1);
+  background-color: rgba(200, 200, 200, .5);
   border-radius: 20px;
 }
 
 div::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(200, 200, 200, .2);
+  background-color: rgba(200, 200, 200, .6);
   border-radius: 20px;
 }
 
