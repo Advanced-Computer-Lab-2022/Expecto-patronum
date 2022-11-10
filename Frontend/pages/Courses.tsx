@@ -31,6 +31,7 @@ const Courses: NextPage<AllCoursesData> = ({ data }) => {
   });
 
   Router.events.on("routeChangeStart", (url) => {
+    console.log(`Loading: ${url}`);
     SetLoading(true);
   });
 
@@ -133,7 +134,7 @@ const Courses: NextPage<AllCoursesData> = ({ data }) => {
             })}
           </div>
 
-          <div className="flex flex-wrap gap-10 gap-y-14 ">
+          <div className="gap-10 gap-y-14 grid grid-cols-3">
             {data.FinalResult.map((item, index) => {
               return <CourseCard key={index} CourseData={item}></CourseCard>;
             })}

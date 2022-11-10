@@ -29,7 +29,7 @@ const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
       onMouseLeave={() => {
         SetFlag(false);
       }}
-      className=" w-[22rem] h-[28rem] px-10 pt-10 relative rounded-3xl shadow-lg 
+      className=" h-[28rem] px-10 pt-10 relative rounded-3xl shadow-lg 
     bg-gradient-to-br from-amber-400/90  to-amber-300/90 
      ... cursor-pointer"
     >
@@ -58,12 +58,12 @@ const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
       >
         <div
           className="bg-white 
-           absolute top-0 right-0 w-20 h-10 shadow-xl ease-in duration-300 
+           absolute top-0 right-0 w-14 h-10 shadow-xl ease-in duration-300 
            hover:shadow-sm flex items-center justify-center rounded-b-lg "
         >
           <Rating rating={rating.avg}></Rating>
         </div>
-        <div className="bg-white/60 inline-block text-center px-5 py-1 font-bold uppercase rounded-md mb-10">
+        <div className="bg-white/60 inline-block text-center px-3 py-1 font-bold uppercase rounded-md mb-10">
           Beginner
         </div>
         <h1 className="text-4xl w-4/5 font-bold line-clamp-2">{title}</h1>
@@ -79,7 +79,7 @@ const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
           {Rate.curr}
         </p>
         <div className="absolute bottom-0 right-10">
-          <div className="w-36 ">
+          <div className="w-32 ">
             <Image
               src="https://i.ibb.co/kqgnCrP/Brush.png"
               width={45}

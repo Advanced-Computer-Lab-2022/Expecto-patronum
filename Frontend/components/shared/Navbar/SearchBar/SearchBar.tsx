@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { BiSearchAlt2 } from "react-icons/bi";
@@ -215,6 +216,7 @@ const SearchBar = (props: Props) => {
       >
         <IoMdClose />
       </button>
+
       <button
         id="submit-search-btn"
         ref={searchRef}
