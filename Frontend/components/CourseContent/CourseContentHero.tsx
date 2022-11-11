@@ -13,7 +13,7 @@ const CourseContentHero = (props: Props) => {
 
   const onScroll = () => {
     if (listInnerRef.current) {
-      const { scrollTop, offsetHeight, scrollHeight } = listInnerRef.current;
+      const { offsetHeight, scrollHeight } = listInnerRef.current;
       if (window.scrollY >= offsetHeight) {
         props.SetNavApear(true);
       } else {
