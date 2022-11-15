@@ -53,7 +53,7 @@ const InputAlt = (props: Props) => {
     }
 
   return (
-    <div className={props.inputDivStyle + ' w-auto p-2 min-w-form-input'}>
+    <div className={props.inputDivStyle + ' w-auto p-2 min-w-[8.9rem]'}>
         <label ref={labelRef} className={(props.required ? 'create-course-input-label ': "") + props.labelStyle + ' relative whitespace-nowrap block w-fit pointer-events-none rounded-lg top-7 text-gray-400 h-4 left-2 bg-navbar px-1'}>{props.placeholder}</label>
         <input type={props.type} name={props.name} value={props.value} onClick={props.onClick} onChange={props.onChange} onFocus={moveLabel} onBlur={(e) => returnToInitial(e)} className={props.style + (props.required ? ' create-course-input': "") + ' focus:outline-none appearance-none w-full transition-bg text-white bg-transparent rounded-lg pl-2 shadow-lg border-2 h-12 border-navlink-bg'}></input>
     </div>

@@ -225,22 +225,41 @@ async function GetCourse(req, res) {
 }
 
 async function CreateCourse(req, res) {
-  const result = await Course.create({
-    title: req.body.title,
-    subject: req.body.subject,
-    instructorName: req.body.instructorName,
-    price: req.body.price,
-    level: req.body.level,
-    courseHours: req.body.courseHours,
-    summary: req.body.summary
-    // skills: req.body.skills,
-    // rating: req.body.rating,
-    // exercises: req.body.exercises,
-    // subtitles: req.body.subtitles,
-  }).then(result => { return result });
-  console.log(req.body.level);
+
+    const result = await Course.create({
+      title: req.body.title,
+      subject: req.body.subject,
+      instructorName: req.body.instructorName,
+      price: req.body.price,
+      level: req.body.level,
+      courseHours: req.body.courseHours,
+      summary: req.body.summary,
+      subtitles: req.body.subtitles,
+    });
+    res.send(result);
+
+
+  // const result = await Course.create({
+  //   title: req.body.title,
+  //   subject: req.body.subject,
+  //   instructorName: req.body.instructorName,
+  //   price: req.body.price,
+  //   level: req.body.level,
+  //   courseHours: req.body.courseHours,
+  //   summary: req.body.summary,
+  //   // skills: req.body.skills,
+  //   // rating: req.body.rating,
+  //   subtitles: req.body.subtitles,
+  // }).then(result => { return result });
+  // res.send(result);
+}
+
+async function GetAllCourses(req, res) {
+  var result = await Course.find({});
+
+  console.log(result);
+
   res.send(result);
 }
 
-
-module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse };
+module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses };

@@ -4,6 +4,7 @@ import DataContext from "../../../../context/DataContext";
 import { BiSearchAlt2 } from "react-icons/bi";
 import  { IoMdClose } from "react-icons/io";
 import { curtainSearchSwitching } from "../Navbar";
+import classNames from 'classnames';
 
 type Props = {}
 
@@ -16,10 +17,9 @@ const SearchBar = (props: Props) => {
     const searchInputRef = useRef<any>();
     const submitSearchRef = useRef<any>();
     const closeButtonRef = useRef<any>();
-    const responsiveSearchButtonRef = useRef<any>();
 
     const { SetFilter } = useContext(DataContext);
-    const { setIsSearchOpen, isCurtainOpen } = useContext(curtainSearchSwitching);
+    const { isSearchOpen, setIsSearchOpen, isCurtainOpen } = useContext(curtainSearchSwitching);
 
     const router = useRouter();
 
@@ -45,8 +45,21 @@ const SearchBar = (props: Props) => {
             Page: 1,
             };
         });
-
-        e.preventDefault();
+        
+        // if (router.query.search) {
+        //   router.query.search = searchValue;
+        // } else {
+        //   if (
+        //     router.query.subject ||
+        //     router.query.price ||
+        //     router.query.rating
+        //   ) {
+        //     router.push(router.asPath + "&keyword=" + searchValue);
+        //   } else {
+        //     router.push(router.asPath + "?keyword=" + searchValue);
+        //   }
+        // }
+        // e.preventDefault();
     }
 
     const setDisableAndValue = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -63,52 +76,53 @@ const SearchBar = (props: Props) => {
     
     }
 
-    function openSearch() {
-        
-        setIsSearchOpen(true);
-
-        searchRef.current.classList.remove("nv-max:top-[-50px]");
-        searchRef.current.classList.add("nv-max:top-22");
-
-        responsiveSearchButtonRef.current.classList.add("hidden");
-
-        closeButtonRef.current.classList.remove("z-behind");
-
-        searchInputRef.current.focus();
-    }
-
     function closeSearch() {
 
         setIsSearchOpen(false);
         
-        searchRef.current.classList.add("nv-max:top-[-50px]");
-        searchRef.current.classList.remove("nv-max:top-22");
+        searchRef.current.classList.add("nv-max:w-0");
+        searchRef.current.classList.remove("nv-max:w-fullscreen");
 
-        responsiveSearchButtonRef.current.classList.remove("hidden");
+    }
 
-        closeButtonRef.current.classList.add("z-1");
+    function toggleSearch() {
+
+        !isSearchOpen ? searchInputRef.current.focus(): null;
+
+        setIsSearchOpen(!isSearchOpen);
+        
+        searchRef.current.classList.toggle("nv-max:w-0");
+        searchRef.current.classList.toggle("mob:w-screen");
+        searchRef.current.classList.toggle("nv-max-mob:w-fullscreen");
+        searchRef.current.classList.toggle("z-50");
+
+        closeButtonRef.current.classList.toggle("nv-max:right-2");
 
     }
 
   return (
-    <form className='flex items-center w-full z-40'>
+    <form className={search}>
 
-        <div ref={searchRef} className='nv-max:absolute z-20 flex relative nv-max:top-[-50px] nv-max:left-0 nv-max:right-0 max-w-lg nv-max:w-11/12 nv-max:mx-auto transition-all duration-1000'>
-            <input ref={searchInputRef} value={searchValue} onChange={setDisableAndValue} placeholder='Search for anything' className='rounded-full w-96 h-8 pl-2.5 nv-max:ml-12 text-white bg-navlink-bg placeholder:italic placeholder:text-sm placeholder-white tracking-wide placeholder-opacity-70 focus:outline focus:outline-2 outline-searchFocus'/>
-            <button type='submit' ref={submitSearchRef} disabled={isDisabled} onClick={submit} onMouseOver={checkEmptySearch} className='rounded-full bg-navlink-bg text-white p-2 align-top relative right-8'>
-                <BiSearchAlt2 className='scale-150 hover:scale-160' />
+        <div ref={searchRef} className={searchInputDiv}>
+            <input ref={searchInputRef} value={searchValue} onChange={setDisableAndValue} placeholder='Search for anything' className={searchInput} />
+            <button type='submit' ref={submitSearchRef} disabled={isDisabled} onClick={submit} onMouseOver={checkEmptySearch} className={searchButton} >
+                <BiSearchAlt2 />
             </button>
         </div>
 
-        <button type='button' onClick={closeSearch} ref={closeButtonRef} className='absolute text-white rounded-full nv:hidden nv-max:bg-red-500 p-2 right-24 top-4 hover:cursor-pointer transition-transform duration-300' >
-            <IoMdClose className='scale-150 hover:scale-160' />
-        </button>
-        <button type='button' ref={responsiveSearchButtonRef} onClick={openSearch} className='rounded-full nv:hidden nv-max:absolute text-navlink-bg bg-white p-2 nv-max:right-24 relative right-8'>
-            <BiSearchAlt2 className='scale-150 hover:scale-160' />
+        <button type='button' onClick={toggleSearch} ref={closeButtonRef} className={toggleSearchButton} >
+            {isSearchOpen ? <IoMdClose className={buttonIcon} />: <BiSearchAlt2 className={buttonIcon} /> }
         </button>
 
     </form>
   )
 }
+
+const search = classNames('flex items-center z-40');
+const searchInputDiv = classNames('nv-max:absolute z-behind flex relative nv-max:h-full nv-max:w-0 nv-max:right-0 nv-max:overflow-hidden nv-max:mx-auto transition-all duration-300');
+const searchInput = classNames('rounded-full w-96 h-8 nv-max:h-full mob:w-screen nv-max-mob:w-fullscreen nv-max:absolute nv-max:pr-3 bg-main nv-max:right-0 pl-2.5 pr-8 nv-max:rounded-none border-1.5 nv-max:border-gray-300 border-black placeholder:italic placeholder:text-sm bg-transparent tracking-wide focus:outline-0 transition-all duration-300');
+const searchButton = classNames('rounded-full p-2 align-top relative right-8 transition-all duration-200 scale-125 hover:scale-135 nv-max:hidden');
+const toggleSearchButton = classNames('absolute text-white rounded-full nv:hidden nv-max:bg-canadian-red hover:scale-110 nv-max:hover:text-canadian-red nv-max:hover:bg-main border-1.5 border-canadian-red h-8 w-8 right-48 top-6 hover:cursor-pointer transition-all duration-300');
+const buttonIcon = classNames('scale-135 pointer-events-none ml-1.5');
 
 export default SearchBar;

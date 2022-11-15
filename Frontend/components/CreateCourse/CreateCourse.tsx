@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import Input from '../shared/Input/Input';
-import { IoMdClose } from "react-icons/io";
 import SubtitleAlt from '../shared/SubtitleAlt/SubtitleAlt';
 
 type Props = {}
@@ -19,11 +18,10 @@ const CreateCourse = React.forwardRef((props: Props, ref) => {
     const subjectRef = useRef<any>();
     const instructorNameRef = useRef<any>();
     const priceRef = useRef<any>();
-    const courseHoursRef = useRef<any>();
     const summaryRef = useRef<any>();
     const radioRef = useRef<any>(null);
 
-    const essentialsRef = [titleRef, subjectRef, instructorNameRef, priceRef, courseHoursRef, radioRef, summaryRef];
+    const essentialsRef = [titleRef, subjectRef, instructorNameRef, priceRef, radioRef, summaryRef];
 
     function goToPrev() {
         const tabs = document.getElementsByClassName("tab");
@@ -66,7 +64,7 @@ const CreateCourse = React.forwardRef((props: Props, ref) => {
                     var radioButton = essentialsRef[k].current.children[z].children[0];
                     if(radioButton.checked) {
                         // console.log(essentialsRef[k].current.children[z].children[2].value);
-                        setSelectedRadio(essentialsRef[k].current.children[z].children[2].value);
+                        setSelectedRadio(essentialsRef[k].current.children[z].children[2].innerHTML);
                         selected = true;
                         break;
                     }
@@ -118,105 +116,65 @@ const CreateCourse = React.forwardRef((props: Props, ref) => {
         isReset = true;
     }
 
-    const subtitle = {
-        header: "",
-        contents: [
-            {
-                contentTitle: "",
-                video: "",
-                preview: false,
-                duration: 0,
-                description: "",
-            },
-            {
-                contentTitle: "",
-                video: "",
-                preview: false,
-                duration: 0,
-                description: "",
-            },
-            {
-                contentTitle: "",
-                video: "",
-                preview: false,
-                duration: 0,
-                description: "",
-            },
-            {
-                contentTitle: "",
-                video: "",
-                preview: false,
-                duration: 0,
-                description: "",
-            }
-        ],
-        exercise: {
-            exerciseTitle: "",
-            questions: [
-                {
-                    question: "",
-                    choices: [""],
-                    answer: "",
-                },
-                {
-                    question: "",
-                    choices: [""],
-                    answer: "",
-                },
-                {
-                    question: "",
-                    choices: [""],
-                    answer: "",
-                }
-            ],
-        },
-        totalMinutes: 0,
-    }
-
-    const [subtitles, setSubtitles] = useState<any>([subtitle, subtitle, subtitle]);
+    const [subtitles, setSubtitles] = useState<any>([new Subtitle(), new Subtitle(), new Subtitle()]);
 
     async function createCourse(e: React.FormEvent<HTMLFormElement>) {
 
         e.preventDefault();
 
-        console.log(subtitles);
+        var courseHours = 0;
+        subtitles.map((subtitle: any) => {
+            subtitle.totalMinutes = 0;
+            subtitle.contents.map((content: any) => {
+                subtitle.totalMinutes += content.duration;
+            })
+            courseHours += subtitle.totalMinutes;
+        });
 
-        // axios.defaults.withCredentials = true;
-        // response = await axios.post("http://localhost:5000/Course/CreateCourse", {
-        //     title: titleRef.current.value,
-        //     subject: subjectRef.current.value,
-        //     instructorName: instructorNameRef.current.value,
-        //     price: priceRef.current.value,
-        //     level: selectedRadio,
-        //     courseHours: courseHoursRef.current.value,
-        //     summary: summaryRef.current.value,
-        // }).then(res => {return res.data});
+        axios.defaults.withCredentials = true;
+        response = await axios.post("http://localhost:5000/Course/CreateCourse", {
+            title: titleRef.current.children[1].value,
+            subject: subjectRef.current.children[1].value,
+            instructorName: instructorNameRef.current.children[1].value,
+            price: priceRef.current.children[1].value,
+            level: selectedRadio,
+            courseHours: courseHours,
+            summary: summaryRef.current.children[1].value,
+            subtitles: subtitles,
+        }).then(res => {return res.data});
 
-        // console.log(response);
+        console.log(response);
     }
 
   return (
-        <form id='course-form' className='w-full sb-max:w-beside-sidebar mr-0 ml-auto' ref={ref as any} onSubmit={(e) => createCourse(e)} onChange={(e) => !isReset ? resetError(e): {}}>
+        <form id='course-form' className='w-auto sb-max:w-beside-sidebar mr-0 ml-auto' ref={ref as any} onSubmit={(e) => createCourse(e)} onChange={(e) => !isReset ? resetError(e): {}}>
             
-            <div className='tab row mx-0 justify-center shadow-xl'>
+            <div className='tab row mx-0 justify-center'>
                         <Input ref={titleRef} required={true} placeholder={"Title*"} />
                         <Input ref={subjectRef} required={true} placeholder={"Subject*"} />
                         <Input ref={instructorNameRef} required={true} placeholder={"Instructor's Name*"} />
                         <div className='row px-0'>
-                            <div className='col-6 px-0'>
+                            <div className='col-sm-6 px-0 pt-4 mt-2'>
                                 <label className='text-gray-400 absolute ml-4 mt-9 pt-px'>$</label>
                                 <Input type="number" ref={priceRef} labelStyle="ml-3" required={true} placeholder={"Price*"} />
                             </div>
-                            <div className='col-6 px-0'>
-                                <Input type="number" ref={courseHoursRef} required={true} placeholder={"Course Hours*"} />
+                            <div className='col-sm-6 px-0'>
+                                {/* <Input type="number" ref={courseHoursRef} required={true} placeholder={"Course Hours*"} /> */}
+                                <Input ref={radioRef} type='radio' title='Select Level*' enum={['Beginner', 'Intermediate', 'Advanced', 'All Levels']} required={true} placeholder={"Level"} />
                             </div>
                         </div>
-                        <Input ref={radioRef} type='radio' title='Select Level*' enum={['Beginner', 'Intermediate', 'Advanced', 'All Levels']} required={true} placeholder={"Level"} />
                         <Input type='textarea' ref={summaryRef} required={true} placeholder={"Summary*"} />
             </div>
 
-            <div style={{display: "none"}} className='tab row w-full mx-0 divide-y bg-white divide-gray-200 hidden'>
-                <h1 className='text-center text-3xl py-6 bg-white relative z-10'>Add Subtitles</h1>
+            <div style={{display: "none"}} className='tab row mx-0 hidden relative overflow-hidden'>
+                <h1 className='text-center text-3xl pt-6 bg-white relative z-10'>Add Subtitles</h1>
+                <hr />
+                <p className='text-gray-700 mx-auto pb-6'>In this section you are going to add the subtitles for each part of the course where every subtitle is categorized into multiple contents.
+                    (e.g. A subtitle can contain 'Introduction' & 'What to do next' as content titles for every part of the course).
+                    Please note that a course must have at least 3 subtitles and each subtitle must have at least 4 contents/categories/parts.
+                    Please ensure to fill in the fields with the required format, otherwise this may result in inconsistent information of your course.
+                </p>
+                <hr className='mb-2'/>
                 <SubtitleAlt subtitles={subtitles} setSubtitles={setSubtitles} />
             </div>
 
@@ -225,39 +183,39 @@ const CreateCourse = React.forwardRef((props: Props, ref) => {
                     <div className='px-4'>
                         <div className='row p-2'>
                             <div className='col-4 col-md-2'>
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Brush.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Brush.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Brush.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Brush.png' />
                             </div>
                             <div className='col-4 col-md-2'>
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Rocket3.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Rocket3.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Rocket3.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Rocket3.png' />
                             </div>
                             <div className='col-4 col-md-2'>
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Trophy.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Trophy.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Trophy.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Trophy.png' />
                             </div>
                             <div className='col-4 col-md-2'>
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/pc.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/pc.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/pc.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/pc.png' />
                             </div>
                             <div className='col-4 col-md-2'>
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Brush.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Brush.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Rocket3.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Trophy.png' />
                             </div>
                             <div className='col-4 col-md-2'>
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
-                                <img className='w-20 h-20 hover:scale-105 my-2 hover:bg-navlink-bg transition-all duration-200 border-icon-outline border-semi-transparent-border border-navlink-bg rounded-xl cursor-pointer' src='/images/Brush.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/pc.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Rocket3.png' />
+                                <img className='w-20 h-20 hover:scale-105 my-3 hover:bg-dark-gray transition-all duration-200 border-1.5 hover:border-0 border-bright-gray shadow-md rounded-xl cursor-pointer' src='/images/Trophy.png' />
                             </div>
                         </div>
                     </div>
@@ -286,3 +244,63 @@ const CreateCourse = React.forwardRef((props: Props, ref) => {
 })
 
 export default CreateCourse;
+export class Subtitle {
+    header: string;
+    exercise: { exerciseTitle: string; questions: { question: string; choices: string[]; answer: string; }[]; };
+    contents: { contentTitle: string; video: string; preview: boolean; duration: number; description: string; }[];
+    totalMinutes: number;
+    constructor() {
+        this.header = "";
+        this.contents = [
+            {
+                contentTitle: "",
+                video: "",
+                preview: false,
+                duration: 0,
+                description: "",
+            },
+            {
+                contentTitle: "",
+                video: "",
+                preview: false,
+                duration: 0,
+                description: "",
+            },
+            {
+                contentTitle: "",
+                video: "",
+                preview: false,
+                duration: 0,
+                description: "",
+            },
+            {
+                contentTitle: "",
+                video: "",
+                preview: false,
+                duration: 0,
+                description: "",
+            }
+        ];
+        this.exercise = {
+            exerciseTitle: "",
+            questions: [
+                {
+                    question: "",
+                    choices: [""],
+                    answer: "",
+                },
+                {
+                    question: "",
+                    choices: [""],
+                    answer: "",
+                },
+                {
+                    question: "",
+                    choices: [""],
+                    answer: "",
+                }
+            ],
+        };
+        this.totalMinutes = 0;
+    }
+}

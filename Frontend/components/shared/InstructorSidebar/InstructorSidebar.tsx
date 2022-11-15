@@ -43,22 +43,22 @@ const InstructorSidebar = (props: Props) => {
         <button onClick={toggleSidebar} className='relative left-2 mb-4 rounded-md w-fit p-0.5 bg-opacity-50 hover:bg-slate-600 hover:scale-160 transition-all duration-200 scale-150 hidden sb-max:block' ><GiHamburgerMenu /></button>
         <ul onMouseLeave={hide}>
           <li className='w-full z-10 relative' onMouseOver={autoMove}>
-            <Link href="/Instructor"><a className='flex p-2 w-fit rounded-md relative z-10'><span className='pt-0.5 mr-4 sb-max:mr-0'><FaHome /></span><span className='sb-max:hidden'>Home</span></a></Link>
+            <Link legacyBehavior href="/Instructor"><a className='flex p-2 w-fit rounded-md relative z-10'><span className='pt-0.5 mr-4 sb-max:mr-0'><FaHome /></span><span className='sb-max:hidden'>Home</span></a></Link>
           </li>
           <li className='w-full z-10 relative' onMouseOver={autoMove}>
-            <Link href="/Instructor/Messages"><a className='flex p-2 w-fit rounded-md relative z-10'><span className='pt-0.5 mr-4 sb-max:mr-0'><FaEnvelope /></span><span className='sb-max:hidden'>Messages</span></a></Link>
+            <Link legacyBehavior href="/Instructor/Messages"><a className='flex p-2 w-fit rounded-md relative z-10'><span className='pt-0.5 mr-4 sb-max:mr-0'><FaEnvelope /></span><span className='sb-max:hidden'>Messages</span></a></Link>
           </li>
           <li className='w-full z-10 relative' onMouseOver={autoMove}>
-            <Link href="/Instructor/MyCourses"><a className='flex p-2 w-fit rounded-md relative z-10 whitespace-nowrap'><span className='pt-0.5 mr-4 sb-max:mr-0 sb-max:relative'><FaBookOpen /></span><span className='sb-max:hidden'>My Courses</span></a></Link>
+            <Link legacyBehavior href="/Instructor/MyCourses"><a className='flex p-2 w-fit rounded-md relative z-10 whitespace-nowrap'><span className='pt-0.5 mr-4 sb-max:mr-0 sb-max:relative'><FaBookOpen /></span><span className='sb-max:hidden'>My Courses</span></a></Link>
           </li>
           <li className='w-full z-10 relative' onMouseOver={autoMove}>
-            <Link href="/Instructor/AddNewCourse"><a className='flex p-2 w-fit rounded-md relative z-10 whitespace-nowrap'><span className='pt-0.5 mr-4 sb-max:mr-0'><FaBookOpen /><AiOutlinePlus className='absolute bottom-1 h-4 left-6' /></span><span className='sb-max:hidden'>Add New Course</span></a></Link>
+            <Link legacyBehavior href="/Instructor/AddNewCourse"><a className='flex p-2 w-fit rounded-md relative z-10 whitespace-nowrap'><span className='pt-0.5 mr-4 sb-max:mr-0'><FaBookOpen /><AiOutlinePlus className='absolute bottom-1 h-4 left-6' /></span><span className='sb-max:hidden'>Add New Course</span></a></Link>
           </li>
           <li className='w-full z-10 relative' onMouseOver={autoMove}>
-            <Link href="/Instructor/Settings"><a className='flex p-2 w-fit rounded-md relative z-10'><span className='pt-0.5 mr-4 sb-max:mr-0'><FiSettings /></span><span className='sb-max:hidden'>Settings</span></a></Link>
+            <Link legacyBehavior href="/Instructor/Settings"><a className='flex p-2 w-fit rounded-md relative z-10'><span className='pt-0.5 mr-4 sb-max:mr-0'><FiSettings /></span><span className='sb-max:hidden'>Settings</span></a></Link>
           </li>
           <li className='w-full z-10 relative' onMouseOver={autoMove}>
-            <Link href="/Instructor/Support"><a className='flex p-2 w-fit rounded-md relative z-10'><span className='pt-0.5 mr-4 sb-max:mr-0'><BiSupport /></span><span className='sb-max:hidden'>Support</span></a></Link>
+            <Link legacyBehavior href="/Instructor/Support"><a className='flex p-2 w-fit rounded-md relative z-10'><span className='pt-0.5 mr-4 sb-max:mr-0'><BiSupport /></span><span className='sb-max:hidden'>Support</span></a></Link>
           </li>
         </ul>
         <div ref={sidebarHoverRef} id="movable-hover" className="absolute sb-max:right-1 hidden transition-all z-0 duration-200 bg-navlink-bg px-4 py-1 rounded-lg"></div>

@@ -83,7 +83,7 @@ app.listen(5000, () => {
 
 
 app.use('/Auth', AuthRoute);
-app.use('/Courses', CoursesRoute);
+app.use('/Course', CoursesRoute);
 app.use('/Admin', AdminRoute);
 app.use('/Instructor', InstructorRoute);
 app.use('/User', UsersRoute);

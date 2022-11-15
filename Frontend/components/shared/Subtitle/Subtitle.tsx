@@ -25,7 +25,7 @@ const Subtitle = React.forwardRef((props: Props, ref) => {
     <ContentCount.Provider value={{numberOfContents, setNumberOfContents}} >
       <div id='subtitles' ref={ref as any}>
         <button type='button' onClick={generateContent} className='hover:text-searchFocus ml-4 pb-1 text-navlink-bg block text-xs'>Add Subtitle</button>
-        <div id='subtitles-section' className='h-auto min-h-40 max-h-96 border-2 rounded-lg mb-4 border-neutral-700 overflow-y-scroll'>
+        <div id='subtitles-section' className='h-auto min-h-[10rem] max-h-96 border-2 rounded-lg mb-4 border-neutral-700 overflow-y-scroll'>
           {contents}
         </div>
       </div>
