@@ -22,7 +22,11 @@ const CourseSchema = new mongoose.Schema({
   },
   discount: {
     type: Number,
-    default: 0
+    default: 0,
+    startDate: Date,
+    duration: Number,
+    endDate: Date,
+    //expiration: moment().add(, "days").valueOf()
   },
 
   subject: {
@@ -75,7 +79,7 @@ const CourseSchema = new mongoose.Schema({
       questions: [{
         question: String,
         choices: [String],
-        answer: Number,
+        answer: String,
         isVisible: Boolean,
       }],
       totalGrade: Number
@@ -106,6 +110,12 @@ const CourseSchema = new mongoose.Schema({
     //   / (this.one + this.two + this.three + this.four + this.five)
     // }
   },
+  review:[{
+    username:String,
+    reviewBody:String,
+    rating:Number
+  }]
+
 
 });
 
