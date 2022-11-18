@@ -78,7 +78,7 @@ const selectDiv = classNames("flex flex-col absolute top-14 z-10 right-0 w-48 h-
 const selectSearch = classNames('rounded-lg relative pl-2 m-px bg-white shadow-md focus:outline-0');
 const selectButton = classNames("navbar-link rounded-full border-1.5 border-black hover:text-white hover:bg-black hover:scale-110 mx-2 h-8 w-8 whitespace-nowrap z-10 transition-all duration-300 flex items-center justify-center");
 const selectButtonIcon = classNames("scale-110 pointer-events-none");
-const allCountries = classNames("w-fit flex flex-col overflow-y-scroll mt-2");
+const allCountries = classNames("w-full flex flex-col overflow-y-scroll mt-2");
 const countryStyle = classNames('relative mx-auto w-full hover:bg-canadian-red hover:text-white rounded-full');
 
 export default SelectCountry;

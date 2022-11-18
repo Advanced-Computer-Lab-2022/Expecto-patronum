@@ -7,7 +7,9 @@ const Instructor = (props: Props) => {
 
   return (
     <Layout>
-      
+      <div>
+        
+      </div>
     </Layout>
   )
 }

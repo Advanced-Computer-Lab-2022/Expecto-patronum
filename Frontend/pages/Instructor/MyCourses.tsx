@@ -65,13 +65,13 @@ const MyCourses = (props: Props) => {
 
   return ( 
     <Layout>
-        <div className='w-full m-8 text-white relative nv-max:ml-20'>
+        <div className='sb-max:min-w-fit text-white'>
           {courseData.slice(10*(currentPage - 1), 10*currentPage).map((course: any, index: number) => {
             return (
-              <div key={index} className={`h-[12rem] w-full my-10 p-4 relative rounded-lg shadow-lg bg-gradient-to-br ${levelColor(course.level)}`}>
+              <div key={index} className={`h-fit w-full my-10 p-4 relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg bg-gradient-to-br ${levelColor(course.level)}`}>
                 <h1 className='text-xl nv-max:pr-14'>{course.title}</h1>
                 <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
-                    <Rating rating={parseFloat((Math.random()*5).toFixed(2))} />
+                    <Rating rating={2.47} />
                 </div>
                 <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level}</span></p>
                 <label className='pl-3'>Description:</label>

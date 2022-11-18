@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import { FiFacebook, FiTwitter, FiInstagram, FiLinkedin } from 'react-icons/fi';
 
 type Props = {}
@@ -8,7 +7,7 @@ type Props = {}
 const Footer = (props: Props) => {
 
   return (
-    <div style={{backgroundColor: '#222222'}} className='text-white mx-0 fluid-container'>
+    <div style={{backgroundColor: '#222222'}} className='text-white mx-0 fluid-container block'>
         <div className='row mx-0'>
             <div className={footerCol}>
                 <h4 className={colHeader}><div className={colHeaderText}>Website</div></h4>

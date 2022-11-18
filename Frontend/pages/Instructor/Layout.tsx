@@ -7,9 +7,11 @@ type Props = {
 
 const Layout = (props: Props) => {
   return (
-    <div className='flex'>
+    <div className='flex relative'>
         <InstructorSidebar />
-        {props.children}
+        <div className='overflow-hidden sb-max:w-without-instructor-sidebar-closed sb:w-without-instructor-sidebar p-8 pt-2'>
+          {props.children}
+        </div>
     </div>
   )
 }

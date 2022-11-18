@@ -122,7 +122,7 @@ const search = classNames('flex items-center z-40');
 const searchInputDiv = classNames('nv-max:absolute z-behind flex relative nv-max:h-full nv-max:w-0 nv-max:right-0 nv-max:overflow-hidden nv-max:mx-auto transition-all duration-300');
 const searchInput = classNames('rounded-full w-96 h-8 nv-max:h-full mob:w-screen nv-max-mob:w-fullscreen nv-max:absolute nv-max:pr-3 bg-main nv-max:right-0 pl-2.5 pr-8 nv-max:rounded-none border-1.5 nv-max:border-gray-300 border-black placeholder:italic placeholder:text-sm bg-transparent tracking-wide focus:outline-0 transition-all duration-300');
 const searchButton = classNames('rounded-full p-2 align-top relative right-8 transition-all duration-200 scale-125 hover:scale-135 nv-max:hidden');
-const toggleSearchButton = classNames('absolute text-white rounded-full nv:hidden nv-max:bg-canadian-red hover:scale-110 nv-max:hover:text-canadian-red nv-max:hover:bg-main border-1.5 border-canadian-red h-8 w-8 right-48 top-6 hover:cursor-pointer transition-all duration-300');
+const toggleSearchButton = classNames('absolute text-white rounded-full nv:hidden nv-max:bg-canadian-red hover:scale-110 nv-max:hover:text-canadian-red nv-max:hover:bg-main border-1.5 border-canadian-red h-8 w-8 right-48 top-6 z-50 hover:cursor-pointer transition-all duration-300');
 const buttonIcon = classNames('scale-135 pointer-events-none ml-1.5');
 
 export default SearchBar;

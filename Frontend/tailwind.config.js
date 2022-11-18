@@ -48,6 +48,7 @@ module.exports = {
         'sm-max': { 'max': '639px' },
         'nv-max': { 'max': '935px' },
         'sb-max': { 'max': '856px' },
+        'sb': '857px',
         'nv-max-mob': {'min': '451px', 'max': '935px' },
         '1030': {'max': '1030px'},
       },
@@ -73,11 +74,16 @@ module.exports = {
         '800': '55rem',
         'fullscreen': 'calc(100vw - 16.667px)',
         'beside-sidebar': 'calc(100% - 3.5rem)',
+        'without-instructor-sidebar': 'calc(100% - 208px)',
+        'without-instructor-sidebar-closed': 'calc(100% - 56px)',
       },
       borderWidth: {
         'px': '1px',
         '1.5': '1.5px', 
       },
+      minWidth: {
+        'without-instructor-sidebar-closed': 'calc(100% - 56px)',
+      }
     },
   },
   plugins: [require('@tailwindcss/line-clamp'),
