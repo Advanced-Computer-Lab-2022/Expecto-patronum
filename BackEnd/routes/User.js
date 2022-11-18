@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const connection = require('../config/database');
-const { getRate } = require('../controller/UserController');
+const { getRate, giveCourseRating } = require('../controller/UserController');
 const UserTable = require('../models/UserSchema');
 
 router.get("/", (req, res) => {
@@ -8,5 +8,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/countryRate",getRate);
+
+router.put("/giveCourseRating",giveCourseRating);
 
 module.exports = router;

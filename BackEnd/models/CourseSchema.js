@@ -21,8 +21,10 @@ const CourseSchema = new mongoose.Schema({
     required: true
   },
   discount: {
-    discount: Number,
+    discount:{ 
+    type : Number,
     default: 0,
+    },
     startDate: Date,
     duration: Number,
     endDate: Date,
@@ -96,11 +98,26 @@ const CourseSchema = new mongoose.Schema({
     finalGrade: Number,
   },
   rating: {
-    one: Number,
-    two: Number,
-    three: Number,
-    four: Number,
-    five: Number,
+    one: {
+      type: Number,
+      default: 0
+    },
+    two: {
+      type: Number,
+      default: 0
+    },
+    three: {
+      type: Number,
+      default: 0
+    },
+   four: {
+      type: Number,
+      default: 0
+    },
+    five: {
+      type: Number,
+      default: 0
+    },
     avg: {
       type: Number,
       default: 0

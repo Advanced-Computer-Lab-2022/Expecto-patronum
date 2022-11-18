@@ -83,6 +83,49 @@ async function viewRatings(req,res){
   catch(error){
 
   }
-}
+};
 
-module.exports = { register, Logout,ViewAll,viewRatings,getRate }
+async function giveCourseRating(req, res, next){
+  username = req.body.username;
+  rating = req.body.rating;
+  courseId = req.body.courseId;
+  let query = {};
+  query.username = username;
+  query.rating = rating;
+  try {
+    switch(rating){
+      case 1:await CourseTable.findByIdAndUpdate({ "_id": courseId }, {$inc :{"rating.one": 1}}, { new: true });
+      break;
+      case 2:await CourseTable.findByIdAndUpdate({ "_id": courseId }, {$inc :{"rating.two": 1}}, { new: true });
+      break;
+      case 3:await CourseTable.findByIdAndUpdate({ "_id": courseId }, {$inc :{"rating.three": 1}}, { new: true });
+      break; 
+      case 4:await CourseTable.findByIdAndUpdate({ "_id": courseId }, {$inc :{"rating.four": 1}}, { new: true });
+      break;
+      case 5:await CourseTable.findByIdAndUpdate({ "_id": courseId }, {$inc :{"rating.five": 1}}, { new: true });
+      break;
+      default:res.send("error no rating");     
+    }
+    const y = await CourseTable.find({"_id":courseId}).select({"rating":1,"_id":0});
+    var rate = Object.values(y)[0];
+    var keys = Object.keys(rate.rating);
+    var values = Object.values(rate.rating);
+    console.log(keys);
+    console.log(values);
+    var z = {};
+  for (var i = 0; i < keys.length; i++) {
+    z[keys[i]] = values[i];
+  };
+    var average = (((z.one)+(z.two*2)+(z.three*3)+(z.four*4)+(z.five*5))/(z.one+z.two+z.three+z.four+z.five)).toFixed(2);
+    console.log(average);
+    const xx = await CourseTable.findByIdAndUpdate({ "_id": courseId }, {"rating.avg": average}, { new: true });
+    const review = await CourseTable.findByIdAndUpdate({ "_id": courseId }, {$push :{"review":query}},{ new: true });
+    res.status(200).json(review);
+
+  } catch (error) {
+   // console.log(error);
+  }
+
+};
+
+module.exports = { register, Logout,ViewAll,viewRatings,getRate,giveCourseRating }
