@@ -242,11 +242,15 @@ async function discount(req, res, next) {
   var discount = req.body.discount;
   queryCond.discount = req.body.discount;
   queryCond.duration = req.body.duration;
-  startDate = new Date();
-  endDate = new Date();
-  endDate.setDate(endDate.getDate() +req.body.duration);
-  console.log(endDate);
-  queryCond.startDate = startDate;
+  if(req.body.startDate){
+    startDate = new Date(req.body.startDate);
+    queryCond.startDate = req.body.startDate;
+  }else{
+    startDate = new Date();
+    queryCond.startDate = startDate;
+  }
+  endDate = new Date(startDate);
+  endDate.setDate(endDate.getDate() + req.body.duration);
   queryCond.endDate = endDate;
   discount = 1 - (discount / 100);
   try {
@@ -256,7 +260,6 @@ async function discount(req, res, next) {
 
     discountPrice = discountPrice.toFixed(2);
     const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond, discountPrice: discountPrice }, { new: true });
-    console.log(x);
     res.status(200).json(x);
 
   } catch (error) {
