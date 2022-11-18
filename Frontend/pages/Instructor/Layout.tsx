@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react'
-import InstructorSidebar from '../../components/shared/InstructorSidebar/InstructorSidebar'
+import React, { ReactNode } from 'react';
+import Sidebar from '../../components/Instructor/Sidebar/Sidebar';
 
 type Props = {
     children: ReactNode
@@ -8,7 +8,7 @@ type Props = {
 const Layout = (props: Props) => {
   return (
     <div className='flex relative'>
-        <InstructorSidebar />
+        <Sidebar />
         <div className='overflow-hidden sb-max:w-without-instructor-sidebar-closed sb:w-without-instructor-sidebar p-8 pt-2'>
           {props.children}
         </div>

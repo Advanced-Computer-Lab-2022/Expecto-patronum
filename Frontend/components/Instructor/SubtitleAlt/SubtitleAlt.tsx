@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { RiArrowDropDownLine } from 'react-icons/ri';
-import Input from '../Input/Input';
+import Input from '../../shared/Input/Input';
 import ExerciseAlt from './ExerciseAlt/ExerciseAlt';
-import { Subtitle } from '../../CreateCourse/CreateCourse';
+import { Subtitle } from '../../Instructor/CreateCourse/CreateCourse';
 import { FiTrash } from 'react-icons/fi';
 import { IoMdRemove } from 'react-icons/io';
 import { VscError } from 'react-icons/vsc';

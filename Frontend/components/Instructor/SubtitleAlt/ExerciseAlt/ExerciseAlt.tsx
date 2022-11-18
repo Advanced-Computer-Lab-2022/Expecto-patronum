@@ -1,6 +1,6 @@
 import React from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
-import Input from "../../Input/Input";
+import Input from "../../../shared/Input/Input";
 
 type Props = {
   subtitles: any;

@@ -11,7 +11,7 @@ import { IoMdClose } from 'react-icons/io';
 
 type Props = {}
 
-const InstructorSidebar = (props: Props) => {
+const Sidebar = (props: Props) => {
     
     const sidebarHoverRef = useRef<any>();
     const sidebarRef = useRef<any>();
@@ -34,12 +34,6 @@ const InstructorSidebar = (props: Props) => {
             current?.classList.add("selected-instructor-tab");
 
     }, [global.window?.location.pathname]);
-
-    // useEffect(() => {
-    //   global.window.onscroll = () => {
-    //     global.window.scrollY < 80 ? sidebarRef.current.classList.add('sb-max:top-[80px]'): sidebarRef.current.classList.remove('sb-max:top-[80px]')
-    //   }
-    // },[])
 
     const autoMove = (e: any) => {
         sidebarHoverRef.current.classList.add('opacity-100');
@@ -150,4 +144,4 @@ const linkIcon = classNames('mr-4 mb-1.25 sb-max:mr-0 opacity-70 scale-120');
 const linkText = classNames('sb-max:hidden whitespace-nowrap');
 const hoverPointer = classNames('absolute opacity-0 transition-all z-0 top-0 left-0 duration-200 bg-canadian-red py-1 rounded-lg');
 
-export default InstructorSidebar;
+export default Sidebar;
