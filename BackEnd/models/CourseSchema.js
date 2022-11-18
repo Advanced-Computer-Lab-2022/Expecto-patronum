@@ -21,7 +21,7 @@ const CourseSchema = new mongoose.Schema({
     required: true
   },
   discount: {
-    type: Number,
+    discount: Number,
     default: 0,
     startDate: Date,
     duration: Number,
@@ -90,7 +90,7 @@ const CourseSchema = new mongoose.Schema({
     questions: [{
       question: String,
       choices: [String],
-      answer: Number,
+      answer: String,
       isVisible: Boolean,
     }],
     finalGrade: Number,

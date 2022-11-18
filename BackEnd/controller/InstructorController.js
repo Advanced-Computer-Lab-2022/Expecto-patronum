@@ -237,8 +237,17 @@ async function addCourse(req, res, next) {
 };
 
 async function discount(req, res, next) {
+  let queryCond = {};
   const courseID = req.body.courseID;
   var discount = req.body.discount;
+  queryCond.discount = req.body.discount;
+  queryCond.duration = req.body.duration;
+  startDate = new Date();
+  endDate = new Date();
+  endDate.setDate(endDate.getDate() +req.body.duration);
+  console.log(endDate);
+  queryCond.startDate = startDate;
+  queryCond.endDate = endDate;
   discount = 1 - (discount / 100);
   try {
     const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
@@ -246,7 +255,7 @@ async function discount(req, res, next) {
     var discountPrice = (z.price * discount);
 
     discountPrice = discountPrice.toFixed(2);
-    const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: req.body.discount, discountPrice: discountPrice }, { new: true });
+    const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond, discountPrice: discountPrice }, { new: true });
     console.log(x);
     res.status(200).json(x);
 

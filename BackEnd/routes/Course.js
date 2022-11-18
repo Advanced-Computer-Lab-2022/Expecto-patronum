@@ -30,8 +30,8 @@ router.get("/POP", async (req, res) => {
         title: "Quiz 1",
         questions:
           [
-            { question: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: 0, isVisible: false },
-            { question: "what about ur second oscar?", choices: ["hard", "what", "about", "it"], answer: 0, isVisible: true },
+            { question: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
+            { question: "what about ur second oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
           ]
         , totalGrade: 100
       },
@@ -39,8 +39,8 @@ router.get("/POP", async (req, res) => {
         title: "Quiz 2",
         questions:
           [
-            { question: "what about ur 3rd oscar?", choices: ["easier", "what", "about", "it"], answer: 0, isVisible: false },
-            { question: "what about ur 4th oscar?", choices: ["harder", "what", "about", "it"], answer: 0, isVisible: true },
+            { question: "what about ur 3rd oscar?", choices: ["easier", "what", "about", "it"], answer: "about", isVisible: false },
+            { question: "what about ur 4th oscar?", choices: ["harder", "what", "about", "it"], answer: "it", isVisible: true },
           ]
         , totalGrade: 50
       },
@@ -74,7 +74,7 @@ router.post("/", async (req, res) => {
   await Course.create(newCourse);
 })
 
-router.get("/getPrice", GetPrice)
+router.get("/getPrice", GetPrice);
 
 router.get("/", CourseSearch);
 router.get("/GetCourse", GetCourse);

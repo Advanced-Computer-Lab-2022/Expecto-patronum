@@ -56,6 +56,23 @@ async function ViewAll(req,res){
 
 }
 
+async function getRate(req, res, next) {
+  const country = req.query.country;
+  console.log("country " + country);
+  const curr = countryToCurrency[country];
+  let currencyConverter = new CC({ from: "USD", to: curr, amount: 1 });
+  var rate = 1;
+  await currencyConverter.rates().then((response) => {
+    rate = response;
+  });
+  console.log("rate " + rate);
+  try {
+    res.send({ rate: rate, curr: curr });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 async function viewRatings(req,res){
   try{
     var ratings=await CourseTable.find().select({
@@ -68,4 +85,4 @@ async function viewRatings(req,res){
   }
 }
 
-module.exports = { register, Logout,ViewAll,viewRatings }
+module.exports = { register, Logout,ViewAll,viewRatings,getRate }
