@@ -26,6 +26,7 @@ const CourseContentHero = (props: Props) => {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
   return (
     <div ref={listInnerRef} className="h-[100vh]  ">
       <div className="w-100 h-[80vh]  flex   bg  px-20 justify-between items-center">
@@ -34,6 +35,7 @@ const CourseContentHero = (props: Props) => {
             <div className="bg-white/60 inline-block text-center px-3 py-1 font-bold uppercase rounded-md mb-6">
               Beginner
             </div>
+
             <h1 className="text-6xl">Course Title</h1>
             <p className="text-lg">Course Description</p>
             <div className="">4*****(150,000 rating) 650,000 student</div>
@@ -43,9 +45,7 @@ const CourseContentHero = (props: Props) => {
             <button className="border-4 p-2">Start Course</button>
           </div>
         </div>
-        <div className="flex-1 bg-blue-500 h-3/4 curve flex  justify-center items-center">
-          Preview Video
-        </div>
+        <div>Preview Video</div>
       </div>
       <div className="min-h-[15vh]  flex justify-around items-center shadow-sm">
         <div>

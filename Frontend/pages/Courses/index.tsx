@@ -2,18 +2,13 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
-import CourseCard from "../components/CourseCard/CourseCard";
-import FilterBar from "../components/filter/FilterBar";
-import Hero from "../components/hero/Hero";
-import FilterTag from "../components/shared/filterTag/FilterTag";
-import DataContext from "../context/DataContext";
-import { GetServerSideProps } from "next";
-import { ApiUrl, BaseUrl } from "../constants/constants";
-import { CardData } from "../DataFestek";
-import Zew from "../components/shared/pagination/CompPagination";
-import axios from "axios";
-import CompPagination from "../components/shared/pagination/CompPagination";
-import { CourseData } from "../Interface/CourseDataInterface";
+import CourseCard from "../../components/CourseCard/CourseCard";
+import FilterBar from "../../components/filter/FilterBar";
+import FilterTag from "../../components/shared/filterTag/FilterTag";
+import DataContext from "../../context/DataContext";
+import { ApiUrl } from "../../constants/constants";
+import CompPagination from "../../components/shared/pagination/CompPagination";
+import { CourseData } from "../../Interface/CourseDataInterface";
 import Router, { useRouter } from "next/router";
 
 export interface AllCoursesData {
