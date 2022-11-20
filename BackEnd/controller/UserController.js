@@ -139,6 +139,7 @@ async function ViewMyCourses(req,res,next){
         if(z.courseID == req.body.courseId){
           x = await CourseTable.find({"_id":  req.body.courseId});
           res.send({purchased : "yes", courses :x});
+          return;
         }
       } 
       x = await CourseTable.find({"_id":  req.body.courseId}).select({
@@ -152,8 +153,7 @@ async function ViewMyCourses(req,res,next){
       subject: 1,
       summary: 1,
       discount: 1,
-      discountPrice: 1
-      });
+      discountPrice: 1});
       res.send({ purchased :"no",courseID : x});
     }
     else{
