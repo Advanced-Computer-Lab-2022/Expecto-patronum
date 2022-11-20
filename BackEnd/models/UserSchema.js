@@ -57,8 +57,10 @@ const UserSchema = new mongoose.Schema({
     },
     grade:Number,
     progress:Number,
-    exerciseAnswers:[String]
-
+    exercisesAnswers:{
+      exerciseTitle: String,
+      answer: [String],
+    },
 }],
 
   biography:{

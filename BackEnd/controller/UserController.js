@@ -123,9 +123,72 @@ async function giveCourseRating(req, res, next){
     res.status(200).json(review);
 
   } catch (error) {
-   // console.log(error);
+    console.log(error);
   }
 
 };
 
-module.exports = { register, Logout,ViewAll,viewRatings,getRate,giveCourseRating }
+
+async function ViewMyCourses(req,res,next){
+  try{
+      if(req.body.courseId){
+      var x = await User.find({ "_id": req.body.userId }).select({purchasedCourses : 1,_id :0});
+      var y = Object.values(x)[0];
+      for(var i= 0;i<y.purchasedCourses.length;i++){
+        var z = Object.values(y.purchasedCourses)[i];
+        if(z.courseID == req.body.courseId){
+          x = await CourseTable.find({"_id":  req.body.courseId});
+          res.send(x);
+        }
+        else{
+          res.send("not purchased");
+        }
+      }
+    }
+    else{
+      var x = await User.find({ "_id": req.body.userId }).select({purchasedCourses : 1,_id :0});
+      var y = Object.values(x)[0];
+      var ids = [y.purchasedCourses.length];
+
+      for(var i= 0;i<y.purchasedCourses.length;i++){
+        var z = Object.values(y.purchasedCourses)[i];
+        ids[i] = z.courseID;
+        console.log(ids[i]);
+      }
+      x = await CourseTable.find({"_id" : {$in : ids }}).select({
+        _id: 1,
+        title: 1,
+        courseHours: 1,
+        price: 1,
+        courseImage: 1,
+        rating: 1,
+        instructorName: 1,
+        subject: 1,
+        summary: 1,
+        discount: 1,
+        discountPrice: 1
+      });
+      res.send(x);
+    }
+
+  }catch (error) {
+     console.log(error);
+   }
+};
+
+async function buyCourse(req,res,next){
+  // let obj = {
+  //   "purchasedCourses":[
+  //     {
+  //   "courseID":req.body.courseId
+  // }]};
+  try{
+        const xx = await User.findByIdAndUpdate({ "_id": req.body.userId }, {$push : {"purchasedCourses" : req.body.purchasedCourses}}, { new: true });
+        res.send(xx);
+
+  }catch (error) {
+     console.log(error);
+   }
+};
+
+module.exports = { register, Logout,ViewAll,viewRatings,getRate,giveCourseRating,buyCourse,ViewMyCourses}
