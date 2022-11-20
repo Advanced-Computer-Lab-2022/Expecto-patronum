@@ -227,13 +227,13 @@ async function GetCourse(req, res) {
 async function CreateCourse(req, res) {
 
     const result = await Course.create({
-      title: req.body.title,
-      subject: req.body.subject,
-      instructorName: req.body.instructorName,
-      price: req.body.price,
-      level: req.body.level,
+      title: req.body.courseInfo.title,
+      subject: req.body.courseInfo.subject,
+      instructorName: 'Rodin Salem',
+      price: req.body.courseInfo.price,
+      level: req.body.courseInfo.level,
       courseHours: req.body.courseHours,
-      summary: req.body.summary,
+      summary: req.body.courseInfo.summary,
       subtitles: req.body.subtitles,
     });
     res.send(result);

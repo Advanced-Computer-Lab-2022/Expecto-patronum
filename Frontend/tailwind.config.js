@@ -22,6 +22,7 @@ module.exports = {
         'bright-gray': '#9F9F9F',
         'dark-gray': '#222222',
         'main': '#F4F4F4',
+        'input': '#083248',
       },
       scale: {
         '120': '1.2',

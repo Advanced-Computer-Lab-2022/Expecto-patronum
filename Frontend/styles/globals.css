@@ -121,7 +121,7 @@ div::-webkit-scrollbar-thumb:hover {
   left: -100%;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #0088a8);
+  background: linear-gradient(90deg, transparent, #083248);
   animation: btn-anim1 3s linear infinite;
 }
 
@@ -141,7 +141,7 @@ div::-webkit-scrollbar-thumb:hover {
   right: 0;
   width: 2px;
   height: 100%;
-  background: linear-gradient(180deg, transparent, #0088a8);
+  background: linear-gradient(180deg, transparent, #083248);
   animation: btn-anim2 3s linear infinite;
   animation-delay: 0.75s;
 }
@@ -162,7 +162,7 @@ div::-webkit-scrollbar-thumb:hover {
   right: -100%;
   width: 100%;
   height: 2px;
-  background: linear-gradient(270deg, transparent, #0088a8);
+  background: linear-gradient(270deg, transparent, #083248);
   animation: btn-anim3 3s linear infinite;
   animation-delay: 1.5s;
 }
@@ -183,7 +183,7 @@ div::-webkit-scrollbar-thumb:hover {
   left: 0;
   width: 2px;
   height: 100%;
-  background: linear-gradient(360deg, transparent, #0088a8);
+  background: linear-gradient(360deg, transparent, #083248);
   animation: btn-anim4 3s linear infinite;
   animation-delay: 2.25s;
 }
