@@ -147,14 +147,14 @@ const Courses: NextPage<{ data: any }> = ({ data }) => {
 //   };
 // };
 
-export async function getServerSideProps(UrlInfo: { resolvedUrl: string }) {
-  let res = await fetch(ApiUrl + UrlInfo.resolvedUrl);
-  let CoursesData = await res.json();
-  return {
-    props: {
-      data: CoursesData,
-    },
-  };
-}
+// export async function getServerSideProps(UrlInfo: { resolvedUrl: string }) {
+//   let res = await fetch(ApiUrl + UrlInfo.resolvedUrl);
+//   let CoursesData = await res.json();
+//   return {
+//     props: {
+//       data: CoursesData,
+//     },
+//   };
+// }
 
 export default Courses;

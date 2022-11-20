@@ -7,6 +7,7 @@ html {
   font-family: "Amino Alt";
   margin: 0px;
   padding: 0px;
+  scroll-behavior: smooth;
 }
 
 input::-webkit-outer-spin-button,
@@ -27,12 +28,12 @@ div::-webkit-scrollbar-track {
 }
 
 div::-webkit-scrollbar-thumb {
-  background-color: rgba(200, 200, 200, .1);
+  background-color: rgba(200, 200, 200, .5);
   border-radius: 20px;
 }
 
 div::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(200, 200, 200, .2);
+  background-color: rgba(200, 200, 200, .6);
   border-radius: 20px;
 }
 
@@ -44,16 +45,57 @@ div::-webkit-scrollbar-thumb:hover {
   }
 }
 
+.selected-instructor-tab::after {
+  content: ""; 
+  position: absolute;
+  background-color: transparent; 
+  z-index: -1;
+  bottom: -50px;
+  right: 0px; 
+  height: 50px; 
+  width: 25px;
+  border-top-right-radius: 15px;
+  box-shadow: 0px -25px 0px 0px #D80621;
+}
+
+.delete-button-reject {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(1px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(2px, 0, 0);
+  }
+}
+
+#select-country:after {
+  background-color: blue;
+}
+
 .drawer-button {
   transform: scale(1);
-  position: absolute;
-  bottom: 5px;
-  right: 15px;
+  margin-left: 18px;
   transition: all 0.2s linear;
+  height: fit-content;
 }
 
 .hamburger-ingredients {
-  background-color: #e6e6e6;
+  background-color: black;
   opacity: 100%;
   margin: 7px auto;
   width: 50px;
@@ -79,7 +121,7 @@ div::-webkit-scrollbar-thumb:hover {
   left: -100%;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #0088a8);
+  background: linear-gradient(90deg, transparent, #083248);
   animation: btn-anim1 3s linear infinite;
 }
 
@@ -99,7 +141,7 @@ div::-webkit-scrollbar-thumb:hover {
   right: 0;
   width: 2px;
   height: 100%;
-  background: linear-gradient(180deg, transparent, #0088a8);
+  background: linear-gradient(180deg, transparent, #083248);
   animation: btn-anim2 3s linear infinite;
   animation-delay: 0.75s;
 }
@@ -120,7 +162,7 @@ div::-webkit-scrollbar-thumb:hover {
   right: -100%;
   width: 100%;
   height: 2px;
-  background: linear-gradient(270deg, transparent, #0088a8);
+  background: linear-gradient(270deg, transparent, #083248);
   animation: btn-anim3 3s linear infinite;
   animation-delay: 1.5s;
 }
@@ -141,7 +183,7 @@ div::-webkit-scrollbar-thumb:hover {
   left: 0;
   width: 2px;
   height: 100%;
-  background: linear-gradient(360deg, transparent, #0088a8);
+  background: linear-gradient(360deg, transparent, #083248);
   animation: btn-anim4 3s linear infinite;
   animation-delay: 2.25s;
 }
@@ -158,8 +200,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 @font-face {
-  src: url("../public/fonts/Amino-Alt\ 5/Amino Alt Medium.ttf")
-    format("truetype");
+  src: url("../public/fonts/Amino-Alt\ 5/Amino Alt Medium.otf");
   font-family: "Amino Alt";
   font-weight: normal;
   font-style: normal;
@@ -178,7 +219,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "Roboto", sans-serif;
+  /* font-family: "Roboto", sans-serif; */
 }
 
 .SectionHome {

@@ -22,10 +22,10 @@ const BurgerButton = (props: Props) => {
 
         // Toggles curtain when responsive
         if(!isCurtainOpen) {
-            props.curtainRef.current.style.bottom = "-115px";
+            props.curtainRef.current.style.bottom = "-5rem";
             props.curtainRef.current.style.opacity = "100%";
         } else {
-            props.curtainRef.current.style.bottom = "9rem";
+            props.curtainRef.current.style.bottom = "5.5rem";
             props.curtainRef.current.style.opacity = "0%";
         }
 
