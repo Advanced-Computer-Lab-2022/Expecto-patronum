@@ -140,23 +140,21 @@ async function ViewMyCourses(req,res,next){
           x = await CourseTable.find({"_id":  req.body.courseId});
           res.send({purchased : "yes", courses :x});
         }
-        else{
-          x = await CourseTable.find({"_id":  req.body.courseId}).select({
-            _id: 1,
-            title: 1,
-            courseHours: 1,
-            price: 1,
-            courseImage: 1,
-            rating: 1,
-            instructorName: 1,
-            subject: 1,
-            summary: 1,
-            discount: 1,
-            discountPrice: 1
-          });
-          res.send({ purchased :"no",courseID : x});
-        }
-      }
+      } 
+      x = await CourseTable.find({"_id":  req.body.courseId}).select({
+      _id: 1,
+      title: 1,
+      courseHours: 1,
+      price: 1,
+      courseImage: 1,
+      rating: 1,
+      instructorName: 1,
+      subject: 1,
+      summary: 1,
+      discount: 1,
+      discountPrice: 1
+      });
+      res.send({ purchased :"no",courseID : x});
     }
     else{
       var x = await User.find({ "_id": req.body.userId }).select({purchasedCourses : 1,_id :0});
@@ -181,7 +179,7 @@ async function ViewMyCourses(req,res,next){
         discount: 1,
         discountPrice: 1
       });
-      res.send(x);
+      res.send({courses :x});
     }
 
   }catch (error) {
