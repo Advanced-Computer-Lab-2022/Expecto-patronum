@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  valid: {
+    type: Boolean,
+    default: false
+  },
   hash: {
     type: String,
     required: true,
@@ -32,7 +36,16 @@ const UserSchema = new mongoose.Schema({
     type: String,
     enum: ['User', 'Admin', 'Instructor', 'CorporateTrainee'],
     default: 'User'
+  },
+  passwordTimeStamp: {
+    type: Date, default: Date.now
+  },
+  emailTimeStamp: {
+    type: Date, default: Date.now
   }
+
+
+
 });
 
 const User = connection.model('User', UserSchema);

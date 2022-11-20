@@ -4,7 +4,6 @@ const cors = require("cors");
 const session = require('express-session');
 var passport = require('passport');
 var crypto = require('crypto');
-var AuthRoute = require('./routes/Auth');
 var CoursesRoute = require('./routes/Course');
 var CorpTraineeRoute = require('./routes/CorporateTrainee');
 var InstructorRoute = require('./routes/Instructor');
@@ -82,15 +81,12 @@ app.listen(5000, () => {
  */
 
 
-app.use('/Auth', AuthRoute);
-app.use('/Course', CoursesRoute);
+app.use('/Courses', CoursesRoute);
 app.use('/Admin', AdminRoute);
 app.use('/Instructor', InstructorRoute);
 app.use('/User', UsersRoute);
 app.use('/CorporateTrainee', CorpTraineeRoute);
 
-app.get("/CheckAuth", isAuth, (req, res) => {
-  res.send("HEY User")
-})
+
 
 // Imports all of the routes from ./routes/index.js
