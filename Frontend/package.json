@@ -28,6 +28,8 @@
     "react-icons": "^4.6.0",
     "react-router-dom": "^6.4.3",
     "react-select-country-list": "^2.2.3",
+    "react-timecode": "^1.2.0",
+    "react-timer-wrapper": "^0.4.1",
     "reactjs-popup": "^2.0.5",
     "styled-components": "^5.3.6"
   },
