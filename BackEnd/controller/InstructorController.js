@@ -274,9 +274,37 @@ async function discount(req, res, next) {
   } catch (error) {
     console.log(error);
   }
+}
+
+  
+  async function viewCourseRatings(req,res,next){
+    try{
+      var currentID=await req.body.userID
+      var ratings=await CourseTable.find({
+        "instructorID":currentID
+
+      }).select({ "title": 1, "summary": 1,"rating":1});
+      res.send(ratings);
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+
+  async function testAll(req,res){
+    try{
+      var test=await CourseTable.find();
+      res.send(test);
+    }
+    catch(error){
+      console.log(error);
+    }
+    
+  }
 
 
-};
 
 
-module.exports = { viewCourses, filterCourses, addCourse, discount };
+
+
+module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,testAll};

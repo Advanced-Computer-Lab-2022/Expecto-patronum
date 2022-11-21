@@ -17,7 +17,11 @@ const InstructorSchema = new mongoose.Schema({
   {
     type: String,
     required: true,
-  }
+  },
+  
+ 
+
+
 });
 
 const Instructor = connection.model('Instructor', InstructorSchema);
