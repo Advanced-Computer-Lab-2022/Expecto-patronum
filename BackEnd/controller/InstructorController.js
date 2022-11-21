@@ -234,7 +234,8 @@ async function addCourse(req, res, next) {
     exercises: req.body.exercises,
     rating: req.body.rating,
     instructorName: name,
-    discountPrice: req.body.price
+    discountPrice: req.body.price,
+    courseImage : req.body.courseImage
   });
 
   try {

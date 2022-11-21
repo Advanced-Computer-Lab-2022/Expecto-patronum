@@ -85,9 +85,15 @@ const UserSchema = new mongoose.Schema({
     },
     grade:Number,
     progress:Number,
-    courseRating:Number,
+    courseRating:{
+      type :Number,
+      default:0
+    },
     courseReview:String,
-    instructorRating:Number,
+    instructorRating:{
+      type :Number,
+      default:0
+    },
     instructorReview:String,
     exercisesAnswers:{
       exerciseTitle: String,
