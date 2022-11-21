@@ -47,11 +47,26 @@ const UserSchema = new mongoose.Schema({
 ,
 
   instructorRating:{
-    one: Number,
-    two: Number,
-    three: Number,
-    four: Number,
-    five: Number,
+    one: {
+      type: Number,
+      default: 0
+    },
+    two: {
+      type: Number,
+      default: 0
+    },
+    three: {
+      type: Number,
+      default: 0
+    },
+   four: {
+      type: Number,
+      default: 0
+    },
+    five: {
+      type: Number,
+      default: 0
+    },
     avg: {
       type: Number,
       default: 0
@@ -70,6 +85,10 @@ const UserSchema = new mongoose.Schema({
     },
     grade:Number,
     progress:Number,
+    courseRating:Number,
+    courseReview:String,
+    instructorRating:Number,
+    instructorReview:String,
     exercisesAnswers:{
       exerciseTitle: String,
       answer: [String],
