@@ -8,6 +8,10 @@ const CourseSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  courseImage:{
+    type: String,
+    required: true
+  },
   summary: {
     type: String,
     required: true
