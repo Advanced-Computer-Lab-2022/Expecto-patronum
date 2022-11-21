@@ -46,6 +46,40 @@ const UserSchema = new mongoose.Schema({
 
 
 
+  instructorRating:{
+    one: Number,
+    two: Number,
+    three: Number,
+    four: Number,
+    five: Number,
+    avg: {
+      type: Number,
+      default: 0
+    }
+  },
+
+  instructorReview:[{
+    username:String,
+    reviewBody:String,
+    rating:Number
+  }],
+  purchasedCourses:[{
+    courseID:{
+    type: mongoose.Types.ObjectId,
+    ref: 'CourseSchema'
+    },
+    grade:Number,
+    progress:Number,
+    exercisesAnswers:{
+      exerciseTitle: String,
+      answer: [String],
+    },
+}],
+
+  biography:{
+    type:String
+  }
+
 });
 
 const User = connection.model('User', UserSchema);

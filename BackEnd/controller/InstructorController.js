@@ -26,12 +26,12 @@ async function viewCourses(req, res, next) {
       summary: 1,
       discount: 1,
       discountPrice: 1
-    });
+    }).skip((CurrentPage - 1) * 5).limit(5);
 
     const unique = await CourseTable.distinct("subject", queryCond);
-    var TotalCount = Courses.length;
-    var searchResults = Courses.slice((CurrentPage - 1) * 5, CurrentPage * 5);
-    res.send({ Courses: searchResults, TotalCount: TotalCount, subject: unique });
+    var TotalCount = await CourseTable.countDocuments(queryCond);
+    //var searchResults = Courses.slice((CurrentPage - 1) * 5, CurrentPage * 5);
+    res.send({ Courses: Courses, TotalCount: TotalCount, subject: unique });
 
   }
   catch (err) {
@@ -69,10 +69,13 @@ async function filterCourses(req, res, next) {
               summary: 1,
               discount: 1,
               discountPrice: 1
-            });
-          var TotalCount = y.length;
-          var searchResults = y.slice((CurrentPage - 1) * 5, CurrentPage * 5);
-          res.send({ Courses: searchResults, TotalCount: TotalCount });
+            }).skip((CurrentPage - 1) * 5).limit(5);
+
+          var TotalCount =  await CourseTable.countDocuments({ "discountPrice": Price, "subject": req.query.subject,
+           "instructorID": req.query.instructorID,
+            $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, 
+            { "subject": { "$regex": req.query.keyword, "$options": "i" } }] });
+          res.send({ Courses: y, TotalCount: TotalCount });
 
         }
         else if (req.query.price) {
@@ -90,10 +93,13 @@ async function filterCourses(req, res, next) {
               summary: 1,
               discount: 1,
               discountPrice: 1
-            });
-          var TotalCount = y.length;
-          var searchResults = y.slice((CurrentPage - 1) * 5, CurrentPage * 5);
-          res.send({ Courses: searchResults, TotalCount: TotalCount });
+            }).skip((CurrentPage - 1) * 5).limit(5);
+
+          var TotalCount = await CourseTable.countDocuments( { "discountPrice": Price, "instructorID": req.query.instructorID, 
+          $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } },
+           { "subject": { "$regex": req.query.keyword, "$options": "i" } }] });
+
+          res.send({ Courses: y, TotalCount: TotalCount });
         }
         else {
           var y = await CourseTable.find(
@@ -110,10 +116,11 @@ async function filterCourses(req, res, next) {
               summary: 1,
               discount: 1,
               discountPrice: 1
-            });
-          var TotalCount = y.length;
-          var searchResults = y.slice((CurrentPage - 1) * 5, CurrentPage * 5);
-          res.send({ Courses: searchResults, TotalCount: TotalCount });
+            }).skip((CurrentPage - 1) * 5).limit(5);
+          var TotalCount =await CourseTable.countDocuments( { "subject": req.query.subject, "instructorID": req.query.instructorID,
+           $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } },
+            { "subject": { "$regex": req.query.keyword, "$options": "i" } }] });
+          res.send({ Courses: y, TotalCount: TotalCount });
         }
       }
       else {
@@ -131,10 +138,13 @@ async function filterCourses(req, res, next) {
             summary: 1,
             discount: 1,
             discountPrice: 1
-          });
-        var TotalCount = y.length;
-        var searchResults = y.slice((CurrentPage - 1) * 5, CurrentPage * 5);
-        res.send({ Courses: searchResults, TotalCount: TotalCount });
+          }).skip((CurrentPage - 1) * 5).limit(5);
+
+        var TotalCount = await CourseTable.countDocuments( { "instructorID": req.query.instructorID,
+         $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, 
+         { "subject": { "$regex": req.query.keyword, "$options": "i" } }] });
+
+        res.send({ Courses: y, TotalCount: TotalCount });
       }
     } catch (error) {
       console.log(error);
@@ -162,11 +172,10 @@ async function filterCourses(req, res, next) {
           summary: 1,
           discount: 1,
           discountPrice: 1
-        });
+        }).skip((CurrentPage - 1) * 5).limit(5);;
 
-      var TotalCount = y.length;
-      var searchResults = y.slice((CurrentPage - 1) * 5, CurrentPage * 5);
-      res.send({ Courses: searchResults, TotalCount: TotalCount });
+      var TotalCount = await CourseTable.countDocuments(queryCond);
+      res.send({ Courses: y, TotalCount: TotalCount });
     } catch (error) {
       console.log(error);
     }
@@ -237,8 +246,21 @@ async function addCourse(req, res, next) {
 };
 
 async function discount(req, res, next) {
+  let queryCond = {};
   const courseID = req.body.courseID;
   var discount = req.body.discount;
+  queryCond.discount = req.body.discount;
+  queryCond.duration = req.body.duration;
+  if(req.body.startDate){
+    startDate = new Date(req.body.startDate);
+    queryCond.startDate = req.body.startDate;
+  }else{
+    startDate = new Date();
+    queryCond.startDate = startDate;
+  }
+  endDate = new Date(startDate);
+  endDate.setDate(endDate.getDate() + req.body.duration);
+  queryCond.endDate = endDate;
   discount = 1 - (discount / 100);
   try {
     const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
@@ -246,8 +268,7 @@ async function discount(req, res, next) {
     var discountPrice = (z.price * discount);
 
     discountPrice = discountPrice.toFixed(2);
-    const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: req.body.discount, discountPrice: discountPrice }, { new: true });
-    console.log(x);
+    const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond, discountPrice: discountPrice }, { new: true });
     res.status(200).json(x);
 
   } catch (error) {
