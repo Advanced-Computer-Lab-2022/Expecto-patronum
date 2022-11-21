@@ -3,8 +3,9 @@ let transporter = nodemailer.createTransport({
   host: 'smtp-mail.outlook.com',
   secure: false, // true for 465, false for other ports
   auth: {
-    user: "mohamed7arkat@outlook.com", // generated ethereal user
-    pass: "Bat_man2012", // generated ethereal password
+    user: "CandianChamperEGPTest@outlook.com", // generated ethereal user
+    pass: "RodinRodin", // generated ethereal password
+
   },
 });
 module.exports.MailValidate = async (userMail, route, Token) => {
