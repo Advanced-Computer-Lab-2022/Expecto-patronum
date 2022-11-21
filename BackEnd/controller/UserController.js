@@ -459,7 +459,78 @@ async function giveInstructorRating(req, res, next) {
 
 };
 
+async function giveCourseReview(req, res, next) {
+  rating = req.body.rating;
+  review = req.body.review;
+  userId = req.body.userId;
+  username = req.body.username;
+  courseId = req.body.courseId;
+  try {
+    if(req.body.oldReview){
 
+    const reviewx =  await CourseTable.updateOne({ "_id": courseId,"review.username":username},
+    { "$set": { "review.$.reviewBody": review,"review.$.rating" : rating }}
+    );
+
+    const R = await User.updateOne({ "_id": userId,"purchasedCourses.courseID":courseId},
+    { "$set": { "purchasedCourses.$.courseReview": review }}
+    );
+
+    res.sendStatus(200);
+    }
+    else{
+      await CourseTable.updateOne({ "_id": courseId},
+    { "$push": { "review" : {"reviewBody": review,"rating" : rating,"username" : username }}}
+    );
+
+    const R = await User.updateOne({ "_id": userId,"purchasedCourses.courseID":courseId},
+    { "$set": { "purchasedCourses.$.courseReview": review }}
+    );
+    res.sendStatus(200);
+    }
+    
+  } catch (error) {
+    console.log(error);
+  }
+ 
+}
+
+async function giveInstructorReview(req, res, next) {
+  rating = req.body.rating;
+  review = req.body.review;
+  userId = req.body.userId;
+  username = req.body.username;
+  courseId = req.body.courseId;
+  instructorId = req.body.instructorId
+  try {
+    if(req.body.oldReview){
+
+    const reviewx =  await User.updateOne({ "_id": instructorId,"instructorReview.username":username},
+    { "$set": { "instructorReview.$.reviewBody": review,"instructorReview.$.rating" : rating }}
+    );
+
+    const R = await User.updateOne({ "_id": userId,"purchasedCourses.courseID":courseId},
+    { "$set": { "purchasedCourses.$.instructorReview": review }}
+    );
+
+    res.sendStatus(200);
+    }
+    else{
+     const re =  await User.updateOne({ "_id": instructorId},
+    { "$push": { "instructorReview" : {"reviewBody": review,"rating" : rating,"username" : username }}},{new :true}
+    );
+      console.log(re);
+    const R = await User.updateOne({ "_id": userId,"purchasedCourses.courseID":courseId},
+    { "$set": { "purchasedCourses.$.instructorReview": review }}
+    );
+    res.sendStatus(200);
+    }
+    
+  } catch (error) {
+    console.log(error);
+  }
+ 
+}
 
 async function selectCourse(req, res, next){
   try {
@@ -555,4 +626,4 @@ async function buyCourse(req, res, next) {
 
 module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
    buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
-    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating }
+    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview }
