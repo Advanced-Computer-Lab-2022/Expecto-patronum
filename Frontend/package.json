@@ -16,6 +16,7 @@
     "@tailwindcss/line-clamp": "^0.4.2",
     "axios": "^1.1.3",
     "babel": "^6.23.0",
+    "babel-plugin-styled-components": "^2.0.7",
     "babel-plugin-twin": "^1.0.2",
     "bootstrap": "^5.2.2",
     "flowbite": "^1.5.3",
@@ -27,6 +28,7 @@
     "react-dom": "18.2.0",
     "react-flags-select": "^2.2.3",
     "react-icons": "^4.6.0",
+    "react-select-country-list": "^2.2.3",
     "react-svg": "^15.1.11",
     "reactjs-popup": "^2.0.5"
   },
