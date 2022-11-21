@@ -1,233 +1,154 @@
-import { useRouter } from "next/router";
 import React, { useEffect, useState, useRef, useContext } from "react";
-import { BiSearchAlt2 } from "react-icons/bi";
-import { GrFormClose, GrClose } from "react-icons/gr";
-import { IoMdClose } from "react-icons/io";
+import { useRouter } from "next/router";
 import DataContext from "../../../../context/DataContext";
+import { BiSearchAlt2 } from "react-icons/bi";
+import { IoMdClose } from "react-icons/io";
 import { curtainSearchSwitching } from "../Navbar";
+import classNames from "classnames";
 
 type Props = {};
 
 const SearchBar = (props: Props) => {
   const [isDisabled, setIsDisabled] = useState(true);
-  const { Filter, SetFilter } = useContext(DataContext);
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState("");
 
-  const router = useRouter();
-  const [type, setType] = useState<"submit" | "button" | "reset" | undefined>(
-    global.innerWidth < 935 ? "button" : "submit"
-  );
-  const [isResponsiveOn, setIsResponsiveOn] = useState(
-    global.innerWidth < 935 ? true : false
-  );
   const searchRef = useRef<any>();
   const searchInputRef = useRef<any>();
+  const submitSearchRef = useRef<any>();
+  const closeButtonRef = useRef<any>();
 
-  const {
-    isSearchToggled,
-    setIsSearchToggled,
-    isCurtainOpen,
-    setIsCurtainOpen,
-  } = useContext(curtainSearchSwitching);
+  const { SetFilter } = useContext(DataContext);
+  const { isSearchOpen, setIsSearchOpen, isCurtainOpen } = useContext(
+    curtainSearchSwitching
+  );
 
-  useEffect(() => {
-    const closeBtn = document.getElementById("close-btn");
-
-    if (isCurtainOpen && isSearchToggled) {
-      if (closeBtn != undefined) {
-        closeBtn.click();
-      }
-      setIsSearchToggled(!isSearchToggled);
-    }
-  }, [isCurtainOpen]);
-
-  // Convert Search button to open search instead of submit
+  const router = useRouter();
 
   useEffect(() => {
     if (searchValue === "" && router.query.keyword) {
       if (typeof router.query.keyword !== "object") {
         setSearchValue(router.query.keyword);
+        setIsDisabled(false);
       }
     }
   }, [router.isReady]);
 
   useEffect(() => {
-    if (isResponsiveOn) {
-      searchRef.current.style.cursor = "initial";
-      searchInputRef.current.style.top = "-50px";
-      setIsDisabled(false);
-      setType("button");
-    } else {
-      setType("submit");
-      const closeBtn = document.getElementById("close-btn");
-      if (closeBtn != undefined) closeBtn.click();
-      searchInputRef.current.style.top = "initial";
-      searchInputRef.current.style.display = "initial";
-      searchRef.current.style.display = "initial";
-      if (isSearchToggled) {
-        if (closeBtn != undefined) closeBtn.click();
-      }
-    }
-  }, [isResponsiveOn]);
+    isCurtainOpen ? closeSearch() : null;
+  }, [isCurtainOpen]);
 
-  // Disable/Enable submission if searchbar is empty
-  useEffect(() => {
-    if (!isResponsiveOn && searchValue === "") {
-      setIsDisabled(true);
-    } else {
-      setIsDisabled(false);
-    }
-  }, [searchValue]);
-
-  function disableCursor() {
-    if (
-      !isResponsiveOn ||
-      (searchInputRef.current.style.top === "-50px" &&
-        isResponsiveOn &&
-        type !== "button")
-    ) {
-      if (searchValue == "") {
-        searchRef.current.style.cursor = "not-allowed";
-      } else {
-        searchRef.current.style.cursor = "initial";
-      }
-    } else {
-      searchRef.current.style.cursor = "initial";
-    }
-  }
-
-  global.onresize = () => {
-    setIsResponsiveOn(global.innerWidth < 935 ? true : false);
-    setType(global.innerWidth < 935 ? "button" : "submit");
-  };
-
-  global.onload = () => {
-    setIsResponsiveOn(global.innerWidth < 935 ? true : false);
-    setType(global.innerWidth < 935 ? "button" : "submit");
-  };
-
-  function toggleSearchInput(
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) {
-    if (isDisabled && !isResponsiveOn) {
-      searchInputRef.current.style.display = "initial";
-      return;
-    }
-
-    const closeBtn = document.getElementById("close-btn");
-    setIsSearchToggled(!isSearchToggled);
-
-    if (isResponsiveOn) {
-      if (type === "submit") {
-        if (searchValue === "") {
-          // setIsDisabled(true);
-          e.preventDefault();
-        } else {
-          setIsDisabled(false);
-          ///////////////////////////////////////////
-          SetFilter((prev) => {
-            return {
-              ...prev,
-              Keyword: [searchValue],
-              Page: 1,
-            };
-          });
-        }
-      } else {
-        searchInputRef.current.style.display = "initial";
-        searchInputRef.current.style.top = "85px";
-        searchInputRef.current.style.transition = "top 1s";
-        searchRef.current.style.display = "none";
-        if (closeBtn != undefined) {
-          closeBtn.style.display = "initial";
-        }
-
-        setType("submit");
-        e.preventDefault();
-      }
-    } else {
-      if (searchValue === "") {
-        setIsDisabled(true);
-      } else {
-        setIsDisabled(false);
-        //////////////////////
-        SetFilter((prev) => {
-          return {
-            ...prev,
-            Keyword: [searchValue],
-            Page: 1,
-          };
-        });
-        // if (router.query.search) {
-        //   router.query.search = searchValue;
-        // } else {
-        //   if (
-        //     router.query.subject ||
-        //     router.query.price ||
-        //     router.query.rating
-        //   ) {
-        //     router.push(router.asPath + "&keyword=" + searchValue);
-        //   } else {
-        //     router.push(router.asPath + "?keyword=" + searchValue);
-        //   }
-        // }
-      }
-    }
+  const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+
+    SetFilter((prev) => {
+      return {
+        ...prev,
+        Keyword: [searchValue],
+        Page: 1,
+      };
+    });
+
+    // if (router.query.search) {
+    //   router.query.search = searchValue;
+    // } else {
+    //   if (
+    //     router.query.subject ||
+    //     router.query.price ||
+    //     router.query.rating
+    //   ) {
+    //     router.push(router.asPath + "&keyword=" + searchValue);
+    //   } else {
+    //     router.push(router.asPath + "?keyword=" + searchValue);
+    //   }
+    // }
+    // e.preventDefault();
+  };
+
+  const setDisableAndValue = (e: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setSearchValue(e.target.value);
+
+    e.target.value === "" ? setIsDisabled(true) : setIsDisabled(false);
+  };
+
+  function checkEmptySearch() {
+    isDisabled
+      ? submitSearchRef.current.classList.add("cursor-not-allowed")
+      : submitSearchRef.current.classList.remove("cursor-not-allowed");
   }
 
   function closeSearch() {
-    if (isResponsiveOn) {
-      if (searchInputRef != undefined)
-        searchInputRef.current.style.top = "-50px";
+    setIsSearchOpen(false);
 
-      searchRef.current.style.display = "initial";
-    }
+    searchRef.current.classList.add("nv-max:w-0");
+    searchRef.current.classList.remove("nv-max:w-fullscreen");
+  }
 
-    setIsSearchToggled(false);
-    setType("button");
+  function toggleSearch() {
+    !isSearchOpen ? searchInputRef.current.focus() : null;
 
-    const closeBtn = document.getElementById("close-btn");
+    setIsSearchOpen(!isSearchOpen);
 
-    if (closeBtn != undefined) closeBtn.style.display = "none";
+    searchRef.current.classList.toggle("nv-max:w-0");
+    searchRef.current.classList.toggle("mob:w-screen");
+    searchRef.current.classList.toggle("nv-max-mob:w-fullscreen");
+    searchRef.current.classList.toggle("z-50");
+
+    closeButtonRef.current.classList.toggle("nv-max:right-2");
   }
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
-      className="flex items-center w-full"
-    >
-      <input
-        id="search-value"
-        ref={searchInputRef}
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
-        placeholder="Search for anything"
-        className="rounded-full transition-outline-width duration-200 nv-max:absolute relative max-w-lg nv-max:w-11/12 nv-max:mx-auto text-white nv-max:left-0 nv-max:right-0 w-96 h-8 pl-2.5 bg-navlink-bg placeholder:italic placeholder:text-sm placeholder-white tracking-wide placeholder-opacity-70 focus:outline focus:outline-2 outline-searchFocus"
-      />
+    <form className={search}>
+      <div ref={searchRef} className={searchInputDiv}>
+         <input
+          ref={searchInputRef}
+          value={searchValue}
+          onChange={setDisableAndValue}
+          placeholder="Search for anything"
+          className={searchInput}
+        />
+        <button
+          type="submit"
+          ref={submitSearchRef}
+          disabled={isDisabled}
+          onClick={submit}
+          onMouseOver={checkEmptySearch}
+          className={searchButton}
+        >
+          <BiSearchAlt2 />
+        </button>
+      </div>
+
       <button
-        id="close-btn"
         type="button"
-        onClick={closeSearch}
-        className="absolute text-white rounded-full nv-max:bg-red-500 hidden scale-150 right-26 top-6 hover:scale-160 hover:cursor-pointer transition-transform duration-300"
+        onClick={toggleSearch}
+        ref={closeButtonRef}
+        className={toggleSearchButton}
       >
-        <IoMdClose />
-      </button>
-      <button
-        id="submit-search-btn"
-        ref={searchRef}
-        type={type}
-        disabled={isDisabled}
-        onClick={(e) => toggleSearchInput(e)}
-        onMouseOver={disableCursor}
-        className="rounded-full nv-max:absolute nv-max:right-24 nv-max:bg-white bg-navlink-bg p-2 relative right-8"
-      >
-        <BiSearchAlt2 className="text-white nv-max:text-navlink-bg scale-150 hover:scale-160 transition-all duration-200 rotate-90" />
+        {isSearchOpen ? (
+          <IoMdClose className={buttonIcon} />
+        ) : (
+          <BiSearchAlt2 className={buttonIcon} />
+        )}
       </button>
     </form>
   );
 };
+
+const search = classNames("flex items-center z-40");
+const searchInputDiv = classNames(
+  "nv-max:absolute z-behind flex relative nv-max:h-full nv-max:w-0 nv-max:right-0 nv-max:overflow-hidden nv-max:mx-auto transition-all duration-300"
+);
+const searchInput = classNames(
+  "rounded-full w-96 h-8 nv-max:h-full mob:w-screen nv-max-mob:w-fullscreen nv-max:absolute nv-max:pr-3 bg-main nv-max:right-0 pl-2.5 pr-8 nv-max:rounded-none border-1.5 nv-max:border-gray-300 border-black placeholder:italic placeholder:text-sm bg-transparent tracking-wide focus:outline-0 transition-all duration-300"
+);
+const searchButton = classNames(
+  "rounded-full p-2 align-top relative right-8 transition-all duration-200 scale-125 hover:scale-135 nv-max:hidden"
+);
+const toggleSearchButton = classNames(
+  "absolute text-white rounded-full nv:hidden nv-max:bg-canadian-red hover:scale-110 nv-max:hover:text-canadian-red nv-max:hover:bg-main border-1.5 border-canadian-red h-8 w-8 right-48 top-6 z-50 hover:cursor-pointer transition-all duration-300"
+);
+const buttonIcon = classNames("scale-135 pointer-events-none ml-1.5");
 
 export default SearchBar;

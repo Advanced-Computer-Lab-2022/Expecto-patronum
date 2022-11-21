@@ -5,7 +5,7 @@ import { Router, useRouter } from "next/router";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 
-const CompPagination = () => {
+const CompPagination: React.FC<{ totalCount: number }> = ({ totalCount }) => {
   const datatableUsers = [
     {
       name: "Currey Slee",
@@ -2565,15 +2565,18 @@ const CompPagination = () => {
     return originalElement;
   };
 
+  if (totalCount == 0) {
+    return <div className="text-center">No Data Found</div>;
+  }
   return (
     <>
       <div className="table-filter-info flex justify-center mt-10 mb-20">
         <Pagination
           className="pagination-data"
           onChange={PaginationChange}
-          total={datatableUsers.length}
+          total={totalCount}
           current={CurrentPage}
-          pageSize={size}
+          pageSize={5}
           showSizeChanger={false}
           itemRender={PrevNextArrow}
           onShowSizeChange={PerPageChange}

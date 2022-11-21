@@ -1,9 +1,14 @@
 const CheckUserType = require("../lib/CheckRoleUtils");
-const { genPassword } = require("../lib/passwordUtils");
+const { genPassword, validPassword } = require("../lib/passwordUtils");
 const User = require('../models/UserSchema');
 const passport = require('passport');
-const countryToCurrency = require( 'country-to-currency' );
+const countryToCurrency = require('country-to-currency');
 const CC = require('currency-converter-lt');
+const { CreateToken } = require("../lib/CreateToken");
+const { MailValidate } = require("../lib/MailValidation");
+const { VerifyTokenDate } = require("../lib/VerfiyTokenDate");
+const { Passport } = require("passport");
+const CourseTable = require('../models/CourseSchema');
 
 function register(req, res) {
   const saltHash = genPassword(req.body.password);
@@ -29,6 +34,10 @@ function register(req, res) {
     else {
       console.log("User Added")
       CheckUserType(newUser);
+      let token = CreateToken({ id: newUser._id, email: newUser.email });
+      MailValidate(newUser.email, "http://localhost:5000/user/MailVerify", token);
+      res.send("Please verify your email");
+
     }
 
   })
@@ -43,22 +52,406 @@ function Logout(req, res) {
 
 }
 
+async function ViewAll(req, res) {
+  try {
+    var allCourses = await CourseTable.find().select({
+      "title": 1, "courseHours": 1, "rating": 1
+    });
+    res.send(allCourses);
+  }
+  catch (error) {
 
-async function getRate (req, res, next) {
-  const country = req.query.country;
-  const curr=  countryToCurrency[country];
-  console.log(curr);
-  let currencyConverter = new CC({from:"USD", to:curr, amount:1});
-var rate= 1;
-await currencyConverter.rates().then((response) => {
-  rate = response;
-});
-console.log(rate);
-try {
-  res.send({rate});
-} catch (error) {
-  console.log(error);
+  }
+
+
 }
+
+async function getRate(req, res, next) {
+  const country = req.query.country;
+  console.log("country " + country);
+  const curr = countryToCurrency[country];
+  let currencyConverter = new CC({ from: "USD", to: curr, amount: 1 });
+  var rate = 1;
+  await currencyConverter.rates().then((response) => {
+    rate = response;
+  });
+  console.log("rate " + rate);
+  try {
+    res.send({ rate: rate, curr: curr });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-module.exports = { register, Logout , getRate }
+function forgetPassword(req, res, next) {
+  let userMail = req.body.email;
+  User.findOne({ email: userMail },
+    (err, user) => {
+      if (err) res.send(err);
+      else {
+        if (user) {
+          let Token = CreateToken({ id: user._id });
+          MailValidate(userMail, "http://localhost:5000/user/forgetPassword", Token);
+          res.send("Verify mail sent");
+        }
+        else {
+          res.send("User not found")
+        }
+
+
+      }
+    })
+
+
+}
+
+// function UseforgetPasswordToken(req, res) {
+//   if (req.userid) {
+//     User.findById(req.userid, (err, user) => {
+//       if (err) {
+//         res.send("Invalid Token");
+//       } else
+//         if (user) {
+
+//           if (!VerifyTokenDate(user.passwordTimeStamp, req.iat)) {
+//             res.send("Token expired");
+//           }
+
+//           else {
+//             user.forgotPasswrod = true;
+//             user.save((err, newUser) => {
+//               if (err) {
+//                 console.log(err);
+//               }
+//               else {
+//                 res.send("Done");
+
+//               }
+
+//             })
+
+
+//           }
+
+
+
+//         }
+//         else {
+//           res.send("user not found");
+//         }
+//     })
+
+
+//   }
+// }
+
+
+function ChangeForgottenPassword(req, res) {
+  if (req.userid) {
+    User.findById(req.userid, (err, user) => {
+      if (err) {
+        res.send(err);
+      } else if (user) {
+        if (!VerifyTokenDate(user.passwordTimeStamp, req.iat)) {
+          res.send("Token expired");
+        }
+        else {
+          let { salt, hash } = genPassword(req.body.password);
+          user.salt = salt;
+          user.hash = hash;
+          user.passwordTimeStamp = new Date();
+          user.forgotPasswrod = false;
+          user.save((err, user) => {
+            if (err) {
+              console.log(err);
+            }
+            else {
+              res.send("Password Changed");
+            }
+          })
+
+        }
+
+
+
+      }
+      else {
+        res.send("user not found");
+      }
+    })
+
+
+  }
+
+
+
+}
+
+
+function ChangePassword(req, res, next) {
+
+  if (req.user._id) {
+    User.findById(req.user._id, (err, user) => {
+      if (err) {
+        res.send(err);
+      } else if (user) {
+        if (req.body.oldPassword) {
+          let SameOldPassword = validPassword(req.body.oldPassword, user.hash, user.salt);
+          if (SameOldPassword) {
+            let { salt, hash } = genPassword(req.body.password);
+            user.salt = salt;
+            user.hash = hash;
+            user.save((err, user) => {
+              if (err) {
+                console.log(err);
+              }
+              else {
+                res.send("Password Changed");
+              }
+            })
+          }
+          else {
+            res.send("Invalid Password");
+          }
+
+        }
+        else {
+          res.send("Invalid Request");
+        }
+
+
+      }
+      else {
+        res.send("user not found");
+      }
+    })
+
+
+  }
+
+}
+
+function ValidateUser(req, res) {
+  if (req.userid) {
+    User.findById(req.userid, (err, user) => {
+      if (err) {
+        res.send("Invalid Token " + err);
+      } else
+        if (user) {
+
+          if (!VerifyTokenDate(user.emailTimeStamp, req.iat)) {
+            res.send("Token expired");
+          }
+          else {
+
+            user.valid = true;
+            user.emailTimeStamp = new Date();
+            user.save((err, user) => {
+              if (err) {
+                console.log(err);
+              }
+              else {
+                res.redirect("/user/login");
+
+              }
+            })
+          }
+
+
+        }
+        else {
+          res.send("user not found");
+        }
+    })
+
+
+  }
+}
+
+function ChangeEmail(req, res) {
+  let userMail = req.body.email;
+  User.findOne({ email: userMail }, (err, user) => {
+    if (err) {
+      res.send(err)
+    }
+    else {
+      if (user) {
+        res.send("Email already exists");
+      }
+      else {
+        let Token = CreateToken({ id: req.user._id, email: userMail, oldemail: req.user.email });
+        MailValidate(userMail, "http://localhost:5000/user/resetEmail", Token);
+        res.send("Verify mail sent");
+      }
+    }
+  });
+
+
+}
+
+function UseChangeEmailToken(req, res) {
+  if (req.user.email !== req.oldemail) {
+    res.send("Invalide Token");
+  }
+  else
+    if (req.user._id) {
+
+      User.findById(req.user._id, (err, user) => {
+        if (err) {
+          res.send("Invalid Token " + err);
+        } else
+          if (user) {
+            if (!VerifyTokenDate(user.emailTimeStamp, req.iat)) {
+              res.send("Token expired");
+            }
+            else {
+              user.email = req.email;
+              user.emailTimeStamp = new Date();
+              user.save((err, user) => {
+                if (err) {
+                  console.log(err);
+                }
+                else {
+                  res.send("Email Changed");
+
+                }
+              })
+            }
+          }
+      })
+    }
+
+
+}
+
+async function viewRatings(req, res) {
+  try {
+    var ratings = await CourseTable.find().select({
+      "price": 1, "title": 1
+    }).sort({ "price": "ascending" })
+    res.send(ratings)
+  }
+  catch (error) {
+
+  }
+};
+
+async function giveCourseRating(req, res, next) {
+  username = req.body.username;
+  rating = req.body.rating;
+  courseId = req.body.courseId;
+  let query = {};
+  query.username = username;
+  query.rating = rating;
+  try {
+    switch (rating) {
+      case 1: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.one": 1 } }, { new: true });
+        break;
+      case 2: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.two": 1 } }, { new: true });
+        break;
+      case 3: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.three": 1 } }, { new: true });
+        break;
+      case 4: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.four": 1 } }, { new: true });
+        break;
+      case 5: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.five": 1 } }, { new: true });
+        break;
+      default: res.send("error no rating");
+    }
+    const y = await CourseTable.find({ "_id": courseId }).select({ "rating": 1, "_id": 0 });
+    var rate = Object.values(y)[0];
+    var keys = Object.keys(rate.rating);
+    var values = Object.values(rate.rating);
+    console.log(keys);
+    console.log(values);
+    var z = {};
+    for (var i = 0; i < keys.length; i++) {
+      z[keys[i]] = values[i];
+    };
+    var average = (((z.one) + (z.two * 2) + (z.three * 3) + (z.four * 4) + (z.five * 5)) / (z.one + z.two + z.three + z.four + z.five)).toFixed(2);
+    console.log(average);
+    const xx = await CourseTable.findByIdAndUpdate({ "_id": courseId }, { "rating.avg": average }, { new: true });
+    const review = await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $push: { "review": query } }, { new: true });
+    res.status(200).json(review);
+
+  } catch (error) {
+    console.log(error);
+  }
+
+};
+
+
+async function ViewMyCourses(req, res, next) {
+  try {
+    if (req.body.courseId) {
+      var x = await User.find({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 0 });
+      var y = Object.values(x)[0];
+      for (var i = 0; i < y.purchasedCourses.length; i++) {
+        var z = Object.values(y.purchasedCourses)[i];
+        if (z.courseID == req.body.courseId) {
+          x = await CourseTable.find({ "_id": req.body.courseId });
+          res.send({ purchased: "yes", courses: x });
+          return;
+        }
+      }
+      x = await CourseTable.find({ "_id": req.body.courseId }).select({
+        _id: 1,
+        title: 1,
+        courseHours: 1,
+        price: 1,
+        courseImage: 1,
+        rating: 1,
+        instructorName: 1,
+        subject: 1,
+        summary: 1,
+        discount: 1,
+        discountPrice: 1
+      });
+      res.send({ purchased: "no", courseID: x });
+    }
+    else {
+      var x = await User.find({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 0 });
+      var y = Object.values(x)[0];
+      var ids = [y.purchasedCourses.length];
+
+      for (var i = 0; i < y.purchasedCourses.length; i++) {
+        var z = Object.values(y.purchasedCourses)[i];
+        ids[i] = z.courseID;
+        console.log(ids[i]);
+      }
+      x = await CourseTable.find({ "_id": { $in: ids } }).select({
+        _id: 1,
+        title: 1,
+        courseHours: 1,
+        price: 1,
+        courseImage: 1,
+        rating: 1,
+        instructorName: 1,
+        subject: 1,
+        summary: 1,
+        discount: 1,
+        discountPrice: 1
+      });
+      res.send({ courses: x });
+    }
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+async function buyCourse(req, res, next) {
+  // let obj = {
+  //   "purchasedCourses":[
+  //     {
+  //   "courseID":req.body.courseId
+  // }]};
+  try {
+    const xx = await User.findByIdAndUpdate({ "_id": req.body.userId }, { $push: { "purchasedCourses": req.body.purchasedCourses } }, { new: true });
+    res.send(xx);
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating, buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword, ChangeEmail, UseChangeEmailToken }

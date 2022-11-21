@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { InterfaceFilter } from "../../filter/InterfaceFilter";
 
 type Props = {
   tag: String;

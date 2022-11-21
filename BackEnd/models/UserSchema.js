@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  valid: {
+    type: Boolean,
+    default: false
+  },
   hash: {
     type: String,
     required: true,
@@ -32,7 +36,50 @@ const UserSchema = new mongoose.Schema({
     type: String,
     enum: ['User', 'Admin', 'Instructor', 'CorporateTrainee'],
     default: 'User'
+  },
+  passwordTimeStamp: {
+    type: Date, default: Date.now
+  },
+  emailTimeStamp: {
+    type: Date, default: Date.now
   }
+
+,
+
+  instructorRating:{
+    one: Number,
+    two: Number,
+    three: Number,
+    four: Number,
+    five: Number,
+    avg: {
+      type: Number,
+      default: 0
+    }
+  },
+
+  instructorReview:[{
+    username:String,
+    reviewBody:String,
+    rating:Number
+  }],
+  purchasedCourses:[{
+    courseID:{
+    type: mongoose.Types.ObjectId,
+    ref: 'CourseSchema'
+    },
+    grade:Number,
+    progress:Number,
+    exercisesAnswers:{
+      exerciseTitle: String,
+      answer: [String],
+    },
+}],
+
+  biography:{
+    type:String
+  }
+
 });
 
 const User = connection.model('User', UserSchema);

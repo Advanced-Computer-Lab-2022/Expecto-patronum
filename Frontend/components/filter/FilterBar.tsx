@@ -160,7 +160,7 @@ const FilterBar: React.FC<FilterProps> = ({
   }, [Filter, router.isReady]);
 
   return (
-    <div className="mt-32 ">
+    <div className="mt-32 xs:hidden">
       <h1 className="text-xl mb-10 font-bold">Filter By</h1>
       <FilterType
         Choosen={Filter.Subject}
