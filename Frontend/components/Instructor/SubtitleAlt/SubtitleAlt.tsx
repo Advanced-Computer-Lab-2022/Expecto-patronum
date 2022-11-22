@@ -24,6 +24,12 @@ const SubtitleAlt = (props: Props) => {
         props.setSubtitles(values);
     }
 
+    function setCourseSummary(e: React.ChangeEvent<HTMLInputElement>, subtitleIndex: number) {
+        const values = [...props.subtitles];
+        values[subtitleIndex].courseSummary = e.target.value;
+        props.setSubtitles(values);
+    }
+
     function setContentTitle(e: React.ChangeEvent<HTMLInputElement>, subtitleIndex: number, contentIndex: number) {
         const values = [...props.subtitles];
         values[subtitleIndex].contents[contentIndex].contentTitle = e.target.value;
@@ -72,10 +78,10 @@ const SubtitleAlt = (props: Props) => {
             const message = document.getElementById("error-message-of-subtitles");
             if(message != undefined) {
                 message.classList.toggle("right-0");
-                message.classList.toggle("-right-80");
+                message.classList.toggle("-right-[21rem]");
                 message.children[2].innerHTML = "A subtitle can have at least 4 course contents.";
                 setTimeout(() => {
-                    message.classList.toggle("-right-80");
+                    message.classList.toggle("-right-[21rem]");
                     message.classList.toggle("right-0");
                   }, 3000);
             }
@@ -93,10 +99,10 @@ const SubtitleAlt = (props: Props) => {
             const message = document.getElementById("error-message-of-subtitles");
             if(message != undefined) {
                 message.classList.toggle("right-2");
-                message.classList.toggle("-right-80");
+                message.classList.toggle("-right-[21rem]");
                 message.children[2].innerHTML = "A course can have at least 3 subtitles.";
                 setTimeout(() => {
-                    message.classList.toggle("-right-80");
+                    message.classList.toggle("-right-[21rem]");
                     message.classList.toggle("right-2");
                   }, 4000);
             }
@@ -135,7 +141,7 @@ const SubtitleAlt = (props: Props) => {
 
   return (
     <>
-        <div id='error-message-of-subtitles' style={{width: "20rem"}} className="fixed flex items-center text-left -right-80 transition-all duration-500 top-20 rounded-md shadow-lg h-20 z-30 text-sm whitespace-nowrap border-2 border-gray-600 border-t-4 border-t-red-600 bg-slate-100">
+        <div id='error-message-of-subtitles' style={{width: "20rem"}} className="fixed flex items-center text-left -right-[21rem] transition-all duration-500 top-20 rounded-md shadow-lg h-20 z-30 text-sm whitespace-nowrap border-2 border-gray-600 border-t-4 border-t-red-600 bg-slate-100">
             <VscError className='text-white bg-red-600 rounded-full shadow-md shadow-current scale-200' />
             <h1 className='text-3xl ml-6 mb-4 text-red-600'>Error...</h1>
             <p className='w-0 mt-4 text-xs text-black relative right-20'></p>
@@ -144,16 +150,25 @@ const SubtitleAlt = (props: Props) => {
             props.subtitles.map((subtitle: any, subtitleIndex: number) => (
                 <div id={'subtitle-' + subtitleIndex} className='transition-all duration-300 overflow-hidden pb-3 px-4 max-h-auto' key={subtitleIndex}>
                     <div className='flex items-center justify-center'>
-                        <button type='button' onClick={(e) => toggleSubtitle(e, subtitleIndex)} className={((subtitleIndex % 2 === 0) ? 'bg-gray-300 ': 'bg-gray-200 ') + ' w-full h-8 relative z-20 text-left flex items-center rounded-md'}><RiArrowDropDownLine className='pointer-events-none scale-200 transition-all duration-300 mx-2 rotate-180' /><span className='ml-3 pointer-events-none'><span className='rounded-full bg-black text-white px-1.25 font-bold'>{subtitleIndex + 1}</span><span className={(subtitle.header === "" ? 'opacity-40': '') + ' px-3 italic'}>{subtitle.header === "" ? "Subtitle " + (subtitleIndex + 1) + " Heading" : subtitle.header}</span></span></button>
+                        <button type='button' onClick={(e) => toggleSubtitle(e, subtitleIndex)} className={((subtitleIndex % 2 === 0) ? 'bg-gray-300 ': 'bg-gray-200 ') + ' w-full h-8 relative z-20 text-left flex items-center rounded-md'}>
+                            <RiArrowDropDownLine className='pointer-events-none scale-200 transition-all duration-300 mx-2 rotate-180' />
+                            <span className='ml-3 pointer-events-none'><span className='rounded-full bg-black text-white px-1.25 py-0.5 font-bold'>{subtitleIndex + 1}</span>
+                            <span className={(subtitle.header === "" ? 'opacity-40': '') + ' px-3 italic'}>{subtitle.header === "" ? "Subtitle " + (subtitleIndex + 1) + " Heading" : subtitle.header}</span></span>
+                        </button>
                         <button type='button' onClick={(e) => removeSubtitle(e, subtitleIndex)} className='bg-calm-red hover:bg-canadian-red rounded-full p-2 text-white text-xs whitespace-nowrap shadow-md ml-4 mr-1 h-min hover:scale-110 transition-all duration-300'><FiTrash className='scale-135 pointer-events-none' /></button>
                     </div>
                     <div className='relative transition-all duration-1000 px-2 my-1 border-2 rounded-xl'>
                         <Input value={subtitle.header} placeholder="Header" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setHeader(e, subtitleIndex)} />
+                        <Input value={subtitle.courseSummary} type='textarea' placeholder="Course Summary" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCourseSummary(e, subtitleIndex)} />
                         {
                             subtitle.contents.map((content: any, contentIndex: number) => (
                                 <div id={'content-' + contentIndex +'-subtitle-' + subtitleIndex} key={contentIndex} className='ml-4 relative transition-all duration-300 overflow-hidden p-2 mx-3 sb-max:mx-6 max-h-10'>
                                     <div className='flex items-center'>
-                                        <button type='button' onClick={(e) => toggleContent(e, subtitleIndex, contentIndex)} className={((contentIndex % 2 === 0) ? 'bg-gray-300 ': 'bg-gray-200 ') + '  w-auto min-w-[16rem] nv-max:min-w-min h-8 relative z-20 text-left flex justify-between items-center rounded-md'}><span className='ml-3 pointer-events-none'><span className='rounded-full bg-black text-white px-1.25 font-bold'>{contentIndex + 1}</span><span className={(content.contentTitle === "" ? 'opacity-40': '') + ' px-3'}>{content.contentTitle === "" ? "Content " + (contentIndex + 1) + " Title" : content.contentTitle}</span></span><RiArrowDropDownLine className='pointer-events-none scale-200 transition-all duration-300 mr-5' /></button>
+                                        <button type='button' onClick={(e) => toggleContent(e, subtitleIndex, contentIndex)} className={((contentIndex % 2 === 0) ? 'bg-gray-300 ': 'bg-gray-200 ') + '  w-auto min-w-[16rem] nv-max:min-w-min h-8 relative z-20 text-left flex justify-between items-center rounded-md'}>
+                                            <span className='ml-3 pointer-events-none'><span className='rounded-full bg-black text-white px-1.25 py-0.5 font-bold'>{contentIndex + 1}</span>
+                                            <span className={(content.contentTitle === "" ? 'opacity-40': '') + ' px-3'}>{content.contentTitle === "" ? "Content " + (contentIndex + 1) + " Title" : content.contentTitle}</span>
+                                            </span><RiArrowDropDownLine className='pointer-events-none scale-200 transition-all duration-300 mr-5' />
+                                        </button>
                                         <button type='button' onClick={(e) => removeContent(e, subtitleIndex, contentIndex)} className='bg-calm-red hover:bg-canadian-red rounded-full p-1.25 text-white text-xs whitespace-nowrap shadow-md ml-4 hover:scale-110 transition-all duration-300'><IoMdRemove className='pointer-events-none' /></button>
                                     </div>
                                     <div className='row mx-0'>
@@ -167,9 +182,9 @@ const SubtitleAlt = (props: Props) => {
                                 </div>
                             ))
                         }
-                        <button type='button' onClick={() => addNewContent(subtitleIndex)} className='text-white w-48 text-sm my-2 nv-max:ml-7 ml-14 hover:text-navlink-bg transition-all duration-200 hover:bg-white bg-navlink-bg border-navlink-bg border-px rounded-md p-2 whitespace-nowrap'>Add Content</button>
+                        <button type='button' onClick={() => addNewContent(subtitleIndex)} className='text-white w-48 text-sm my-2 nv-max:ml-7 ml-14 hover:text-input transition-all duration-200 hover:bg-main bg-input border-input border-px rounded-md p-2 whitespace-nowrap'>Add Content</button>
                         <br />
-                        <button type='button' onClick={() => toggleAddExercise(subtitleIndex)} className='hover:text-white text-navlink-bg my-2 text-xs mx-auto flex transition-all duration-200 hover:bg-navlink-bg border-navlink-bg border-px rounded-md p-2 whitespace-nowrap'>Toggle Exercise</button>
+                        <button type='button' onClick={() => toggleAddExercise(subtitleIndex)} className='hover:text-white text-input my-2 text-xs mx-auto flex transition-all duration-200 hover:bg-input border-input border-px rounded-md p-2 whitespace-nowrap'>Toggle Exercise</button>
                         <div id={'exercise-popup-' + subtitleIndex} className='hidden'>
                             <p className='text-center text-xl py-2 border-b-px mb-2'>Subtitle's Exercise (Optional)</p>
                             <ExerciseAlt subtitleIndex={subtitleIndex} subtitles={props.subtitles} setSubtitles={props.setSubtitles} />
@@ -179,7 +194,7 @@ const SubtitleAlt = (props: Props) => {
             ))
         }
         <div className='flex justify-center mt-2 mb-4'>
-            <button type='button' onClick={addNewSubtitle} className='text-white w-48 h-12 hover:text-navlink-bg transition-all duration-200 hover:bg-white bg-navlink-bg border-navlink-bg border-px rounded-md p-2 whitespace-nowrap'>Add Subtitle</button>
+            <button type='button' onClick={addNewSubtitle} className='text-white w-48 h-12 hover:text-input transition-all duration-200 hover:bg-main bg-input border-input border-px rounded-md p-2 whitespace-nowrap'>Add Subtitle</button>
         </div>
     </>
   )

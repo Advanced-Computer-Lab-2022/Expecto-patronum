@@ -60,7 +60,7 @@ const Input = React.forwardRef((props: Props, ref) => {
     return (
         <div ref={ref as any}  className={props.inputDivStyle + (props.required ? ' create-course-input': "") + ' p-2 relative'}> 
             <label ref={labelRef} className={props.labelStyle + (props.required ? ' create-course-input-label ': "") + ' relative h-4 whitespace-nowrap block w-fit pointer-events-none rounded-lg top-7 left-3 bg-main text-dark-semi-transparent px-1'}>{props.placeholder}</label>
-            <textarea onChange={(e) => {setCharacterLeft(250 - e.target.value.length); props.onChange(e)}} onFocus={moveLabel} onBlur={(e) => returnToInitial(e)} maxLength={250} className={props.style + ' h-39 py-2 focus:outline-none resize-none w-full transition-bg bg-transparent rounded-lg pl-2 shadow-lg border-2 border-input'}></textarea>
+            <textarea onChange={(e) => {setCharacterLeft(250 - e.target.value.length); props.onChange(e)}} onFocus={moveLabel} onBlur={(e) => returnToInitial(e)} maxLength={250} className={props.style + ' h-20 sb-max:h-39 py-2 focus:outline-none resize-none w-full transition-bg bg-transparent rounded-lg pl-2 shadow-lg border-2 border-input'}></textarea>
             <label className='absolute text-xs text-gray-400 -bottom-2 right-3 whitespace-nowrap'>{characterLeft} character{characterLeft === 1 ? "": "s"} left</label>
         </div>
     )

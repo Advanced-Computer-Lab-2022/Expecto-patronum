@@ -28,11 +28,11 @@ const MyCourses = (props: Props) => {
 
   function levelColor(level: string) {
       switch(level) {
-          case 'Beginner': return 'from-[#1D948E] to-[#3FE0D0]';
-          case 'Intermediate': return 'from-[#2f8608] to-[#52EB0E]';
+          case 'Beginner': return 'from-[#2f8608] to-[#52EB0E]';
+          case 'Intermediate': return 'from-[#C29904] to-[#FDE143]';
           case 'Advanced': return 'from-[#B20000] to-[#FF4542]';
-          case 'AllLevels': return 'from-[#C29904] to-[#FDE143]';
-          default: return 'from-[#C29904] to-[#FDE143]';
+          case 'All Levels': return 'from-[#2B32B2] to-[#1488CC]';
+          default: return 'from-[#1D948E] to-[#3FE0D0]';
       }
   }
 
@@ -63,13 +63,14 @@ const MyCourses = (props: Props) => {
     }
   }
 
+  // ADDITIONAL CHOOSE GRID VIEW
   return ( 
     <Layout>
         <div className='sb-max:min-w-fit text-white'>
           {courseData.slice(10*(currentPage - 1), 10*currentPage).map((course: any, index: number) => {
             return (
-              <div key={index} className={`h-fit w-full my-10 p-4 relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg bg-gradient-to-br ${levelColor(course.level)}`}>
-                <h1 className='text-xl nv-max:pr-14'>{course.title}</h1>
+              <div key={index} className={`h-48 w-full my-10 p-4 relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg bg-gradient-to-br ${levelColor(course.level)}`}>
+                <h1 className='text-2xl nv-max:pr-14'>{course.title}</h1>
                 <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
                     <Rating rating={2.47} />
                 </div>
@@ -79,18 +80,17 @@ const MyCourses = (props: Props) => {
               </div>
             );
           })}
-
-          <div className='text-center divide-x divide-bright-gray w-fit bg-dark-gray mx-auto h-6 rounded-md flex'>
-            <button type='button' className='px-2 hover:bg-gray-600 rounded-l-md' onClick={() => {currentPage === 1 ? null: setCurrentPage(currentPage-1)}}><BiChevronLeft className='scale-125' /></button>
-            <button type='button' className='px-2 hover:bg-gray-600' onClick={() => scroll(-1)}>...</button>
-            <div ref={pagesRef} className='relative divide-bright-gray overflow-hidden flex w-[10rem] text-left'>
-              {pages.map((i) => (
-                  <button key={i} type='button' className={`px-2 w-10 min-w-[2.5rem] right-0 hover:bg-gray-600 ${currentPage === i ? 'bg-canadian-red': 'bg-dark-gray'}`} onClick={(e) => selectPage(e, i)}>{i}</button>
-              ))}
-            </div>
-            <button type='button' className='px-2 hover:bg-gray-600' onClick={() => scroll(1)}>...</button>
-            <button type='button' className='px-2 hover:bg-gray-600 rounded-r-md' onClick={() => {currentPage === numberOfPages ? null: setCurrentPage(currentPage+1)}}><BiChevronRight className='scale-125' /></button>
+        </div>
+        <div className='text-center divide-x divide-bright-gray w-fit bg-dark-gray text-main mx-auto h-6 rounded-md flex'>
+          <button type='button' className='px-2 hover:bg-gray-600 rounded-l-md' onClick={() => {currentPage === 1 ? null: setCurrentPage(currentPage-1)}}><BiChevronLeft className='scale-125' /></button>
+          <button type='button' className='px-2 hover:bg-gray-600' onClick={() => scroll(-1)}>...</button>
+          <div ref={pagesRef} className='relative divide-bright-gray overflow-hidden flex w-[10rem] text-left'>
+            {pages.map((i) => (
+                <button key={i} type='button' className={`px-2 w-10 min-w-[2.5rem] right-0 hover:bg-gray-600 ${currentPage === i ? 'bg-canadian-red': 'bg-dark-gray'}`} onClick={(e) => selectPage(e, i)}>{i}</button>
+            ))}
           </div>
+          <button type='button' className='px-2 hover:bg-gray-600' onClick={() => scroll(1)}>...</button>
+          <button type='button' className='px-2 hover:bg-gray-600 rounded-r-md' onClick={() => {currentPage === numberOfPages ? null: setCurrentPage(currentPage+1)}}><BiChevronRight className='scale-125' /></button>
         </div>
     </Layout>
   )

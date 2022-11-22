@@ -32,6 +32,13 @@ const CourseInfo = React.forwardRef((props: Props, ref) => {
     setNewCourseInfo(info);
   }
 
+  const getCourseVideoURL = (e: any) => {
+    const info = newCourseInfo;
+    info.courseVideoURL = e.target.value;
+    setNewCourseInfo(info);
+  }
+
+
   const getLevel = (selectedRadio: any) => {
     const info = newCourseInfo;
     info.level = selectedRadio;
@@ -50,6 +57,7 @@ const CourseInfo = React.forwardRef((props: Props, ref) => {
           <Input onChange={getPrice} inputDivStyle='min-w-[6rem]' type="number" labelStyle="ml-3" required placeholder={"Price"} />
         </div>
       </div>
+      <Input onChange={getCourseVideoURL} placeholder={"Course Video URL"} />
       <Input onChange={getSummary} type='textarea' placeholder={"Summary"} />
       <Input onChange={getLevel} type='radio' title='Select Level' enum={['Beginner', 'Intermediate', 'Advanced', 'All Levels']} placeholder={"Level"} />
     </div>

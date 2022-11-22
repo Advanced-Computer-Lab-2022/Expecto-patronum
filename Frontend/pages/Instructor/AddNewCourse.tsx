@@ -36,6 +36,7 @@ const AddNewCourse = (props: Props) => {
       title: '',
       subject: '',
       price: '',
+      courseVideoURL: '',
       summary: '',
       level: '',
     }
@@ -85,11 +86,13 @@ export default AddNewCourse;
 export { AddNewCourseContext }; 
 export class Subtitle {
   header: string;
+  courseSummary: string;
   exercise: { exerciseTitle: string; questions: { question: string; choices: string[]; answer: string; }[]; };
   contents: { contentTitle: string; video: string; preview: boolean; duration: number; description: string; }[];
   totalMinutes: number;
   constructor() {
       this.header = "";
+      this.courseSummary = "";
       this.contents = [
           {
               contentTitle: "",
