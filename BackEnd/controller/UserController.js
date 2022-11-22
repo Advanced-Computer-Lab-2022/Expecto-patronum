@@ -553,7 +553,7 @@ async function selectCourse(req, res, next){
           if(z.instructorReview){
             info.yourinstructorReview = z.instructorReview;
           }
-          x = await CourseTable.find({ "_id": req.body.courseId });
+          x = await CourseTable.find({ "_id": req.body.courseId },{ review:{ "$slice": 3 }});
           res.send({ purchased: "yes", yourInfo: info ,courses: x });
           return;
         }
@@ -569,12 +569,13 @@ async function selectCourse(req, res, next){
         subject: 1,
         summary: 1,
         discount: 1,
-        discountPrice: 1
+        discountPrice: 1,
+        review:{ "$slice": 3 }
       });
       res.send({ purchased: "no", courseID: x });
     }
   } catch (error) {
-    
+    console.log(error);
   }
 }
 
