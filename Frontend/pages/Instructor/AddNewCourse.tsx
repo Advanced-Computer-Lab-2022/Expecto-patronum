@@ -15,6 +15,13 @@ interface ContextState {
   subtitles: any,
   setSubtitles: any,
   setCourseIcon: any,
+  titleRef: any,
+  subjectRef: any,
+  priceRef: any,
+  summaryRef: any,
+  levelRef: any,
+  courseVideoRef: any,
+  errorMessageRef: any,
 }
 
 const AddNewCourseContext = createContext({} as ContextState);
@@ -27,6 +34,14 @@ const AddNewCourse = (props: Props) => {
   const courseInfoRef  = useRef<any>();
   const courseSubtitlesRef = useRef<any>();
   const courseIconRef = useRef<any>();
+
+  const titleRef = useRef<any>();
+  const subjectRef = useRef<any>();
+  const priceRef = useRef<any>();
+  const summaryRef = useRef<any>();
+  const levelRef = useRef<any>(null);
+  const courseVideoRef = useRef<any>(null);
+  const errorMessageRef = useRef<any>();
 
   const addNewCourseSteps = [courseInfoRef, courseSubtitlesRef, courseIconRef];
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -70,8 +85,8 @@ const AddNewCourse = (props: Props) => {
 
   return (
     <Layout>
-        <AddNewCourseContext.Provider value={{addNewCourseSteps, currentStep, setCurrentStep, newCourseInfo, setNewCourseInfo, subtitles, setSubtitles, setCourseIcon}}>
-          <form className='sb-max:min-w-fit'>
+        <AddNewCourseContext.Provider value={{addNewCourseSteps, currentStep, setCurrentStep, newCourseInfo, setNewCourseInfo, subtitles, setSubtitles, setCourseIcon, titleRef, subjectRef, priceRef, summaryRef, levelRef, courseVideoRef, errorMessageRef}}>
+          <form className='sb-max:min-w-fit' onChange={() => errorMessageRef.current.innerHTML = ''}>
             <CourseInfo ref={courseInfoRef} />
             <CourseSubtitles ref={courseSubtitlesRef} />
             <CourseIcon ref={courseIconRef} />

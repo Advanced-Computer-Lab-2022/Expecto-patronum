@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import Input from '../../shared/Input/Input';
 import ExerciseAlt from './ExerciseAlt/ExerciseAlt';
-import { Subtitle } from '../../Instructor/CreateCourse/CreateCourse';
+import { Subtitle } from '../../../pages/Instructor/AddNewCourse';
 import { FiTrash } from 'react-icons/fi';
 import { IoMdRemove } from 'react-icons/io';
 import { VscError } from 'react-icons/vsc';
@@ -141,11 +141,11 @@ const SubtitleAlt = (props: Props) => {
 
   return (
     <>
-        <div id='error-message-of-subtitles' style={{width: "20rem"}} className="fixed flex items-center text-left -right-[21rem] transition-all duration-500 top-20 rounded-md shadow-lg h-20 z-30 text-sm whitespace-nowrap border-2 border-gray-600 border-t-4 border-t-red-600 bg-slate-100">
+        {/* <div id='error-message-of-subtitles' style={{width: "20rem"}} className="fixed flex items-center text-left -right-[21rem] transition-all duration-500 top-20 rounded-md shadow-lg h-20 z-30 text-sm whitespace-nowrap border-2 border-gray-600 border-t-4 border-t-red-600 bg-slate-100">
             <VscError className='text-white bg-red-600 rounded-full shadow-md shadow-current scale-200' />
             <h1 className='text-3xl ml-6 mb-4 text-red-600'>Error...</h1>
             <p className='w-0 mt-4 text-xs text-black relative right-20'></p>
-        </div>
+        </div> */}
         {
             props.subtitles.map((subtitle: any, subtitleIndex: number) => (
                 <div id={'subtitle-' + subtitleIndex} className='transition-all duration-300 overflow-hidden pb-3 px-4 max-h-auto' key={subtitleIndex}>
