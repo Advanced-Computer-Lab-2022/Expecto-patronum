@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div className="bg-[#F4F4F4] relative">
       <DataProvider>
-        {/* <Navbar></Navbar> */}
+        <Navbar></Navbar>
         <Component {...pageProps} />
         <Footer></Footer>
       </DataProvider>
