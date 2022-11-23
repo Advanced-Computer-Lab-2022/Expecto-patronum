@@ -235,12 +235,14 @@ async function addCourse(req, res, next) {
     rating: req.body.rating,
     instructorName: name,
     discountPrice: req.body.price,
-    courseImage : req.body.courseImage
+    review:req.body.review,
+    courseImage:req.body.courseImage
   });
 
   try {
     newCourse.save();
     res.send(newCourse);
+    console.log("course added succsessfully");
   } catch (err) {
     console.log(err);
   };
@@ -275,9 +277,40 @@ async function discount(req, res, next) {
   } catch (error) {
     console.log(error);
   }
+}
+
+  
+  async function viewCourseRatings(req,res,next){
+    try{
+      var currentID=await req.body.userID;
+      var currentCourseID=await req.body.courseID;
+      var ratings=await CourseTable.find({
+        "instructorID":currentID, "_id":currentCourseID
+
+      }).select({ "title": 1, "summary": 1,"rating":1,"review":1});
+      //const rates=[Object.values(ratings)[4]];
+      res.send(ratings);
+    }
+    catch(error){
+      console.log(error);
+    }
+    
+  }
+
+  async function testAll(req,res){
+    try{
+      var test=await CourseTable.find();
+      res.send(test);
+    }
+    catch(error){
+      console.log(error);
+    }
+    
+  }
 
 
-};
 
 
-module.exports = { viewCourses, filterCourses, addCourse, discount };
+
+
+module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,testAll};

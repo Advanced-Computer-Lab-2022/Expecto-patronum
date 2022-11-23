@@ -83,7 +83,18 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: 'CourseSchema'
     },
-    grade:Number,
+    excercises:[{
+      excerciseID:{
+      type: mongoose.Types.ObjectId,
+      ref:'ExcerciseSchema',
+      unique: true},
+      grade:Number,
+      exercisesAnswers:{
+        exerciseTitle: String,
+        answer: [String],
+      },
+
+    }],
     progress:Number,
     courseRating:{
       type :Number,
@@ -95,10 +106,7 @@ const UserSchema = new mongoose.Schema({
       default:0
     },
     instructorReview:String,
-    exercisesAnswers:{
-      exerciseTitle: String,
-      answer: [String],
-    },
+    
 }],
 
   biography:{
