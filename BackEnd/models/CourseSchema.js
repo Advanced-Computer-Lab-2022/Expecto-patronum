@@ -80,25 +80,16 @@ const CourseSchema = new mongoose.Schema({
       description: String,
     }],
     exercise: {
-      exerciseTitle: String,
-      questions: [{
-        question: String,
-        choices: [String],
-        answer: String,
-        isVisible: Boolean,
-      }],
-      totalGrade: Number
+      type: mongoose.Types.ObjectId,
+      ref:'ExcerciseSchema',
+      unique: true,
     },
     totalMinutes: Number,
   }],
   finalExam: {
-    questions: [{
-      question: String,
-      choices: [String],
-      answer: String,
-      isVisible: Boolean,
-    }],
-    finalGrade: Number,
+    type: mongoose.Types.ObjectId,
+    ref:'ExcerciseSchema',
+    unique: true,
   },
   rating: {
     one: {
