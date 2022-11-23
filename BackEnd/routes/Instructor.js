@@ -15,7 +15,7 @@ router.get("/viewCourses",viewCourses);
 
  router.get("/filterCourses",filterCourses);
 
- router.get("/viewMyCourseRatings",viewCourseRatings)
+ router.get("/viewCourseRatings",viewCourseRatings)
 
  router.get("/testAll",testAll)
 

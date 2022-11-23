@@ -234,12 +234,15 @@ async function addCourse(req, res, next) {
     exercises: req.body.exercises,
     rating: req.body.rating,
     instructorName: name,
-    discountPrice: req.body.price
+    discountPrice: req.body.price,
+    review:req.body.review,
+    courseImage:req.body.courseImage
   });
 
   try {
     newCourse.save();
     res.send(newCourse);
+    console.log("course added succsessfully");
   } catch (err) {
     console.log(err);
   };
@@ -279,16 +282,31 @@ async function discount(req, res, next) {
   
   async function viewCourseRatings(req,res,next){
     try{
-      var currentID=await req.body.userID
+      var currentID=await req.body.userID;
+      //var slicedReview= await CourseTable.find({"instructorID":currentID}).select({ "title": 1, "summary": 1,"review":1}).slice('review',5);
+      //res.send(slicedReview)
+     // console.log(slicedReview);
       var ratings=await CourseTable.find({
         "instructorID":currentID
 
-      }).select({ "title": 1, "summary": 1,"rating":1});
-      res.send(ratings);
+      }).select({ "title": 1, "summary": 1,"rating":1,"review":1});
+      //const rateArray=await CourseTable.find({"instructorID":currentID}).select({"review":1}).limit(4).slice("reviews",1);
+      var xxz=[];
+      const rates=[Object.values(ratings)[4]];
+      res.send(rates);
+      for (let i = 0; i < 3; i++) {
+        var xxy= Object.values(rates[0].review[i]);
+        xxz=xxz.concat(xxy);
+      }
+      console.log(xxz);
+      
+    //console.log(rateArray.slice(4));
+    //res.send(rateArray);
     }
     catch(error){
       console.log(error);
     }
+    
   }
 
   async function testAll(req,res){
