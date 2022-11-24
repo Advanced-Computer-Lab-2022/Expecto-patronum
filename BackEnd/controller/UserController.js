@@ -536,10 +536,12 @@ async function selectCourse(req, res, next){
   try {
     let info = {};
     if (req.body.courseId) {
-      var x = await User.find({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 0 });
-      var y = Object.values(x)[0];
-      for (var i = 0; i < y.purchasedCourses.length; i++) {
-        var z = Object.values(y.purchasedCourses)[i];
+      var x = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 1 });
+      //var y = Object.values(x);
+      //console.log(x);
+      if(x.purchasedCourses){
+      for (var i = 0; i < x.purchasedCourses.length; i++) {
+        var z = Object.values(x.purchasedCourses)[i];
         if (z.courseID == req.body.courseId) {
           if(z.courseRating){
             info.yourCourseRating = z.courseRating;
@@ -553,12 +555,15 @@ async function selectCourse(req, res, next){
           if(z.instructorReview){
             info.yourinstructorReview = z.instructorReview;
           }
-          x = await CourseTable.find({ "_id": req.body.courseId },{ review:{ "$slice": 3 }});
-          res.send({ purchased: "yes", yourInfo: info ,courses: x });
+          info.purchased = "yes";
+          x = await CourseTable.findOne({ "_id": req.body.courseId },{ review:{ "$slice": 3 }});
+          info.course = x;
+          res.send(info);
           return;
         }
       }
-      x = await CourseTable.find({ "_id": req.body.courseId }).select({
+      }
+      x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
         _id: 1,
         title: 1,
         courseHours: 1,
@@ -572,7 +577,10 @@ async function selectCourse(req, res, next){
         discountPrice: 1,
         review:{ "$slice": 3 }
       });
-      res.send({ purchased: "no", courseID: x });
+      let q = {};
+      q.purchased = "no";
+      q.course = x;
+      res.send(q);
     }
   } catch (error) {
     console.log(error);
