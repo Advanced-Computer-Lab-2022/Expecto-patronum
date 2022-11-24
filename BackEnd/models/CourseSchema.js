@@ -82,14 +82,12 @@ const CourseSchema = new mongoose.Schema({
     exercise: {
       type: mongoose.Types.ObjectId,
       ref:'ExcerciseSchema',
-      unique: true,
     },
     totalMinutes: Number,
   }],
   finalExam: {
     type: mongoose.Types.ObjectId,
     ref:'ExcerciseSchema',
-    unique: true,
   },
   rating: {
     one: {

@@ -5,13 +5,16 @@ const connection = require('../config/database');
 const ExcerciseSchema= new mongoose.Schema({
   courseID: {
     type: mongoose.Types.ObjectId,
-    ref:'CourseSchema',
-    unique: true
+    ref:'CourseSchema'
   },
-   
-    exerciseTitle:{
-        type:String,
-        required:true
+
+  subtitleName:{
+    type:String,
+},
+
+  exerciseTitle:{
+      type:String,
+      required:true
     },
     questions:
         [{
