@@ -535,6 +535,7 @@ async function giveInstructorReview(req, res, next) {
 async function selectCourse(req, res, next){
   try {
     let info = {};
+    let exercise = {};
     if (req.body.courseId) {
       var x = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 1 });
       //var y = Object.values(x);
@@ -542,7 +543,14 @@ async function selectCourse(req, res, next){
       if(x.purchasedCourses){
       for (var i = 0; i < x.purchasedCourses.length; i++) {
         var z = Object.values(x.purchasedCourses)[i];
-        if (z.courseID == req.body.courseId) {
+        // if (z.courseID == req.body.courseId) {
+        //   if(z.excercises){
+        //     for(var j = 0; j<z.excercises.length;j++){
+        //       var exe = Object.values(z.excercises)[i];
+        //       exercise[excerciseID+j] = exe.excerciseID;
+        //       exercise[grade+j] = exe.grade;
+        //     }
+        //   } 
           if(z.courseRating){
             info.yourCourseRating = z.courseRating;
           }
