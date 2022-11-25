@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import Input from '../../shared/Input/Input';
 import ExerciseAlt from './ExerciseAlt/ExerciseAlt';
@@ -6,6 +6,7 @@ import { Subtitle } from '../../../pages/Instructor/AddNewCourse';
 import { FiTrash } from 'react-icons/fi';
 import { IoMdRemove } from 'react-icons/io';
 import { VscError } from 'react-icons/vsc';
+import { PopupMessageContext } from '../../../pages/_app';
 
 type Props = {
     subtitles: any,
@@ -13,6 +14,8 @@ type Props = {
 }
 
 const SubtitleAlt = (props: Props) => {
+
+    const { viewPopupMessage } = useContext(PopupMessageContext);
 
     function addNewSubtitle() {
         props.setSubtitles([...props.subtitles, new Subtitle()]);
@@ -75,18 +78,7 @@ const SubtitleAlt = (props: Props) => {
     function removeContent(e: any, subtitleIndex: number, contentIndex: number) {
         const values = [...props.subtitles];
         if(values[subtitleIndex].contents.length === 4) {
-            const message = document.getElementById("error-message-of-subtitles");
-            if(message != undefined) {
-                message.classList.toggle("right-0");
-                message.classList.toggle("-right-[21rem]");
-                message.children[2].innerHTML = "A subtitle can have at least 4 course contents.";
-                setTimeout(() => {
-                    message.classList.toggle("-right-[21rem]");
-                    message.classList.toggle("right-0");
-                  }, 3000);
-            }
-            e.target.classList.toggle("delete-button-reject");
-            setTimeout(() => {e.target.classList.toggle("delete-button-reject")}, 820)
+            viewPopupMessage(false, "A subtitle can have at least 4 course contents.");
             return;
         }
         console.log(values[subtitleIndex].contents.splice(contentIndex, 1));
@@ -96,18 +88,7 @@ const SubtitleAlt = (props: Props) => {
     function removeSubtitle(e: any, subtitleIndex: number) {
         const values = [...props.subtitles];
         if(values.length === 3) {
-            const message = document.getElementById("error-message-of-subtitles");
-            if(message != undefined) {
-                message.classList.toggle("right-2");
-                message.classList.toggle("-right-[21rem]");
-                message.children[2].innerHTML = "A course can have at least 3 subtitles.";
-                setTimeout(() => {
-                    message.classList.toggle("-right-[21rem]");
-                    message.classList.toggle("right-2");
-                  }, 4000);
-            }
-            e.target.classList.toggle("delete-button-reject");
-            setTimeout(() => {e.target.classList.toggle("delete-button-reject")}, 820)
+            viewPopupMessage(false, "A course can have at least 3 subtitles.");
             return;
         }
         values.splice(subtitleIndex, 1);

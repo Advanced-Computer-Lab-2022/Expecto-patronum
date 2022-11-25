@@ -33,7 +33,7 @@ const FormNavigation = (props: Props) => {
             return;
         
         if(!checkRequiredCourseInfo()) {
-            viewPopupMessage('Please fill in the required fields.');
+            viewPopupMessage(false, 'Please fill in the required fields.');
             return;
         }
 
