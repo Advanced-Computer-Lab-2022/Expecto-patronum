@@ -337,12 +337,25 @@ async function discount(req, res, next) {
     catch(error){
       console.log(error);
     }
-    
   }
 
+    async function updateBio(req,res){
+      try{var currentId=req.body.userID;
+        var currentBio=req.body.newBio;
+        var updatedBio=await User.findByIdAndUpdate(currentId,{"biography":currentBio});
+        res.send(updatedBio);
+      }
+        catch(error){
+          console.log(error);
+        }
+      
+    }
+    
+  
 
 
 
 
 
-module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,testAll};
+
+module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,testAll,updateBio};
