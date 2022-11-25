@@ -350,6 +350,30 @@ async function discount(req, res, next) {
         }
       
     }
+
+    async function submitAnswer(req,res){
+      try{
+        var excercise=await CourseTable.find({"title":"DMET16"});
+        var subtitles=Object.values(excercise)[0];
+        var excerciseID=subtitles.subtitles[0].exercise;
+        var actualExcercise=await ExerciseTable.findById(excerciseID);
+        var answer=req.body.choice;
+        if (answer==actualExcercise.questions[0].answer){
+          //res.send(answer);
+          res.send(actualExcercise.questions[0]);
+        }
+        else{
+          res.send("this is not correct");
+        }
+        
+
+        
+      }
+      catch(error){
+        console.log(error);
+      }
+      
+    }
     
   
 
@@ -358,4 +382,4 @@ async function discount(req, res, next) {
 
 
 
-module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,testAll,updateBio};
+module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,testAll,updateBio,submitAnswer};
