@@ -10,6 +10,7 @@ import { ApiUrl } from "../../constants/constants";
 import CompPagination from "../../components/shared/pagination/CompPagination";
 import { CourseData } from "../../Interface/CourseDataInterface";
 import Router, { useRouter } from "next/router";
+import Spinner from "../../components/shared/spinner/Spinner";
 
 export interface AllCoursesData {
   data: {
@@ -26,7 +27,6 @@ const Courses: NextPage<AllCoursesData> = ({ data }) => {
   });
 
   Router.events.on("routeChangeStart", (url) => {
-    console.log(`Loading: ${url}`);
     SetLoading(true);
   });
 
@@ -76,6 +76,22 @@ const Courses: NextPage<AllCoursesData> = ({ data }) => {
     }
   }
 
+  function PaginationSetter(page:any){
+    SetFilter((prev) => {
+      return {
+        ...prev,
+        Page: page,
+      };
+    });
+
+
+  }
+  
+
+
+
+  
+
   return (
     <div className="flex  justify-between mt-20 mx-10">
       <FilterBar
@@ -84,10 +100,8 @@ const Courses: NextPage<AllCoursesData> = ({ data }) => {
         PriceSetter={PriceSetter}
       ></FilterBar>
       {Loading ? (
-        <div className="w-full h-screen bg-white flex justify-center items-center">
-          {" Loading... "}
-          <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-24 w-24"></div>
-        </div>
+        <Spinner></Spinner>
+      
       ) : (
         <div className="w-4/5">
           <h1 className="text-2xl font-medium mb-3">
@@ -131,41 +145,17 @@ const Courses: NextPage<AllCoursesData> = ({ data }) => {
 
           <div className="gap-10 gap-y-14 grid grid-cols-3">
             {data.FinalResult.map((item, index) => {
-              return <CourseCard key={index} CourseData={item}></CourseCard>;
+              return <CourseCard  key={index} CourseData={item}></CourseCard>;
             })}
           </div>
 
-          <CompPagination totalCount={data.TotalCount} />
+          <CompPagination FromLink={true} Setter={PaginationSetter} totalCount={data.TotalCount} />
         </div>
       )}
     </div>
   );
 };
 
-// export const getServerSideProps: GetServerSideProps<{ data: [] }> = async ({
-//   resolvedUrl,
-//   query,
-// }) => {
-//   let data: [] = [];
-
-//   let URL = ApiUrl + resolvedUrl;
-//   console.log("====================================");
-//   console.log("hi");
-//   console.log("====================================");
-//   axios.get(URL).then((res: any) => {
-//     data = res.data;
-
-//     console.log("====================================");
-//     console.log(data);
-//     console.log("====================================");
-//   });
-
-//   return {
-//     props: {
-//       data,
-//     },
-//   };
-// };
 
 export async function getServerSideProps(UrlInfo: { resolvedUrl: string }) {
   let res = await fetch(ApiUrl + UrlInfo.resolvedUrl);

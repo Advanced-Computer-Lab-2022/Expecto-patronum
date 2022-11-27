@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import DataContext from "../../context/DataContext";
 import Rating from "../shared/rating/Rating";
 import { CourseData } from "../../Interface/CourseDataInterface";
+import { useRouter } from "next/router";
 
 const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
   const {
@@ -20,9 +21,12 @@ const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
 
   const [Flag, SetFlag] = useState(false);
   const { Rate, SetRate } = useContext(DataContext);
+  let router=useRouter()
+  
 
   return (
     <div
+    onClick={() => {router.push(`/Courses/${_id}`)}}
       onMouseEnter={() => {
         SetFlag(true);
       }}

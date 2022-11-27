@@ -27,7 +27,7 @@ router.get('/MailVerify/:token', VerifyTokenMiddleware, ValidateUser);
 
 router.post("/forgetPassword", forgetPassword);
 router.get("/forgetPassword/:token", VerifyTokenMiddleware, (req, res) => {
-  res.send("Please enter new password");
+  res.send({ Error: false, Message: 'Token is valid' });
 })
 router.post("/ChangeForgottenPassword/:token", VerifyTokenMiddleware, ChangeForgottenPassword);
 router.post("/ChangePassword", isAuth, ChangePassword);
