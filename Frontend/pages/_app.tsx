@@ -28,10 +28,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [popupIcon, setPopupIcon] = useState<any>(<FiAlertTriangle className='text-red-700 relative left-6 scale-[2.5]' />);
   const [isPopupOpen, setIsPopupOpen] = useState<any>();
 
-  function viewPopupMessage(success: boolean, text: string) {
+  function viewPopupMessage(success: boolean, text: string, e: any) {
     setIsPopupOpen(true);
     if(isPopupOpen && text == popupMessageRef.current.children[3].innerHTML)
       return;
+    if(e != undefined) {
+      e.target.classList.toggle('delete-button-reject');
+      setTimeout(() => {
+          e.target.classList.toggle('delete-button-reject');
+      }, 2000)
+    }
     popupMessageRef.current.classList.toggle("right-2");
     popupMessageRef.current.classList.toggle("-right-[21rem]");
     success ? setPopupIcon(<FiCheckCircle className='text-green-600 relative left-6 scale-[2.5]' />): setPopupIcon(<FiAlertTriangle className='text-red-700 relative left-6 scale-[2.5]' />);

@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 import { AddNewCourseContext } from '../../../../pages/Instructor/AddNewCourse';
@@ -16,9 +16,15 @@ const FormNavigation = (props: Props) => {
     const submitNewCourseRef = useRef<any>();
     const { viewPopupMessage } = useContext(PopupMessageContext);
 
+    useEffect(() => {
+        global.window.scrollTo(0, 79);
+    },[]);
+
     const prev = () => {
         if(currentStep === 0)
             return;
+
+        global.window.scrollTo(0, 79);
         if(currentStep === addNewCourseSteps.length - 1) {
             nextStepRef.current.classList.remove('hidden');
             submitNewCourseRef.current.classList.add('hidden');
@@ -32,6 +38,7 @@ const FormNavigation = (props: Props) => {
         if(currentStep === addNewCourseSteps.length - 1)
             return;
         
+        global.window.scrollTo(0, 79);
         if(currentStep === 0) {
             if(!checkRequiredCourseInfo()) {
                 viewPopupMessage(false, 'Please fill in the required fields.');
@@ -92,22 +99,22 @@ const FormNavigation = (props: Props) => {
                 var contents = subtitles[i].contents;
                 for(var j = 0; j < contents.length; j++) {
                     var contentData = subtitle.children[j+2].children[1] as any;
-                    if(contents[i].contentTitle === '') {
+                    if(contents[j].contentTitle === '') {
                         contentData.children[0].children[0].children[0].style.color = 'rgb(185, 28, 28)';
                         moveForward = false;
                     }
     
-                    if(contents[i].video === '') {
+                    if(contents[j].video === '') {
                         contentData.children[2].children[0].style.color = 'rgb(185, 28, 28)';
                         moveForward = false;
                     }
     
-                    if(contents[i].duration === 0) {
+                    if(contents[j].duration === 0) {
                         contentData.children[0].children[1].children[0].style.color = 'rgb(185, 28, 28)';
                         moveForward = false;
                     }
     
-                    if(contents[i].description === '') {
+                    if(contents[j].description === '') {
                         contentData.children[3].children[0].style.color = 'rgb(185, 28, 28)';
                         moveForward = false;
                     }

@@ -17,11 +17,11 @@ const SubtitleAlt = (props: Props) => {
 
     const { viewPopupMessage } = useContext(PopupMessageContext);
 
-    const [height, setHeight] = useState<any>(['auto', 'auto', 'auto']);
+    const [height, setHeight] = useState<any>([36, 36, 36]);
 
     function addNewSubtitle() {
         props.setSubtitles([...props.subtitles, new Subtitle()]);
-        setHeight([...height, 'auto']);
+        setHeight([...height, 36]);
     }
 
     function setHeader(e: React.ChangeEvent<HTMLInputElement>, subtitleIndex: number) {
@@ -81,7 +81,7 @@ const SubtitleAlt = (props: Props) => {
     function removeContent(e: any, subtitleIndex: number, contentIndex: number) {
         const values = [...props.subtitles];
         if(values[subtitleIndex].contents.length === 4) {
-            viewPopupMessage(false, "A subtitle can have at least 4 course contents.");
+            viewPopupMessage(false, "A subtitle can have at least 4 course contents.", e);
             return;
         }
         console.log(values[subtitleIndex].contents.splice(contentIndex, 1));
@@ -91,14 +91,15 @@ const SubtitleAlt = (props: Props) => {
     function removeSubtitle(e: any, subtitleIndex: number) {
         const values = [...props.subtitles];
         if(values.length === 3) {
-            viewPopupMessage(false, "A course can have at least 3 subtitles.");
+            viewPopupMessage(false, "A course can have at least 3 subtitles.", e);
             return;
         }
-        const heights = [...height];
-        heights.splice(subtitleIndex, 1);
-        setHeight(heights);
         values.splice(subtitleIndex, 1);
         props.setSubtitles(values);
+
+        const heights = [...height];
+        heights.splice(subtitleIndex, 1).pop();
+        setHeight(heights);
     }
 
     function toggleAddExercise(subtitleIndex: number) {
@@ -109,8 +110,7 @@ const SubtitleAlt = (props: Props) => {
     }
 
     function toggleSubtitle(e: any, subtitleIndex: number) {
-        e.target.children[0].classList.toggle("rotate-180");
-        const subtitle = document.getElementById('subtitle-' + subtitleIndex + '-data');
+        // e.target.children[0].classList.toggle("rotate-180");
         const heights = [...height];
 
         if(height[subtitleIndex] === 'auto')
@@ -119,9 +119,6 @@ const SubtitleAlt = (props: Props) => {
             heights[subtitleIndex] = 'auto';
         
         setHeight(heights);
-        // if(subtitle != undefined) {
-        //     subtitle.classList.toggle("opacity-0");
-        // }
     }
 
     function toggleContent(e: any, subtitleIndex: number, contentIndex: number) {
@@ -139,13 +136,15 @@ const SubtitleAlt = (props: Props) => {
     <>
         {
             props.subtitles.map((subtitle: any, subtitleIndex: number) => (
-                <AnimateHeight duration={500} height={height[subtitleIndex]} className='transition-all duration-500 overflow-hidden pb-3 px-4' key={subtitleIndex}>
+                <AnimateHeight duration={500} height={height[subtitleIndex]} className='transition-all duration-500 overflow-hidden pb-3 my-1 px-4' key={subtitleIndex}>
                     <div id={'subtitle-' + subtitleIndex}>
                         <div className='flex items-center justify-center h-fit'>
                             <button type='button' onClick={(e) => toggleSubtitle(e, subtitleIndex)} className={((subtitleIndex % 2 === 0) ? 'bg-gray-300 ': 'bg-gray-200 ') + ' w-full h-8 relative z-20 text-left flex items-center rounded-md whitespace-nowrap'}>
-                                <RiArrowDropDownLine className='pointer-events-none scale-200 transition-all duration-300 mx-2 rotate-180' />
-                                <span className='ml-3 pointer-events-none'><span className='rounded-full bg-black text-white px-1.25 py-0.5 font-bold'>{subtitleIndex + 1}</span>
-                                <span className={(subtitle.header === "" ? 'opacity-40': '') + ' px-3 italic'}>{subtitle.header === "" ? "Subtitle " + (subtitleIndex + 1) + " Heading" : subtitle.header}</span></span>
+                                <RiArrowDropDownLine className={(height[subtitleIndex] === 'auto' ? 'rotate-180': '') + ' pointer-events-none scale-200 transition-all duration-300 mx-2'} />
+                                <span className='ml-3 pointer-events-none'>
+                                    <span className={(subtitle.header === "" ? 'hidden': '') + ' rounded-full bg-input text-white px-1.25 py-0.5 font-bold'}>{subtitleIndex + 1}</span>
+                                    <span className={(subtitle.header === "" ? 'opacity-40': '') + ' px-3 italic'}>{subtitle.header === "" ? "Subtitle " + (subtitleIndex + 1) + " Header" : subtitle.header}</span>
+                                </span>
                             </button>
                             <button type='button' onClick={(e) => removeSubtitle(e, subtitleIndex)} className='bg-calm-red hover:bg-canadian-red rounded-full p-2 text-white text-xs whitespace-nowrap shadow-md ml-4 mr-1 h-min hover:scale-110 transition-all duration-300'><FiTrash className='scale-135 pointer-events-none' /></button>
                         </div>
@@ -172,7 +171,6 @@ const SubtitleAlt = (props: Props) => {
                                             <Input value={content.video} placeholder="Video URL" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContentVideo(e, subtitleIndex, contentIndex)} inputDivStyle={content.preview ? "": "hidden"} />
                                             <Input type='textarea' value={content.description} placeholder="Content Description" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContentDescription(e, subtitleIndex, contentIndex)} />
                                         </div>
-                                        <p id={"content-" + contentIndex + "-message-" + subtitleIndex} className="hidden text-center relative bottom-3 text-red-600"></p>
                                     </div>
                                 ))
                             }

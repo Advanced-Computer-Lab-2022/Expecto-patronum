@@ -2,7 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Rating from '../../components/shared/rating/Rating';
 import Layout from './Layout';
-import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
+import { BiChevronLeft, BiChevronRight, BiSearchAlt2 } from 'react-icons/bi';
+import { CiGrid2H, CiGrid41} from 'react-icons/ci';
+import { MdViewList, MdViewAgenda } from 'react-icons/md';
+import  { TfiLayoutGrid2Alt } from 'react-icons/tfi';
+import { BsFillGridFill, BsGridFill } from 'react-icons/bs';
+import { HiViewBoards, HiViewGrid } from 'react-icons/hi';
+import classNames from 'classnames';
 
 type Props = {}
 
@@ -15,6 +21,7 @@ const MyCourses = (props: Props) => {
   const [paginationScroll, setPaginationScroll] = useState(0);
   const pagesRef = useRef<any>();
   const [direction, setDirection] = useState(1);
+  const [isGridViewList, setIsGridViewList] = useState(true);
 
   // useEffect(() => {
   //     const getCourses = async () => {
@@ -63,25 +70,43 @@ const MyCourses = (props: Props) => {
     }
   }
 
-  // ADDITIONAL CHOOSE GRID VIEW
+  const expandDescription = (e: any) => {
+    e.target.classList.toggle('whitespace-nowrap');
+    e.target.classList.toggle('overflow-hidden');
+    e.target.classList.toggle('text-ellipsis');
+    e.target.classList.toggle('h-fit');
+  }
+
   return ( 
     <Layout>
-        <div className='sb-max:min-w-fit text-white'>
+        <div className='flex pl-4 ml-1 mb-4 mt-4 items-center'>
+          <div className={searchInputDiv}>
+          <input placeholder="Search for a course" className={searchInput}/>
+            <button type="submit" className={searchButton}>
+              <BiSearchAlt2 className='scale-125 hover:scale-135 transition-all duration-300' />
+            </button>
+          </div>
+          <div className='ml-2 flex items-center sb-max:hidden'>
+            <button onClick={() => setIsGridViewList(true)} className={(isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 opacity-70 scale-[1.195] rounded-[0.65rem] border-1.5 p-[0.271rem] hover:scale-[1.295] hover:text-main hover:bg-gray-700 transition-all duration-300 rotate-90'}><HiViewBoards /></button>
+            <button onClick={() => setIsGridViewList(false)} className={(!isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 opacity-70 scale-[1.0665] rounded-xl border-1.5 p-1.5 hover:scale-[1.1665] hover:text-main hover:bg-gray-700 transition-all duration-300'}><BsGridFill /></button>
+          </div>
+        </div>
+        <div className={(!isGridViewList ? 'grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-x-20': '') + ' sb-max:min-w-fit text-white mx-8'}>
           {courseData.slice(10*(currentPage - 1), 10*currentPage).map((course: any, index: number) => {
             return (
-              <div key={index} className={`h-48 w-full my-10 p-4 relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg bg-gradient-to-br ${levelColor(course.level)}`}>
+              <div key={index} className={`h-42 w-full mb-10 p-4 relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg bg-gradient-to-br cursor-pointer ${levelColor(course.level)}`}>
                 <h1 className='text-2xl nv-max:pr-14'>{course.title}</h1>
                 <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
                     <Rating rating={2.47} />
                 </div>
                 <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level}</span></p>
                 <label className='pl-3'>Description:</label>
-                <p className='pl-6'>{course.summary}</p>
+                <p onClick={expandDescription} className='pl-6 whitespace-nowrap overflow-hidden sb-max:w-48 text-ellipsis mr-18 sb-max:mr-4'>{course.summary}</p>
               </div>
             );
           })}
         </div>
-        <div className='text-center divide-x divide-bright-gray w-fit bg-dark-gray text-main mx-auto h-6 rounded-md flex'>
+        <div className='text-center divide-x divide-bright-gray w-fit bg-dark-gray text-main mx-auto h-6 rounded-md mb-8 flex'>
           <button type='button' className='px-2 hover:bg-gray-600 rounded-l-md' onClick={() => {currentPage === 1 ? null: setCurrentPage(currentPage-1)}}><BiChevronLeft className='scale-125' /></button>
           <button type='button' className='px-2 hover:bg-gray-600' onClick={() => scroll(-1)}>...</button>
           <div ref={pagesRef} className='relative divide-bright-gray overflow-hidden flex w-[10rem] text-left'>
@@ -96,6 +121,10 @@ const MyCourses = (props: Props) => {
   )
 }
 
+const searchInputDiv = classNames("flex items-center relative sb-max:w-full sb-max:mr-4");
+const searchInput = classNames("rounded-xl relative w-80  h-8 nv-max:pr-3 bg-main pl-2.5 border-1.5 border-gray-700 border-opacity-50 placeholder:italic placeholder:text-sm bg-transparent tracking-wide focus:outline-0 transition-all duration-300");
+const searchButton = classNames("rounded-lg text-gray-300 sb-max:relative absolute hover:text-gray-100 h-6 bg-gray-500 px-2 align-top sb-max:right-9 right-1");
+
 
 const courseData = [
   {
@@ -105,7 +134,7 @@ const courseData = [
     "price": 1272.78,
     "level": "Intermediate",
     "courseHours": 141,
-    "summary": "Viral pericarditis",
+    "summary": "sdffd fddsf fdsdf fddsfds df sdd f dsd f dsffsddf dfdsfdsfdsdf ffddfdd fdddfddf f dsddsf sdfds dfdfsdsdfdsfd dfdfdfdf dsf dsfdfsdds fddfds ddfd dsdfdfd fd fd fd dsfds d sfds fdsfdfdffddfd dsddfddsdfdfdsddssddsds dddsdsf dsfdfd fdfdf sd dsffddfddff sf",
     "subtitles": [
       {
         "header": "Budget/Accounting Analyst IV",
