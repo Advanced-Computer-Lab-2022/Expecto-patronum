@@ -9,11 +9,8 @@ import DataContext, { DataProvider } from "../context/DataContext";
 import { useContext, useEffect, useState } from "react";
 import Router from "next/router";
 function MyApp({ Component, pageProps }: AppProps) {
-  const { Rate, SetRate } = useContext(DataContext);
 
-  useEffect(() => {
-    console.log(Rate);
-  }, [Rate]);
+ 
 
   return (
     <div className="bg-[#F4F4F4] relative">

@@ -7,7 +7,7 @@ module.exports.isAuth = (req, res, next) => {
       res.send("Please verify your email");
     }
   } else {
-    res.send('<h1>You are not authenticated</h1><p><a href="/Auth/login">Login</a></p>');
+    res.send('<h1>You are not authenticated</h1>');
   }
 
 }

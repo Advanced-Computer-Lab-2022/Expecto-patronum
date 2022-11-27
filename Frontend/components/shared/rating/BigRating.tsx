@@ -11,7 +11,7 @@ const BigRating = (props: Props) => {
     <ul className="flex ">
       {stars.map((star, index) => {
         return (
-          <li>
+          <li key={index}>
             <svg
               aria-hidden="true"
               className={

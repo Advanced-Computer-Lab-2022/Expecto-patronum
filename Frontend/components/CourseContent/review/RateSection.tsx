@@ -18,7 +18,7 @@ const RateSection = (props: Props) => {
       </div>
       {arrayTemp.map((item, index) => {
         return (
-          <div className="flex gap-2 items-center mb-2 ">
+          <div key={index} className="flex gap-2 items-center mb-2 ">
             <p>{item} stars</p>
             <div className=" w-2/3 bg-gray-200 rounded-sm h-2.5 dark:bg-gray-700">
               <div

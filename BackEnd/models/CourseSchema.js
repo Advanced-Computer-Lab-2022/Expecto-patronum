@@ -8,7 +8,7 @@ const CourseSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  courseImage:{
+  courseImage: {
     type: String,
     required: true
   },
@@ -24,9 +24,9 @@ const CourseSchema = new mongoose.Schema({
     type: Number,
   },
   discount: {
-    discount:{ 
-    type : Number,
-    default: 0,
+    discount: {
+      type: Number,
+      default: 0,
     },
     startDate: Date,
     duration: Number,
@@ -72,8 +72,7 @@ const CourseSchema = new mongoose.Schema({
   // }],
   subtitles: [{
     header: String,
-    summary:String,
-    
+    summary: String,
     contents: [{
       contentTitle: String,
       video: String,
@@ -82,16 +81,17 @@ const CourseSchema = new mongoose.Schema({
       description: String,
     }],
     exercise: {
-      exerciseName:String
-      ,exerciseID:{
-      type: mongoose.Types.ObjectId,
-      ref:'ExcerciseSchema',
-    }},
+      exerciseName: String
+      , exerciseID: {
+        type: mongoose.Types.ObjectId,
+        ref: 'ExcerciseSchema',
+      }
+    },
     totalMinutes: Number,
   }],
   finalExam: {
     type: mongoose.Types.ObjectId,
-    ref:'ExcerciseSchema',
+    ref: 'ExcerciseSchema',
   },
   rating: {
     one: {
@@ -106,7 +106,7 @@ const CourseSchema = new mongoose.Schema({
       type: Number,
       default: 0
     },
-   four: {
+    four: {
       type: Number,
       default: 0
     },
@@ -123,10 +123,10 @@ const CourseSchema = new mongoose.Schema({
     //   / (this.one + this.two + this.three + this.four + this.five)
     // }
   },
-  review:[{
-    username:String,
-    reviewBody:String,
-    rating:Number
+  review: [{
+    username: String,
+    reviewBody: String,
+    rating: Number
   }]
 
 

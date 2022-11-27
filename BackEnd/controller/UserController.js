@@ -86,27 +86,32 @@ async function getRate(req, res, next) {
 
 function forgetPassword(req, res, next) {
   let userMail = req.body.email;
-  User.findOne({ email: userMail },
+  User.findOne({ email: userMail.toLowerCase() },
     (err, user) => {
-      if (err) res.send(err);
+      if (err) {
+        console.log("Mail Sent");
+      }
+
       else {
         if (user) {
           let Token = CreateToken({ id: user._id });
-          MailValidate(userMail, "http://localhost:5000/user/forgetPassword", Token);
-          res.send("Verify mail sent");
+          MailValidate(userMail, "http://localhost:3000/ForgetPassword", Token);
+          console.log("Mail Sent");
         }
         else {
-          res.send("User not found")
+          console.log("user not found");
         }
 
 
       }
+      res.send({ Error: false, Message: "Please check your email" });
+
     })
 
 
 }
 
-// function UseforgetPasswordToken(req, res) {
+// function Usef orgetPasswordToken(req, res) {
 //   if (req.userid) {
 //     User.findById(req.userid, (err, user) => {
 //       if (err) {
@@ -151,10 +156,13 @@ function ChangeForgottenPassword(req, res) {
   if (req.userid) {
     User.findById(req.userid, (err, user) => {
       if (err) {
-        res.send(err);
+        res.send({ Error: true, Message: "Invalid request" });
+        console.log(err);
       } else if (user) {
         if (!VerifyTokenDate(user.passwordTimeStamp, req.iat)) {
-          res.send("Token expired");
+          res.send({ Error: true, Message: "Token expired" });
+          console.log("Token expired as the pass was changed already");
+
         }
         else {
           let { salt, hash } = genPassword(req.body.password);
@@ -164,10 +172,13 @@ function ChangeForgottenPassword(req, res) {
           user.forgotPasswrod = false;
           user.save((err, user) => {
             if (err) {
+              res.send({ Error: true, Message: "Cannot Change user Password" });
               console.log(err);
             }
             else {
-              res.send("Password Changed");
+              res.send({ Error: false, Message: "Password Changed" });
+              console.log("Password Changed");
+
             }
           })
 
@@ -177,7 +188,7 @@ function ChangeForgottenPassword(req, res) {
 
       }
       else {
-        res.send("user not found");
+        res.send({ Error: true, Message: "ERROR UNKOWN" });
       }
     })
 
@@ -271,7 +282,7 @@ function ValidateUser(req, res) {
 
 function ChangeEmail(req, res) {
   let userMail = req.body.email;
-  User.findOne({ email: userMail }, (err, user) => {
+  User.findOne({ email: userMail.toLowerCase() }, (err, user) => {
     if (err) {
       res.send(err)
     }
@@ -291,7 +302,7 @@ function ChangeEmail(req, res) {
 }
 
 function UseChangeEmailToken(req, res) {
-  if (req.user.email !== req.oldemail) {
+  if (req.user.email.toLowerCase() !== req.oldemail.toLowerCase()) {
     res.send("Invalide Token");
   }
   else
