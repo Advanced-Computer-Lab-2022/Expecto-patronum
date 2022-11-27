@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const connection = require('../config/database');
-const { getRate, forgetPassword, ValidateUser, ChangeEmail, UseChangeEmailToken, ChangePassword, ChangeForgottenPassword, giveInstructorRating, selectCourse, giveCourseReview, giveInstructorReview } = require('../controller/UserController');
+const { getRate, forgetPassword, ValidateUser, ChangeEmail, UseChangeEmailToken, ChangePassword, ChangeForgottenPassword, 
+        giveInstructorRating, selectCourse, giveCourseReview, giveInstructorReview,submitAnswer,test } = require('../controller/UserController');
 const { genPassword } = require('../lib/passwordUtils');
 const { VerifyTokenMiddleware } = require('../middleware/VerifyTokenMiddleware');
 const passport = require('passport');
@@ -24,6 +25,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 router.post('/register', register)
 router.get('/MailVerify/:token', VerifyTokenMiddleware, ValidateUser);
+router.get('/test',test)
 
 router.post("/forgetPassword", forgetPassword);
 router.get("/forgetPassword/:token", VerifyTokenMiddleware, (req, res) => {
@@ -39,6 +41,8 @@ router.get("/countryRate", getRate);
 
 
 router.get('/logout', Logout);
+
+router.put('/submitAnswer', submitAnswer);
 
 
 router.put("/buyCourse", buyCourse);

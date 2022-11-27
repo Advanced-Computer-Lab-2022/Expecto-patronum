@@ -9,6 +9,7 @@ const { MailValidate } = require("../lib/MailValidation");
 const { VerifyTokenDate } = require("../lib/VerfiyTokenDate");
 const { Passport } = require("passport");
 const CourseTable = require('../models/CourseSchema');
+const ExerciseTable = require('../models/ExcerciseSchema');
 
 function register(req, res) {
   const saltHash = genPassword(req.body.password);
@@ -641,6 +642,47 @@ async function buyCourse(req, res, next) {
   }
 };
 
+async function submitAnswer(req,res){
+  try{
+    user_id=req.body.user_id;
+    var excercise=await CourseTable.find({"title":"DMET16"});
+    var subtitles=Object.values(excercise)[0];
+    var excerciseID=subtitles.subtitles[0].exercise;
+    var actualExcercise=await ExerciseTable.findById(excerciseID);
+    var answer=req.body.choice;
+    if (answer==actualExcercise.questions[0].answer){
+      //res.send(answer);
+      //res.send(actualExcercise.questions[0]);
+    }
+    else{
+      //res.send("this is not correct");
+    }
+
+    //var user=await User.findById(user_id);
+    /*const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":Object.values(excercise)[0]._id},
+    { "$push": { "purchasedCourses.$.excercises": 
+    {"excerciseID":excerciseID,"exercisesAnswers":{"exerciseTitle":actualExcercise.title,"answer":[answer]}} }}
+    );*/
+    res.send(answer);
+    
+  }
+  catch(error){
+    console.log(error);
+  }
+  
+};
+
+  async function test(req,res){
+    try{
+      var x = await User.find()
+      res.send(x);
+
+  }
+  catch(error){
+    console.log(error);
+  }
+};
+
 module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
    buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
-    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview }
+    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview,submitAnswer,test }

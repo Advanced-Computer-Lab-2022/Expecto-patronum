@@ -329,15 +329,7 @@ async function discount(req, res, next) {
     
   }
 
-  async function testAll(req,res){
-    try{
-      var test=await CourseTable.find();
-      res.send(test);
-    }
-    catch(error){
-      console.log(error);
-    }
-  }
+  
 
     async function updateBio(req,res){
       try{var currentId=req.body.userID;
@@ -351,28 +343,16 @@ async function discount(req, res, next) {
       
     }
 
-    async function submitAnswer(req,res){
-      try{
-        var excercise=await CourseTable.find({"title":"DMET16"});
-        var subtitles=Object.values(excercise)[0];
-        var excerciseID=subtitles.subtitles[0].exercise;
-        var actualExcercise=await ExerciseTable.findById(excerciseID);
-        var answer=req.body.choice;
-        if (answer==actualExcercise.questions[0].answer){
-          //res.send(answer);
-          res.send(actualExcercise.questions[0]);
-        }
-        else{
-          res.send("this is not correct");
-        }
-        
+    
 
-        
+    async function testingAll(req,res){
+      try{
+        var whatever=await ExerciseTable.find();
+        res.send(whatever);
       }
       catch(error){
         console.log(error);
       }
-      
     }
     
   
@@ -382,4 +362,4 @@ async function discount(req, res, next) {
 
 
 
-module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,testAll,updateBio,submitAnswer};
+module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,updateBio,testingAll};
