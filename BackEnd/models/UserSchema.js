@@ -86,8 +86,7 @@ const UserSchema = new mongoose.Schema({
     excercises:[{
       excerciseID:{
       type: mongoose.Types.ObjectId,
-      ref:'ExcerciseSchema',
-      unique: true},
+      ref:'ExcerciseSchema'},
       grade:Number,
       exercisesAnswers:{
         exerciseTitle: String,
