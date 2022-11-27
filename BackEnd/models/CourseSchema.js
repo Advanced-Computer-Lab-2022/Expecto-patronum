@@ -80,9 +80,11 @@ const CourseSchema = new mongoose.Schema({
       description: String,
     }],
     exercise: {
+      exerciseName:String
+      ,exerciseID:{
       type: mongoose.Types.ObjectId,
       ref:'ExcerciseSchema',
-    },
+    }},
     totalMinutes: Number,
   }],
   finalExam: {

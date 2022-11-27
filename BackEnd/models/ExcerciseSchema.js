@@ -11,7 +11,8 @@ const ExcerciseSchema= new mongoose.Schema({
   subtitleName:{
     type:String,
 },
-
+  exerciseDuration:Number,
+  
   exerciseTitle:{
       type:String,
       required:true

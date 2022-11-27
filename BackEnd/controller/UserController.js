@@ -8,6 +8,7 @@ const { CreateToken } = require("../lib/CreateToken");
 const { MailValidate } = require("../lib/MailValidation");
 const { VerifyTokenDate } = require("../lib/VerfiyTokenDate");
 const { Passport } = require("passport");
+const ExerciseTable = require('../models/ExcerciseSchema');
 const CourseTable = require('../models/CourseSchema');
 
 function register(req, res) {
@@ -537,6 +538,7 @@ async function selectCourse(req, res, next){
     let info = {};
     let exercise = {};
     if (req.body.courseId) {
+      if(req.body.userId){
       var x = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 1 });
       //var y = Object.values(x);
       //console.log(x);
@@ -571,6 +573,7 @@ async function selectCourse(req, res, next){
         }
       }
       }
+    }
       x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
         _id: 1,
         title: 1,
@@ -590,6 +593,7 @@ async function selectCourse(req, res, next){
       q.course = x;
       res.send(q);
     }
+    
   } catch (error) {
     console.log(error);
   }
@@ -626,6 +630,25 @@ async function ViewMyCourses(req, res, next) {
   }
 };
 
+async function takeExam(req, res, next) {
+  try {
+    const exam = await ExerciseTable.find({"_id":req.query.examID}).select({
+      "_id":1,
+      "courseID" :1,
+      "exerciseTitle":1,
+      "questions.problem":1,
+      "questions.choices":1,
+      "totalGrade":1
+  });
+  res.status(200).send(exam);
+  }
+  catch (err) {
+    console.log(err);
+  }
+};
+
+
+
 async function buyCourse(req, res, next) {
   // let obj = {
   //   "purchasedCourses":[
@@ -643,4 +666,4 @@ async function buyCourse(req, res, next) {
 
 module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
    buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
-    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview }
+    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview,takeExam }
