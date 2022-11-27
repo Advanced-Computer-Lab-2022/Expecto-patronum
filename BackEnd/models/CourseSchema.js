@@ -72,6 +72,8 @@ const CourseSchema = new mongoose.Schema({
   // }],
   subtitles: [{
     header: String,
+    summary:String,
+    
     contents: [{
       contentTitle: String,
       video: String,

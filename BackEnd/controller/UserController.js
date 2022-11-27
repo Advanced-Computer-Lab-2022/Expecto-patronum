@@ -586,6 +586,10 @@ async function selectCourse(req, res, next){
         summary: 1,
         discount: 1,
         discountPrice: 1,
+        "subtitles.header":1,
+        "subtitles.summary":1,
+        "subtitles.contents.contentTitle":1,
+        "subtitles.contents.duration":1,
         review:{ "$slice": 3 }
       });
       let q = {};
