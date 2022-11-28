@@ -36,7 +36,7 @@ async function viewCourses(req, res, next) {
 
   }
   catch (err) {
-    console.log(err);
+    res.status(400).json({error:err.message})
   }
 };
 
@@ -147,7 +147,7 @@ async function filterCourses(req, res, next) {
         res.send({ Courses: y, TotalCount: TotalCount });
       }
     } catch (error) {
-      console.log(error);
+      res.status(400).json({error:error.message})
     }
 
   }
@@ -178,7 +178,7 @@ async function filterCourses(req, res, next) {
       var TotalCount = await CourseTable.countDocuments(queryCond);
       res.send({ Courses: y, TotalCount: TotalCount });
     } catch (error) {
-      console.log(error);
+      res.status(400).json({error:error.message})
     }
   }
 };
@@ -276,7 +276,7 @@ async function addCourse(req, res, next) {
     res.send("Course Added");
 
   } catch (err) {
-    console.log(err);
+    res.status(400).json({error:err.message})
   };
 };
 
@@ -307,7 +307,7 @@ async function discount(req, res, next) {
     res.status(200).json(x);
 
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
 }
 
@@ -324,7 +324,7 @@ async function discount(req, res, next) {
       res.send(ratings);
     }
     catch(error){
-      console.log(error);
+      res.status(400).json({error:error.message})
     }
     
   }

@@ -334,7 +334,7 @@ async function viewRatings(req, res) {
     res.send(ratings)
   }
   catch (error) {
-
+    res.status(400).json({error:error.message})
   }
 };
 
@@ -393,7 +393,7 @@ async function giveCourseRating(req, res, next) {
     res.send(200);
 
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
 
 };
@@ -456,7 +456,7 @@ async function giveInstructorRating(req, res, next) {
     res.send(200);
 
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
 
 };
@@ -492,7 +492,7 @@ async function giveCourseReview(req, res, next) {
     }
     
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
  
 }
@@ -529,7 +529,7 @@ async function giveInstructorReview(req, res, next) {
     }
     
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
  
 }
@@ -569,6 +569,16 @@ async function selectCourse(req, res, next){
           info.purchased = "yes";
           x = await CourseTable.findOne({ "_id": req.body.courseId },{ review:{ "$slice": 3 }});
           info.course = x;
+          var instructor = await User.findOne({"_id":(x.instructorID)}).select({
+            instructorRating:1,
+            biography:1,
+            _id:1,
+            firstname:1,
+            lastname:1,
+            instructorReview:{ "$slice": 3 }
+          });
+          info.instructor = instructor;
+          info.course = x;
           res.send(info);
           return;
         }
@@ -593,22 +603,25 @@ async function selectCourse(req, res, next){
         "subtitles.contents.contentTitle":1,
         "subtitles.contents.duration":1,
         review:{ "$slice": 3 }
-      }).populate('instructorID').exec();
+      });
       console.log(x);
-      // var instructor = await User.findOne({"_id":(x.instructorID)}).select({
-      //   instructorRating:1,
-      //   biography:1,
-      //   _id:1,
-      // });
+      var instructor = await User.findOne({"_id":(x.instructorID)}).select({
+        instructorRating:1,
+        biography:1,
+        _id:1,
+        firstname:1,
+        lastname:1,
+        instructorReview:{ "$slice": 3 }
+      });
       let q = {};
       q.purchased = "no";
       q.course = x;
-      // q.instructor= instructor;
+      q.instructor= instructor;
       res.send(q);
     }
     
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
 }
 
@@ -643,7 +656,7 @@ async function ViewMyCourses(req, res, next) {
     }
     res.send("no courses");
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
 };
 
@@ -653,14 +666,13 @@ async function takeExam(req, res, next) {
       "_id":1,
       "courseID" :1,
       "exerciseTitle":1,
-      "questions.problem":1,
-      "questions.choices":1,
+      "questions":1,
       "totalGrade":1
   });
-  res.status(200).send(exam);
+  res.status(200).json(exam);
   }
   catch (err) {
-    console.log(err);
+    res.status(400).json({error:error.message})
   }
 };
 
