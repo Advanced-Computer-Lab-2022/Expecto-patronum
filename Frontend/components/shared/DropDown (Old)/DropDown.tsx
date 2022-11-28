@@ -43,9 +43,9 @@ const DropDown: React.FC<InterfaceDropDown> = ({
             : "opacity-0 hidden ease-linear duration-75 "
         }
       >
-        <div className="ml-4  ">
+        {/* <div className="ml-4  ">
           <CourseSubtitle></CourseSubtitle>
-        </div>
+        </div> */}
       </div>
     </div>
   );

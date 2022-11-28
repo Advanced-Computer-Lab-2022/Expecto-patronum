@@ -1,7 +1,7 @@
 import { WindowSharp } from "@mui/icons-material";
 import Image from "next/image";
 import React, { useEffect, useRef } from "react";
-import DropDown from "../shared/DropDown/DropDown";
+import DropDown from "../shared/DropDown (Old)/DropDown";
 import VideoPlayer from "../shared/Video/VideoPlayer";
 
 type Props = {

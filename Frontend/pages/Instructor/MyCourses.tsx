@@ -2,72 +2,77 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Rating from '../../components/shared/rating/Rating';
 import Layout from './Layout';
-import { BiChevronLeft, BiChevronRight, BiSearchAlt2 } from 'react-icons/bi';
-import { CiGrid2H, CiGrid41} from 'react-icons/ci';
-import { MdViewList, MdViewAgenda } from 'react-icons/md';
-import  { TfiLayoutGrid2Alt } from 'react-icons/tfi';
-import { BsFillGridFill, BsGridFill } from 'react-icons/bs';
-import { HiViewBoards, HiViewGrid } from 'react-icons/hi';
+import { BiSearchAlt2 } from 'react-icons/bi';
+import { BsGridFill } from 'react-icons/bs';
+import { HiViewBoards } from 'react-icons/hi';
 import classNames from 'classnames';
+import Pagination from '../../components/shared/pagination/Pagination';
+import FilterDropdown from '../../components/shared/FilterDropdown/FilterDropdown';
+import { AiOutlineClear } from 'react-icons/ai';
 
 type Props = {}
 
 const MyCourses = (props: Props) => {
 
   const [courses, setCourses] = useState([]);
-  const numberOfPages = Math.ceil(courseData?.length/10);
-  const pages = Array.from({length: numberOfPages}, (_, i) => i + 1);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [paginationScroll, setPaginationScroll] = useState(0);
-  const pagesRef = useRef<any>();
-  const [direction, setDirection] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [numberOfPages, setNumberOfPages] = useState(Math.ceil(totalCount/10));
+  const [search, setSearch] = useState('');
   const [isGridViewList, setIsGridViewList] = useState(true);
+  const [isSearch, setIsSearch] = useState(false);
+  const [filter, setFilter] = useState({
+    subject: '',
+    price: {
+      min: '',
+      max: '',
+    }
+  });
 
-  // useEffect(() => {
-  //     const getCourses = async () => {
-  //       axios.defaults.withCredentials = true;
-  //       setCourses(await axios.post("http://localhost:5000/Course/GetAllCourses").then(res => {return res.data}));
-  //     }
+  const [page, setPage] = useState<number>(0);
 
-  //     getCourses();
+  useEffect(() => {
+    setNumberOfPages(Math.ceil(totalCount/10));
+  }, [totalCount])
 
-  // }, []) 
+
+  function getCourses(pageIndex: number) {
+    isSearch ? courseSearch(pageIndex) : allCourses(pageIndex);
+  }
+
+  async function allCourses(pageIndex: number) {
+    axios.defaults.withCredentials = true;
+    await axios.get("http://localhost:5000/Instructor/filterCourses", {
+      params: {
+        page: !isSearch ? pageIndex + 1: 1,
+        coursesPerPage: 10,
+      },
+    }).then((res: { data: any }) => {
+        console.log( 'Get',res.data.Courses);
+        setCourses(res.data.Courses);
+        setTotalCount(res.data.TotalCount);
+      });
+
+      setPage(!isSearch ? pageIndex: 0);
+  }
+
+  // On Load & on Page Change
+  useEffect(() => {
+    getCourses(page);
+  }, [page])
+
+  // On Clear Search
+  useEffect(() => {
+    !isSearch ? getCourses(page): null;
+  }, [isSearch])
 
   function levelColor(level: string) {
       switch(level) {
           case 'Beginner': return 'from-[#2f8608] to-[#52EB0E]';
           case 'Intermediate': return 'from-[#C29904] to-[#FDE143]';
           case 'Advanced': return 'from-[#B20000] to-[#FF4542]';
-          case 'All Levels': return 'from-[#2B32B2] to-[#1488CC]';
+          case 'AllLevels': return 'from-[#2B32B2] to-[#1488CC]';
           default: return 'from-[#1D948E] to-[#3FE0D0]';
       }
-  }
-
-  function selectPage(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, i: number) {
-    setCurrentPage(i);
-    setDirection(i);
-
-    global.window.scrollTo(0,75);
-
-    if(i > direction) {
-        pagesRef.current.scrollTo(paginationScroll+40,0);
-        setPaginationScroll(paginationScroll+40);
-    } else if(i < direction) {
-        pagesRef.current.scrollTo(paginationScroll-40,0);
-        setPaginationScroll(paginationScroll-40);
-    }
-
-  }
-
-  function scroll(direction: number) {
-    
-    if(direction == -1) {
-      paginationScroll <= 0 ?  null: pagesRef.current.scrollTo(paginationScroll-80,0);
-      paginationScroll <= 0 ?  null: setPaginationScroll(paginationScroll-80);
-    } else {
-      paginationScroll + 160 >= pagesRef.current.scrollWidth ? null: pagesRef.current.scrollTo(paginationScroll+80,0);
-      paginationScroll + 160 >= pagesRef.current.scrollWidth ? null: setPaginationScroll(paginationScroll+80);
-    }
   }
 
   const expandDescription = (e: any) => {
@@ -77,53 +82,77 @@ const MyCourses = (props: Props) => {
     e.target.classList.toggle('h-fit');
   }
 
+  async function courseSearch(pageIndex: number) {
+    await axios.get("http://localhost:5000/Instructor/filterCourses", {
+      params: {
+          keyword: search,
+          page: isSearch ? page + 1: 1,
+          coursesPerPage: 10,
+          subject: filter.subject === '' ? undefined: filter.subject,
+          price: {
+            gte: filter.price.min === '' ? undefined: parseInt(filter.price.min),
+            lte: filter.price.max === '' ? undefined: parseInt(filter.price.max),
+          }
+        },
+      })
+      .then((res: { data: any }) => {
+        console.log( 'Search',res.data.Courses, isSearch);
+        setTotalCount(res.data.TotalCount);
+        setCourses(res.data.Courses);
+      });
+      setPage(isSearch ? pageIndex: 0);
+      setIsSearch(true);
+  }
+
+  useEffect(() => {
+    courseSearch(page);
+  }, [filter])
+
   return ( 
     <Layout>
-        <div className='flex pl-4 ml-1 mb-4 mt-4 items-center'>
-          <div className={searchInputDiv}>
-          <input placeholder="Search for a course" className={searchInput}/>
-            <button type="submit" className={searchButton}>
-              <BiSearchAlt2 className='scale-125 hover:scale-135 transition-all duration-300' />
-            </button>
+        <div className='flex mx-12 my-4 items-center justify-between'>
+          <div className='flex items-center'>
+            <div className={searchInputDiv}>
+              <input onChange={(e) => setSearch(e.target.value)} value={search} placeholder="Search for a course" className={searchInput}/>
+              <button onClick={() => courseSearch(page)} className={searchButton + ' ' + (search === '' ? 'cursor-not-allowed': '')} disabled={search === ''}>
+                <BiSearchAlt2 className='scale-125 hover:scale-135 transition-all duration-300' />
+              </button>
+            </div>
+            <button onClick={() => {setIsSearch(false); setSearch('')}} className='rounded-full border-1.5 border-canadian-red text-white bg-canadian-red hover:text-canadian-red hover:bg-main ml-4 p-1.5 hover:scale-105 transition-all duration-200'><AiOutlineClear /></button>
           </div>
-          <div className='ml-2 flex items-center sb-max:hidden'>
-            <button onClick={() => setIsGridViewList(true)} className={(isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 opacity-70 scale-[1.195] rounded-[0.65rem] border-1.5 p-[0.271rem] hover:scale-[1.295] hover:text-main hover:bg-gray-700 transition-all duration-300 rotate-90'}><HiViewBoards /></button>
-            <button onClick={() => setIsGridViewList(false)} className={(!isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 opacity-70 scale-[1.0665] rounded-xl border-1.5 p-1.5 hover:scale-[1.1665] hover:text-main hover:bg-gray-700 transition-all duration-300'}><BsGridFill /></button>
+          
+          <div className='ml-2 flex items-center'>
+            <FilterDropdown filter={filter} setFilter={setFilter} />
+            <div className='sb-max:hidden'>
+              <button onClick={() => setIsGridViewList(true)} className={(isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.195] rounded-[0.65rem] border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-[0.271rem] hover:scale-[1.295] hover:text-main hover:bg-gray-700 transition-all duration-200 rotate-90'}><HiViewBoards /></button>
+              <button onClick={() => setIsGridViewList(false)} className={(!isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.0665] rounded-xl border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-1.5 hover:scale-[1.1665] hover:text-main hover:bg-gray-700 transition-all duration-200'}><BsGridFill /></button>
+            </div>
           </div>
         </div>
+
         <div className={(!isGridViewList ? 'grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-x-20': '') + ' sb-max:min-w-fit text-white mx-8'}>
-          {courseData.slice(10*(currentPage - 1), 10*currentPage).map((course: any, index: number) => {
+          {courses.map((course: any, index: number) => {
             return (
               <div key={index} className={`h-42 w-full mb-10 p-4 relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg bg-gradient-to-br cursor-pointer ${levelColor(course.level)}`}>
-                <h1 className='text-2xl nv-max:pr-14'>{course.title}</h1>
+                <h1 className='text-2xl nv-max:pr-14 mr-16'>{course.title}</h1>
                 <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
                     <Rating rating={2.47} />
                 </div>
-                <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level}</span></p>
+                <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level === 'AllLevels' ? 'All Levels': course.level}</span></p>
                 <label className='pl-3'>Description:</label>
                 <p onClick={expandDescription} className='pl-6 whitespace-nowrap overflow-hidden sb-max:w-48 text-ellipsis mr-18 sb-max:mr-4'>{course.summary}</p>
               </div>
             );
           })}
         </div>
-        <div className='text-center divide-x divide-bright-gray w-fit bg-dark-gray text-main mx-auto h-6 rounded-md mb-8 flex'>
-          <button type='button' className='px-2 hover:bg-gray-600 rounded-l-md' onClick={() => {currentPage === 1 ? null: setCurrentPage(currentPage-1)}}><BiChevronLeft className='scale-125' /></button>
-          <button type='button' className='px-2 hover:bg-gray-600' onClick={() => scroll(-1)}>...</button>
-          <div ref={pagesRef} className='relative divide-bright-gray overflow-hidden flex w-[10rem] text-left'>
-            {pages.map((i) => (
-                <button key={i} type='button' className={`px-2 w-10 min-w-[2.5rem] right-0 hover:bg-gray-600 ${currentPage === i ? 'bg-canadian-red': 'bg-dark-gray'}`} onClick={(e) => selectPage(e, i)}>{i}</button>
-            ))}
-          </div>
-          <button type='button' className='px-2 hover:bg-gray-600' onClick={() => scroll(1)}>...</button>
-          <button type='button' className='px-2 hover:bg-gray-600 rounded-r-md' onClick={() => {currentPage === numberOfPages ? null: setCurrentPage(currentPage+1)}}><BiChevronRight className='scale-125' /></button>
-        </div>
+        <Pagination pageCount={numberOfPages} page={page} setPage={setPage} onClick={courseSearch} getCourses={getCourses} />
     </Layout>
   )
 }
 
 const searchInputDiv = classNames("flex items-center relative sb-max:w-full sb-max:mr-4");
-const searchInput = classNames("rounded-xl relative w-80  h-8 nv-max:pr-3 bg-main pl-2.5 border-1.5 border-gray-700 border-opacity-50 placeholder:italic placeholder:text-sm bg-transparent tracking-wide focus:outline-0 transition-all duration-300");
-const searchButton = classNames("rounded-lg text-gray-300 sb-max:relative absolute hover:text-gray-100 h-6 bg-gray-500 px-2 align-top sb-max:right-9 right-1");
+const searchInput = classNames("rounded-xl relative w-80 h-8 nv-max:pr-3 bg-main pl-2.5 border-1.5 border-gray-700 border-opacity-50 placeholder:italic placeholder:text-sm bg-transparent tracking-wide focus:outline-0 transition-all duration-300");
+const searchButton = classNames("rounded-lg text-gray-300 sb-max:relative absolute hover:text-gray-100 h-6 bg-gray-600 px-2 align-top sb-max:right-9 right-1");
 
 
 const courseData = [
