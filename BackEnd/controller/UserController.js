@@ -540,20 +540,31 @@ async function selectCourse(req, res, next){
     let exercise = {};
     if (req.body.courseId) {
       if(req.body.userId){
-      var x = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 1 });
+        var instructor = await CourseTable.findOne({ "instructorID": req.body.userId },{instructorID:1});
+        if(instructor){
+          info.Owner = "yes";
+          x = await CourseTable.findOne({ "_id": req.body.courseId },{ review:{ "$slice": 3 }});
+          info.course = x;
+          var instructor = await User.findOne({"_id":(x.instructorID)}).select({
+            instructorRating:1,
+            biography:1,
+            _id:1,
+            firstname:1,
+            lastname:1,
+            instructorReview:{ "$slice": 3 }
+          });
+          info.instructor = instructor;
+          info.course = x;
+          res.send(info);
+          return;
+        }
+        var x = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 1 });
       //var y = Object.values(x);
       //console.log(x);
       if(x.purchasedCourses){
       for (var i = 0; i < x.purchasedCourses.length; i++) {
         var z = Object.values(x.purchasedCourses)[i];
         if (z.courseID == req.body.courseId) {
-          // if(z.excercises){
-          //   for(var j = 0; j<z.excercises.length;j++){
-          //     var exe = Object.values(z.excercises)[i];
-          //     exercise[excerciseID+j] = exe.excerciseID;
-          //     exercise[grade+j] = exe.grade;
-          //   }
-          // } 
           if(z.courseRating){
             info.yourCourseRating = z.courseRating;
           }
