@@ -6,39 +6,37 @@ import { FiChevronDown } from 'react-icons/fi';
 type Props = {
   filter: any,
   setFilter: any,
+  submit: any,
 }
 
 const FilterDropdown = (props: Props) => {
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [subject, setSubject] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
 
-  // function setSubject(e: React.ChangeEvent<HTMLInputElement>) {
-  //   const values = values;
-  //   values.subject = parseInt(e.target.value);
-  //   props.setFilter(values);
-  // }
+  function setSubject(e: React.ChangeEvent<HTMLInputElement>) {
+    const values = {...props.filter};
+    values.subject = e.target.value;
+    props.setFilter(values);
+  }
 
-  // const setMinPrice = (e: any) => {
-  //   const values = values;
-  //   values.price.min = parseInt(e.target.value);
-  //   props.setFilter(values);
-  // }
+  const setMinPrice = (e: any) => {
+    const values = {...props.filter};
+    values.price.min = e.target.value;
+    props.setFilter(values);
+  }
 
-  // const setMaxPrice = (e: any) => {
-  //   const values = values;
-  //   values.price.max = parseInt(e.target.value);
-  //   props.setFilter(values);
-  // }
+  const setMaxPrice = (e: any) => {
+    const values = {...props.filter};
+    values.price.max = e.target.value;
+    props.setFilter(values);
+  }
 
   function submitFilter() {
-    const values = {...props.filter};
-    values.subject = subject;
-    values.price.min = minPrice;
-    values.price.max = maxPrice;
-    props.setFilter(values);
+    // const values = {...props.filter};
+    // values.subject = subject;
+    // values.price.min = minPrice;
+    // values.price.max = maxPrice;
+    props.submit();
   }
 
   return (
@@ -48,18 +46,18 @@ const FilterDropdown = (props: Props) => {
         <ul className='divide-y-2 space-y-3'>
           <li>
             <label>Subject:</label>
-            <input value={subject} type='text' onChange={(e) => setSubject(e.target.value)} className={` ${input}`} />
+            <input value={props.filter.subject} type='text' onChange={setSubject} className={` ${input}`} />
           </li>
           <li className='pt-1'>
             <label>Price:</label>
             <div className='flex justify-between'>
               <div>
                 <label className='text-sm opacity-50'>min: </label>
-                <input value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className={`w-10 ${input}`} />
+                <input value={props.filter.price.min} onChange={setMinPrice} className={`w-10 ${input}`} />
               </div>
               <div>
                 <label className='text-sm opacity-50'>max: </label>
-                <input value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className={`w-10 ${input}`} />
+                <input value={props.filter.price.max} onChange={setMaxPrice} className={`w-10 ${input}`} />
               </div>
             </div>
           </li>

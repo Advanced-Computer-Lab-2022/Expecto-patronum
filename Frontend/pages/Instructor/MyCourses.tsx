@@ -47,7 +47,7 @@ const MyCourses = (props: Props) => {
         coursesPerPage: 10,
       },
     }).then((res: { data: any }) => {
-        console.log( 'Get',res.data.Courses);
+        console.log( 'Get',res.data.TotalCount);
         setCourses(res.data.Courses);
         setTotalCount(res.data.TotalCount);
       });
@@ -96,7 +96,7 @@ const MyCourses = (props: Props) => {
         },
       })
       .then((res: { data: any }) => {
-        console.log( 'Search',res.data.Courses, isSearch);
+        console.log( 'Search',res.data.TotalCount, isSearch);
         setTotalCount(res.data.TotalCount);
         setCourses(res.data.Courses);
       });
@@ -104,25 +104,37 @@ const MyCourses = (props: Props) => {
       setIsSearch(true);
   }
 
-  useEffect(() => {
-    courseSearch(page);
-  }, [filter])
+  function clearSearchAndFilter() {
+    setIsSearch(false);
+    setSearch('');
+    setFilter({
+      subject: '',
+      price: {
+        min: '',
+        max: '',
+      }
+    });
+  }
+
+  // useEffect(() => {
+  //   courseSearch(page);
+  // }, [filter])
 
   return ( 
     <Layout>
         <div className='flex mx-12 my-4 items-center justify-between'>
           <div className='flex items-center'>
-            <div className={searchInputDiv}>
+            <form id='instructor-search-course' className={searchInputDiv}>
               <input onChange={(e) => setSearch(e.target.value)} value={search} placeholder="Search for a course" className={searchInput}/>
-              <button onClick={() => courseSearch(page)} className={searchButton + ' ' + (search === '' ? 'cursor-not-allowed': '')} disabled={search === ''}>
+              <button type='submit' form='instructor-search-course' onClick={(e) => {courseSearch(page); e.preventDefault()}} className={searchButton + ' ' + (search === '' ? 'cursor-not-allowed': '')} disabled={search === ''}>
                 <BiSearchAlt2 className='scale-125 hover:scale-135 transition-all duration-300' />
               </button>
-            </div>
-            <button onClick={() => {setIsSearch(false); setSearch('')}} className='rounded-full border-1.5 border-canadian-red text-white bg-canadian-red hover:text-canadian-red hover:bg-main ml-4 p-1.5 hover:scale-105 transition-all duration-200'><AiOutlineClear /></button>
+            </form>
+            <button title='Clear Search & Filter' onClick={() => clearSearchAndFilter()} className='rounded-full border-1.5 border-canadian-red text-white bg-canadian-red hover:text-canadian-red hover:bg-main ml-4 p-1.5 hover:scale-105 transition-all duration-200'><AiOutlineClear /></button>
           </div>
           
           <div className='ml-2 flex items-center'>
-            <FilterDropdown filter={filter} setFilter={setFilter} />
+            <FilterDropdown filter={filter} setFilter={setFilter} submit={() => courseSearch(page)} />
             <div className='sb-max:hidden'>
               <button onClick={() => setIsGridViewList(true)} className={(isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.195] rounded-[0.65rem] border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-[0.271rem] hover:scale-[1.295] hover:text-main hover:bg-gray-700 transition-all duration-200 rotate-90'}><HiViewBoards /></button>
               <button onClick={() => setIsGridViewList(false)} className={(!isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.0665] rounded-xl border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-1.5 hover:scale-[1.1665] hover:text-main hover:bg-gray-700 transition-all duration-200'}><BsGridFill /></button>
