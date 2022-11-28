@@ -644,26 +644,27 @@ async function buyCourse(req, res, next) {
 
 async function submitAnswer(req,res){
   try{
-    user_id=req.body.user_id;
-    var excercise=await CourseTable.find({"title":"DMET16"});
-    var subtitles=Object.values(excercise)[0];
-    var excerciseID=subtitles.subtitles[0].exercise;
+    var user_id=req.body.userID;
+    var counter=0;
+    var course_id=req.body.courseID;
+    var course =await CourseTable.findById(course_id);
+    var subtitles=course.subtitles;
+    var excerciseID=subtitles[0].exercise;
     var actualExcercise=await ExerciseTable.findById(excerciseID);
-    var answer=req.body.choice;
-    if (answer==actualExcercise.questions[0].answer){
-      //res.send(answer);
-      //res.send(actualExcercise.questions[0]);
+    var answers=req.body.answers;
+    for(let i=0;i<answers.length;i++){
+      if(answers[i]==actualExcercise.questions[i].answer){
+        counter++
+      }
     }
-    else{
-      //res.send("this is not correct");
-    }
+    
 
     //var user=await User.findById(user_id);
-    /*const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":Object.values(excercise)[0]._id},
+    const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
     { "$push": { "purchasedCourses.$.excercises": 
-    {"excerciseID":excerciseID,"exercisesAnswers":{"exerciseTitle":actualExcercise.title,"answer":[answer]}} }}
-    );*/
-    res.send(answer);
+    {"excerciseID":excerciseID,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
+    );
+    res.send(re);
     
   }
   catch(error){
@@ -686,3 +687,13 @@ async function submitAnswer(req,res){
 module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
    buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
     ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview,submitAnswer,test }
+
+
+    
+
+
+  /*{
+    "user_id":"6383d9da6670d09304d2b016",
+    "courseID":"637f97cb7c7a24250c993ae2",
+    "answers":["what","about"]
+}*/
