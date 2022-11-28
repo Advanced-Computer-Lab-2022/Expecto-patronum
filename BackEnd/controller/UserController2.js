@@ -13,18 +13,26 @@ const CourseTable = require('../models/CourseSchema');
 
   async function SelectExercise(req, res, next) {
     try {
-        x = await ExerciseTable.find({"_id":req.body.exerciseID},{
+        var x = await ExerciseTable.findOne({"_id":req.body.exerciseID},{
             exerciseTitle:1,
             totalGrade:1,
-            
+            _id:1
         });
-        for (var i = 0; i < y.purchasedCourses.length; i++) {
-          var z = Object.values(y.purchasedCourses)[i];
-          ids[i] = z.courseID;
-          console.log(ids[i]);
+        console.log(x);
+        var y = await User.findOne({"_id": req.body.UserID,"purchasedCourses.excercises.excerciseID":req.body.exerciseID},
+        {"purchasedCourses.excercises.grade":1});
+        console.log(y);
+        let q = {};
+        if(y){
+          q.grade = y.purchasedCourses;
         }
-        res.send(x);
+        q.exerciseTitle = x.exerciseTitle;
+        q.exerciseID = x._id;
+        q.totalGrade = x.totalGrade;
+        res.status(200).send(q);
     } catch (error) {
       console.log(error);
+      res.status(400).send(error.message);
     }
   };
+  module.exports = { SelectExercise}
