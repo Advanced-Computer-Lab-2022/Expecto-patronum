@@ -1,55 +1,57 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import classNames from "classnames";
-import Timer from 'react-timer-wrapper';
-import Timecode from 'react-timecode';
+
 import CompPagination from "../../components/shared/pagination/CompPagination";
 import ExamQuestionCard from "../../components/exam/ExamQuestionCard";
-import { QuestionData } from "../../Interface/QuestionDataInterface";
+import ExamHeader from "../../components/exam/ExamHeader";
+import classNames from "classnames";
 // import { Pagination } from "flowbite-react"
 // import Input from "../components/shared/Input/Input";
-
-
-
-const navbar = classNames(
-    "relative z-50 flex justify-between items-center nv:px-2 h-16 py-8 shadow-sm"
+const wrongAnswer = classNames(
+    "inline-flex justify-between items-center p-5 w-full text-red-500 bg-white rounded-lg border-2 border-red-500"
 );
-const navLogoDiv = classNames(
-    "nv-max:absolute z-behind 1030:overflow-hidden 1030:w-[3.75rem] transition-all duration-300"
+const rightAnswer = classNames(
+    "inline-flex justify-between items-center p-5 w-full text-green-500 bg-white rounded-lg border-2 border-green-500"
 );
-const navLogo = classNames("h-20 w-fit min-w-fit");
-const navContentDiv = classNames(
-    " nv-max:absolute z-50 h-full mob:w-screen nv-max-mob:w-fullscreen nv-max:block nv-max:p-2 flex items-center transition-navbar-anime duration-1000 nv-max:bottom-20 nv-max:left-0 nv-max:bg-main "
+const notChosen = classNames(
+    "inline-flex justify-between items-center p-5 w-full text-black-600 bg-white rounded-lg border-2 border-black-600"
 );
-
-
 
 const Exam = () => {
     const [index, setIndex] = useState<number>(0);
+    const [totalGrade, settotalGrade] = useState<number>(0);
+    const [totalQuestions, settotalQuestions] = useState<number>(0);
+    const [skipped, setSkipped] = useState([""]);
     const [type, setType] = useState<"button" | "submit" | "reset" | undefined>(
         "button"
     );
     const [questions, setQuestions] = useState([{
         question: "",
-        choices:[""],
+        choices: ["", ""],
         answer: "",
         isVisible: false,
-      }]
+    }]
     ); // or use effect or use context
-     // 👇️ this only runs once
-     const questionsDummyData=[  { question: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
-     { question: "what about ur second oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
-     { question: "what about ur 3rd oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
-     { question: "what about ur 4th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
-     { question: "what about ur 5th oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
-     { question: "what about ur 6th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true } ];
+    // 👇️ this only runs once
     useEffect(() => {
+        const questionsDummyData = [
+            { question: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
+            { question: "testDiffNumber?", choices: ["easy", "what"], answer: "what", isVisible: false },
+            { question: "testDiffNumber?", choices: ["easy", "what", "about"], answer: "about", isVisible: false },
+            { question: "what about ur second oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
+            { question: "what about ur 3rd oscar?", choices: ["easy", "what", "about", "it"], answer: "it", isVisible: false },
+            { question: "what about ur 4th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
+            { question: "what about ur 5th oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
+            { question: "what about ur 6th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true }];
+        setQuestions(questionsDummyData);
+    }, [])
+    useEffect(() => {
+        settotalQuestions(questions.length);
+    }, [questions])
 
-        setQuestions(questionsDummyData);},[])
 
     //on Clicking on the exer we call api takeexam by giving exercise/course id as input and it returns all exam questions+total number of questions
     //then we will loop creating exam questions cards 
-
     const getQuestions = async () => { //need to be callled on loading page
 
 
@@ -63,54 +65,12 @@ const Exam = () => {
 
     }
 
-    let Questions = questions.map((question, index) => {
-        return  <div
-        style={index!=0 ? {display:"none"} : {}}
-        className="row tab mx-auto pt-8 pb-12 w-700 rounded-t-2xl shadow-xl">
-        <h2 className="mb-5 text-lg pt-4 font-medium text-gray-900 dark:text-black">{index+1}.{question.question}</h2>
-        <ul className="grid gap-6 w-full md:grid-cols-4">
-            <li>
-                <input type="radio" id={"A"+index} name={"Q"+index} value={"A"+index} className="hidden peer" required />
-                <label htmlFor={"A"+index} className="inline-flex justify-between items-center p-5 w-full text-gray-900 bg-white rounded-lg border-2 border-gray-200 cursor-pointer dark:hover:text-gray-900 dark:border-gray-700 dark:peer-checked:text-blue-600 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-white-500 dark:text-gray-500 dark:bg-white-800 dark:hover:bg-white-500">
-                    <div className="block">
-                        <div className="w-full text-lg font-semibold">A)</div>
-                        <div className="w-full">{question.choices[0]}</div>
-                    </div>
-                </label>
-            </li>
-            <li>
-                <input type="radio" id={"B"+index} name={"Q"+index} value={"B"+index} className="hidden peer" />
-                <label htmlFor={"B"+index} className="inline-flex justify-between items-center p-5 w-full text-gray-900 bg-white rounded-lg border-2 border-gray-200 cursor-pointer dark:hover:text-gray-900 dark:border-gray-700 dark:peer-checked:text-blue-600 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-white-500 dark:text-gray-500 dark:bg-white-800 dark:hover:bg-white-500">
-                    <div className="block">
-                        <div className="w-full text-lg font-semibold">B)</div>
-                        <div className="w-full">{question.choices[1]}</div>
-                    </div>
-                </label>
-            </li>
-            <li>
-                <input type="radio" id={"C"+index} name={"Q"+index} value={"C"+index} className="hidden peer" />
-                <label htmlFor={"C"+index} className="inline-flex justify-between items-center p-5 w-full text-gray-900 bg-white rounded-lg border-2 border-gray-200 cursor-pointer dark:hover:text-gray-900 dark:border-gray-700 dark:peer-checked:text-blue-600 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-white-500 dark:text-gray-500 dark:bg-white-800 dark:hover:bg-white-500">
-                    <div className="block">
-                        <div className="w-full text-lg font-semibold">C)</div>
-                        <div className="w-full">{question.choices[2]}</div>
-                    </div>
-                </label>
-            </li>
-            <li>
-                <input type="radio" id={"D"+index} name={"Q"+index} value={"D"+index} className="hidden peer" />
-                <label htmlFor={"D"+index} className="inline-flex justify-between items-center p-5 w-full text-gray-900 bg-white rounded-lg border-2 border-gray-200 cursor-pointer dark:hover:text-gray-900 dark:border-gray-700 dark:peer-checked:text-blue-600 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-white-500 dark:text-gray-500 dark:bg-white-800 dark:hover:bg-white-500">
-                    <div className="block">
-                        <div className="w-full text-lg font-semibold">D)</div>
-                        <div className="w-full">{question.choices[3]}</div>
-                    </div>
-                </label>
-            </li>
-        </ul>
-    </div>
-    })
+    // let Questions = questions.map((question, index) => {
+    //     return <ExamQuestionCard key={index} QuestionData={question} Index={index} />
+    // })
 
     function goToPrev() {
-       
+
         const tabs = document.getElementsByClassName("tab");
 
         if (index > 0) {
@@ -135,9 +95,25 @@ const Exam = () => {
     }
 
     function goToNext() {
-
-
+        const QuestionChoices = document.getElementsByClassName("Q" + index) as any;
+        var answerflag = false;
+        var flag = false;
+        for (var j = 0; j < QuestionChoices.length; j++) {
+            if (QuestionChoices[j].checked == true) {
+                answerflag = true;
+            }
+        }
+        if (!answerflag) {
+            if (skipped.indexOf(`${index + 1}`) == -1) {
+                setSkipped(oldArray => [...oldArray, `${index + 1}`])
+            }
+        } else {
+            if (skipped.indexOf(`${index + 1}`) != -1) {
+                setSkipped(skipped.filter(item => item !== `${index + 1}`))
+            }
+        }
         const tabs = document.getElementsByClassName("tab");
+
 
         if (index < tabs.length - 1) {
             setType("button");
@@ -199,13 +175,79 @@ const Exam = () => {
     }
     async function submitExam(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        axios.defaults.withCredentials = true;
-        Response = await axios
-            .post("http://localhost:5000/", {
-            })
-            .then((res) => {
-                return res.data;
-            });
+        const AnswerLabel = document.getElementsByClassName("answer") as HTMLCollectionOf<HTMLLabelElement>;
+
+        if (AnswerLabel != undefined) {
+            for (var i = 0; i < AnswerLabel.length; i++) {
+                AnswerLabel[i].style.display = "";
+            }
+            var correctAnswers = 0;
+            for (var i = 0; i < questions.length; i++) {
+                const QuestionChoices = document.getElementsByClassName("Q" + i) as any;
+                var chosenAnswerIndex = 100; // out of bounds
+                for (var j = 0; j < QuestionChoices.length; j++) {
+                    if (QuestionChoices[j].nextElementSibling != null) {
+                        QuestionChoices[j].nextElementSibling.className = notChosen;
+                        if (QuestionChoices[j].checked) {
+                            chosenAnswerIndex = j;
+                        }
+                    }
+                }
+                if (chosenAnswerIndex >= 0 && chosenAnswerIndex <= 3) {
+                    if (questions[i].answer === questions[i].choices[chosenAnswerIndex]) {
+                        correctAnswers++;
+                        if (QuestionChoices[chosenAnswerIndex].nextElementSibling != null) {
+                            QuestionChoices[chosenAnswerIndex].nextElementSibling.className = rightAnswer;
+                        }
+                    } else {
+                        if (QuestionChoices[chosenAnswerIndex].nextElementSibling != null) {
+                            QuestionChoices[chosenAnswerIndex].nextElementSibling.className = wrongAnswer;
+                        }
+                    }
+                }
+            }
+            const questionsCards = document.getElementsByClassName("question") as any;
+            if (questionsCards != undefined) {
+                for (var i = 0; i < questionsCards.length; i++) {
+                    questionsCards[i].style.display = "";
+                }
+            }
+            settotalGrade((correctAnswers / questions.length) * 100);
+            const grade = document.getElementById("grade") as HTMLParagraphElement;
+            grade.style.display = "";
+            const submit = document.getElementById("submit-btn");
+            if (submit != undefined) {
+                submit.style.display = "none";
+            }
+            const timer = document.getElementById("timer");
+            if (timer != undefined) {
+                timer.style.display = "none";
+            }
+            const info = document.getElementById("info");
+            if (info != undefined) {
+                info.style.display = "none";
+            }
+            const pagination = document.getElementById("pagination");
+            if (pagination != undefined) {
+                pagination.style.display = "none";
+            }
+            const prev = document.getElementById("prev-btn");
+            if (prev != undefined) {
+                prev.style.display = "none";
+            }
+            const goback = document.getElementById("go-back");
+            if (goback != undefined) {
+                goback.style.display = "";
+            }
+        }
+
+        // axios.defaults.withCredentials =true;
+        // Response = await axios
+        //     .post("http://localhost:5000/", {
+        //     })
+        //     .then((res) => {
+        //         return res.data;
+        //     });
     }
 
     return (
@@ -213,50 +255,25 @@ const Exam = () => {
             id="Exam-form"
             className="row mx-4  h-full"
             onSubmit={(e) => submitExam(e)}
-
         >
-            <div className={navbar}>
-                <div className={navLogoDiv}>
-                    <img className={navLogo} src="/images/logo.png" />
-                </div>
 
-                <div className="flex">
-                    <div className={navContentDiv}>
-                        <Timer active duration={null}>
-                            <Timecode />
-                        </Timer>
-                        <div className="flex items-center space-x-4">
-                            <img id="avatarButton" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" className="w-10 h-10 rounded-full cursor-pointer" src="/images/x8PhM.png" alt="" />
-                            <div id="userDropdown" className="hidden z-10 w-44 bg-white rounded ">
-                                <div className="py-3 px-4 text-sm text-gray-900 dark:text-black">
-                                    <div className="font-medium truncate">Rodin@3azma.com</div>
-                                </div>
-                                <ul className="py-1 text-sm text-gray-700 dark:text-black" aria-labelledby="avatarButton">
-                                    <li>
-                                        <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-red-600 dark:hover:text-white">Home</a>
-                                    </li>
-                                </ul>
-                                <div className="py-1">
-                                    <a href="#" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-red-600 dark:text-black dark:hover:text-white">Sign out</a>
-                                </div>
-                            </div>
-                            <script src="https://unpkg.com/flowbite@1.4.5/dist/flowbite.js"></script>
-                            <div className="font-medium dark:text-black">
-                                <div>Rodin Salem</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <ExamHeader></ExamHeader>
+            <div id="info" className="flex justify-center gap-8 ">
+                <p style={{ display: '' }} className="mb-2 text-black-700 h-auto"> total Questions: {totalQuestions}</p>
+                <p style={{ display: '' }} className="mb-2 text-orange-500 h-auto">Skipped Questions Numbers:{skipped}</p>
             </div>
 
-           
-          {Questions}
+
+            {questions.map((question, index) => (
+                <ExamQuestionCard key={index} QuestionData={question} Index={index} />
+            ))}
 
             <div className="mx-auto w-700 py-8 rounded-b-2xl">
                 <p
-                    id="error-message"
-                    className="text-red-700 h-auto mb-2 text-center"
-                ></p>
+                    style={{ display: 'none' }}
+                    id="grade"
+                    className="text-black-700 h-auto mb-2 text-center"
+                >total Grade: {totalGrade}%</p>
                 <div className="text-center flex justify-center ">
                     <button
                         id="prev-btn"
@@ -279,7 +296,29 @@ const Exam = () => {
                         </svg>
                         Previous
                     </button>
-                    <CompPagination totalCount={20 * 5} />
+                    <button
+                        style={{ display: 'none' }}
+                        id="go-back"
+                        type="button"
+                        className="inline-flex h-10 mb-4 items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 bg-[#222222] dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        <svg
+                            aria-hidden="true"
+                            className="mr-2 w-5 h-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
+                                clipRule="evenodd"
+                            ></path>
+                        </svg>
+                        Go Back
+                    </button>
+                    <div id="pagination"><CompPagination totalCount={20 * 5} /></div>
+
                     <button
                         id="next-btn"
                         type="button"
