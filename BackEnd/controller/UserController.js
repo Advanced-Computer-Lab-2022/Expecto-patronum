@@ -1,5 +1,7 @@
 const CheckUserType = require("../lib/CheckRoleUtils");
 const { genPassword, validPassword } = require("../lib/passwordUtils");
+const { default: mongoose } = require('mongoose');
+const CourseTable = require('../models/CourseSchema');
 const User = require('../models/UserSchema');
 const passport = require('passport');
 const countryToCurrency = require('country-to-currency');
@@ -9,7 +11,6 @@ const { MailValidate } = require("../lib/MailValidation");
 const { VerifyTokenDate } = require("../lib/VerfiyTokenDate");
 const { Passport } = require("passport");
 const ExerciseTable = require('../models/ExcerciseSchema');
-const CourseTable = require('../models/CourseSchema');
 
 function register(req, res) {
   const saltHash = genPassword(req.body.password);
@@ -344,7 +345,7 @@ async function viewRatings(req, res) {
     res.send(ratings)
   }
   catch (error) {
-
+    res.status(400).json({error:error.message})
   }
 };
 
@@ -403,7 +404,7 @@ async function giveCourseRating(req, res, next) {
     res.send(200);
 
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
 
 };
@@ -466,7 +467,7 @@ async function giveInstructorRating(req, res, next) {
     res.send(200);
 
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
 
 };
@@ -502,7 +503,7 @@ async function giveCourseReview(req, res, next) {
     }
     
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
  
 }
@@ -539,7 +540,7 @@ async function giveInstructorReview(req, res, next) {
     }
     
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
  
 }
@@ -550,20 +551,31 @@ async function selectCourse(req, res, next){
     let exercise = {};
     if (req.body.courseId) {
       if(req.body.userId){
-      var x = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 1 });
+        var instructor = await CourseTable.findOne({ "instructorID": req.body.userId },{instructorID:1});
+        if(instructor){
+          info.Owner = "yes";
+          x = await CourseTable.findOne({ "_id": req.body.courseId },{ review:{ "$slice": 3 }});
+          info.course = x;
+          var instructor = await User.findOne({"_id":(x.instructorID)}).select({
+            instructorRating:1,
+            biography:1,
+            _id:1,
+            firstname:1,
+            lastname:1,
+            instructorReview:{ "$slice": 3 }
+          });
+          info.instructor = instructor;
+          info.course = x;
+          res.send(info);
+          return;
+        }
+        var x = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 1 });
       //var y = Object.values(x);
       //console.log(x);
       if(x.purchasedCourses){
       for (var i = 0; i < x.purchasedCourses.length; i++) {
         var z = Object.values(x.purchasedCourses)[i];
         if (z.courseID == req.body.courseId) {
-          // if(z.excercises){
-          //   for(var j = 0; j<z.excercises.length;j++){
-          //     var exe = Object.values(z.excercises)[i];
-          //     exercise[excerciseID+j] = exe.excerciseID;
-          //     exercise[grade+j] = exe.grade;
-          //   }
-          // } 
           if(z.courseRating){
             info.yourCourseRating = z.courseRating;
           }
@@ -579,13 +591,23 @@ async function selectCourse(req, res, next){
           info.purchased = "yes";
           x = await CourseTable.findOne({ "_id": req.body.courseId },{ review:{ "$slice": 3 }});
           info.course = x;
+          var instructor = await User.findOne({"_id":(x.instructorID)}).select({
+            instructorRating:1,
+            biography:1,
+            _id:1,
+            firstname:1,
+            lastname:1,
+            instructorReview:{ "$slice": 3 }
+          });
+          info.instructor = instructor;
+          info.course = x;
           res.send(info);
           return;
         }
       }
       }
     }
-      x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
+     var x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
         _id: 1,
         title: 1,
         courseHours: 1,
@@ -593,6 +615,7 @@ async function selectCourse(req, res, next){
         courseImage: 1,
         rating: 1,
         instructorName: 1,
+        instructorID :1,
         subject: 1,
         summary: 1,
         discount: 1,
@@ -603,22 +626,33 @@ async function selectCourse(req, res, next){
         "subtitles.contents.duration":1,
         review:{ "$slice": 3 }
       });
+      console.log(x);
+      var instructor = await User.findOne({"_id":(x.instructorID)}).select({
+        instructorRating:1,
+        biography:1,
+        _id:1,
+        firstname:1,
+        lastname:1,
+        instructorReview:{ "$slice": 3 }
+      });
       let q = {};
       q.purchased = "no";
       q.course = x;
+      q.instructor= instructor;
       res.send(q);
     }
     
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
 }
 
 async function ViewMyCourses(req, res, next) {
   try {
       var CurrentPage = req.query.page ? req.query.page : 1; 
-      var x = await User.find({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 0 });
-      var y = Object.values(x)[0];
+      var y = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 0 });
+      console.log(y);
+      if(y){
       var ids = [y.purchasedCourses.length];
 
       for (var i = 0; i < y.purchasedCourses.length; i++) {
@@ -640,8 +674,11 @@ async function ViewMyCourses(req, res, next) {
         discountPrice: 1
       }).skip((CurrentPage - 1) * 5).limit(5);
       res.send(x);
+      return;
+    }
+    res.send("no courses");
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
   }
 };
 
@@ -651,14 +688,13 @@ async function takeExam(req, res, next) {
       "_id":1,
       "courseID" :1,
       "exerciseTitle":1,
-      "questions.problem":1,
-      "questions.choices":1,
+      "questions":1,
       "totalGrade":1
   });
-  res.status(200).send(exam);
+  res.status(200).json(exam);
   }
   catch (err) {
-    console.log(err);
+    res.status(400).json({error:error.message})
   }
 };
 
