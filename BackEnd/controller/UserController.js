@@ -1,5 +1,7 @@
 const CheckUserType = require("../lib/CheckRoleUtils");
 const { genPassword, validPassword } = require("../lib/passwordUtils");
+const { default: mongoose } = require('mongoose');
+const CourseTable = require('../models/CourseSchema');
 const User = require('../models/UserSchema');
 const passport = require('passport');
 const countryToCurrency = require('country-to-currency');
@@ -9,7 +11,6 @@ const { MailValidate } = require("../lib/MailValidation");
 const { VerifyTokenDate } = require("../lib/VerfiyTokenDate");
 const { Passport } = require("passport");
 const ExerciseTable = require('../models/ExcerciseSchema');
-const CourseTable = require('../models/CourseSchema');
 
 function register(req, res) {
   const saltHash = genPassword(req.body.password);
@@ -574,7 +575,7 @@ async function selectCourse(req, res, next){
       }
       }
     }
-      x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
+     var x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
         _id: 1,
         title: 1,
         courseHours: 1,
@@ -582,6 +583,7 @@ async function selectCourse(req, res, next){
         courseImage: 1,
         rating: 1,
         instructorName: 1,
+        instructorID :1,
         subject: 1,
         summary: 1,
         discount: 1,
@@ -591,10 +593,17 @@ async function selectCourse(req, res, next){
         "subtitles.contents.contentTitle":1,
         "subtitles.contents.duration":1,
         review:{ "$slice": 3 }
-      });
+      }).populate('instructorID').exec();
+      console.log(x);
+      // var instructor = await User.findOne({"_id":(x.instructorID)}).select({
+      //   instructorRating:1,
+      //   biography:1,
+      //   _id:1,
+      // });
       let q = {};
       q.purchased = "no";
       q.course = x;
+      // q.instructor= instructor;
       res.send(q);
     }
     
@@ -606,8 +615,9 @@ async function selectCourse(req, res, next){
 async function ViewMyCourses(req, res, next) {
   try {
       var CurrentPage = req.query.page ? req.query.page : 1; 
-      var x = await User.find({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 0 });
-      var y = Object.values(x)[0];
+      var y = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 0 });
+      console.log(y);
+      if(y){
       var ids = [y.purchasedCourses.length];
 
       for (var i = 0; i < y.purchasedCourses.length; i++) {
@@ -629,6 +639,9 @@ async function ViewMyCourses(req, res, next) {
         discountPrice: 1
       }).skip((CurrentPage - 1) * 5).limit(5);
       res.send(x);
+      return;
+    }
+    res.send("no courses");
   } catch (error) {
     console.log(error);
   }
