@@ -652,8 +652,7 @@ async function ViewMyCourses(req, res, next) {
   try {
       var CurrentPage = req.query.page ? req.query.page : 1; 
       var y = await User.findOne({ "_id": req.query.userId }).select({ purchasedCourses: 1, _id: 0 });
-      console.log(y);
-      if(y){
+      if(y.purchasedCourses.length){
       var ids = [y.purchasedCourses.length];
 
       for (var i = 0; i < y.purchasedCourses.length; i++) {
@@ -665,19 +664,15 @@ async function ViewMyCourses(req, res, next) {
         _id: 1,
         title: 1,
         courseHours: 1,
-        price: 1,
         courseImage: 1,
-        rating: 1,
         instructorName: 1,
         subject: 1,
-        summary: 1,
-        discount: 1,
-        discountPrice: 1
+        summary: 1
       }).skip((CurrentPage - 1) * 5).limit(5);
       res.send(x);
       return;
     }
-    res.send("no courses");
+    res.send(y.purchasedCourses);
   } catch (error) {
     res.status(400).json({error:error.message})
   }
