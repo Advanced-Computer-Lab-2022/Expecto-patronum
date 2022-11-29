@@ -24,13 +24,12 @@ const CourseSubtitle = (props: Props) => {
           }}
           className="flex justify-between items-center gap-10 mb-4 cursor-pointer"
         >
-          <h1 className="text-2xl font-bold">{props.Data.header}</h1>
-          <p className="text-sm">{Hours} h</p>
-
           <div className={"flex items-center gap-9"}>
-            {" "}
             {ShowSubtitle ? <AiOutlineMinus /> : <AiOutlinePlus />}
+            <h1 className="text-2xl font-bold">{props.Data.header}</h1>
           </div>
+          <p className="text-sm">{Hours} h</p>
+  
         </div>
         {ShowSubtitle && (
           <div>
@@ -63,7 +62,6 @@ const CourseSubtitle = (props: Props) => {
       {onClick && ShowSubtitle && (
         <div className="mb-20">
           <CourseSubtitleData
-            type="video"
             Data={props.Data.contents}
           ></CourseSubtitleData>
       

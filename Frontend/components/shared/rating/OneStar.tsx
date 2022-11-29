@@ -4,7 +4,7 @@ type Props = {
   rating: number;
 };
 
-const Rating = (props: Props) => {
+const OneStar = (props: Props) => {
   return (
     <div className="flex items-center">
       <svg
@@ -22,4 +22,4 @@ const Rating = (props: Props) => {
   );
 };
 
-export default Rating;
+export default OneStar;

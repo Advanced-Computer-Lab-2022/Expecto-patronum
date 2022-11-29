@@ -31,6 +31,7 @@ module.exports = {
         '160': '1.60',
         '200': '2',
       },
+
       transitionProperty: {
         'navbar-anime': 'bottom, opacity',
         'bg': 'background-color',
@@ -50,8 +51,8 @@ module.exports = {
         'nv-max': { 'max': '935px' },
         'sb-max': { 'max': '856px' },
         'sb': '857px',
-        'nv-max-mob': {'min': '451px', 'max': '935px' },
-        '1030': {'max': '1030px'},
+        'nv-max-mob': { 'min': '451px', 'max': '935px' },
+        '1030': { 'max': '1030px' },
       },
       zIndex: {
         'behind': '-1',
@@ -80,11 +81,19 @@ module.exports = {
       },
       borderWidth: {
         'px': '1px',
-        '1.5': '1.5px', 
+        '1.5': '1.5px',
       },
       minWidth: {
         'without-instructor-sidebar-closed': 'calc(100% - 56px)',
-      }
+      },
+      backgroundImage: theme => ({
+        'All': "linear-gradient(#2B32B2, #1488CC)",
+        'Beg': "linear-gradient(#2f8608, #52EB0E)",
+        'Int': "linear-gradient(#C29904, #FDE143)",
+        'Adv': "linear-gradient(#B20000, #FF4542)",
+
+      }),
+
     },
   },
   plugins: [require('@tailwindcss/line-clamp'),

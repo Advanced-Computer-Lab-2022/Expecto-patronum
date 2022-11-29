@@ -1,14 +1,14 @@
 export interface CourseHeroData{
     Title:String;
     Summary:String;
-    Rate:Number;
+    Rate:number;
     InstructorName:String;
     PreviewVideo:String;
-    TotalHours:Number;
+    TotalHours:number;
     Level:String;
-    Price:Number;
-    DiscountPrice:Number;
-    Discount:Number;
+    Price:number;
+    DiscountPrice:number;
+    Discount:number;
     Subject:String;
     
 
