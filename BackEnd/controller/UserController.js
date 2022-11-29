@@ -606,6 +606,31 @@ async function selectCourse(req, res, next) {
               return;
             }
           }
+          if(z.instructorRating){
+            info.yourInstructorRating = z.instructorRating;
+          }
+          if(z.courseReview){
+            info.yourCourseReview = z.courseReview;
+          }
+          if(z.instructorReview){
+            info.yourinstructorReview = z.instructorReview;
+          }
+          info.purchased = "yes";
+          x = await CourseTable.findOne({ "_id": req.body.courseId },
+          { review:{ "$slice": 3 }});
+          info.course = x;
+          var instructor = await User.findOne({"_id":(x.instructorID)}).select({
+            instructorRating:1,
+            biography:1,
+            _id:1,
+            firstname:1,
+            lastname:1,
+            instructorReview:{ "$slice": 3 }
+          });
+          info.instructor = instructor;
+          info.course = x;
+          res.send(info);
+          return;
         }
       }
       var x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
@@ -755,7 +780,7 @@ async function submitAnswer(req,res){
 
 module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
    buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
-    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview,submitAnswer,test }
+    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview,submitAnswer,takeExam,test }
 
 
     
