@@ -9,12 +9,14 @@ import classNames from 'classnames';
 import Pagination from '../../components/shared/pagination/Pagination';
 import FilterDropdown from '../../components/shared/FilterDropdown/FilterDropdown';
 import { AiOutlineClear } from 'react-icons/ai';
+import { MdModeEditOutline } from 'react-icons/md';
+import { TbDiscount2 } from 'react-icons/tb';
 
 type Props = {}
 
 const MyCourses = (props: Props) => {
 
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState();
   const [totalCount, setTotalCount] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(Math.ceil(totalCount/10));
   const [search, setSearch] = useState('');
@@ -116,55 +118,56 @@ const MyCourses = (props: Props) => {
     });
   }
 
-  // useEffect(() => {
-  //   courseSearch(page);
-  // }, [filter])
-
   return ( 
     <Layout>
-        <div className='flex mx-12 my-4 items-center justify-between'>
-          <div className='flex items-center'>
-            <form id='instructor-search-course' className={searchInputDiv}>
-              <input onChange={(e) => setSearch(e.target.value)} value={search} placeholder="Search for a course" className={searchInput}/>
-              <button type='submit' form='instructor-search-course' onClick={(e) => {courseSearch(page); e.preventDefault()}} className={searchButton + ' ' + (search === '' ? 'cursor-not-allowed': '')} disabled={search === ''}>
-                <BiSearchAlt2 className='scale-125 hover:scale-135 transition-all duration-300' />
-              </button>
-            </form>
-            <button title='Clear Search & Filter' onClick={() => clearSearchAndFilter()} className='rounded-full border-1.5 border-canadian-red text-white bg-canadian-red hover:text-canadian-red hover:bg-main ml-4 p-1.5 hover:scale-105 transition-all duration-200'><AiOutlineClear /></button>
-          </div>
-          
-          <div className='ml-2 flex items-center'>
-            <FilterDropdown filter={filter} setFilter={setFilter} submit={() => courseSearch(page)} />
-            <div className='sb-max:hidden'>
-              <button onClick={() => setIsGridViewList(true)} className={(isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.195] rounded-[0.65rem] border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-[0.271rem] hover:scale-[1.295] hover:text-main hover:bg-gray-700 transition-all duration-200 rotate-90'}><HiViewBoards /></button>
-              <button onClick={() => setIsGridViewList(false)} className={(!isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.0665] rounded-xl border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-1.5 hover:scale-[1.1665] hover:text-main hover:bg-gray-700 transition-all duration-200'}><BsGridFill /></button>
+        <div className='sb-max:min-w-[100vw] pt-2'>
+          <div className='flex mx-12 my-4 sb-max:mx-4 items-center sb:justify-between'>
+            <div className='flex items-center'>
+              <form id='instructor-search-course' className={searchInputDiv}>
+                <input onChange={(e) => setSearch(e.target.value)} value={search} placeholder="Search for a course" className={searchInput}/>
+                <button type='submit' form='instructor-search-course' onClick={(e) => {courseSearch(page); e.preventDefault()}} className={searchButton + ' ' + (search === '' ? 'cursor-not-allowed': '')} disabled={search === ''}>
+                  <BiSearchAlt2 className='scale-125 hover:scale-135 transition-all duration-300' />
+                </button>
+              </form>
+              <button title='Clear Search & Filter' onClick={() => clearSearchAndFilter()} className='rounded-full border-1.5 border-canadian-red text-white bg-canadian-red hover:text-canadian-red hover:bg-main sb-max:ml-1 ml-4 p-1.5 hover:scale-105 transition-all duration-200'><AiOutlineClear /></button>
+            </div>
+            
+            <div className='ml-2 flex items-center'>
+              <FilterDropdown filter={filter} setFilter={setFilter} submit={() => courseSearch(page)} />
+              <div className='sb-max:hidden flex items-center'>
+                <button onClick={() => setIsGridViewList(true)} className={(isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.195] rounded-full border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-[0.271rem] hover:scale-[1.295] hover:text-main hover:bg-gray-700 transition-all duration-200 rotate-90'}><HiViewBoards /></button>
+                <button onClick={() => setIsGridViewList(false)} className={(!isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.0665] rounded-full border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-1.5 hover:scale-[1.1665] hover:text-main hover:bg-gray-700 transition-all duration-200'}><BsGridFill /></button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className={(!isGridViewList ? 'grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-x-20': '') + ' sb-max:min-w-fit text-white mx-8'}>
-          {courses.map((course: any, index: number) => {
-            return (
-              <div key={index} className={`h-42 w-full mb-10 p-4 relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg bg-gradient-to-br cursor-pointer ${levelColor(course.level)}`}>
-                <h1 className='text-2xl nv-max:pr-14 mr-16'>{course.title}</h1>
-                <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
-                    <Rating rating={2.47} />
+          <div className={(!isGridViewList ? 'grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-x-20': '') + ' sb-max:ml-8 sb-max:mr-22 text-white mx-8'}>
+            {(courses ? courses: courseData).map((course: any, index: number) => {
+              return (
+                <div key={index} className={`h-42 w-full mb-10 p-4 relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg bg-gradient-to-br cursor-pointer ${levelColor(course.level)}`}>
+                  <h1 className='text-2xl pr-16'>{course.title}</h1>
+                  <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
+                      <Rating rating={2.47} />
+                  </div>
+                  <p className='pl-3'>Subject: <span className='opacity-95'>{course.subject}</span></p>
+                  <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level === 'AllLevels' ? 'All Levels': course.level}</span></p>
+                  <label className='pl-3'>Description:</label>
+                  <p onClick={expandDescription} className='pl-6 whitespace-nowrap overflow-hidden sb-max:w-48 text-ellipsis mr-18 sb-max:mr-4'>{course.summary}</p>
+                  <a href='/Instructor/Settings/AddDiscount/' title='Add Promotion' className={`${(!isGridViewList ? 'bottom-12 right-4': 'bottom-12 right-40 top-3')} scale-160 absolute opacity-70 hover:opacity-100 sb-max:bottom-12 sb-max:right-4 transition-all duration-300`}><TbDiscount2 /></a>
+                  <a href='/Instructor/Settings/EditCourse/' title='Edit Course' className={`${(!isGridViewList ? 'bottom-4 right-4': 'bottom-4 right-28 top-3')} scale-150 absolute opacity-70 hover:opacity-100 sb-max:bottom-4 sb-max:right-4 transition-all duration-300`}><MdModeEditOutline /></a>
                 </div>
-                <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level === 'AllLevels' ? 'All Levels': course.level}</span></p>
-                <label className='pl-3'>Description:</label>
-                <p onClick={expandDescription} className='pl-6 whitespace-nowrap overflow-hidden sb-max:w-48 text-ellipsis mr-18 sb-max:mr-4'>{course.summary}</p>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+          <Pagination pageCount={numberOfPages} page={page} setPage={setPage} onClick={courseSearch} getCourses={getCourses} />
         </div>
-        <Pagination pageCount={numberOfPages} page={page} setPage={setPage} onClick={courseSearch} getCourses={getCourses} />
     </Layout>
   )
 }
 
-const searchInputDiv = classNames("flex items-center relative sb-max:w-full sb-max:mr-4");
-const searchInput = classNames("rounded-xl relative w-80 h-8 nv-max:pr-3 bg-main pl-2.5 border-1.5 border-gray-700 border-opacity-50 placeholder:italic placeholder:text-sm bg-transparent tracking-wide focus:outline-0 transition-all duration-300");
-const searchButton = classNames("rounded-lg text-gray-300 sb-max:relative absolute hover:text-gray-100 h-6 bg-gray-600 px-2 align-top sb-max:right-9 right-1");
+const searchInputDiv = classNames("flex items-center relative sb-max:mr-1");
+const searchInput = classNames("rounded-xl relative w-80 h-8 nv-max:pr-3 bg-main pl-2.5 sb-max:w-48 border-1.5 border-gray-700 border-opacity-50 placeholder:italic placeholder:text-sm bg-transparent tracking-wide focus:outline-0 transition-all duration-300");
+const searchButton = classNames("rounded-lg text-gray-300 absolute hover:text-gray-100 h-6 bg-gray-600 px-2 align-top right-1");
 
 
 const courseData = [
@@ -13784,7 +13787,7 @@ const courseData = [
     "subject": "Human Resources",
     "instructorName": "Rodin Salem",
     "price": 1545.45,
-    "level": "All Levels",
+    "level": "AllLevels",
     "courseHours": 163,
     "summary": "Pathological fracture, left tibia, subs for fx w nonunion",
     "subtitles": [
@@ -18141,7 +18144,7 @@ const courseData = [
     "subject": "Product Management",
     "instructorName": "Rodin Salem",
     "price": 2217.22,
-    "level": "All Levels",
+    "level": "AllLevels",
     "courseHours": 138,
     "summary": "Sltr-haris Type II physl fx low end r fibula, 7thK",
     "subtitles": [
@@ -19220,7 +19223,7 @@ const courseData = [
     "subject": "Business Development",
     "instructorName": "Rodin Salem",
     "price": 585.97,
-    "level": "All Levels",
+    "level": "AllLevels",
     "courseHours": 127,
     "summary": "Poisoning by antitussives, accidental (unintentional), init",
     "subtitles": [

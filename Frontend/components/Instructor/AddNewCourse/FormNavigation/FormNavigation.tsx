@@ -69,12 +69,12 @@ const FormNavigation = (props: Props) => {
             if(newCourseInfo[key] === '') {
                 moveForward = false;
                 switch(key) {
-                    case 'title': titleRef.current.children[0].style.color = 'rgb(185, 28, 28)';
-                    case 'subject': subjectRef.current.children[0].style.color = 'rgb(185, 28, 28)';
-                    case 'price': priceRef.current.children[0].style.color = 'rgb(185, 28, 28)';
-                    case 'courseVideoURL': courseVideoRef.current.children[0].style.color = 'rgb(185, 28, 28)';
-                    case 'summary': summaryRef.current.children[0].style.color = 'rgb(185, 28, 28)';
-                    case 'level': levelRef.current.children[0].style.color = 'rgb(185, 28, 28)';
+                    case 'title': titleRef.current.children[0].style.color = 'rgb(185, 28, 28)'; break;
+                    case 'subject': subjectRef.current.children[0].style.color = 'rgb(185, 28, 28)'; break;
+                    case 'price': priceRef.current.children[0].style.color = 'rgb(185, 28, 28)'; break;
+                    case 'courseVideoURL': courseVideoRef.current.children[0].style.color = 'rgb(185, 28, 28)'; break;
+                    case 'summary': summaryRef.current.children[0].style.color = 'rgb(185, 28, 28)'; break;
+                    case 'level': levelRef.current.children[0].style.color = 'rgb(185, 28, 28)'; break;
                 }
             }
         }
@@ -138,7 +138,7 @@ const FormNavigation = (props: Props) => {
                 Next
                 <BsArrowRight className={`${buttonIcon} left-2`} />
             </button>
-            <button ref={submitNewCourseRef} type='submit' form='add-new-course-form' onClick={checkRequiredCourseInfo} className={submitButton} id='submit-btn'>
+            <button ref={submitNewCourseRef} type='submit' form='add-new-course-form' onClick={() => console.log(newCourseInfo)} className={submitButton} id='submit-btn'>
                 <span /><span /><span /><span />
                 Submit
             </button>

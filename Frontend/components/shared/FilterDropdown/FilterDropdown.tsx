@@ -41,7 +41,7 @@ const FilterDropdown = (props: Props) => {
 
   return (
     <div className='relative z-10'>
-      <button className={filterButton} onClick={() => setIsFilterOpen(!isFilterOpen)}><FaFilter className='mr-2' />Filter<FiChevronDown className='ml-1' /></button>
+      <button className={filterButton} onClick={() => setIsFilterOpen(!isFilterOpen)}><FaFilter className='mr-2 sb-max:mr-0' /><span className='sb-max:hidden'>Filter</span><FiChevronDown className='ml-1' /></button>
       <div className={filterOptions + (isFilterOpen ? ' top-8 h-48 opacity-100': ' top-0 h-0 opacity-0')}>
         <ul className='divide-y-2 space-y-3'>
           <li>
