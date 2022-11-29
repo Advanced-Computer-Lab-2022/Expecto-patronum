@@ -262,7 +262,7 @@ async function addCourse(req, res, next) {
        var z = exe[i] ;
        if(z.subtitleName){
         await CourseTable.updateOne({ "_id": courseid,"subtitles.header": z.subtitleName },
-          { "$push": { "subtitles.$.exercise" : z._id}}
+          { "$push": { "subtitles.$.exercise.$.exerciseID" : z._id,"subtitles.$.exercise.$.exerciseName" : z.exerciseTitle}}
           );
       }
       else{
@@ -293,8 +293,8 @@ async function discount(req, res, next) {
     startDate = new Date();
     queryCond.startDate = startDate;
   }
-  endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + req.body.duration);
+  endDate = new Date(req.body.endDate);
+  // endDate.setDate(endDate.getDate() + req.body.duration);
   queryCond.endDate = endDate;
   discount = 1 - (discount / 100);
   try {

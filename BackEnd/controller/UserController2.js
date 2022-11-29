@@ -20,7 +20,7 @@ const CourseTable = require('../models/CourseSchema');
         });
         console.log(x);
         var y = await User.findOne({"_id": req.body.UserID,"purchasedCourses.excercises.excerciseID":req.body.exerciseID},
-        {"purchasedCourses.excercises.grade":1});
+        {"purchasedCourses.$.excercises":1});
         console.log(y);
         let q = {};
         if(y){
@@ -35,4 +35,32 @@ const CourseTable = require('../models/CourseSchema');
       res.status(400).send(error.message);
     }
   };
+
+  async function viewAnswer(req, res, next) {
+    try {
+        var x = await ExerciseTable.findOne({"_id":req.body.exerciseID},{
+            exerciseTitle:1,
+            totalGrade:1,
+            _id:1,
+            questions:1
+        });
+        console.log(x);
+        var y = await User.findOne({"_id": req.body.UserID,"purchasedCourses.excercises.excerciseID":req.body.exerciseID},
+        {"purchasedCourses.$.excercises":1});
+        console.log(y);
+        let q = {};
+        if(y){
+          q.grade = y.purchasedCourses;
+        }
+        q.exerciseTitle = x.exerciseTitle;
+        q.exerciseID = x._id;
+        q.totalGrade = x.totalGrade;
+        res.status(200).send(q);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error.message);
+    }
+  };
+
+
   module.exports = { SelectExercise}

@@ -578,7 +578,8 @@ async function selectCourse(req, res, next){
             info.yourinstructorReview = z.instructorReview;
           }
           info.purchased = "yes";
-          x = await CourseTable.findOne({ "_id": req.body.courseId },{ review:{ "$slice": 3 }});
+          x = await CourseTable.findOne({ "_id": req.body.courseId },
+          { review:{ "$slice": 3 }});
           info.course = x;
           var instructor = await User.findOne({"_id":(x.instructorID)}).select({
             instructorRating:1,
