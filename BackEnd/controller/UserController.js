@@ -589,7 +589,8 @@ async function selectCourse(req, res, next){
             info.yourinstructorReview = z.instructorReview;
           }
           info.purchased = "yes";
-          x = await CourseTable.findOne({ "_id": req.body.courseId },{ review:{ "$slice": 3 }});
+          x = await CourseTable.findOne({ "_id": req.body.courseId },
+          { review:{ "$slice": 3 }});
           info.course = x;
           var instructor = await User.findOne({"_id":(x.instructorID)}).select({
             instructorRating:1,
@@ -650,7 +651,7 @@ async function selectCourse(req, res, next){
 async function ViewMyCourses(req, res, next) {
   try {
       var CurrentPage = req.query.page ? req.query.page : 1; 
-      var y = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 0 });
+      var y = await User.findOne({ "_id": req.query.userId }).select({ purchasedCourses: 1, _id: 0 });
       console.log(y);
       if(y){
       var ids = [y.purchasedCourses.length];

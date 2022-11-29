@@ -9,6 +9,7 @@ const { Logout } = require('../controller/UserController');
 const { register } = require('../controller/UserController');
 const { giveCourseRating, buyCourse, ViewMyCourses } = require('../controller/UserController');
 const UserTable = require('../models/UserSchema');
+const { SelectExercise } = require('../controller/UserController2');
 
 router.get("/", (req, res) => {
   res.send("Hello, User");
@@ -45,13 +46,15 @@ router.put("/buyCourse", buyCourse);
 
 router.get("/takeExam",takeExam);
 
-router.put("/viewMyCourses", ViewMyCourses);
+router.get("/viewMyCourses", ViewMyCourses);
 
 router.put("/giveCourseRating", giveCourseRating);
 
 router.put("/giveInstructorRating", giveInstructorRating );
 
 router.put("/selectCourse", selectCourse);
+
+router.put("/selectExercise",SelectExercise);
 
 router.put("/giveCourseReview", giveCourseReview );
 
