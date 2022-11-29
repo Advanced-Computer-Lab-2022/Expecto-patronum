@@ -153,8 +153,8 @@ const MyCourses = (props: Props) => {
                   <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level === 'AllLevels' ? 'All Levels': course.level}</span></p>
                   <label className='pl-3'>Description:</label>
                   <p onClick={expandDescription} className='pl-6 whitespace-nowrap overflow-hidden sb-max:w-48 text-ellipsis mr-18 sb-max:mr-4'>{course.summary}</p>
-                  <a href='/Instructor/Settings/AddDiscount/' title='Add Promotion' className={`${(!isGridViewList ? 'bottom-12 right-4': 'bottom-12 right-40 top-3')} scale-160 absolute opacity-70 hover:opacity-100 sb-max:bottom-12 sb-max:right-4 transition-all duration-300`}><TbDiscount2 /></a>
-                  <a href='/Instructor/Settings/EditCourse/' title='Edit Course' className={`${(!isGridViewList ? 'bottom-4 right-4': 'bottom-4 right-28 top-3')} scale-150 absolute opacity-70 hover:opacity-100 sb-max:bottom-4 sb-max:right-4 transition-all duration-300`}><MdModeEditOutline /></a>
+                  <a href='/Instructor/Settings/AddDiscount/' title='Add Promotion' className={`${(!isGridViewList ? 'bottom-12 right-4': 'right-40 sb:top-3')} scale-160 absolute opacity-70 hover:opacity-100 sb-max:bottom-12 sb-max:right-4 transition-all duration-300`}><TbDiscount2 /></a>
+                  <a href='/Instructor/Settings/EditCourse/' title='Edit Course' className={`${(!isGridViewList ? 'bottom-4 right-4': 'right-28 sb:top-3')} scale-150 absolute opacity-70 hover:opacity-100 sb-max:bottom-4 sb-max:right-4 transition-all duration-300`}><MdModeEditOutline /></a>
                 </div>
               );
             })}
