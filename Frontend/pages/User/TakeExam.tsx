@@ -22,6 +22,7 @@ const Exam = () => {
     const [totalGrade, settotalGrade] = useState<number>(0);
     const [totalQuestions, settotalQuestions] = useState<number>(0);
     const [skipped, setSkipped] = useState([""]);
+    // const [answered, setAnswered] = useState([""]);
     const [type, setType] = useState<"button" | "submit" | "reset" | undefined>(
         "button"
     );
@@ -176,11 +177,16 @@ const Exam = () => {
     async function submitExam(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const AnswerLabel = document.getElementsByClassName("answer") as HTMLCollectionOf<HTMLLabelElement>;
-
+        var empty = new Array(questions.length);
+        for(var i=0;i<empty.length;i++){
+            empty[i] = '';
+        }
+        
         if (AnswerLabel != undefined) {
             for (var i = 0; i < AnswerLabel.length; i++) {
                 AnswerLabel[i].style.display = "";
             }
+        }
             var correctAnswers = 0;
             for (var i = 0; i < questions.length; i++) {
                 const QuestionChoices = document.getElementsByClassName("Q" + i) as any;
@@ -190,9 +196,14 @@ const Exam = () => {
                         QuestionChoices[j].nextElementSibling.className = notChosen;
                         if (QuestionChoices[j].checked) {
                             chosenAnswerIndex = j;
+                            var selected=questions[i].choices[chosenAnswerIndex];
+                            console.log(selected);
+                            empty[i]=selected;
+                            console.log(empty);
                         }
                     }
                 }
+
                 if (chosenAnswerIndex >= 0 && chosenAnswerIndex <= 3) {
                     if (questions[i].answer === questions[i].choices[chosenAnswerIndex]) {
                         correctAnswers++;
@@ -239,8 +250,8 @@ const Exam = () => {
             if (goback != undefined) {
                 goback.style.display = "";
             }
-        }
-
+            // setAnswered(empty);
+            // console.log(answered);
         // axios.defaults.withCredentials =true;
         // Response = await axios
         //     .post("http://localhost:5000/", {
@@ -249,7 +260,9 @@ const Exam = () => {
         //         return res.data;
         //     });
     }
-
+    // useEffect(() => {
+    //     console.log(answered);
+    //   }, [answered]);
     return (
         <form
             id="Exam-form"

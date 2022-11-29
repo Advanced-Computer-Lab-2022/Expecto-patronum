@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <DataProvider>
         {/* <Navbar></Navbar> */}
         <Component {...pageProps} />
-        <Footer></Footer>
+        {/* <Footer></Footer> */}
       </DataProvider>
     </div>
   );
