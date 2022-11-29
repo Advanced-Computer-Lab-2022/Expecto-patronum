@@ -10,8 +10,8 @@ const ReviewSection = (props: Props) => {
       <h2 className="mb-8 text-lg font-semibold">TOP REVIEWS</h2>
       {arrayTemp.map((item, index) => {
         return (
-          <div className="flex-cols items-start mb-5">
-            <BigRating Rate={4.8}></BigRating>
+          <div key={index} className="flex-cols items-start mb-5">
+            <BigRating RateAction={false} Rate={4.8}></BigRating>
             <p className="text-lg mb-2 mt-2">By MS</p>
             <p className="w-4/5">
               Solid "big picture" refresher course before getting into the more

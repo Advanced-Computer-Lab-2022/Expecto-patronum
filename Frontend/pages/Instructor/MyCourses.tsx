@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import Rating from '../../components/shared/rating/Rating';
+import OneStar from '../../components/shared/rating/OneStar';
 import Layout from './Layout';
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
 
@@ -71,7 +71,7 @@ const MyCourses = (props: Props) => {
               <div key={index} className={`h-fit w-full my-10 p-4 relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg bg-gradient-to-br ${levelColor(course.level)}`}>
                 <h1 className='text-xl nv-max:pr-14'>{course.title}</h1>
                 <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
-                    <Rating rating={2.47} />
+                    <OneStar rating={2.47} />
                 </div>
                 <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level}</span></p>
                 <label className='pl-3'>Description:</label>

@@ -1,8 +1,9 @@
 import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import DataContext from "../../context/DataContext";
-import Rating from "../shared/rating/Rating";
+import OneStar from "../shared/rating/OneStar";
 import { CourseData } from "../../Interface/CourseDataInterface";
+import { useRouter } from "next/router";
 
 const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
   const {
@@ -20,9 +21,12 @@ const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
 
   const [Flag, SetFlag] = useState(false);
   const { Rate, SetRate } = useContext(DataContext);
+  let router=useRouter()
+  
 
   return (
     <div
+    onClick={() => {router.push(`/Courses/${_id}`)}}
       onMouseEnter={() => {
         SetFlag(true);
       }}
@@ -61,7 +65,7 @@ const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
            absolute top-0 right-0 w-14 h-10 shadow-xl ease-in duration-300 
            hover:shadow-sm flex items-center justify-center rounded-b-lg "
         >
-          <Rating rating={rating.avg}></Rating>
+          <OneStar rating={rating.avg}></OneStar>
         </div>
         <div className="bg-white/60 inline-block text-center px-3 py-1 font-bold uppercase rounded-md mb-10">
           Beginner

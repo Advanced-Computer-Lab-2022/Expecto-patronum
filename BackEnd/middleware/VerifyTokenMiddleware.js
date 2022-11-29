@@ -3,7 +3,8 @@ function VerifyTokenMiddleware(req, res, next) {
 
   jwt.verify(req.params.token, process.env.SECRET_KEY, (err, decoded) => {
     if (err) {
-      res.send("Invalid Token" + err);
+      res.send({ Error: true, Message: 'Token is not valid' });
+      console.log(err);
     }
     else {
       req.userid = decoded.id;

@@ -87,27 +87,32 @@ async function getRate(req, res, next) {
 
 function forgetPassword(req, res, next) {
   let userMail = req.body.email;
-  User.findOne({ email: userMail },
+  User.findOne({ email: userMail.toLowerCase() },
     (err, user) => {
-      if (err) res.send(err);
+      if (err) {
+        console.log("Mail Sent");
+      }
+
       else {
         if (user) {
           let Token = CreateToken({ id: user._id });
-          MailValidate(userMail, "http://localhost:5000/user/forgetPassword", Token);
-          res.send("Verify mail sent");
+          MailValidate(userMail, "http://localhost:3000/ForgetPassword", Token);
+          console.log("Mail Sent");
         }
         else {
-          res.send("User not found")
+          console.log("user not found");
         }
 
 
       }
+      res.send({ Error: false, Message: "Please check your email" });
+
     })
 
 
 }
 
-// function UseforgetPasswordToken(req, res) {
+// function Usef orgetPasswordToken(req, res) {
 //   if (req.userid) {
 //     User.findById(req.userid, (err, user) => {
 //       if (err) {
@@ -152,10 +157,13 @@ function ChangeForgottenPassword(req, res) {
   if (req.userid) {
     User.findById(req.userid, (err, user) => {
       if (err) {
-        res.send(err);
+        res.send({ Error: true, Message: "Invalid request" });
+        console.log(err);
       } else if (user) {
         if (!VerifyTokenDate(user.passwordTimeStamp, req.iat)) {
-          res.send("Token expired");
+          res.send({ Error: true, Message: "Token expired" });
+          console.log("Token expired as the pass was changed already");
+
         }
         else {
           let { salt, hash } = genPassword(req.body.password);
@@ -165,10 +173,13 @@ function ChangeForgottenPassword(req, res) {
           user.forgotPasswrod = false;
           user.save((err, user) => {
             if (err) {
+              res.send({ Error: true, Message: "Cannot Change user Password" });
               console.log(err);
             }
             else {
-              res.send("Password Changed");
+              res.send({ Error: false, Message: "Password Changed" });
+              console.log("Password Changed");
+
             }
           })
 
@@ -178,7 +189,7 @@ function ChangeForgottenPassword(req, res) {
 
       }
       else {
-        res.send("user not found");
+        res.send({ Error: true, Message: "ERROR UNKOWN" });
       }
     })
 
@@ -272,7 +283,7 @@ function ValidateUser(req, res) {
 
 function ChangeEmail(req, res) {
   let userMail = req.body.email;
-  User.findOne({ email: userMail }, (err, user) => {
+  User.findOne({ email: userMail.toLowerCase() }, (err, user) => {
     if (err) {
       res.send(err)
     }
@@ -292,7 +303,7 @@ function ChangeEmail(req, res) {
 }
 
 function UseChangeEmailToken(req, res) {
-  if (req.user.email !== req.oldemail) {
+  if (req.user.email.toLowerCase() !== req.oldemail.toLowerCase()) {
     res.send("Invalide Token");
   }
   else
@@ -334,7 +345,7 @@ async function viewRatings(req, res) {
     res.send(ratings)
   }
   catch (error) {
-    res.status(400).json({error:error.message})
+    res.status(400).json({ error: error.message })
   }
 };
 
@@ -346,19 +357,19 @@ async function giveCourseRating(req, res, next) {
   let query = {};
   query.rating = newRating;
   try {
-    if(req.body.oldRating){
+    if (req.body.oldRating) {
       switch (oldRating) {
-      case 1: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.one": -1 } }, { new: true });
-        break;
-      case 2: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.two": -1 } }, { new: true });
-        break;
-      case 3: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.three":-1 } }, { new: true });
-        break;
-      case 4: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.four": -1 } }, { new: true });
-        break;
-      case 5: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.five": -1 } }, { new: true });
-        break;
-      default:;
+        case 1: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.one": -1 } }, { new: true });
+          break;
+        case 2: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.two": -1 } }, { new: true });
+          break;
+        case 3: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.three": -1 } }, { new: true });
+          break;
+        case 4: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.four": -1 } }, { new: true });
+          break;
+        case 5: await CourseTable.findByIdAndUpdate({ "_id": courseId }, { $inc: { "rating.five": -1 } }, { new: true });
+          break;
+        default: ;
       }
     }
     switch (newRating) {
@@ -387,13 +398,13 @@ async function giveCourseRating(req, res, next) {
     var average = (((z.one) + (z.two * 2) + (z.three * 3) + (z.four * 4) + (z.five * 5)) / (z.one + z.two + z.three + z.four + z.five)).toFixed(2);
     console.log(average);
     const xx = await CourseTable.findByIdAndUpdate({ "_id": courseId }, { "rating.avg": average }, { new: true });
-  const review = await User.updateOne({ "_id": userId,"purchasedCourses.courseID":courseId},
-  { "$set": { "purchasedCourses.$.courseRating": newRating }}
-  );
+    const review = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
+      { "$set": { "purchasedCourses.$.courseRating": newRating } }
+    );
     res.send(200);
 
   } catch (error) {
-    res.status(400).json({error:error.message})
+    res.status(400).json({ error: error.message })
   }
 
 };
@@ -409,19 +420,19 @@ async function giveInstructorRating(req, res, next) {
   let query = {};
   query.rating = newRating;
   try {
-    if(req.body.oldRating){
+    if (req.body.oldRating) {
       switch (oldRating) {
-      case 1: await User.findByIdAndUpdate({ "_id": instructorId }, { $inc: { "instructorRating.one": -1 } }, { new: true });
-        break;
-      case 2: await User.findByIdAndUpdate({ "_id": instructorId }, { $inc: { "instructorRating.two": -1 } }, { new: true });
-        break;
-      case 3: await User.findByIdAndUpdate({ "_id": instructorId }, { $inc: { "instructorRating.three":-1 } }, { new: true });
-        break;
-      case 4: await User.findByIdAndUpdate({ "_id": instructorId }, { $inc: { "instructorRating.four": -1 } }, { new: true });
-        break;
-      case 5: await User.findByIdAndUpdate({ "_id": instructorId }, { $inc: { "instructorRating.five": -1 } }, { new: true });
-        break;
-      default:;
+        case 1: await User.findByIdAndUpdate({ "_id": instructorId }, { $inc: { "instructorRating.one": -1 } }, { new: true });
+          break;
+        case 2: await User.findByIdAndUpdate({ "_id": instructorId }, { $inc: { "instructorRating.two": -1 } }, { new: true });
+          break;
+        case 3: await User.findByIdAndUpdate({ "_id": instructorId }, { $inc: { "instructorRating.three": -1 } }, { new: true });
+          break;
+        case 4: await User.findByIdAndUpdate({ "_id": instructorId }, { $inc: { "instructorRating.four": -1 } }, { new: true });
+          break;
+        case 5: await User.findByIdAndUpdate({ "_id": instructorId }, { $inc: { "instructorRating.five": -1 } }, { new: true });
+          break;
+        default: ;
       }
     }
     switch (newRating) {
@@ -450,13 +461,13 @@ async function giveInstructorRating(req, res, next) {
     var average = (((z.one) + (z.two * 2) + (z.three * 3) + (z.four * 4) + (z.five * 5)) / (z.one + z.two + z.three + z.four + z.five)).toFixed(2);
     console.log(average);
     const xx = await User.findByIdAndUpdate({ "_id": instructorId }, { "instructorRating.avg": average }, { new: true });
-  const review = await User.updateOne({ "_id": userId,"purchasedCourses.courseID":courseId},
-  { "$set": { "purchasedCourses.$.instructorRating": newRating }}
-  );
+    const review = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
+      { "$set": { "purchasedCourses.$.instructorRating": newRating } }
+    );
     res.send(200);
 
   } catch (error) {
-    res.status(400).json({error:error.message})
+    res.status(400).json({ error: error.message })
   }
 
 };
@@ -468,33 +479,33 @@ async function giveCourseReview(req, res, next) {
   username = req.body.username;
   courseId = req.body.courseId;
   try {
-    if(req.body.oldReview){
+    if (req.body.oldReview) {
 
-    const reviewx =  await CourseTable.updateOne({ "_id": courseId,"review.username":username},
-    { "$set": { "review.$.reviewBody": review,"review.$.rating" : rating }}
-    );
+      const reviewx = await CourseTable.updateOne({ "_id": courseId, "review.username": username },
+        { "$set": { "review.$.reviewBody": review, "review.$.rating": rating } }
+      );
 
-    const R = await User.updateOne({ "_id": userId,"purchasedCourses.courseID":courseId},
-    { "$set": { "purchasedCourses.$.courseReview": review }}
-    );
+      const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
+        { "$set": { "purchasedCourses.$.courseReview": review } }
+      );
 
-    res.sendStatus(200);
+      res.sendStatus(200);
     }
-    else{
-      await CourseTable.updateOne({ "_id": courseId},
-    { "$push": { "review" : {"reviewBody": review,"rating" : rating,"username" : username }}}
-    );
+    else {
+      await CourseTable.updateOne({ "_id": courseId },
+        { "$push": { "review": { "reviewBody": review, "rating": rating, "username": username } } }
+      );
 
-    const R = await User.updateOne({ "_id": userId,"purchasedCourses.courseID":courseId},
-    { "$set": { "purchasedCourses.$.courseReview": review }}
-    );
-    res.sendStatus(200);
+      const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
+        { "$set": { "purchasedCourses.$.courseReview": review } }
+      );
+      res.sendStatus(200);
     }
-    
+
   } catch (error) {
-    res.status(400).json({error:error.message})
+    res.status(400).json({ error: error.message })
   }
- 
+
 }
 
 async function giveInstructorReview(req, res, next) {
@@ -505,53 +516,53 @@ async function giveInstructorReview(req, res, next) {
   courseId = req.body.courseId;
   instructorId = req.body.instructorId
   try {
-    if(req.body.oldReview){
+    if (req.body.oldReview) {
 
-    const reviewx =  await User.updateOne({ "_id": instructorId,"instructorReview.username":username},
-    { "$set": { "instructorReview.$.reviewBody": review,"instructorReview.$.rating" : rating }}
-    );
+      const reviewx = await User.updateOne({ "_id": instructorId, "instructorReview.username": username },
+        { "$set": { "instructorReview.$.reviewBody": review, "instructorReview.$.rating": rating } }
+      );
 
-    const R = await User.updateOne({ "_id": userId,"purchasedCourses.courseID":courseId},
-    { "$set": { "purchasedCourses.$.instructorReview": review }}
-    );
+      const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
+        { "$set": { "purchasedCourses.$.instructorReview": review } }
+      );
 
-    res.sendStatus(200);
+      res.sendStatus(200);
     }
-    else{
-     const re =  await User.updateOne({ "_id": instructorId},
-    { "$push": { "instructorReview" : {"reviewBody": review,"rating" : rating,"username" : username }}},{new :true}
-    );
+    else {
+      const re = await User.updateOne({ "_id": instructorId },
+        { "$push": { "instructorReview": { "reviewBody": review, "rating": rating, "username": username } } }, { new: true }
+      );
       console.log(re);
-    const R = await User.updateOne({ "_id": userId,"purchasedCourses.courseID":courseId},
-    { "$set": { "purchasedCourses.$.instructorReview": review }}
-    );
-    res.sendStatus(200);
+      const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
+        { "$set": { "purchasedCourses.$.instructorReview": review } }
+      );
+      res.sendStatus(200);
     }
-    
+
   } catch (error) {
-    res.status(400).json({error:error.message})
+    res.status(400).json({ error: error.message })
   }
- 
+
 }
 
-async function selectCourse(req, res, next){
+async function selectCourse(req, res, next) {
   try {
     let info = {};
     let exercise = {};
     if (req.body.courseId) {
-      if(req.body.userId){
-        var instructor = await CourseTable.findOne({ "instructorID": req.body.userId },{instructorID:1});
-        if(instructor){
+      if (req.body.userId) {
+        var instructor = await CourseTable.findOne({ "instructorID": req.body.userId }, { instructorID: 1 });
+        if (instructor) {
           info.Owner = "yes";
-          x = await CourseTable.findOne({ "_id": req.body.courseId },{ review:{ "$slice": 3 }});
+          x = await CourseTable.findOne({ "_id": req.body.courseId }, { review: { "$slice": 3 } });
           info.course = x;
-          var instructor = await User.findOne({"_id":(x.instructorID)}).select({
-            instructorRating:1,
-            biography:1,
-            _id:1,
-            firstname:1,
-            lastname:1,
-            instructorReview:{ "$slice": 3 }
+          var instructor = await User.findOne({ "_id": (x.instructorID) }).select({
+            instructorRating: 1,
+            biography: 1,
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            instructorReview: { "$slice": 3 }
           });
           info.instructor = instructor;
           info.course = x;
@@ -559,45 +570,45 @@ async function selectCourse(req, res, next){
           return;
         }
         var x = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 1 });
-      //var y = Object.values(x);
-      //console.log(x);
-      if(x.purchasedCourses){
-      for (var i = 0; i < x.purchasedCourses.length; i++) {
-        var z = Object.values(x.purchasedCourses)[i];
-        if (z.courseID == req.body.courseId) {
-          if(z.courseRating){
-            info.yourCourseRating = z.courseRating;
+        //var y = Object.values(x);
+        //console.log(x);
+        if (x.purchasedCourses) {
+          for (var i = 0; i < x.purchasedCourses.length; i++) {
+            var z = Object.values(x.purchasedCourses)[i];
+            if (z.courseID == req.body.courseId) {
+              if (z.courseRating) {
+                info.yourCourseRating = z.courseRating;
+              }
+              if (z.instructorRating) {
+                info.yourInstructorRating = z.instructorRating;
+              }
+              if (z.courseReview) {
+                info.yourCourseReview = z.courseReview;
+              }
+              if (z.instructorReview) {
+                info.yourinstructorReview = z.instructorReview;
+              }
+              info.purchased = "yes";
+              x = await CourseTable.findOne({ "_id": req.body.courseId },
+                { review: { "$slice": 3 } });
+              info.course = x;
+              var instructor = await User.findOne({ "_id": (x.instructorID) }).select({
+                instructorRating: 1,
+                biography: 1,
+                _id: 1,
+                firstname: 1,
+                lastname: 1,
+                instructorReview: { "$slice": 3 }
+              });
+              info.instructor = instructor;
+              info.course = x;
+              res.send(info);
+              return;
+            }
           }
-          if(z.instructorRating){
-            info.yourInstructorRating = z.instructorRating;
-          }
-          if(z.courseReview){
-            info.yourCourseReview = z.courseReview;
-          }
-          if(z.instructorReview){
-            info.yourinstructorReview = z.instructorReview;
-          }
-          info.purchased = "yes";
-          x = await CourseTable.findOne({ "_id": req.body.courseId },
-          { review:{ "$slice": 3 }});
-          info.course = x;
-          var instructor = await User.findOne({"_id":(x.instructorID)}).select({
-            instructorRating:1,
-            biography:1,
-            _id:1,
-            firstname:1,
-            lastname:1,
-            instructorReview:{ "$slice": 3 }
-          });
-          info.instructor = instructor;
-          info.course = x;
-          res.send(info);
-          return;
         }
       }
-      }
-    }
-     var x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
+      var x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
         _id: 1,
         title: 1,
         courseHours: 1,
@@ -605,43 +616,43 @@ async function selectCourse(req, res, next){
         courseImage: 1,
         rating: 1,
         instructorName: 1,
-        instructorID :1,
+        instructorID: 1,
         subject: 1,
         summary: 1,
         discount: 1,
         discountPrice: 1,
-        "subtitles.header":1,
-        "subtitles.summary":1,
-        "subtitles.contents.contentTitle":1,
-        "subtitles.contents.duration":1,
-        review:{ "$slice": 3 }
+        "subtitles.header": 1,
+        "subtitles.summary": 1,
+        "subtitles.contents.contentTitle": 1,
+        "subtitles.contents.duration": 1,
+        review: { "$slice": 3 }
       });
       console.log(x);
-      var instructor = await User.findOne({"_id":(x.instructorID)}).select({
-        instructorRating:1,
-        biography:1,
-        _id:1,
-        firstname:1,
-        lastname:1,
-        instructorReview:{ "$slice": 3 }
+      var instructor = await User.findOne({ "_id": (x.instructorID) }).select({
+        instructorRating: 1,
+        biography: 1,
+        _id: 1,
+        firstname: 1,
+        lastname: 1,
+        instructorReview: { "$slice": 3 }
       });
       let q = {};
       q.purchased = "no";
       q.course = x;
-      q.instructor= instructor;
+      q.instructor = instructor;
       res.send(q);
     }
-    
+
   } catch (error) {
-    res.status(400).json({error:error.message})
+    res.status(400).json({ error: error.message })
   }
 }
 
 async function ViewMyCourses(req, res, next) {
   try {
-      var CurrentPage = req.query.page ? req.query.page : 1; 
-      var y = await User.findOne({ "_id": req.query.userId }).select({ purchasedCourses: 1, _id: 0 });
-      if(y.purchasedCourses.length){
+    var CurrentPage = req.query.page ? req.query.page : 1;
+    var y = await User.findOne({ "_id": req.query.userId }).select({ purchasedCourses: 1, _id: 0 });
+    if (y.purchasedCourses.length) {
       var ids = [y.purchasedCourses.length];
 
       for (var i = 0; i < y.purchasedCourses.length; i++) {
@@ -663,23 +674,23 @@ async function ViewMyCourses(req, res, next) {
     }
     res.send(y.purchasedCourses);
   } catch (error) {
-    res.status(400).json({error:error.message})
+    res.status(400).json({ error: error.message })
   }
 };
 
 async function takeExam(req, res, next) {
   try {
-    const exam = await ExerciseTable.find({"_id":req.query.examID}).select({
-      "_id":1,
-      "courseID" :1,
-      "exerciseTitle":1,
-      "questions":1,
-      "totalGrade":1
-  });
-  res.status(200).json(exam);
+    const exam = await ExerciseTable.find({ "_id": req.query.examID }).select({
+      "_id": 1,
+      "courseID": 1,
+      "exerciseTitle": 1,
+      "questions": 1,
+      "totalGrade": 1
+    });
+    res.status(200).json(exam);
   }
   catch (err) {
-    res.status(400).json({error:error.message})
+    res.status(400).json({ error: error.message })
   }
 };
 
@@ -700,6 +711,58 @@ async function buyCourse(req, res, next) {
   }
 };
 
+async function submitAnswer(req,res){
+  try{
+    var user_id=req.body.userID;
+    var counter=0;
+    var course_id=req.body.courseID;
+    var course =await CourseTable.findById(course_id);
+    var subtitles=course.subtitles;
+    var excerciseID=subtitles[0].exercise;
+    var actualExcercise=await ExerciseTable.findById(excerciseID);
+    var answers=req.body.answers;
+    for(let i=0;i<answers.length;i++){
+      if(answers[i]==actualExcercise.questions[i].answer){
+        counter++
+      }
+    }
+    
+
+    //var user=await User.findById(user_id);
+    const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
+    { "$push": { "purchasedCourses.$.excercises": 
+    {"excerciseID":excerciseID,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
+    );
+    res.send(re);
+    
+  }
+  catch(error){
+    console.log(error);
+  }
+  
+};
+
+  async function test(req,res){
+    try{
+      var x = await User.find()
+      res.send(x);
+
+  }
+  catch(error){
+    console.log(error);
+  }
+};
+
 module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
    buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
-    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview,takeExam }
+    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview,submitAnswer,test }
+
+
+    
+
+
+  /*{
+    "user_id":"6383d9da6670d09304d2b016",
+    "courseID":"637f97cb7c7a24250c993ae2",
+    "answers":["what","about"]
+}*/

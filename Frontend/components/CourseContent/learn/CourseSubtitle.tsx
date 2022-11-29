@@ -2,13 +2,17 @@ import React from "react";
 import CourseSubtitleData from "../CourseSubtitleData";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import { OneSubtitleData } from "../../../Interface/OneSubtitleData";
 
-type Props = {};
+type Props = {
+  Data:OneSubtitleData
+};
 
 const CourseSubtitle = (props: Props) => {
   const [animationParent] = useAutoAnimate<HTMLDivElement>();
   const [onClick, SetonClick] = React.useState(false);
   const [ShowSubtitle, SetShowSubtitle] = React.useState(false);
+  let Hours=Math.floor( props.Data.totalMinutes/60);
 
   return (
     <div className="mb-4 ">
@@ -20,13 +24,12 @@ const CourseSubtitle = (props: Props) => {
           }}
           className="flex justify-between items-center gap-10 mb-4 cursor-pointer"
         >
-          <h1 className="text-2xl font-bold">Learn to code</h1>
-          <p className="text-sm">10 hours to complete</p>
-
           <div className={"flex items-center gap-9"}>
-            {" "}
             {ShowSubtitle ? <AiOutlineMinus /> : <AiOutlinePlus />}
+            <h1 className="text-2xl font-bold">{props.Data.header}</h1>
           </div>
+          <p className="text-sm">{Hours} h</p>
+  
         </div>
         {ShowSubtitle && (
           <div>
@@ -43,7 +46,7 @@ const CourseSubtitle = (props: Props) => {
             </p>
             <div className="flex items-center gap-4 mb-10">
               <div>Icon</div>
-              <p className="text-sm">10 videos,5 documents and 1 quiz</p>
+              <p className="text-sm">{props.Data.contents.length} videos,{props.Data.exercise.exerciseTitle&& "1 quiz"}</p>
               <p
                 onClick={() => {
                   SetonClick((prev) => !prev);
@@ -59,26 +62,9 @@ const CourseSubtitle = (props: Props) => {
       {onClick && ShowSubtitle && (
         <div className="mb-20">
           <CourseSubtitleData
-            type="video"
-            Data={[
-              "Introduction",
-              "Introduction",
-              "Introduction",
-              "Introduction",
-              "Introduction",
-              "Introduction",
-              "Introduction",
-            ]}
+            Data={props.Data.contents}
           ></CourseSubtitleData>
-          <CourseSubtitleData
-            type="Reading"
-            Data={[
-              "Introduction",
-              "Introduction",
-              "Introduction",
-              "Introduction",
-            ]}
-          ></CourseSubtitleData>
+      
         </div>
       )}
     </div>
