@@ -583,7 +583,7 @@ async function selectCourse(req, res, next) {
                 info.yourInstructorRating = z.instructorRating;
               }
               if (z.courseReview) {
-                info.yourCourseRating = z.courseReview;
+                info.yourCourseReview = z.courseReview;
               }
               if (z.instructorReview) {
                 info.yourinstructorReview = z.instructorReview;
