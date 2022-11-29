@@ -640,7 +640,7 @@ async function selectCourse(req, res, next){
 async function ViewMyCourses(req, res, next) {
   try {
       var CurrentPage = req.query.page ? req.query.page : 1; 
-      var y = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 0 });
+      var y = await User.findOne({ "_id": req.query.userId }).select({ purchasedCourses: 1, _id: 0 });
       console.log(y);
       if(y){
       var ids = [y.purchasedCourses.length];

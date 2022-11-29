@@ -46,7 +46,7 @@ router.put("/buyCourse", buyCourse);
 
 router.get("/takeExam",takeExam);
 
-router.put("/viewMyCourses", ViewMyCourses);
+router.get("/viewMyCourses", ViewMyCourses);
 
 router.put("/giveCourseRating", giveCourseRating);
 
