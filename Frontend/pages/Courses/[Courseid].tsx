@@ -84,7 +84,6 @@ interface CourseData {
   
 }
 const Course: NextPage<CourseData> = (props) => {
-  const [Helper, SetHelper] = useState(false);
   const [NavApear, SetNavApear] = useState(false);
   const CourseHeroData:CourseHeroData={
     Title: props.data.title,
@@ -106,6 +105,7 @@ const Course: NextPage<CourseData> = (props) => {
 
   }
 
+  console.log(props.data.instructorID)
   
 
   let ref1 = useRef<HTMLDivElement>(null);
@@ -115,6 +115,7 @@ const Course: NextPage<CourseData> = (props) => {
   let ref5 = useRef<HTMLDivElement>(null);
 
   return (
+ 
     <div>
       {NavApear && (
         <CourseContentNav
@@ -137,18 +138,18 @@ const Course: NextPage<CourseData> = (props) => {
         </div>
       </div>
 
-      {/* <img style={{ width: "100%" }} src="/images/3azama.jpg" /> */}
     </div>
   );
 };
 
 export async function getServerSideProps(context:GetServerSidePropsContext) {
   let id=context.params?.Courseid;
-  let res = await fetch(ApiUrl + `/Courses/GetCourse?id=${id}`);
+  let res = await fetch(ApiUrl + `/user/selectCourse?id=${id}`);
   let CoursesData = await res.json();
+  console.log(CoursesData)
   return {
     props: {
-      data: CoursesData[0],
+      data: {CoursesData},
     },
   };
 }

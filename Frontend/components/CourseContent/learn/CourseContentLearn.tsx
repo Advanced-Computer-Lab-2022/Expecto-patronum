@@ -5,7 +5,6 @@ import CourseSubtitle from "./CourseSubtitle";
 type Props = {
   Subtitles:CourseLearnData;
   
-  
 };
 
 const CourseContentLearn = (props: Props) => {
@@ -15,8 +14,7 @@ const CourseContentLearn = (props: Props) => {
         What You Will learn
       </h1>
    
-      <div className="flex">
-        <div>Line</div>
+      
         <div className="w-1/2">
           {props.Subtitles.Subtitles.map((subtitle,index) => (
              <CourseSubtitle Data={subtitle} key={index}></CourseSubtitle>
@@ -24,7 +22,6 @@ const CourseContentLearn = (props: Props) => {
 
           ))}
        
-        </div>
       </div>
     </div>
   );

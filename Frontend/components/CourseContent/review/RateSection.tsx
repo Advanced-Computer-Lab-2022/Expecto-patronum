@@ -12,7 +12,7 @@ const RateSection = (props: Props) => {
       <div className="flex gap-4 items-center mb-4">
         <p className="text-5xl font-bold">4.8</p>
         <div className="text-center">
-          <BigRating Rate={4.8}></BigRating>
+          <BigRating RateAction={false} Rate={4.8}></BigRating>
           <p>1300 Rate</p>
         </div>
       </div>

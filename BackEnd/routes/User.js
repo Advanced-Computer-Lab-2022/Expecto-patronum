@@ -30,6 +30,7 @@ router.get("/forgetPassword/:token", VerifyTokenMiddleware, (req, res) => {
   res.send({ Error: false, Message: 'Token is valid' });
 })
 router.post("/ChangeForgottenPassword/:token", VerifyTokenMiddleware, ChangeForgottenPassword);
+
 router.post("/ChangePassword", isAuth, ChangePassword);
 
 router.post("/ChangeEmail", isAuth, ChangeEmail);
@@ -43,17 +44,17 @@ router.get('/logout', Logout);
 
 router.put("/buyCourse", buyCourse);
 
-router.get("/takeExam",takeExam);
+router.get("/takeExam", takeExam);
 
 router.put("/viewMyCourses", ViewMyCourses);
 
 router.put("/giveCourseRating", giveCourseRating);
 
-router.put("/giveInstructorRating", giveInstructorRating );
+router.put("/giveInstructorRating", giveInstructorRating);
 
 router.put("/selectCourse", selectCourse);
 
-router.put("/giveCourseReview", giveCourseReview );
+router.put("/giveCourseReview", giveCourseReview);
 
-router.put("/giveInstructorReview", giveInstructorReview );
+router.put("/giveInstructorReview", giveInstructorReview);
 module.exports = router;

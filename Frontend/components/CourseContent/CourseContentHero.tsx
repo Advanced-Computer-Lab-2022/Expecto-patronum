@@ -11,8 +11,6 @@ type Props = {
 
   
   
-  
-
 };
 
 const CourseContentHero = (props: Props) => {
