@@ -711,8 +711,58 @@ async function buyCourse(req, res, next) {
   }
 };
 
-module.exports = {
-  register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
-  buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
-  ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview, giveInstructorReview, takeExam
-}
+async function submitAnswer(req,res){
+  try{
+    var user_id=req.body.userID;
+    var counter=0;
+    var course_id=req.body.courseID;
+    var course =await CourseTable.findById(course_id);
+    var subtitles=course.subtitles;
+    var excerciseID=subtitles[0].exercise;
+    var actualExcercise=await ExerciseTable.findById(excerciseID);
+    var answers=req.body.answers;
+    for(let i=0;i<answers.length;i++){
+      if(answers[i]==actualExcercise.questions[i].answer){
+        counter++
+      }
+    }
+    
+
+    //var user=await User.findById(user_id);
+    const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
+    { "$push": { "purchasedCourses.$.excercises": 
+    {"excerciseID":excerciseID,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
+    );
+    res.send(re);
+    
+  }
+  catch(error){
+    console.log(error);
+  }
+  
+};
+
+  async function test(req,res){
+    try{
+      var x = await User.find()
+      res.send(x);
+
+  }
+  catch(error){
+    console.log(error);
+  }
+};
+
+module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
+   buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
+    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview,submitAnswer,test }
+
+
+    
+
+
+  /*{
+    "user_id":"6383d9da6670d09304d2b016",
+    "courseID":"637f97cb7c7a24250c993ae2",
+    "answers":["what","about"]
+}*/

@@ -329,20 +329,37 @@ async function discount(req, res, next) {
     
   }
 
-  async function testAll(req,res){
-    try{
-      var test=await CourseTable.find();
-      res.send(test);
+  
+
+    async function updateBio(req,res){
+      try{var currentId=req.body.userID;
+        var currentBio=req.body.newBio;
+        var updatedBio=await User.findByIdAndUpdate(currentId,{"biography":currentBio});
+        res.send(updatedBio);
+      }
+        catch(error){
+          console.log(error);
+        }
+      
     }
-    catch(error){
-      console.log(error);
+
+    
+
+    async function testingAll(req,res){
+      try{
+        var whatever=await ExerciseTable.find();
+        res.send(whatever);
+      }
+      catch(error){
+        console.log(error);
+      }
     }
     
-  }
+  
 
 
 
 
 
 
-module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,testAll};
+module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,updateBio,testingAll};
