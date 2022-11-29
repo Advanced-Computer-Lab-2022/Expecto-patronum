@@ -19,13 +19,21 @@ const CourseTable = require('../models/CourseSchema');
             _id:1
         });
         console.log(x);
-        var y = await User.findOne({"_id": req.body.UserID,"purchasedCourses.excercises.excerciseID":req.body.exerciseID},
-        {"purchasedCourses.$.excercises":1});
-        console.log(y);
+        var y = await User.findOne({"_id": req.query.userID,"purchasedCourses.excercises.excerciseID":req.query.exerciseID},
+        {purchasedCourses:{ $elemMatch : {courseID:req.query.courseID}}}
+        );
         let q = {};
         if(y){
-          q.grade = y.purchasedCourses;
-        }
+          var exe = y.purchasedCourses[0].excercises;
+          for(var i = 0; i<exe.length;i++){
+            if(exe[i].excerciseID ==req.query.exerciseID){
+              if(exe[i].grade){
+              q.yourGrade =exe[i].grade;
+              }
+              break;
+            };
+          }
+          }
         q.exerciseTitle = x.exerciseTitle;
         q.exerciseID = x._id;
         q.totalGrade = x.totalGrade;
@@ -38,23 +46,34 @@ const CourseTable = require('../models/CourseSchema');
 
   async function viewAnswer(req, res, next) {
     try {
-        var x = await ExerciseTable.findOne({"_id":req.body.exerciseID},{
+        var x = await ExerciseTable.findOne({"_id":req.query.exerciseID},{
             exerciseTitle:1,
             totalGrade:1,
             _id:1,
             questions:1
         });
-        console.log(x);
-        var y = await User.findOne({"_id": req.body.UserID,"purchasedCourses.excercises.excerciseID":req.body.exerciseID},
-        {"purchasedCourses.$.excercises":1});
+        var y = await User.findOne({"_id": req.query.userID,"purchasedCourses.excercises.excerciseID":req.query.exerciseID},
+        {purchasedCourses:{ $elemMatch : {courseID:req.query.courseID}}}
+        );
         console.log(y);
         let q = {};
         if(y){
-          q.grade = y.purchasedCourses;
+        var exe = y.purchasedCourses[0].excercises;
+        for(var i = 0; i<exe.length;i++){
+          if(exe[i].excerciseID ==req.query.exerciseID){
+            if(exe[i].grade){
+            q.yourGrade =exe[i].grade;
+            }
+            q.yourAnswers = exe[i].exercisesAnswers.answer;
+            break;
+          };
+        }
+
         }
         q.exerciseTitle = x.exerciseTitle;
         q.exerciseID = x._id;
         q.totalGrade = x.totalGrade;
+        q.questions = x.questions;
         res.status(200).send(q);
     } catch (error) {
       console.log(error);
@@ -63,4 +82,4 @@ const CourseTable = require('../models/CourseSchema');
   };
 
 
-  module.exports = { SelectExercise}
+  module.exports = { SelectExercise,viewAnswer}
