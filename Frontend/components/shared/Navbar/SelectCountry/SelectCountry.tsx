@@ -1,7 +1,10 @@
 import classNames from 'classnames';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { GiEarthAmerica } from 'react-icons/gi';
 import countryList from 'react-select-country-list';
+import DataContext from '../../../../context/DataContext';
+import axios from "axios";
+
 
 type Props = {}
 
@@ -10,6 +13,7 @@ const SelectCountry = (props: Props) => {
     const selectRef = useRef<any>();
     const selectCountryRef = useRef<any>();
     const [countries, setCountries] = useState(countryList().getData());
+    const { Rate, SetRate } = useContext(DataContext);
 
     const filterSearch = (e: any) => {
         const includedCountries = countryList().getData().filter((country) => (
@@ -17,6 +21,7 @@ const SelectCountry = (props: Props) => {
         ));
         setCountries(includedCountries);
     }
+
 
     function toggleSelect() {
         selectRef.current.classList.toggle("h-0");
@@ -27,14 +32,43 @@ const SelectCountry = (props: Props) => {
             selectRef.current.children[0].focus();
     }
 
-    const selectCountry = (e: any, country: any) => {
-        console.log(country.value, country.label);
-        
+    const selectCountry =async (e: any, country: any) => {
         e.preventDefault();
+        axios.defaults.withCredentials = true;
+       let  response = await axios
+          .get("http://localhost:5000/User/countryRate", {
+            params: {
+              country: country.value,
+            },
+          })
+          .then((res: { data: any }) => {
+            return res.data;
+          });
+        localStorage.setItem("rate", response.rate);
+        localStorage.setItem("curr", response.curr);
+        localStorage.setItem("country", country.value);
+        SetRate({ ...response, Country: country.value });
+        var x = localStorage.getItem("rate");      
     }
 
-    // useEffect(() => {
-    //     document.onmouseup = ((e) => {
+    useEffect(() => {
+        let RateInfo = localStorage.getItem("rate");
+        let Curr = localStorage.getItem("curr");
+        let Country = localStorage.getItem("country");
+        console.log(RateInfo, Curr, Country);
+    
+        if (RateInfo !== null && Curr !== null && Country !== null) {
+          SetRate({
+            rate: parseInt(RateInfo),
+            curr: Curr,
+            Country: Country,
+          });
+        }
+      }, []);
+
+
+    useEffect(() => {
+        document.onmouseup = ((e) => {
 
     //         const selectCountryButton = selectCountryRef.current?.children[0].getBoundingClientRect();
     //         const selectCountryData = selectCountryRef.current?.children[1].getBoundingClientRect();
@@ -67,7 +101,7 @@ const SelectCountry = (props: Props) => {
   return (
     <div ref={selectCountryRef}>
         <button type="button" onClick={toggleSelect} className={selectButton}><GiEarthAmerica className={selectButtonIcon} /></button>
-        <div onBlur={closeSearch} ref={selectRef} className={selectDiv}>
+        <div onBlur={closeSearch} ref={selectRef} className={selectDiv} >
             <input type='text' placeholder='Search' onChange={filterSearch} className={selectSearch} />
             <div className={allCountries}>
                 <form>

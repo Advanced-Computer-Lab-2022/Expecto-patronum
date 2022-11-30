@@ -1,5 +1,6 @@
 import React from "react";
 import type { NextPage } from "next";
+import UserHome from "./UserHome";
 
 const Home: NextPage = () => {
   return (

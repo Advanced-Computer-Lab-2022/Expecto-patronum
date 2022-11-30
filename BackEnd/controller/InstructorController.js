@@ -3,6 +3,7 @@ const instructorTable = require('../models/InstructorSchema');
 const User = require('../models/UserSchema');
 //const { isInstructor } = require('../middleware/RolesMiddleware');
 const CourseTable = require('../models/CourseSchema');
+const ExerciseTable = require('../models/ExcerciseSchema');
 const { query, response } = require('express');
 
 
@@ -37,7 +38,7 @@ async function viewCourses(req, res, next) {
 
   }
   catch (err) {
-    console.log(err);
+    res.status(400).json({error:err.message})
   }
 };
 
@@ -239,17 +240,51 @@ async function addCourse(req, res, next) {
     skills: req.body.skills,
     level: req.body.level,
     courseHours: req.body.courseHours,
-    exercises: req.body.exercises,
+    //exercises: req.body.exercises,
     rating: req.body.rating,
     instructorName: name,
-    discountPrice: req.body.price
+    discountPrice: req.body.price,
+    review:req.body.review,
+    courseImage:req.body.courseImage
   });
 
   try {
     newCourse.save();
-    res.send(newCourse);
+   // res.send(newCourse);
+    console.log("course added succsessfully");
+    if(req.body.exercises){
+    var z = Object.values(newCourse)[0] ;
+    console.log(z._id);
+    let exercises = req.body.exercises;
+    for(var i = 0;i<exercises.length;i++){
+      var q =  exercises[i] ;
+      q.courseID = z._id;
+      const newExercise = new ExerciseTable(q);
+      await newExercise.save();
+    }
+    var courseid = z._id;
+    const exe = await ExerciseTable.find({courseID:courseid}).select({"_id":1,"subtitleName":1});
+    console.log(exe);
+    //var z = Object.values(exe)[0] ;
+     for(var i=0;i<exe.length;i++){
+       var z = exe[i] ;
+       if(z.subtitleName){
+        await CourseTable.updateOne({ "_id": courseid,"subtitles.header": z.subtitleName },
+          { "$push": { "subtitles.$.exercise.$.exerciseID" : z._id,"subtitles.$.exercise.$.exerciseName" : z.exerciseTitle}}
+          );
+      }
+      else{
+        await CourseTable.updateOne({ "_id": courseid},
+        { "$set": { "finalExam" : z._id}}
+        );
+      }
+      
+     }
+    }
+    res.send("Course Added");
+
   } catch (err) {
-    console.log(err);
+    res.status(400).json({error:err.message})
   };
 };
 
@@ -266,8 +301,8 @@ async function discount(req, res, next) {
     startDate = new Date();
     queryCond.startDate = startDate;
   }
-  endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + req.body.duration);
+  endDate = new Date(req.body.endDate);
+  // endDate.setDate(endDate.getDate() + req.body.duration);
   queryCond.endDate = endDate;
   discount = 1 - (discount / 100);
   try {
@@ -280,11 +315,59 @@ async function discount(req, res, next) {
     res.status(200).json(x);
 
   } catch (error) {
-    console.log(error);
+    res.status(400).json({error:error.message})
+  }
+}
+
+  
+  async function viewCourseRatings(req,res,next){
+    try{
+      var currentID=await req.body.userID;
+      var currentCourseID=await req.body.courseID;
+      var ratings=await CourseTable.find({
+        "instructorID":currentID, "_id":currentCourseID
+
+      }).select({ "title": 1, "summary": 1,"rating":1,"review":1});
+      //const rates=[Object.values(ratings)[4]];
+      res.send(ratings);
+    }
+    catch(error){
+      res.status(400).json({error:error.message})
+    }
+    
   }
 
+  
 
-};
+    async function updateBio(req,res){
+      try{var currentId=req.body.userID;
+        var currentBio=req.body.newBio;
+        var updatedBio=await User.findByIdAndUpdate(currentId,{"biography":currentBio});
+        res.send(updatedBio);
+      }
+        catch(error){
+          console.log(error);
+        }
+      
+    }
+
+    
+
+    async function testingAll(req,res){
+      try{
+        var whatever=await ExerciseTable.find();
+        res.send(whatever);
+      }
+      catch(error){
+        console.log(error);
+      }
+    }
+    
+  
 
 
-module.exports = { viewCourses, filterCourses, addCourse, discount };
+
+
+
+
+module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,updateBio,testingAll};

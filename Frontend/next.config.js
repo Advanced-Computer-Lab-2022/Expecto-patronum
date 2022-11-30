@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['i.ibb.co'], //your-external-link-hostname
+    domains: ['i.ibb.co', 'cancham.org.eg'], //your-external-link-hostname
   },
 }
 

@@ -1,5 +1,4 @@
 import React from "react";
-import BigRating from "../../shared/rating/BigRating";
 import RateSection from "./RateSection";
 import ReviewSection from "./ReviewSection";
 
