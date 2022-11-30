@@ -87,7 +87,7 @@ async function getRate(req, res, next) {
 
 function forgetPassword(req, res, next) {
   let userMail = req.body.email;
-  User.findOne({ email: userMail.toLowerCase() },
+  User.findOne({ email: { $regex: userMail, $options: 'i' } },
     (err, user) => {
       if (err) {
         console.log("Mail Sent");
@@ -219,23 +219,33 @@ function ChangePassword(req, res, next) {
                 console.log(err);
               }
               else {
-                res.send("Password Changed");
+                res.send({ Error: false, Message: "Password Changed" });
+                req.logout(function (err) {
+                  if (err) {
+                    console.log(err);
+                  }
+                });
+                console.log("Password Changed");
               }
             })
           }
           else {
-            res.send("Invalid Password");
+            res.send({ Error: true, Message: "Wrong Password" });
+            console.log("Wrong Password");
           }
 
         }
         else {
-          res.send("Invalid Request");
+          res.send({ Error: true, Message: "Invalid Request" });
+          console.log("old Password is not provided");
         }
 
 
       }
       else {
-        res.send("user not found");
+        res.send({ Error: false, Message: "user not found" });
+        console.log("user not found");
+
       }
     })
 

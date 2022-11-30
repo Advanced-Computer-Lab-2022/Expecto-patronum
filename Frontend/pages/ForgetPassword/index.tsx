@@ -6,7 +6,7 @@ type Props = {}
 const index = (props: Props) => {
   return (
     <ForgotPassword></ForgotPassword>
-    
+
   )
 }
 
