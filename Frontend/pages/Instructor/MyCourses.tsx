@@ -45,11 +45,12 @@ const MyCourses = (props: Props) => {
     axios.defaults.withCredentials = true;
     await axios.get("http://localhost:5000/Instructor/filterCourses", {
       params: {
+        instructorID: '63877fb65c8dac5284aaa3c2',
         page: !isSearch ? pageIndex + 1: 1,
         coursesPerPage: 10,
       },
     }).then((res: { data: any }) => {
-        console.log( 'Get',res.data.TotalCount);
+        console.log( 'Get',res.data.Courses);
         setCourses(res.data.Courses);
         setTotalCount(res.data.TotalCount);
       });
@@ -87,6 +88,7 @@ const MyCourses = (props: Props) => {
   async function courseSearch(pageIndex: number) {
     await axios.get("http://localhost:5000/Instructor/filterCourses", {
       params: {
+          instructorID: '63877fb65c8dac5284aaa3c2',
           keyword: search,
           page: isSearch ? page + 1: 1,
           coursesPerPage: 10,
@@ -142,12 +144,12 @@ const MyCourses = (props: Props) => {
           </div>
 
           <div className={(!isGridViewList ? 'grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-x-20': '') + ' sb-max:ml-8 sb-max:mr-22 text-white mx-8'}>
-            {(courses ? courses: courseData).map((course: any, index: number) => {
+            {courses && (courses ? courses: courseData).map((course: any, index: number) => {
               return (
                 <div key={index} className={`h-42 w-full mb-10 p-4 relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg bg-gradient-to-br cursor-pointer ${levelColor(course.level)}`}>
                   <h1 className='text-2xl pr-16'>{course.title}</h1>
                   <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
-                      <OneStar rating={2.47} />
+                      <OneStar rating={course.rating.avg} />
                   </div>
                   <p className='pl-3'>Subject: <span className='opacity-95'>{course.subject}</span></p>
                   <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level === 'AllLevels' ? 'All Levels': course.level}</span></p>

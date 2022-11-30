@@ -77,7 +77,7 @@ const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
             Skills you will Gain:{summary}
           </span>
         </p>
-        <p className="text-sm text-black/90  ">{courseHours / 60} hours</p>
+        <p className="text-sm text-black/90  ">{Math.round(courseHours)} hours</p>
         <p className="text-sm text-black font-bold  ">
           {Math.floor(price * Rate.rate)}
           {Rate.curr}

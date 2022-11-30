@@ -73,14 +73,14 @@ const AddNewCourse = (props: Props) => {
     });
 
     axios.defaults.withCredentials = true;
-        response = await axios.post("http://localhost:5000/Course/CreateCourse", {
-            courseInfo: newCourseInfo,
-            courseHours: courseHours,
-            subtitles: subtitles,
-            courseIcon: courseIcon,
-        }).then(res => {return res.data});
+    response = await axios.post("http://localhost:5000/Course/CreateCourse", {
+        courseInfo: newCourseInfo,
+        courseHours: courseHours,
+        subtitles: subtitles,
+        courseIcon: courseIcon,
+    }).then(res => {return res.data});
 
-        console.log(response);
+    console.log(response);
   }
 
   return (

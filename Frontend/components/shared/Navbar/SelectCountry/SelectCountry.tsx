@@ -67,8 +67,8 @@ const SelectCountry = (props: Props) => {
       }, []);
 
 
-    useEffect(() => {
-        document.onmouseup = ((e) => {
+    // useEffect(() => {
+    //     document.onmouseup = ((e) => {
 
     //         const selectCountryButton = selectCountryRef.current?.children[0].getBoundingClientRect();
     //         const selectCountryData = selectCountryRef.current?.children[1].getBoundingClientRect();
@@ -92,10 +92,10 @@ const SelectCountry = (props: Props) => {
     // },[])
 
     function closeSearch() {
-        selectRef.current.classList.add("h-0");
-        selectRef.current.classList.remove("h-48");
-        selectRef.current.classList.remove("pb-2");
-        selectRef.current.classList.remove("border-1.5");
+      selectRef.current.classList.add("h-0");
+      selectRef.current.classList.remove("h-48");
+      selectRef.current.classList.remove("pb-2");
+      selectRef.current.classList.remove("border-1.5");
     }
 
   return (
