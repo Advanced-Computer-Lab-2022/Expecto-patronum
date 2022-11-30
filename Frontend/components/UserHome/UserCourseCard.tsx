@@ -1,9 +1,12 @@
 import classNames from 'classnames'
 import Image from 'next/image';
 import React from 'react'
+import { UserCourseDataInterface } from '../../Interface/UserCourseDataInterface';
 import ProgressBar from '../shared/progress/ProgressBar';
 
-type Props = {}
+type Props = {
+  course:UserCourseDataInterface
+}
 
 const UserCourseCard = (props: Props) => {
   let [Progress,SetProgress]=React.useState(10);
@@ -24,9 +27,9 @@ const UserCourseCard = (props: Props) => {
         </div>
     </div>
     <div className={TextBox}>
-    <p className={CardTitle}>title</p>
-      <p className='text-md'>instructor</p>
-      <p className={CardDescription}> (with authentication, Node.js security, payments & more)</p>
+    <p className={CardTitle}>{props.course.title}</p>
+      <p className='text-md'>{props.course.instructorName}</p>
+      <p className={CardDescription}> {props.course.summary}</p>
     </div>
     <div className={Progress==0?ProgressContainerZero:ProgressContainer}>
       {Progress==0?<p className={StartCourse}>Start Course</p>
