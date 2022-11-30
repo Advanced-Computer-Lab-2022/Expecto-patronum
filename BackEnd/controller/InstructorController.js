@@ -124,8 +124,10 @@ async function filterCourses(req, res, next) {
         }
       }
       else {
+        console.log("enter");
+        console.log(req.query.keyword);
         var y = await CourseTable.find(
-          { "instructorID": req.query.instructorID, $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, { "subject": { "$regex": req.query.keyword, "$options": "i" } }] })
+          { "instructorID": req.query.instructorID, $or: [{ title: { "$regex": req.query.keyword, "$options": 'i' } }, { subject: { "$regex": req.query.keyword, "$options": 'i' } }] })
           .select({
             _id: 1,
             title: 1,
@@ -139,12 +141,13 @@ async function filterCourses(req, res, next) {
             discount: 1,
             discountPrice: 1
           }).skip((CurrentPage - 1) * coursesPerPage).limit(coursesPerPage);
-    
+          console.log(y);
         var TotalCount = await CourseTable.countDocuments( { "instructorID": req.query.instructorID,
          $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, 
          { "subject": { "$regex": req.query.keyword, "$options": "i" } }] });
 
         res.send({ Courses: y, TotalCount: TotalCount });
+        return;
       }
     } catch (error) {
       res.status(400).json({error:error.message})
@@ -289,31 +292,49 @@ async function discount(req, res, next) {
   const courseID = req.body.courseID;
   var discount = req.body.discount;
   queryCond.discount = req.body.discount;
-  queryCond.duration = req.body.duration;
-  if(req.body.startDate){
-    startDate = new Date(req.body.startDate);
-    queryCond.startDate = req.body.startDate;
+  startDate = new Date(req.body.startDate);
+  queryCond.startDate = req.body.startDate;
+  const dateNow = new Date();
+  //queryCond.duration = req.body.duration;
+  if(startDate<= dateNow){
+    endDate = new Date(req.body.endDate);
+    queryCond.endDate = endDate;
+    discount = 1 - (discount / 100);
+    try {
+      queryCond.duration = 1;
+      const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
+      var z = Object.values(y)[0];
+      var discountPrice = (z.price * discount);
+  
+      discountPrice = discountPrice.toFixed(2);
+      const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond,discountPrice : discountPrice  }, { new: true });
+      res.status(200).json(x);
+  
+    } catch (error) {
+      res.status(400).json({error:error.message})
+    }
+    
   }else{
-    startDate = new Date();
-    queryCond.startDate = startDate;
-  }
-  endDate = new Date(req.body.endDate);
-  // endDate.setDate(endDate.getDate() + req.body.duration);
-  queryCond.endDate = endDate;
-  discount = 1 - (discount / 100);
-  try {
-    const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
-    var z = Object.values(y)[0];
-    var discountPrice = (z.price * discount);
+    endDate = new Date(req.body.endDate);
+    queryCond.endDate = endDate;
+    queryCond.duration = 0;
+    discount = 1 - (discount / 100);
+    try {
+      const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
+      var z = Object.values(y)[0];
+      var discountPrice = (z.price * discount);
+  
+      discountPrice = discountPrice.toFixed(2);
+      const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond }, { new: true });
+      res.status(200).json(x);
+  
+    } catch (error) {
+      res.status(400).json({error:error.message})
+    }
 
-    discountPrice = discountPrice.toFixed(2);
-    const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond, discountPrice: discountPrice }, { new: true });
-    res.status(200).json(x);
-
-  } catch (error) {
-    res.status(400).json({error:error.message})
   }
 }
+
 
   
   async function viewCourseRatings(req,res,next){
@@ -347,7 +368,23 @@ async function discount(req, res, next) {
       
     }
 
-    
+    async function cancelDiscount(req,res){
+      try{
+        var allCourses = await CourseTable.updateOne( {"_id" : req.body.courseId,
+        "discount.startDate": { $exists: true }},
+        [
+          {"$set":{discountPrice: "$price","discount.discount":0}},
+          { $unset: ["discount.startDate","discount.endDate","discount.duration"]}
+        ]
+        );
+        if(allCourses){
+          res.status(200).send("discount removed");
+        }
+      }
+      catch(error){
+        console.log(error);
+      }
+    }
 
     async function testingAll(req,res){
       try{
@@ -383,4 +420,4 @@ async function discount(req, res, next) {
 
 
 
-module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,updateBio,testingAll,viewProfile};
+module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,updateBio,testingAll,viewProfile,cancelDiscount};
