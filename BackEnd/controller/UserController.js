@@ -454,4 +454,54 @@ async function buyCourse(req, res, next) {
   }
 };
 
-module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating, buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword, ChangeEmail, UseChangeEmailToken }
+
+async function GenerateUsers(req, res) {
+
+  // for(var i = 0; i< instructors.length; i++) {
+
+  //   var saltHash = genPassword(instructors[i].password);
+  //   var salt = saltHash.salt;
+  //   var hash = saltHash.hash;
+
+  //   await User.create({
+  //     username: instructors[i].username,
+  //     email: instructors[i].email,
+  //     hash: hash,
+  //     salt: salt,
+  //     firstname: instructors[i].firstname,
+  //     lastname: instructors[i].lastname,
+  //     role: instructors[i].role,
+  //     biography: instructors[i].biography,
+  //   });
+  // }
+
+  // res.send("success: " + instructors.length);
+
+  res.send("uncomment first an comment this line");
+}
+
+async function ConnectInstructorsWithCourses(req, res) {
+
+  // for(var i = 0; i < 80; i++) {
+  //   // User i takes course i & i+1
+  //   var instructor = await User.find({ username: instructors[i].username}).select({ _id: 1, firstname: 1, lastname: 1 });
+  //   console.log(i, instructor[0]._id);
+
+  //   await CourseTable.findOneAndUpdate({ title: courses[2*i].title}, { instructorID: instructor[0]._id, instructorName:  instructor[0].firstname + " " + instructor[0].lastname });
+  //   await CourseTable.findOneAndUpdate({ title: courses[2*i + 1].title}, { instructorID: instructor[0]._id, instructorName:  instructor[0].firstname + " " + instructor[0].lastname });
+  // }
+
+  // for(var i = 0; i < 80; i++) {
+  //   // User i takes course i & i+1
+  //   var instructor = await User.find({ username: instructors[i].username}).select({ _id: 1, firstname: 1, lastname: 1 });
+  //   console.log(i, instructor[0]._id);
+
+  //   await CourseTable.findOneAndUpdate({ title: courses[2*(80-i) - 2].title}, { instructorID: instructor[0]._id, instructorName:  instructor[0].firstname + " " + instructor[0].lastname });
+  //   await CourseTable.findOneAndUpdate({ title: courses[2*(80-i) - 1].title}, { instructorID: instructor[0]._id, instructorName:  instructor[0].firstname + " " + instructor[0].lastname });
+  // }
+
+  // res.send("success");
+  res.send("uncomment first an comment this line");
+}
+
+module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating, buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword, ChangeEmail, UseChangeEmailToken, GenerateUsers, ConnectInstructorsWithCourses }

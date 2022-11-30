@@ -7,7 +7,7 @@ const passport = require('passport');
 const { isAuth } = require('../middleware/AuthMiddleware');
 const { Logout } = require('../controller/UserController');
 const { register } = require('../controller/UserController');
-const { giveCourseRating, buyCourse, ViewMyCourses } = require('../controller/UserController');
+const { giveCourseRating, buyCourse, ViewMyCourses, GenerateUsers, ConnectInstructorsWithCourses } = require('../controller/UserController');
 const UserTable = require('../models/UserSchema');
 
 router.get("/", (req, res) => {
@@ -46,5 +46,9 @@ router.put("/buyCourse", buyCourse);
 router.put("/viewMyCourses", ViewMyCourses);
 
 router.put("/giveCourseRating", giveCourseRating);
+
+
+router.post("/GenerateUsers", GenerateUsers);
+router.post("/ConnectInstructorsWithCourses", ConnectInstructorsWithCourses);
 
 module.exports = router;
