@@ -7,7 +7,6 @@ const ExerciseTable = require('../models/ExcerciseSchema');
 const { query, response } = require('express');
 
 
-
 async function viewCourses(req, res, next) {
   var CurrentPage = req.query.page ? req.query.page : 1;
   try {
@@ -189,10 +188,6 @@ async function filterCourses(req, res, next) {
   }
 };
 
-
-
-
-
 async function addCourse(req, res, next) {
 
   var x = await User.find({ "_id": req.body.instructorID }, { firstname: 1, lastname: 1, _id: 0 });
@@ -319,8 +314,7 @@ async function discount(req, res, next) {
   }
 }
 
-  
-  async function viewCourseRatings(req,res,next){
+async function viewCourseRatings(req,res,next){
     try{
       var currentID=await req.body.userID;
       var currentCourseID=await req.body.courseID;
@@ -335,11 +329,9 @@ async function discount(req, res, next) {
       res.status(400).json({error:error.message})
     }
     
-  }
+}
 
-  
-
-    async function updateBio(req,res){
+async function updateBio(req,res){
       try{var currentId=req.body.userID;
         var currentBio=req.body.newBio;
         var updatedBio=await User.findByIdAndUpdate(currentId,{"biography":currentBio});
@@ -349,11 +341,9 @@ async function discount(req, res, next) {
           console.log(error);
         }
       
-    }
+}
 
-    
-
-    async function testingAll(req,res){
+async function testingAll(req,res){
       try{
         var whatever=await ExerciseTable.find();
         res.send(whatever);
@@ -361,13 +351,6 @@ async function discount(req, res, next) {
       catch(error){
         console.log(error);
       }
-    }
-    
-  
-
-
-
-
-
+}
 
 module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,updateBio,testingAll};

@@ -764,6 +764,14 @@ async function GenerateUsers(req, res) {
 
 async function ConnectInstructorsWithCourses(req, res) {
 
+  // var instructor = await User.find({ _id: '63877fb65c8dac5284aaa3c2' }).select({ _id: 1, firstname: 1, lastname: 1 });
+
+  // for(var i = 160; i < 200; i++) {
+  //   await CourseTable.findOneAndUpdate({ title: courses[i].title}, { instructorID: instructor[0]._id, instructorName:  instructor[0].firstname + " " + instructor[0].lastname });
+  // }
+
+  // res.send(instructor);
+
   // for(var i = 0; i < 80; i++) {
   //   // User i takes course i & i+1
   //   var instructor = await User.find({ username: instructors[i].username}).select({ _id: 1, firstname: 1, lastname: 1 });
@@ -783,10 +791,9 @@ async function ConnectInstructorsWithCourses(req, res) {
   // }
 
   // res.send("success");
-  res.send("uncomment first an comment this line");
+  // res.send("uncomment first an comment this line");
 }
 
-module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating, buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword, ChangeEmail, UseChangeEmailToken, GenerateUsers, ConnectInstructorsWithCourses }
 async function submitAnswer(req,res){
   try{
     var user_id=req.body.userID;
@@ -818,7 +825,7 @@ async function submitAnswer(req,res){
   
 };
 
-  async function test(req,res){
+async function test(req,res){
     try{
       var x = await User.find()
       res.send(x);
@@ -829,13 +836,46 @@ async function submitAnswer(req,res){
   }
 };
 
-module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
-   buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
-    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview,submitAnswer,takeExam,test }
+async function getInstructorInfo(req, res) {
 
+  const id = req.query.id;
 
-    
+  const info = await User.find({ _id: id }).select({ email: 1 });
 
+  res.send(info[0]);
+
+}
+
+async function updateInstructorInfo(req, res) {
+  const { id, email , biography } = req.body;
+
+  if(email === '' && biography === '') {
+    res.send('No data entered to update.');
+    return;
+  } else if(email !== '' && biography !== '') {
+
+    await User.findOneAndUpdate({ _id: id }, { email: email, biography: biography });
+
+  } else {
+
+    if(email !== '')
+      await User.findOneAndUpdate({ _id: id }, { email: email });
+  
+    if(biography !== '')
+      await User.findOneAndUpdate({ _id: id }, { biography: biography });
+
+  }
+
+  res.send("Your information have been updated successfully.");
+}
+
+module.exports = { 
+  register, Logout, ViewAll, viewRatings, getRate, giveCourseRating, buyCourse, 
+  ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
+  ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview, 
+  giveInstructorReview, submitAnswer, takeExam, test, GenerateUsers, ConnectInstructorsWithCourses,
+  getInstructorInfo, updateInstructorInfo 
+}
 
   /*{
     "user_id":"6383d9da6670d09304d2b016",
