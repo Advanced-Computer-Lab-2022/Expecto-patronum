@@ -22,13 +22,22 @@ export interface AllCoursesData {
 const Courses: NextPage<AllCoursesData> = ({ data }) => {
   const [Loading, SetLoading] = useState(false);
 
-  Router.events.on("routeChangeComplete", () => {
-    SetLoading(false);
-  });
+  useEffect(() => {
 
-  Router.events.on("routeChangeStart", (url) => {
-    SetLoading(true);
-  });
+    Router.events.on("routeChangeComplete", () => {
+      SetLoading(false);
+    });
+
+    Router.events.on("routeChangeStart", (url) => {
+      if (!url.includes("Courses/")) {
+
+        SetLoading(true);
+      }
+
+    });
+
+  }, [])
+
 
   const { Filter, SetFilter } = useContext(DataContext);
 
@@ -76,7 +85,7 @@ const Courses: NextPage<AllCoursesData> = ({ data }) => {
     }
   }
 
-  function PaginationSetter(page:any){
+  function PaginationSetter(page: any) {
     SetFilter((prev) => {
       return {
         ...prev,
@@ -86,11 +95,11 @@ const Courses: NextPage<AllCoursesData> = ({ data }) => {
 
 
   }
-  
 
 
 
-  
+
+
 
   return (
     <div className="flex  justify-between mt-20 mx-10">
@@ -101,7 +110,7 @@ const Courses: NextPage<AllCoursesData> = ({ data }) => {
       ></FilterBar>
       {Loading ? (
         <Spinner></Spinner>
-      
+
       ) : (
         <div className="w-4/5">
           <h1 className="text-2xl font-medium mb-3">
@@ -145,7 +154,7 @@ const Courses: NextPage<AllCoursesData> = ({ data }) => {
 
           <div className="gap-10 gap-y-14 grid grid-cols-3">
             {data.FinalResult.map((item, index) => {
-              return <CourseCard  key={index} CourseData={item}></CourseCard>;
+              return <CourseCard key={index} CourseData={item}></CourseCard>;
             })}
           </div>
 

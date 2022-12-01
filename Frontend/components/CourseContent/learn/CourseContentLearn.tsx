@@ -3,8 +3,8 @@ import { CourseLearnData } from "../../../Interface/CourseLearnData";
 import CourseSubtitle from "./CourseSubtitle";
 
 type Props = {
-  Subtitles:CourseLearnData;
-  
+  Subtitles: CourseLearnData;
+
 };
 
 const CourseContentLearn = (props: Props) => {
@@ -13,15 +13,15 @@ const CourseContentLearn = (props: Props) => {
       <h1 className="text-4xl uppercase font-bold mb-20">
         What You Will learn
       </h1>
-   
-      
-        <div className="w-1/2">
-          {props.Subtitles.Subtitles.map((subtitle,index) => (
-             <CourseSubtitle Data={subtitle} key={index}></CourseSubtitle>
 
 
-          ))}
-       
+      <div className="w-1/2">
+        {props.Subtitles.subtitles.map((subtitle, index) => (
+          <CourseSubtitle Data={subtitle} key={index}></CourseSubtitle>
+
+
+        ))}
+
       </div>
     </div>
   );

@@ -48,6 +48,10 @@ const SearchBar = (props: Props) => {
       };
     });
 
+    if (router.pathname !== "/Courses") {
+      router.push("/Courses?keyword=" + searchValue);
+    }
+
     // if (router.query.search) {
     //   router.query.search = searchValue;
     // } else {
@@ -101,7 +105,7 @@ const SearchBar = (props: Props) => {
   return (
     <form className={search}>
       <div ref={searchRef} className={searchInputDiv}>
-         <input
+        <input
           ref={searchInputRef}
           value={searchValue}
           onChange={setDisableAndValue}

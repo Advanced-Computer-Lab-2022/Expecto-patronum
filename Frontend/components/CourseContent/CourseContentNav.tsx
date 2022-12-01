@@ -20,8 +20,10 @@ const CourseContentNav = (props: Props) => {
       <p onClick={() => ScrollTo(props.refs[1])}>Syllabus</p>
       <p onClick={() => ScrollTo(props.refs[2])}>Instructor</p>
       <p onClick={() => ScrollTo(props.refs[3])}>Reviews</p>
+      <CourseCTACard></CourseCTACard>
     </div>
   );
+
 };
 
 export default CourseContentNav;

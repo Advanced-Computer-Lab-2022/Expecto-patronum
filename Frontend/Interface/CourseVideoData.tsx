@@ -1,5 +1,5 @@
-export interface CourseVideoData{
-      contentTitle: String,
+export interface CourseVideoData {
+      contentTitle: string,
       duration: number,
-    
+
 }

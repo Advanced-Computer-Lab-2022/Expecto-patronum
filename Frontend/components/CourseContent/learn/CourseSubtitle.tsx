@@ -5,14 +5,14 @@ import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { OneSubtitleData } from "../../../Interface/OneSubtitleData";
 
 type Props = {
-  Data:OneSubtitleData
+  Data: OneSubtitleData
 };
 
 const CourseSubtitle = (props: Props) => {
   const [animationParent] = useAutoAnimate<HTMLDivElement>();
   const [onClick, SetonClick] = React.useState(false);
   const [ShowSubtitle, SetShowSubtitle] = React.useState(false);
-  let Hours=Math.floor( props.Data.totalMinutes/60);
+  let Hours = Math.floor(props.Data.totalMinutes / 60);
 
   return (
     <div className="mb-4 ">
@@ -29,7 +29,7 @@ const CourseSubtitle = (props: Props) => {
             <h1 className="text-2xl font-bold">{props.Data.header}</h1>
           </div>
           <p className="text-sm">{Hours} h</p>
-  
+
         </div>
         {ShowSubtitle && (
           <div>
@@ -46,7 +46,7 @@ const CourseSubtitle = (props: Props) => {
             </p>
             <div className="flex items-center gap-4 mb-10">
               <div>Icon</div>
-              <p className="text-sm">{props.Data.contents.length} videos,{props.Data.exercise.exerciseTitle&& "1 quiz"}</p>
+              <p className="text-sm">{props.Data.contents.length} videos,{props.Data.exercises?.exerciseTitle && "1 quiz"}</p>
               <p
                 onClick={() => {
                   SetonClick((prev) => !prev);
@@ -64,7 +64,7 @@ const CourseSubtitle = (props: Props) => {
           <CourseSubtitleData
             Data={props.Data.contents}
           ></CourseSubtitleData>
-      
+
         </div>
       )}
     </div>

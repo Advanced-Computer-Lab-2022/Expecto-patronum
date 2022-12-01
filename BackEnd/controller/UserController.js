@@ -563,6 +563,7 @@ async function selectCourse(req, res, next) {
       if (req.body.userId) {
         var instructor = await CourseTable.findOne({ "instructorID": req.body.userId }, { instructorID: 1 });
         if (instructor) {
+          ////////////////instructor/////////////////////
           info.Owner = "yes";
           x = await CourseTable.findOne({ "_id": req.body.courseId }, { review: { "$slice": 3 } });
           info.course = x;
@@ -578,7 +579,10 @@ async function selectCourse(req, res, next) {
           info.course = x;
           res.send(info);
           return;
+          //////////////////////////////////////////////////////////////////////////
+
         }
+        ////////////////indivTrainee/Corp/////////////////////
         var x = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 1 });
         //var y = Object.values(x);
         //console.log(x);
@@ -586,6 +590,7 @@ async function selectCourse(req, res, next) {
           for (var i = 0; i < x.purchasedCourses.length; i++) {
             var z = Object.values(x.purchasedCourses)[i];
             if (z.courseID == req.body.courseId) {
+              /////////////////User bought the course already/////////////////////
               if (z.courseRating) {
                 info.yourCourseRating = z.courseRating;
               }
@@ -614,52 +619,35 @@ async function selectCourse(req, res, next) {
               info.course = x;
               res.send(info);
               return;
+              //////////////////////////////////////////////////////////////////////////
             }
           }
-          if(z.instructorRating){
-            info.yourInstructorRating = z.instructorRating;
-          }
-          if(z.courseReview){
-            info.yourCourseReview = z.courseReview;
-          }
-          if(z.instructorReview){
-            info.yourinstructorReview = z.instructorReview;
-          }
-          info.purchased = "yes";
-          x = await CourseTable.findOne({ "_id": req.body.courseId },
-          { review:{ "$slice": 3 }});
-          info.course = x;
-          var instructor = await User.findOne({"_id":(x.instructorID)}).select({
-            instructorRating:1,
-            biography:1,
-            _id:1,
-            firstname:1,
-            lastname:1,
-            instructorReview:{ "$slice": 3 }
-          });
-          info.instructor = instructor;
-          info.course = x;
-          res.send(info);
-          return;
+
+
         }
       }
+      ////////////////Guest/////////////////////
       var x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
         _id: 1,
         title: 1,
-        courseHours: 1,
-        price: 1,
-        courseImage: 1,
+        summary: 1,
         rating: 1,
         instructorName: 1,
-        instructorID: 1,
-        subject: 1,
-        summary: 1,
+        courseVideo: 1,
+        courseHours: 1,
+        level: 1,
+        price: 1,
         discount: 1,
         discountPrice: 1,
+        subject: 1,
         "subtitles.header": 1,
         "subtitles.summary": 1,
+        "subtitles.totalMinutes": 1,
         "subtitles.contents.contentTitle": 1,
         "subtitles.contents.duration": 1,
+        "subtitles.exercises.exerciseTitle": 1,
+        courseImage: 1,
+        instructorID: 1,
         review: { "$slice": 3 }
       });
       console.log(x);
@@ -669,7 +657,6 @@ async function selectCourse(req, res, next) {
         _id: 1,
         firstname: 1,
         lastname: 1,
-        instructorReview: { "$slice": 3 }
       });
       let q = {};
       q.purchased = "no";
@@ -738,7 +725,8 @@ async function buyCourse(req, res, next) {
   //   "courseID":req.body.courseId
   // }]};
   try {
-    const xx = await User.findByIdAndUpdate({ "_id": req.body.userId }, { $push: { "purchasedCourses": req.body.purchasedCourses } }, { new: true });
+    const xx = await User.findByIdAndUpdate({ "_id": req.body.userId },
+      { $push: { "purchasedCourses": req.body.purchasedCourses } }, { new: true });
     res.send(xx);
 
   } catch (error) {
@@ -746,58 +734,64 @@ async function buyCourse(req, res, next) {
   }
 };
 
-async function submitAnswer(req,res){
-  try{
-    var user_id=req.body.userID;
-    var counter=0;
-    var course_id=req.body.courseID;
-    var course =await CourseTable.findById(course_id);
-    var subtitles=course.subtitles;
-    var excerciseID=subtitles[0].exercise;
-    var actualExcercise=await ExerciseTable.findById(excerciseID);
-    var answers=req.body.answers;
-    for(let i=0;i<answers.length;i++){
-      if(answers[i]==actualExcercise.questions[i].answer){
+async function submitAnswer(req, res) {
+  try {
+    var user_id = req.body.userID;
+    var counter = 0;
+    var course_id = req.body.courseID;
+    var course = await CourseTable.findById(course_id);
+    var subtitles = course.subtitles;
+    var excerciseID = subtitles[0].exercise;
+    var actualExcercise = await ExerciseTable.findById(excerciseID);
+    var answers = req.body.answers;
+    for (let i = 0; i < answers.length; i++) {
+      if (answers[i] == actualExcercise.questions[i].answer) {
         counter++
       }
     }
-    
+
 
     //var user=await User.findById(user_id);
-    const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
-    { "$push": { "purchasedCourses.$.excercises": 
-    {"excerciseID":excerciseID,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
+    const re = await User.updateOne({ "_id": user_id, "purchasedCourses.courseID": course_id },
+      {
+        "$push": {
+          "purchasedCourses.$.excercises":
+            { "excerciseID": excerciseID, "exercisesAnswers": { "exerciseTitle": actualExcercise.exerciseTitle, "answer": answers } }
+        }
+      }
     );
     res.send(re);
-    
+
   }
-  catch(error){
+  catch (error) {
     console.log(error);
   }
-  
+
 };
 
-  async function test(req,res){
-    try{
-      var x = await User.find()
-      res.send(x);
+async function test(req, res) {
+  try {
+    var x = await User.find()
+    res.send(x);
 
   }
-  catch(error){
+  catch (error) {
     console.log(error);
   }
 };
 
-module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
-   buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
-    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview,submitAnswer,takeExam,test }
+module.exports = {
+  register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
+  buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
+  ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview, giveInstructorReview, submitAnswer, takeExam, test
+}
 
 
-    
 
 
-  /*{
-    "user_id":"6383d9da6670d09304d2b016",
-    "courseID":"637f97cb7c7a24250c993ae2",
-    "answers":["what","about"]
+
+/*{
+  "user_id":"6383d9da6670d09304d2b016",
+  "courseID":"637f97cb7c7a24250c993ae2",
+  "answers":["what","about"]
 }*/
