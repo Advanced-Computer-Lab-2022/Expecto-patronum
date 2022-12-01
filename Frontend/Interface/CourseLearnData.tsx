@@ -1,11 +1,11 @@
 import { OneSubtitleData } from "./OneSubtitleData";
 
-export interface CourseLearnData{
-Subtitles:[
-  OneSubtitleData
-]
- 
-  
-  
+export interface CourseLearnData {
+  subtitles: [
+    OneSubtitleData
+  ]
+
+
+
 
 }

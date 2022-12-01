@@ -1,22 +1,25 @@
 import React from "react";
 import BigRating from "../../shared/rating/BigRating";
 
-type Props = {};
+type Props = {
+  review: [{
+    username: string,
+    reviewBody: string,
+    rating: number
+  }]
+};
 
 const ReviewSection = (props: Props) => {
-  let arrayTemp = [1, 2, 3];
   return (
-    <div className="px-10 ">
-      <h2 className="mb-8 text-lg font-semibold">TOP REVIEWS</h2>
-      {arrayTemp.map((item, index) => {
+    <div className="w-1/2">
+      <h2 className="mb-8 text-3xl font-semibold">TOP REVIEWS</h2>
+      {props.review.map((item, index) => {
         return (
-          <div key={index} className="flex-cols items-start mb-5">
-            <BigRating RateAction={false} Rate={4.8}></BigRating>
-            <p className="text-lg mb-2 mt-2">By MS</p>
+          <div key={index} className="flex-cols px-2 items-start mb-5">
+            <BigRating RateAction={false} Rate={item.rating}></BigRating>
+            <p className="text-lg mb-2 mt-2">{item.username}</p>
             <p className="w-4/5">
-              Solid "big picture" refresher course before getting into the more
-              technical stuff I'm sure down the road, even for folks with
-              backgrounds in math and science but haven't used it years
+              {item.reviewBody}
             </p>
           </div>
         );

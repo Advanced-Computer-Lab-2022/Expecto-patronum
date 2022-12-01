@@ -27,7 +27,7 @@ const FilterBar: React.FC<FilterProps> = ({
 }) => {
   const router = useRouter();
   const [FlagHelper, SetFlagHelper] = useState(false);
-  const [FirstFilter, SetFirstFilter] = useState<true|false|null>(false);
+  const [FirstFilter, SetFirstFilter] = useState<true | false | null>(false);
 
   const { Filter, SetFilter } = useContext(DataContext);
 
@@ -153,28 +153,28 @@ const FilterBar: React.FC<FilterProps> = ({
       ) {
         FilterFunction("GetFromUrl");
       }
-      else{
+      else {
         SetFirstFilter(null);
       }
     }
-  
 
-  }, [ router.isReady]);
 
-  useEffect(()=>{
+  }, [router.isReady]);
+
+  useEffect(() => {
     if (FlagHelper) {
-      if(FirstFilter==null){
+      if (FirstFilter == null) {
         FilterFunction("PushToUrl");
       }
-      else{
-        if(FirstFilter===true){
+      else {
+        if (FirstFilter === true) {
           SetFirstFilter(null);
         }
       }
     }
     SetFlagHelper(true);
-    
-  },[Filter])
+
+  }, [Filter])
 
 
 

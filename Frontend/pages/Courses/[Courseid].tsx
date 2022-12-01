@@ -11,102 +11,47 @@ import { useRouter } from "next/router";
 import { ApiUrl } from "../../constants/constants";
 import { CourseHeroData } from "../../Interface/CourseHeroData";
 import { CourseLearnData } from "../../Interface/CourseLearnData";
+import axios from "axios";
+import { UserCourseDataInterface } from "../../Interface/UserCourseDataInterface";
 
 
 
 
-interface CourseData {
-  data: {
-    title: String;
-    courseImage: String;
-    summary: String;
-    price: number;
-    discountPrice: number;
-    discount: number;
-    startDate: Date,
-    duration: number,
-    endDate: Date,
-    subject: String;
-    skills: String;
-    level: String;
-    instructorName:String;
-    instructorID:String;
-    courseHours: number
-    subtitles: [{
-      header: String,
-      summary: String,
-      contents: [{
-        contentTitle: String,
-        video: String,
-        preview: Boolean,
-        duration: number,
-        description: String,
-      }],
-      exercise: {
-        exerciseTitle: String,
-        questions: [{
-          question: String,
-          choices: [String],
-          answer: String,
-          isVisible: Boolean,
-        }],
-        totalGrade: number
-      },
-      totalMinutes: number,
-    }],
-    finalExam: {
-      questions: [{
-        question: String,
-        choices: [String],
-        answer: String,
-        isVisible: Boolean,
-      }],
-      finalGrade: number,
-    },
-    rating: {
-      one: number,
-      two: number,
-      three: number,
-     four: number,
-      five: number,
-      avg: number,
-    },
-    review:[{
-      username:String,
-      reviewBody:String,
-      rating:number
-    }]
 
-  
-    },
-  
-   
-  
-}
-const Course: NextPage<CourseData> = (props) => {
+
+
+
+
+const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
   const [NavApear, SetNavApear] = useState(false);
-  const CourseHeroData:CourseHeroData={
-    Title: props.data.title,
-    Summary: props.data.summary,
-    Rate: props.data.rating.avg,
-    InstructorName: props.data.instructorName,
-    PreviewVideo: props.data.subtitles[0].contents[0].video,
-    TotalHours: props.data.courseHours,
-    Level: props.data.level,
-    Price: props.data.price,
-    DiscountPrice: props.data.discountPrice,
-    Discount: props.data.discount,
-    Subject: props.data.subject,
+  const CourseHeroData: CourseHeroData = {
+    title: props.data.course.title,
+    summary: props.data.course.summary,
+    rating: props.data.course.rating,
+    instructorName: props.data.course.instructorName,
+    courseVideo: props.data.course.courseVideo,
+    courseHours: props.data.course.courseHours,
+    level: props.data.course.level,
+    price: props.data.course.price,
+    discountPrice: props.data.course.discountPrice,
+    discount: props.data.course.discount,
+    subject: props.data.course.subject,
 
   }
 
-  const CourseLearnData:CourseLearnData={
-    Subtitles: props.data.subtitles,
+  const CourseLearnData: CourseLearnData = {
+    subtitles: props.data.course.subtitles,
 
   }
 
-  console.log(props.data.instructorID)
-  
+  const instructorData = {
+    instructorRating: props.data.instructor.instructorRating,
+    biography: props.data.instructor?.biography,
+    firstname: props.data.instructor.firstname,
+    lastname: props.data.instructor.lastname,
+
+  }
+
 
   let ref1 = useRef<HTMLDivElement>(null);
   let ref2 = useRef<HTMLDivElement>(null);
@@ -115,7 +60,7 @@ const Course: NextPage<CourseData> = (props) => {
   let ref5 = useRef<HTMLDivElement>(null);
 
   return (
- 
+
     <div>
       {NavApear && (
         <CourseContentNav
@@ -124,34 +69,40 @@ const Course: NextPage<CourseData> = (props) => {
       )}
 
       <div ref={ref1}>
-        <CourseContentHero  courseContentData={CourseHeroData}  SetNavApear={SetNavApear}></CourseContentHero>
+        <CourseContentHero courseContentData={CourseHeroData} SetNavApear={SetNavApear}></CourseContentHero>
       </div>
       <div className="ml-20">
         <div ref={ref2}>
           <CourseContentLearn Subtitles={CourseLearnData}></CourseContentLearn>
         </div>
         <div ref={ref3}>
-          <CourseContentInstructor></CourseContentInstructor>
+          <CourseContentInstructor instructorData={instructorData} ></CourseContentInstructor>
         </div>
-        <div ref={ref4}>
-          <CourseContentReviews></CourseContentReviews>
-        </div>
+        {
+          props.data.course.review && props.data.course.review.length > 0 &&
+          <div ref={ref4}>
+            <CourseContentReviews review={props.data.course.review}></CourseContentReviews>
+          </div>
+        }
+
       </div>
 
-    </div>
+    </div >
   );
 };
 
-export async function getServerSideProps(context:GetServerSidePropsContext) {
-  let id=context.params?.Courseid;
-  let res = await fetch(ApiUrl + `/user/selectCourse?id=${id}`);
-  let CoursesData = await res.json();
-  console.log(CoursesData)
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  let id = context.params?.Courseid;
+  let CourseData = await axios.put(ApiUrl + '/user/selectCourse', {
+    courseId: id,
+  })
+
   return {
     props: {
-      data: {CoursesData},
+      data: CourseData.data,
     },
   };
+
 }
 
 
