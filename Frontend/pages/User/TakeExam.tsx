@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+var response = null;
 
 import CompPagination from "../../components/shared/pagination/CompPagination";
 import ExamQuestionCard from "../../components/exam/ExamQuestionCard";
@@ -27,7 +28,7 @@ const Exam = () => {
         "button"
     );
     const [questions, setQuestions] = useState([{
-        question: "",
+        problem: "",
         choices: ["", ""],
         answer: "",
         isVisible: false,
@@ -35,16 +36,18 @@ const Exam = () => {
     ); // or use effect or use context
     // 👇️ this only runs once
     useEffect(() => {
-        const questionsDummyData = [
-            { question: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
-            { question: "testDiffNumber?", choices: ["easy", "what"], answer: "what", isVisible: false },
-            { question: "testDiffNumber?", choices: ["easy", "what", "about"], answer: "about", isVisible: false },
-            { question: "what about ur second oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
-            { question: "what about ur 3rd oscar?", choices: ["easy", "what", "about", "it"], answer: "it", isVisible: false },
-            { question: "what about ur 4th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
-            { question: "what about ur 5th oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
-            { question: "what about ur 6th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true }];
-        setQuestions(questionsDummyData);
+
+        // const questionsDummyData = [
+        //     { question: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
+        //     { question: "testDiffNumber?", choices: ["easy", "what"], answer: "what", isVisible: false },
+        //     { question: "testDiffNumber?", choices: ["easy", "what", "about"], answer: "about", isVisible: false },
+        //     { question: "what about ur second oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
+        //     { question: "what about ur 3rd oscar?", choices: ["easy", "what", "about", "it"], answer: "it", isVisible: false },
+        //     { question: "what about ur 4th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
+        //     { question: "what about ur 5th oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
+        //     { question: "what about ur 6th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true }];
+        // setQuestions(questionsDummyData);
+        getQuestions();
     }, [])
     useEffect(() => {
         settotalQuestions(questions.length);
@@ -54,13 +57,16 @@ const Exam = () => {
     //on Clicking on the exer we call api takeexam by giving exercise/course id as input and it returns all exam questions+total number of questions
     //then we will loop creating exam questions cards 
     const getQuestions = async () => { //need to be callled on loading page
-
-
-        await axios.get('http://localhost:5000/').then(
+        await axios.get('http://localhost:5000/User/takeExam', {
+            params: {
+                examID:"6383e073de30152bc8991dd5" ,
+            },
+          }).then(
             (res) => {
-                const questions = res.data.questions;
-                console.log(questions);
-                setQuestions(questions);
+                console.log(res.data[0]);
+                const q = res.data[0].questions;
+                console.log(q);
+                setQuestions(q);
 
             });
 
@@ -176,24 +182,24 @@ const Exam = () => {
     }
     async function submitExam(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const AnswerLabel = document.getElementsByClassName("answer") as HTMLCollectionOf<HTMLLabelElement>;
+        // const AnswerLabel = document.getElementsByClassName("answer") as HTMLCollectionOf<HTMLLabelElement>;
         var empty = new Array(questions.length);
         for(var i=0;i<empty.length;i++){
             empty[i] = '';
         }
         
-        if (AnswerLabel != undefined) {
-            for (var i = 0; i < AnswerLabel.length; i++) {
-                AnswerLabel[i].style.display = "";
-            }
-        }
+        // if (AnswerLabel != undefined) {
+        //     for (var i = 0; i < AnswerLabel.length; i++) {
+        //         AnswerLabel[i].style.display = "";
+        //     }
+        // }
             var correctAnswers = 0;
             for (var i = 0; i < questions.length; i++) {
                 const QuestionChoices = document.getElementsByClassName("Q" + i) as any;
                 var chosenAnswerIndex = 100; // out of bounds
                 for (var j = 0; j < QuestionChoices.length; j++) {
                     if (QuestionChoices[j].nextElementSibling != null) {
-                        QuestionChoices[j].nextElementSibling.className = notChosen;
+                        // QuestionChoices[j].nextElementSibling.className = notChosen;
                         if (QuestionChoices[j].checked) {
                             chosenAnswerIndex = j;
                             var selected=questions[i].choices[chosenAnswerIndex];
@@ -203,53 +209,62 @@ const Exam = () => {
                         }
                     }
                 }
+                axios.defaults.withCredentials = true;
+                response = await axios.put("http://localhost:5000/User/submitAnswer", {
+                    userID:"6383d9da6670d09304d2b016",
+                    courseID:"6383e073de30152bc8991dc9",
+                    exerciseID:"6383e073de30152bc8991dd5",
+                    answers:empty,
+                }).then((res: { data: any; }) => { return res.data });
+            
+                console.log(response);
 
-                if (chosenAnswerIndex >= 0 && chosenAnswerIndex <= 3) {
-                    if (questions[i].answer === questions[i].choices[chosenAnswerIndex]) {
-                        correctAnswers++;
-                        if (QuestionChoices[chosenAnswerIndex].nextElementSibling != null) {
-                            QuestionChoices[chosenAnswerIndex].nextElementSibling.className = rightAnswer;
-                        }
-                    } else {
-                        if (QuestionChoices[chosenAnswerIndex].nextElementSibling != null) {
-                            QuestionChoices[chosenAnswerIndex].nextElementSibling.className = wrongAnswer;
-                        }
-                    }
-                }
-            }
-            const questionsCards = document.getElementsByClassName("question") as any;
-            if (questionsCards != undefined) {
-                for (var i = 0; i < questionsCards.length; i++) {
-                    questionsCards[i].style.display = "";
-                }
-            }
-            settotalGrade((correctAnswers / questions.length) * 100);
-            const grade = document.getElementById("grade") as HTMLParagraphElement;
-            grade.style.display = "";
-            const submit = document.getElementById("submit-btn");
-            if (submit != undefined) {
-                submit.style.display = "none";
-            }
-            const timer = document.getElementById("timer");
-            if (timer != undefined) {
-                timer.style.display = "none";
-            }
-            const info = document.getElementById("info");
-            if (info != undefined) {
-                info.style.display = "none";
-            }
-            const pagination = document.getElementById("pagination");
-            if (pagination != undefined) {
-                pagination.style.display = "none";
-            }
-            const prev = document.getElementById("prev-btn");
-            if (prev != undefined) {
-                prev.style.display = "none";
-            }
-            const goback = document.getElementById("go-back");
-            if (goback != undefined) {
-                goback.style.display = "";
-            }
+            //     if (chosenAnswerIndex >= 0 && chosenAnswerIndex <= 3) {
+            //         if (questions[i].answer === questions[i].choices[chosenAnswerIndex]) {
+            //             correctAnswers++;
+            //             if (QuestionChoices[chosenAnswerIndex].nextElementSibling != null) {
+            //                 QuestionChoices[chosenAnswerIndex].nextElementSibling.className = rightAnswer;
+            //             }
+            //         } else {
+            //             if (QuestionChoices[chosenAnswerIndex].nextElementSibling != null) {
+            //                 QuestionChoices[chosenAnswerIndex].nextElementSibling.className = wrongAnswer;
+            //             }
+            //         }
+            //     }
+            // }
+            // const questionsCards = document.getElementsByClassName("question") as any;
+            // if (questionsCards != undefined) {
+            //     for (var i = 0; i < questionsCards.length; i++) {
+            //         questionsCards[i].style.display = "";
+            //     }
+            // }
+            // settotalGrade((correctAnswers / questions.length) * 100);
+            // const grade = document.getElementById("grade") as HTMLParagraphElement;
+            // grade.style.display = "";
+            // const submit = document.getElementById("submit-btn");
+            // if (submit != undefined) {
+            //     submit.style.display = "none";
+            // }
+            // const timer = document.getElementById("timer");
+            // if (timer != undefined) {
+            //     timer.style.display = "none";
+            // }
+            // const info = document.getElementById("info");
+            // if (info != undefined) {
+            //     info.style.display = "none";
+            // }
+            // const pagination = document.getElementById("pagination");
+            // if (pagination != undefined) {
+            //     pagination.style.display = "none";
+            // }
+            // const prev = document.getElementById("prev-btn");
+            // if (prev != undefined) {
+            //     prev.style.display = "none";
+            // }
+            // const goback = document.getElementById("go-back");
+            // if (goback != undefined) {
+            //     goback.style.display = "";
+            // }
             // setAnswered(empty);
             // console.log(answered);
         // axios.defaults.withCredentials =true;
@@ -260,9 +275,8 @@ const Exam = () => {
         //         return res.data;
         //     });
     }
-    // useEffect(() => {
-    //     console.log(answered);
-    //   }, [answered]);
+}
+
     return (
         <form
             id="Exam-form"

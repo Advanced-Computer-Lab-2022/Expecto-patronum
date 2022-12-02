@@ -1,7 +1,6 @@
 export interface QuestionData {
-      question: String,
+      problem: String,
       choices: string[],
       answer: String,
-      isVisible: Boolean,
   }
   

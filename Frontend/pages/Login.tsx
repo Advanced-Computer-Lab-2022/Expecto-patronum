@@ -1,6 +1,5 @@
 import React from "react";
 import classNames from "classnames";
-import Login from "../components/Auth/Login";
 
 const navLogoDiv = classNames(
   "nv-max:absolute z-behind 1030:overflow-hidden 1030:w-[3.75rem] transition-all duration-300"

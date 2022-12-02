@@ -1,7 +1,7 @@
 export interface ExamData {
     exerciseTitle: String,
     questions: [{
-      question: String,
+      problem: String,
       choices: [String],
       answer: String,
       isVisible: Boolean,

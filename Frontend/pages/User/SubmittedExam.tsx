@@ -17,36 +17,43 @@ const rightAnswer = classNames(
 const SubmittedExam = () => {
     const [totalGrade, settotalGrade] = useState<number>(0);
     const [questions, setQuestions] = useState([{
-        question: "",
+        problem: "",
         choices: ["", ""],
         answer: "",
-        isVisible: false,
     }]);
     const [myAnswers, setMyAnswers] = useState([""]); 
     useEffect(() => {
-        const questionsDummyData = [
-            { question: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
-            { question: "testDiffNumber?", choices: ["easy", "what"], answer: "what", isVisible: false },
-            { question: "testDiffNumber?", choices: ["easy", "what", "about"], answer: "about", isVisible: false },
-            { question: "what about ur second oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
-            { question: "what about ur 3rd oscar?", choices: ["easy", "what", "about", "it"], answer: "it", isVisible: false },
-            { question: "what about ur 4th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
-            { question: "what about ur 5th oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
-            { question: "what about ur 6th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true }];
-        setQuestions(questionsDummyData);
-        const choicesDummyData = ["it", "what", "about", "it","","it","easy","what"];
-        setMyAnswers(choicesDummyData);
-
+        // const questionsDummyData = [
+        //     { question: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
+        //     { question: "testDiffNumber?", choices: ["easy", "what"], answer: "what", isVisible: false },
+        //     { question: "testDiffNumber?", choices: ["easy", "what", "about"], answer: "about", isVisible: false },
+        //     { question: "what about ur second oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
+        //     { question: "what about ur 3rd oscar?", choices: ["easy", "what", "about", "it"], answer: "it", isVisible: false },
+        //     { question: "what about ur 4th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true },
+        //     { question: "what about ur 5th oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
+        //     { question: "what about ur 6th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true }];
+        // setQuestions(questionsDummyData);
+        // const choicesDummyData = ["it", "what", "about", "it","","it","easy","what"];
+        // setMyAnswers(choicesDummyData);
+        getQuestionsAnswers();
     }, [])
 
     const getQuestionsAnswers = async () => { //need to be callled on loading page
 
 
-        await axios.get('http://localhost:5000/').then(
+        await axios.get('http://localhost:5000/User/viewAnswer', {
+            params: {
+                exerciseID:"6383e073de30152bc8991dd5" ,
+                userID:"6383d9da6670d09304d2b016",
+                courseID:"6383e073de30152bc8991dc9",
+            },
+          }).then(
             (res) => {
-                const questions = res.data.questions;
-                console.log(questions);
-                setQuestions(questions);
+                const q = res.data[0].questions;
+                console.log(q);
+                setQuestions(q);
+                const a=res.data[0].yourAnswers;
+                setMyAnswers(q);
 
             });
 

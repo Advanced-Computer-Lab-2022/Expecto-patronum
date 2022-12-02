@@ -741,7 +741,7 @@ async function submitAnswer(req, res) {
     var course_id = req.body.courseID;
     var course = await CourseTable.findById(course_id);
     var subtitles = course.subtitles;
-    var excerciseID = subtitles[0].exercise;
+    var excerciseID = req.body.exerciseID;
     var actualExcercise = await ExerciseTable.findById(excerciseID);
     var answers = req.body.answers;
     for (let i = 0; i < answers.length; i++) {

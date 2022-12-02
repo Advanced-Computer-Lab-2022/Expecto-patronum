@@ -10,10 +10,9 @@ const notChosen = classNames(
 
 const SubmittedExamCards: React.FC<{ QuestionData: QuestionData, Index: number }> = ({ QuestionData, Index }) => {
     const {
-        question,
+        problem,
         choices,
         answer,
-        isVisible,
     } = QuestionData;
     function getChoiceInitial(ChoiceIndex: number) {
         switch (ChoiceIndex) {
@@ -53,7 +52,7 @@ const SubmittedExamCards: React.FC<{ QuestionData: QuestionData, Index: number }
     return (
         <div
             className="question row tab mx-auto pt-8 pb-12 w-700 rounded-t-2xl shadow-xl">
-            <h2 className="mb-5 text-lg pt-4 font-medium text-gray-900 dark:text-black">{Index + 1}.{question}</h2>
+            <h2 className="mb-5 text-lg pt-4 font-medium text-gray-900 dark:text-black">{Index + 1}.{problem}</h2>
             <ul className={"row gap-6 w-full"}>
                { choices.map((choice, ChoiceIndex) => (
      
