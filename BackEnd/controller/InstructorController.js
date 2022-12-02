@@ -236,6 +236,7 @@ async function addCourse(req, res, next) {
     level: req.body.level,
     courseHours: req.body.courseHours,
     //exercises: req.body.exercises,
+    courseVideo : req.body.courseVideo,
     rating: req.body.rating,
     instructorName: name,
     discountPrice: req.body.price,
@@ -258,14 +259,17 @@ async function addCourse(req, res, next) {
       await newExercise.save();
     }
     var courseid = z._id;
-    const exe = await ExerciseTable.find({courseID:courseid}).select({"_id":1,"subtitleName":1});
+    const exe = await ExerciseTable.find({courseID:courseid}).select({"_id":1,"subtitleName":1,"exerciseTitle":1});
     console.log(exe);
     //var z = Object.values(exe)[0] ;
      for(var i=0;i<exe.length;i++){
        var z = exe[i] ;
        if(z.subtitleName){
         await CourseTable.updateOne({ "_id": courseid,"subtitles.header": z.subtitleName },
-          { "$push": { "subtitles.$.exercise.$.exerciseID" : z._id,"subtitles.$.exercise.$.exerciseName" : z.exerciseTitle}}
+          { "$push": { "subtitles.$.exercise" :{
+            "exerciseID":  z._id,
+            "exerciseName": z.exerciseTitle
+          }}}
           );
       }
       else{
@@ -351,6 +355,30 @@ async function testingAll(req,res){
       catch(error){
         console.log(error);
       }
-}
+    }
+    
+    async function viewProfile(req,res,next){
+      try{
+        var instructor=await User.find({"_id":req.query.userID},{
+          username:1,
+          instructorRating: 1,
+          biography: 1,
+          _id: 1,
+          firstname: 1,
+          lastname: 1,
+          instructorReview: { "$slice": 3 }
 
-module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,updateBio,testingAll};
+        });
+        res.status(200).send(instructor);
+      }
+      catch(error){
+        console.log(error);
+        res.status(400).send({error:error.message});
+      }
+    }
+
+
+
+
+
+module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,updateBio,testingAll,viewProfile};

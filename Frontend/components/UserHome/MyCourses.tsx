@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import React from 'react'
+import React, { useEffect } from 'react'
 import ProgressBar from '../shared/progress/ProgressBar'
 import BigRating from '../shared/rating/BigRating'
 import Rate from 'rc-rate';
@@ -7,21 +7,44 @@ import 'rc-rate/assets/index.css';
 import Image from 'next/image';
 import UserCourseCard from './UserCourseCard';
 import CompPagination from '../shared/pagination/CompPagination';
+import axios from 'axios';
+import { UserCourseDataInterface } from '../../Interface/UserCourseDataInterface';
+import Spinner from '../shared/spinner/Spinner';
+import { useQuery } from 'react-query';
 
 type Props = {}
 
 const MyCourses = (props: Props) => {
- console.log(Rate)
+  
+   
+  
+const [Loading,SetLoading]=React.useState(true);
+const [Courses,SetCourses]=React.useState<UserCourseDataInterface[]>([]);
+
+useEffect(()=>{
+  SetLoading(true);
+  axios.get('http://localhost:5000/user/ViewMyCourses?userId=637b8d0db9a1824a34fabe74')
+  .then(res=>{
+    SetCourses(res.data);
+    SetLoading(false);
+  })
+},[])
+
+
+
+if(Loading){
+  return <Spinner></Spinner>
+}
+
 
   return (
     <div>
-      <UserCourseCard></UserCourseCard>
-      <UserCourseCard></UserCourseCard>
-      <UserCourseCard></UserCourseCard>
-      <UserCourseCard></UserCourseCard>
-      <UserCourseCard></UserCourseCard>
-      <UserCourseCard></UserCourseCard>
-      <CompPagination totalCount={5} FromLink={false} Setter={()=>{}}></CompPagination>
+      {Courses.map((course,index)=>{
+        return(
+          <UserCourseCard key={index} course={course}></UserCourseCard>
+        )
+      })}
+    
       </div>
     
   

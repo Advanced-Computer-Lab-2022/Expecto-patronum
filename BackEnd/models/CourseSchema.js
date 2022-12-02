@@ -8,6 +8,11 @@ const CourseSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  courseVideo: {
+    type: String,
+    required: true
+  }
+  ,
   courseImage: {
     type: String,
     required: true
