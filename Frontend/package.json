@@ -29,6 +29,7 @@
     "react-icons": "^4.6.0",
     "react-player": "^2.11.0",
     "react-query": "^3.39.2",
+    "react-remove-scroll-bar": "^2.3.4",
     "react-router-dom": "^6.4.3",
     "react-select-country-list": "^2.2.3",
     "reactjs-popup": "^2.0.5",

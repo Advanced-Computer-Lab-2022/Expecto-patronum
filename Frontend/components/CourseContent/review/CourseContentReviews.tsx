@@ -1,5 +1,5 @@
 import React from "react";
-import RateSection from "./RateSection";
+import RateSection from "../rate/RateSection";
 import ReviewSection from "./ReviewSection";
 
 type Props = {
@@ -8,6 +8,7 @@ type Props = {
     reviewBody: string,
     rating: number
   }]
+  SetReviewModalOpen: (value: boolean) => void
 
 };
 
@@ -20,7 +21,7 @@ const CourseContentReviews = (props: Props) => {
         {<ReviewSection review={props.review}></ReviewSection>}
       </div>
       <div className="flex justify-start">
-        {props.review.length > 3 && <button className="px-4 py-2 border-2 rounded-md mt-4">
+        {props.review.length > 3 && <button onClick={() => { props.SetReviewModalOpen(true) }} className="px-4 py-2 border-2 rounded-md mt-4">
           Show more
         </button>}
 

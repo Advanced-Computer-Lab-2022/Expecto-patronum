@@ -15,7 +15,7 @@ const CourseIcon = React.forwardRef((props: Props, ref) => {
   return (
     <div ref={ref as any} className='hidden w-full'>
       <h1 className='text-center text-3xl py-4 text-black'>Choose Course Icon</h1>
-      <div className='row p-2 sb:mx-2 overflow-y-scroll h-[22rem] sb-max:h-700 border-2 rounded-lg'>
+      <div className='row p-2 sb:mx-2 overflow-y-scroll h-[22rem] sb-max:h-700 border-2 rounded-lg course-icon'>
         <div className='col-4 col-lg-2'>
           <img onClick={selectIcon} className={icon} src='/images/Brush.png' />
           <img onClick={selectIcon} className={icon} src='/images/Brush.png' />

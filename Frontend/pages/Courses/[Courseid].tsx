@@ -13,19 +13,12 @@ import { CourseHeroData } from "../../Interface/CourseHeroData";
 import { CourseLearnData } from "../../Interface/CourseLearnData";
 import axios from "axios";
 import { UserCourseDataInterface } from "../../Interface/UserCourseDataInterface";
-
-
-
-
-
-
-
+import CourseReviewModal from "../../components/CourseContent/review/CourseReviewModal";
 
 
 const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
   const [NavApear, SetNavApear] = useState(false);
-  let router = useRouter();
-  console.log(router.query.id)
+  const [ReviewModalOpen, SetReviewModalOpen] = useState(false);
 
   const CourseHeroData: CourseHeroData = {
     title: props.data.course.title,
@@ -84,12 +77,12 @@ const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
         {
           props.data.course.review && props.data.course.review.length > 0 &&
           <div ref={ref4}>
-            <CourseContentReviews review={props.data.course.review}></CourseContentReviews>
+            <CourseContentReviews SetReviewModalOpen={SetReviewModalOpen} review={props.data.course.review}></CourseContentReviews>
           </div>
         }
 
       </div>
-
+      {ReviewModalOpen && (<CourseReviewModal SetOpen={SetReviewModalOpen} />)}
     </div >
   );
 };

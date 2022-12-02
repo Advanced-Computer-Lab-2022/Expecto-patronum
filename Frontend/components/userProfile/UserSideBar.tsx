@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import React from 'react'
+import ProfilePic from '../shared/ProfilePic/ProfilePic'
 
 type Props = {
   Setter: React.Dispatch<React.SetStateAction<"AccountInfo" | "Wallet" | "Tickets">>
@@ -9,9 +10,8 @@ type Props = {
 const UserSideBar = (props: Props) => {
   return (
     <div className={Container}>
-      <div className={ProfilePicter}>
-        <p className={PorfilePictureText}>MS</p>
-      </div>
+      <ProfilePic FirstName='Mohamed' LastName='Salem' Size='medium' />
+
       <p className={ProfileName}>Mohamed Salem</p>
 
       <ul className={ProfileListNavContainer}>

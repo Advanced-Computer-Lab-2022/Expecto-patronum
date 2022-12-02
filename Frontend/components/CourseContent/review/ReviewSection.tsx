@@ -1,31 +1,30 @@
+import classNames from "classnames";
 import React from "react";
 import BigRating from "../../shared/rating/BigRating";
+import ReviewCard from "./ReviewCard";
 
 type Props = {
-  review: [{
+  review: {
     username: string,
     reviewBody: string,
     rating: number
-  }]
+  }[]
+  ViewMore?: boolean
 };
 
 const ReviewSection = (props: Props) => {
   return (
-    <div className="w-1/2">
-      <h2 className="mb-8 text-3xl font-semibold">TOP REVIEWS</h2>
-      {props.review.map((item, index) => {
+    <div className="w-full">
+      {!props.ViewMore && <h2 className="mb-8 text-3xl font-semibold">REVIEWS</h2>}
+      {props.review.map((review, index) => {
         return (
-          <div key={index} className="flex-cols px-2 items-start mb-5">
-            <BigRating RateAction={false} Rate={item.rating}></BigRating>
-            <p className="text-lg mb-2 mt-2">{item.username}</p>
-            <p className="w-4/5">
-              {item.reviewBody}
-            </p>
-          </div>
+          <ReviewCard key={index} review={review}></ReviewCard>
         );
       })}
+      {props.ViewMore && <button className={Button}>View More Reviews</button>}
     </div>
   );
 };
 
 export default ReviewSection;
+const Button = classNames("bg-canadian-red text-white px-4 py-2 rounded-md w-1/3 ml-auto mr-auto block")
