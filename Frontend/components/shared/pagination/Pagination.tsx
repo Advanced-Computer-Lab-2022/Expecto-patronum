@@ -6,8 +6,8 @@ type Props = {
     pageCount: number,
     page: any,
     setPage: any,
-    onClick: any,
-    getCourses: any,
+    onClick?: any,
+    getCourses?: any,
 }
 
 const Pagination = (props: Props) => {
@@ -19,7 +19,7 @@ const Pagination = (props: Props) => {
     },[props.pageCount])
 
     const buildPagination = (pageIndex: number) => {
-        global.window.scrollTo(0, 75);
+
         props.setPage(pageIndex);
 
         var pagesToDisplay = props.pageCount > 5 ? 5: props.pageCount;
@@ -44,6 +44,10 @@ const Pagination = (props: Props) => {
 
         setPages(newPages);
     }
+
+    useEffect(() => {
+        global.window.scrollTo(0, 75);
+    }, [props.page])
 
     return (
     <div className='flex items-center justify-center text-center mb-4'>

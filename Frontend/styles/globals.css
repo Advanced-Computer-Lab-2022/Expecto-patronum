@@ -19,22 +19,107 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-div::-webkit-scrollbar {
+.course-icon::-webkit-scrollbar {
   width: 0.4em;
 }
 
-div::-webkit-scrollbar-track {
+.course-icon::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
 }
 
-div::-webkit-scrollbar-thumb {
+.course-icon::-webkit-scrollbar-thumb {
   background-color: rgba(200, 200, 200, 0.5);
   border-radius: 20px;
 }
 
-div::-webkit-scrollbar-thumb:hover {
+.course-icon::-webkit-scrollbar-thumb:hover {
   background-color: rgba(200, 200, 200, 0.6);
   border-radius: 20px;
+}
+
+.react-calendar {
+  border: 0px !important;
+}
+
+.react-calendar button {
+  transition: all 0.2s linear;
+}
+
+.react-calendar__navigation__label {
+  border-radius: 15px !important;
+}
+
+.react-calendar__navigation__arrow {
+  width: 35px;
+  height: 35px;
+  border-radius: 100% !important;
+  min-width: 0px !important;
+  margin: 10px 10px !important;
+}
+
+.react-calendar__navigation__label {
+  margin-top: 10px !important;
+}
+
+.react-calendar__navigation__arrow:disabled {
+  color: #959493 !important;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  width: 35px !important;
+  margin: auto 7px !important;
+  flex-basis: auto !important;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none !important;
+}
+
+.react-calendar .react-calendar__tile {
+  border-radius: 100%;
+  width: 35px;
+  height: 35px;
+  margin: 7px !important;
+  flex-basis: auto !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.react-calendar .react-calendar__tile:hover {
+  background-color: #E6E6E6;
+}
+
+.react-calendar .react-calendar__tile:disabled {
+  color: #959493 !important;
+}
+
+.react-calendar .react-calendar__tile:disabled:hover {
+  background-color: #f0f0f0 !important;
+}
+
+.react-calendar__tile--active.react-calendar__tile--now {
+  background-color: #D80621 !important;
+  color: white !important;
+}
+
+.react-calendar__tile--active.react-calendar__tile--now:hover {
+  background-color: #D80621 !important;
+  color: white !important;
+}
+
+.react-calendar__tile--active {
+  background-color: #D80621 !important;
+  color: white !important;
+}
+
+.react-calendar__tile--now {
+  border: #D80621 solid 1.5px !important;
+  background-color: white !important;
+}
+
+.react-calendar__tile--now:hover {
+  background-color: #E6E6E6 !important;
 }
 
 @media (max-width: 935px) {

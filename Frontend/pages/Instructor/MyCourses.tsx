@@ -21,7 +21,7 @@ const MyCourses = (props: Props) => {
   const [totalCount, setTotalCount] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(Math.ceil(totalCount/10));
   const [search, setSearch] = useState('');
-  const [isViewList, setisViewList] = useState(true);
+  const [isViewList, setIsViewList] = useState(true);
   const [isSearch, setIsSearch] = useState(false);
   const [filter, setFilter] = useState({
     subject: '',
@@ -138,8 +138,8 @@ const MyCourses = (props: Props) => {
             <div className='ml-2 flex items-center'>
               <FilterDropdown filter={filter} setFilter={setFilter} submit={() => courseSearch(page)} />
               <div className='sb-max:hidden flex items-center'>
-                <button onClick={() => setisViewList(true)} className={(isViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.195] rounded-full border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-[0.271rem] hover:scale-[1.295] hover:text-main hover:bg-gray-700 transition-all duration-200 rotate-90'}><HiViewBoards /></button>
-                <button onClick={() => setisViewList(false)} className={(!isViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.0665] rounded-full border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-1.5 hover:scale-[1.1665] hover:text-main hover:bg-gray-700 transition-all duration-200'}><BsGridFill /></button>
+                <button onClick={() => setIsViewList(true)} className={(isViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.195] rounded-full border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-[0.271rem] hover:scale-[1.295] hover:text-main hover:bg-gray-700 transition-all duration-200 rotate-90'}><HiViewBoards /></button>
+                <button onClick={() => setIsViewList(false)} className={(!isViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.0665] rounded-full border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-1.5 hover:scale-[1.1665] hover:text-main hover:bg-gray-700 transition-all duration-200'}><BsGridFill /></button>
               </div>
             </div>
           </div>

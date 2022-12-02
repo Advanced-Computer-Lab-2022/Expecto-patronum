@@ -1,7 +1,10 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import Pagination from '../../components/shared/pagination/Pagination'
 import ProgressBar from '../../components/shared/progress/ProgressBar'
+import ProgressBar2 from '../../components/shared/progress/ProgressBar2'
 import BigRating from '../../components/shared/rating/BigRating'
+import Review from '../../components/shared/Review/Review'
 import Layout from './Layout'
 
 type Props = {}
@@ -10,6 +13,10 @@ const RatingsAndReviews = (props: Props) => {
 
   const [ratings, setRatings] = useState<any>();
   const [reviews, setReviews] = useState<any>();
+
+  const [totalCount, setTotalCount] = useState(0);
+  const [numberOfPages, setNumberOfPages] = useState(Math.ceil(totalCount/10));
+  const [page, setPage] = useState<number>(0);
   
   const [totalRatings, setTotalRatings] = useState<any>();
 
@@ -23,6 +30,7 @@ const RatingsAndReviews = (props: Props) => {
       }).then((res: { data: any }) => {
           setRatings(res.data.instructorRating);
           setReviews(res.data.instructorReview);
+          setTotalCount(res.data.instructorReview.length);
         });
     }
 
@@ -35,54 +43,51 @@ const RatingsAndReviews = (props: Props) => {
     }
   }, [ratings])
 
+  useEffect(() => {
+    setNumberOfPages(Math.ceil(totalCount/10));
+  }, [totalCount])
+
   return (
     <Layout>
-      {ratings && reviews && totalRatings && <div className='sb-max:min-w-[100vw] text-center'>
+      {ratings && reviews && totalRatings && <div className='sb-max:min-w-[fit] text-center'>
         <div className='mt-10 space-y-2'>
           <h1 className='text-5xl'>{ratings.avg.toFixed(1)}</h1>
           <p>{totalRatings.toLocaleString()} Ratings &#128900; {reviews.length} Reviews</p>
           <BigRating Rate={ratings.avg.toFixed(1)} RateAction={false} />
           <div className='mx-auto w-fit'>
-              <div className='flex items-center justify-between w-[23rem]'>
-                <p>5 stars</p>
-                <div title={ratings.five + ' Ratings'} className="w-72 h-3 bg-black bg-opacity-[0.04] shadow-sm hover:shadow-md hover:opacity-95 transition-all duration-200 rounded-full flex overflow-hidden">
-                    <div className="bg-[#4AA54A] rounded-l-full transition-all duration-300" style={{width: `${(ratings.five/totalRatings)*100}%`}} aria-valuenow={0} aria-valuemin={0} aria-valuemax={100}></div>
-                </div>
+              <div className='flex items-center justify-between w-[23rem] sb-max:w-[18rem]'>
+                <p className='whitespace-nowrap'>5 stars</p>
+                <ProgressBar2 stars={5} percentage={ratings.five/totalRatings} />
               </div>
 
-              <div className='flex items-center justify-between w-[23rem]'>
-                <p>4 stars</p>
-                <div className="w-72 h-3 bg-black bg-opacity-[0.04] shadow-sm hover:shadow-md hover:opacity-95 transition-all duration-200 rounded-full flex overflow-hidden">
-                    <div className="bg-[#A5D631] rounded-l-full transition-all duration-300" style={{width: `${(ratings.four/totalRatings)*100}%`}} aria-valuenow={0} aria-valuemin={0} aria-valuemax={100}></div>
-                </div>
+              <div className='flex items-center justify-between w-[23rem] sb-max:w-[18rem]'>
+                <p className='whitespace-nowrap'>4 stars</p>
+                <ProgressBar2 stars={4} percentage={ratings.four/totalRatings} />
               </div>
 
-              <div className='flex items-center justify-between w-[23rem]'>
-                <p>3 stars</p>
-                <div className="w-72 h-3 bg-black bg-opacity-[0.04] shadow-sm hover:shadow-md hover:opacity-95 transition-all duration-200 rounded-full flex overflow-hidden">
-                    <div className="bg-[#F7E632] rounded-l-full transition-all duration-300" style={{width: `${(ratings.three/totalRatings)*100}%`}} aria-valuenow={0} aria-valuemin={0} aria-valuemax={100}></div>
-                </div>
+              <div className='flex items-center justify-between w-[23rem] sb-max:w-[18rem]'>
+                <p className='whitespace-nowrap'>3 stars</p>
+                <ProgressBar2 stars={3} percentage={ratings.three/totalRatings} />
               </div>
-              <div className='flex items-center justify-between w-[23rem]'>
-                <p>2 stars</p>
-                <div className="w-72 h-3 bg-black bg-opacity-[0.04] shadow-sm hover:shadow-md hover:opacity-95 transition-all duration-200 rounded-full flex overflow-hidden">
-                    <div className="bg-[#F7A521] rounded-l-full transition-all duration-300" style={{width: `${(ratings.two/totalRatings)*100}%`}} aria-valuenow={0} aria-valuemin={0} aria-valuemax={100}></div>
-                </div>
+              <div className='flex items-center justify-between w-[23rem] sb-max:w-[18rem]'>
+                <p className='whitespace-nowrap'>2 stars</p>
+                <ProgressBar2 stars={2} percentage={ratings.two/totalRatings} />
               </div>
-              <div className='flex items-center justify-between w-[23rem]'>
-                <p>1 star</p>
-                <div className="w-72 h-3 bg-black bg-opacity-[0.04] shadow-sm hover:shadow-md hover:opacity-95 transition-all duration-200 rounded-full flex overflow-hidden">
-                    <div className="bg-[#EF3A10] rounded-l-full transition-all duration-300" style={{width: `${(ratings.one/totalRatings)*100}%`}} aria-valuenow={0} aria-valuemin={0} aria-valuemax={100}></div>
-                </div>
+              <div className='flex items-center justify-between w-[23rem] sb-max:w-[18rem]'>
+                <p className='whitespace-nowrap'>1 star</p>
+                <ProgressBar2 stars={1} percentage={ratings.one/totalRatings} />
               </div>
           </div>
         </div>
 
         <hr className='my-4' />
 
-        <div>
-
+        <div className='px-8'>
+          {reviews.slice(10*page, 10*(page+1)).map((review: any, index: number) => (
+            <Review key={index} reviewer={review} />
+          ))}
         </div>
+        <Pagination page={page} setPage={setPage} pageCount={numberOfPages} />
       </div>}
     </Layout>
   )
