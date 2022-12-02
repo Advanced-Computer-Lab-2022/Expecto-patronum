@@ -713,27 +713,41 @@ async function buyCourse(req, res, next) {
 
 async function submitAnswer(req,res){
   try{
+    var grade=req.body.grade;
     var user_id=req.body.userID;
     var counter=0;
     var course_id=req.body.courseID;
     var course =await CourseTable.findById(course_id);
-    var subtitles=course.subtitles;
-    var excerciseID=subtitles[0].exercise;
+    //var subtitles=course.subtitles;
+    var excerciseID=req.body.excerciseID
     var actualExcercise=await ExerciseTable.findById(excerciseID);
     var answers=req.body.answers;
-    for(let i=0;i<answers.length;i++){
+   /* for(let i=0;i<answers.length;i++){
       if(answers[i]==actualExcercise.questions[i].answer){
         counter++
-      }
-    }
+      }*/
+    
+    
+    var exists=await User.findOne({"purchasedCourses.excercises.excerciseID":excerciseID,"_id":user_id})
+    console.log(actualExcercise);
+    console.log(exists);
     
 
     //var user=await User.findById(user_id);
-    const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
-    { "$push": { "purchasedCourses.$.excercises": 
-    {"excerciseID":excerciseID,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
+    if(exists){const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
+    { "$set": { "purchasedCourses.$.excercises": 
+    {"excerciseID":excerciseID,"grade":grade,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
     );
     res.send(re);
+    }
+    else{
+      const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
+    { "$push": { "purchasedCourses.$.excercises": 
+    {"excerciseID":excerciseID,"grade":grade,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
+    );
+    res.send(re);
+    }
+    
     
   }
   catch(error){
@@ -746,6 +760,7 @@ async function submitAnswer(req,res){
     try{
       var x = await User.find()
       res.send(x);
+      
 
   }
   catch(error){
@@ -755,7 +770,7 @@ async function submitAnswer(req,res){
 
 module.exports = { register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
    buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
-    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview,submitAnswer,test }
+    ChangeEmail, UseChangeEmailToken,selectCourse,giveInstructorRating,giveCourseReview, giveInstructorReview,submitAnswer,test,takeExam }
 
 
     
