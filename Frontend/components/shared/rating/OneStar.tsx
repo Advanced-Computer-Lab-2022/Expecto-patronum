@@ -1,12 +1,13 @@
 import React from "react";
 
 type Props = {
-  rating: number;
+  rating: number,
+  className?: any,
 };
 
 const OneStar = (props: Props) => {
   return (
-    <div className="flex items-center">
+    <div className={`${props.className} flex items-center`}>
       <svg
         aria-hidden="true"
         className="w-5 h-5 text-yellow-400"

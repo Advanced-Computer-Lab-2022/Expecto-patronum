@@ -1,4 +1,5 @@
 const Course = require('../models/CourseSchema');
+const User = require('../models/UserSchema');
 
 async function CourseSearch(req, res) {
   var PriceFilter = req.query.price;
@@ -226,17 +227,24 @@ async function GetCourse(req, res) {
 
 async function CreateCourse(req, res) {
 
+  const user = await User.findById({ _id: req.body.instructorID }).select({ firstname: 1, lastname: 1 });
+
     const result = await Course.create({
       title: req.body.courseInfo.title,
       subject: req.body.courseInfo.subject,
-      instructorName: 'Rodin Salem',
+      instructorName: user.firstname + ' ' + user.lastname,
+      instructorID: '63877fb65c8dac5284aaa3c2',
       price: req.body.courseInfo.price,
       level: req.body.courseInfo.level,
       courseHours: req.body.courseHours,
       summary: req.body.courseInfo.summary,
       subtitles: req.body.subtitles,
+      courseImage: req.body.courseImage,
+      courseVideo: req.body.courseInfo.courseVideoURL,
     });
-    res.send(result);
+
+
+    res.send(await Course.find({ instructorID: '63877fb65c8dac5284aaa3c2' }));
 
 
   // const result = await Course.create({

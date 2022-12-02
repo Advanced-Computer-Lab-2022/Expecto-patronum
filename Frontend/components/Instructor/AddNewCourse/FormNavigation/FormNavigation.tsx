@@ -138,7 +138,7 @@ const FormNavigation = (props: Props) => {
                 Next
                 <BsArrowRight className={`${buttonIcon} left-2`} />
             </button>
-            <button ref={submitNewCourseRef} type='submit' form='add-new-course-form' onClick={() => console.log(newCourseInfo)} className={submitButton} id='submit-btn'>
+            <button ref={submitNewCourseRef} type='submit' form='add-new-course-form' onClick={(e) => props.submit(e)} className={submitButton} id='submit-btn'>
                 <span /><span /><span /><span />
                 Submit
             </button>

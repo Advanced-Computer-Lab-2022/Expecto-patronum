@@ -18,7 +18,7 @@ const PopupMessageContext = createContext({} as ContextState);
 
 function MyApp({ Component, pageProps }: AppProps) {
 
-  // const { Rate, SetRate } = useContext(DataContext);
+  const { Rate, SetRate } = useContext(DataContext);
     // useEffect(() => {
   //   console.log(Rate);
   // }, [Rate]);

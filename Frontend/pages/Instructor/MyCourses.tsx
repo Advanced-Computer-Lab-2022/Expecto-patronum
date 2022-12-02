@@ -11,6 +11,7 @@ import FilterDropdown from '../../components/shared/FilterDropdown/FilterDropdow
 import { AiOutlineClear } from 'react-icons/ai';
 import { MdModeEditOutline } from 'react-icons/md';
 import { TbDiscount2 } from 'react-icons/tb';
+import InstructorCourseCard from '../../components/Instructor/InstructorCourseCard/InstructorCourseCard';
 
 type Props = {}
 
@@ -20,7 +21,7 @@ const MyCourses = (props: Props) => {
   const [totalCount, setTotalCount] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(Math.ceil(totalCount/10));
   const [search, setSearch] = useState('');
-  const [isGridViewList, setIsGridViewList] = useState(true);
+  const [isViewList, setisViewList] = useState(true);
   const [isSearch, setIsSearch] = useState(false);
   const [filter, setFilter] = useState({
     subject: '',
@@ -137,27 +138,33 @@ const MyCourses = (props: Props) => {
             <div className='ml-2 flex items-center'>
               <FilterDropdown filter={filter} setFilter={setFilter} submit={() => courseSearch(page)} />
               <div className='sb-max:hidden flex items-center'>
-                <button onClick={() => setIsGridViewList(true)} className={(isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.195] rounded-full border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-[0.271rem] hover:scale-[1.295] hover:text-main hover:bg-gray-700 transition-all duration-200 rotate-90'}><HiViewBoards /></button>
-                <button onClick={() => setIsGridViewList(false)} className={(!isGridViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.0665] rounded-full border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-1.5 hover:scale-[1.1665] hover:text-main hover:bg-gray-700 transition-all duration-200'}><BsGridFill /></button>
+                <button onClick={() => setisViewList(true)} className={(isViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.195] rounded-full border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-[0.271rem] hover:scale-[1.295] hover:text-main hover:bg-gray-700 transition-all duration-200 rotate-90'}><HiViewBoards /></button>
+                <button onClick={() => setisViewList(false)} className={(!isViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.0665] rounded-full border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-1.5 hover:scale-[1.1665] hover:text-main hover:bg-gray-700 transition-all duration-200'}><BsGridFill /></button>
               </div>
             </div>
           </div>
 
-          <div className={(!isGridViewList ? 'grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-x-20': '') + ' sb-max:ml-8 sb-max:mr-22 text-white mx-8'}>
-            {courses && (courses ? courses: courseData).map((course: any, index: number) => {
+          <div className={(!isViewList ? 'grid grid-flow-row grid-cols-1 md:grid-cols-2 3lg:grid-cols-3 gap-x-20': '') + ' sb-max:ml-8 sb-max:mr-22 mx-8'}>
+            {(courses ? courses: courseData).map((course: any, index: number) => {
               return (
-                <div key={index} className={`h-42 w-full mb-10 p-4 relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg bg-gradient-to-br cursor-pointer ${levelColor(course.level)}`}>
-                  <h1 className='text-2xl pr-16'>{course.title}</h1>
-                  <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
-                      <OneStar rating={course.rating.avg} />
-                  </div>
-                  <p className='pl-3'>Subject: <span className='opacity-95'>{course.subject}</span></p>
-                  <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level === 'AllLevels' ? 'All Levels': course.level}</span></p>
-                  <label className='pl-3'>Description:</label>
-                  <p onClick={expandDescription} className='pl-6 whitespace-nowrap overflow-hidden sb-max:w-48 text-ellipsis mr-18 sb-max:mr-4'>{course.summary}</p>
-                  <a href='/Instructor/Settings/AddDiscount/' title='Add Promotion' className={`${(!isGridViewList ? 'bottom-12 right-4': 'right-40 sb:top-3')} scale-160 absolute opacity-70 hover:opacity-100 sb-max:bottom-12 sb-max:right-4 transition-all duration-300`}><TbDiscount2 /></a>
-                  <a href='/Instructor/Settings/EditCourse/' title='Edit Course' className={`${(!isGridViewList ? 'bottom-4 right-4': 'right-28 sb:top-3')} scale-150 absolute opacity-70 hover:opacity-100 sb-max:bottom-4 sb-max:right-4 transition-all duration-300`}><MdModeEditOutline /></a>
-                </div>
+                <InstructorCourseCard key={index} course={course} color={levelColor(course.level)} isViewList={isViewList} />
+                // <div key={index} className={` ${!isViewList ? `inline ${levelColor(course.level)}`: 'flex flex-row-reverse justify-end'} bg-white w-full mb-10 bg-gradient-to-br relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg cursor-pointer`}>
+                //   <div className='align-top min-h-0 min-w-0'>
+                //     <a href='/Instructor/Settings/AddDiscount/' title='Add Promotion' className={`${(!isViewList ? 'bottom-12 right-4': 'right-40 sb:top-3')} scale-160 absolute opacity-70 hover:opacity-100 sb-max:bottom-12 sb-max:right-4 transition-all duration-300`}><TbDiscount2 /></a>
+                //     <a href='/Instructor/Settings/EditCourse/' title='Edit Course' className={`${(!isViewList ? 'bottom-4 right-4': 'right-28 sb:top-3')} scale-150 absolute opacity-70 hover:opacity-100 sb-max:bottom-4 sb-max:right-4 transition-all duration-300`}><MdModeEditOutline /></a>
+                //     <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
+                //         <OneStar rating={(courses ? course.rating.avg: 2.8)} />
+                //     </div>
+                //     <div className='p-4'>
+                //       <h1 className='text-2xl pr-16'>{course.title}</h1>
+                //       <p className='pl-3'>Subject: <span className='opacity-95'>{course.subject}</span></p>
+                //       <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level === 'AllLevels' ? 'All Levels': course.level}</span></p>
+                //       <label className='pl-3'>Description:</label>
+                //       <p onClick={expandDescription} className='pl-6 whitespace-nowrap overflow-hidden sb-max:w-48 text-ellipsis mr-18 sb-max:mr-4'>{course.summary}</p>
+                //     </div>
+                //   </div>
+                //   <img className={`rounded-l-lg ${!isViewList ? 'w-34': `w-40 ${levelColor(course.level)} bg-gradient-to-br`} p-3`} src={courses ? course.courseImage : '/Trophy.png'} />
+                // </div>
               );
             })}
           </div>

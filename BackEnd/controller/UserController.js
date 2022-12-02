@@ -764,7 +764,7 @@ async function GenerateUsers(req, res) {
 
 async function ConnectInstructorsWithCourses(req, res) {
 
-  // var instructor = await User.find({ _id: '63877fb65c8dac5284aaa3c2' }).select({ _id: 1, firstname: 1, lastname: 1 });
+  // var instructor = await User.find({ _id: '63877fb65c8dac5284aaa3c2' }).select({ _id: 1, firstname: 1, lastname: 1, instructorRating: 1 });
 
   // for(var i = 160; i < 200; i++) {
   //   await CourseTable.findOneAndUpdate({ title: courses[i].title}, { instructorID: instructor[0]._id, instructorName:  instructor[0].firstname + " " + instructor[0].lastname });
@@ -791,7 +791,7 @@ async function ConnectInstructorsWithCourses(req, res) {
   // }
 
   // res.send("success");
-  // res.send("uncomment first an comment this line");
+  res.send("uncomment first and comment this line");
 }
 
 async function submitAnswer(req,res){

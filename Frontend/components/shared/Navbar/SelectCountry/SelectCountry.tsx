@@ -67,29 +67,29 @@ const SelectCountry = (props: Props) => {
       }, []);
 
 
-    // useEffect(() => {
-    //     document.onmouseup = ((e) => {
+    useEffect(() => {
+        document.onmouseup = ((e) => {
 
-    //         const selectCountryButton = selectCountryRef.current?.children[0].getBoundingClientRect();
-    //         const selectCountryData = selectCountryRef.current?.children[1].getBoundingClientRect();
+            const selectCountryButton = selectCountryRef.current?.children[0].getBoundingClientRect();
+            const selectCountryData = selectCountryRef.current?.children[1].getBoundingClientRect();
     
-    //         const isMouseOnButtonY = e.clientY <= (selectCountryButton.y + selectCountryButton.height - 2) && e.clientY >= (selectCountryButton.y - 2);
-    //         const isMouseOnButtonX = e.clientX <= (selectCountryButton.x + selectCountryButton.width + 2) && e.clientX >= Math.floor(selectCountryButton.x);
+            const isMouseOnButtonY = e.clientY <= (selectCountryButton.y + selectCountryButton.height - 2) && e.clientY >= (selectCountryButton.y - 2);
+            const isMouseOnButtonX = e.clientX <= (selectCountryButton.x + selectCountryButton.width + 2) && e.clientX >= Math.floor(selectCountryButton.x);
     
-    //         const isMouseOnSelectY = e.clientY <= (selectCountryData.y + selectCountryData.width - 2) && e.clientY >= (selectCountryData.y);
-    //         const isMouseOnSelectX = e.clientX <= (selectCountryData.x + selectCountryData.width - 2) && e.clientX >= Math.floor(selectCountryData.x);
+            const isMouseOnSelectY = e.clientY <= (selectCountryData.y + selectCountryData.width - 2) && e.clientY >= (selectCountryData.y);
+            const isMouseOnSelectX = e.clientX <= (selectCountryData.x + selectCountryData.width - 2) && e.clientX >= Math.floor(selectCountryData.x);
     
-    //         if(!(isMouseOnButtonX && isMouseOnButtonY)) {
-    //             if(!(isMouseOnSelectX && isMouseOnSelectY)) {
-    //                 selectRef.current.classList.add("h-0");
-    //                 selectRef.current.classList.remove("h-48");
-    //                 selectRef.current.classList.remove("pb-2");
-    //                 selectRef.current.classList.remove("border-1.5");
-    //             }
-    //         }
+            if(!(isMouseOnButtonX && isMouseOnButtonY)) {
+                if(!(isMouseOnSelectX && isMouseOnSelectY)) {
+                    selectRef.current.classList.add("h-0");
+                    selectRef.current.classList.remove("h-48");
+                    selectRef.current.classList.remove("pb-2");
+                    selectRef.current.classList.remove("border-1.5");
+                }
+            }
             
-    //     });
-    // },[])
+        });
+    },[])
 
     function closeSearch() {
       selectRef.current.classList.add("h-0");
@@ -101,7 +101,7 @@ const SelectCountry = (props: Props) => {
   return (
     <div ref={selectCountryRef}>
         <button type="button" onClick={toggleSelect} className={selectButton}><GiEarthAmerica className={selectButtonIcon} /></button>
-        <div onBlur={closeSearch} ref={selectRef} className={selectDiv} >
+        <div ref={selectRef} className={selectDiv} >
             <input type='text' placeholder='Search' onChange={filterSearch} className={selectSearch} />
             <div className={allCountries}>
                 <form>

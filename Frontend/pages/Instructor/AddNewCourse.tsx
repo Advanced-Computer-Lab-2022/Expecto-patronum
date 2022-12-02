@@ -61,8 +61,6 @@ const AddNewCourse = (props: Props) => {
 
   async function submitNewCourse(e: any) {
 
-    e.preventDefault();
-
     var courseHours = 0;
     subtitles.map((subtitle: any) => {
         subtitle.totalMinutes = 0;
@@ -73,14 +71,17 @@ const AddNewCourse = (props: Props) => {
     });
 
     axios.defaults.withCredentials = true;
-    response = await axios.post("http://localhost:5000/Course/CreateCourse", {
+    response = await axios.post("http://localhost:5000/Courses/CreateCourse", {
+        instructorID: '63877fb65c8dac5284aaa3c2',
         courseInfo: newCourseInfo,
         courseHours: courseHours,
         subtitles: subtitles,
-        courseIcon: courseIcon,
+        courseImage: courseIcon,
     }).then(res => {return res.data});
 
     console.log(response);
+
+    e.preventDefault();
   }
 
   return (
