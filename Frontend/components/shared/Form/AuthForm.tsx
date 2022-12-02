@@ -13,7 +13,6 @@ type Props = {
 
 const AuthForm = (props: Props) => {
 
-  console.log(props.Success);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">

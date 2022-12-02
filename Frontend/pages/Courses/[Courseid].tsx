@@ -24,6 +24,9 @@ import { UserCourseDataInterface } from "../../Interface/UserCourseDataInterface
 
 const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
   const [NavApear, SetNavApear] = useState(false);
+  let router = useRouter();
+  console.log(router.query.id)
+
   const CourseHeroData: CourseHeroData = {
     title: props.data.course.title,
     summary: props.data.course.summary,

@@ -1,18 +1,18 @@
 import React from 'react'
 import classNames from "classnames";
 import Image from 'next/image';
-import UserHomeTabs from '../components/UserHome/UserHomeTabs';
-import MyCourses from '../components/UserHome/MyCourses';
+import UserHomeTabs from '../../components/UserHome/UserHomeTabs';
+import MyCourses from '../../components/UserHome/MyCourses';
 
 
 
 type Props = {}
 
-const UserHome = (props: Props) => {
+const index = (props: Props) => {
   return (
     <div >
       <div className={HomeBanner}>
-          {/* <Image
+        {/* <Image
             src="https://cancham.org.eg//upload//Canadian_Chamber_201902_742919.jpg"
             alt={'banner'}
             objectFit='cover'
@@ -20,9 +20,9 @@ const UserHome = (props: Props) => {
             quality={100}
             priority
           /> */}
-   
 
-   
+
+
 
         <p className={HomeBannerTitle}>Welcome Back,Mohamed</p>
       </div>
@@ -33,10 +33,10 @@ const UserHome = (props: Props) => {
   )
 }
 
-export default UserHome
+export default index
 
 
 const HomeBanner = classNames(
   "flex px-20 items-center h-[40vh] w-[100%] bg-blue-300 curve relative "
 );
-const HomeBannerTitle=classNames("text-4xl text-black z-10")
+const HomeBannerTitle = classNames("text-4xl text-black z-10")

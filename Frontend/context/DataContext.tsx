@@ -7,12 +7,18 @@ export interface InterfaceDataContext {
   SetFilter: React.Dispatch<React.SetStateAction<InterfaceFilter>>;
   Rate: InterfaceRate;
   SetRate: React.Dispatch<React.SetStateAction<InterfaceRate>>;
+  Profile: "AccountInfo" | "Wallet" | "Tickets";
+  SetProfile: React.Dispatch<React.SetStateAction<"AccountInfo" | "Wallet" | "Tickets">>;
 }
 interface InterfaceRate {
   rate: number;
   curr: string;
   Country: string;
 }
+
+
+
+
 export interface InterfaceFilter {
   Subject: string[];
   Rating: string[];
@@ -23,9 +29,11 @@ export interface InterfaceFilter {
 
 const defualtFilter = {
   Filter: { Subject: [], Rating: [], Price: [], Page: 1, Keyword: [] },
-  SetFilter: () => {},
+  SetFilter: () => { },
   Rate: { rate: 1, curr: "USD", Country: "US" },
-  SetRate: () => {},
+  SetRate: () => { },
+  Profile: "AccountInfo" as "AccountInfo" | "Wallet" | "Tickets",
+  SetProfile: () => { },
 };
 
 const DataContext = React.createContext<InterfaceDataContext>(defualtFilter);
@@ -40,11 +48,12 @@ export const DataProvider: React.FC<PropsWithChildren> = ({ children }) => {
   });
 
   const [Rate, SetRate] = useState<InterfaceRate>(defualtFilter.Rate);
+  const [Profile, SetProfile] = useState<"AccountInfo" | "Wallet" | "Tickets">(defualtFilter.Profile);
 
   return (
-    <DataContext.Provider value={{ Filter, SetFilter, Rate, SetRate }}>
+    <DataContext.Provider value={{ Filter, SetFilter, Rate, SetRate, Profile, SetProfile }}>
       {children}
-    </DataContext.Provider>
+    </DataContext.Provider >
   );
 };
 

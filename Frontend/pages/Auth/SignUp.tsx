@@ -1,5 +1,5 @@
 import React from 'react'
-import RegisterComp from '../components/Register/RegisterComp'
+import RegisterComp from '../../components/Register/RegisterComp'
 
 type Props = {}
 

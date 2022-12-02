@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import React from 'react'
-import AuthForm from '../components/shared/Form/AuthForm';
-import FormFeedBack from '../components/shared/Form/FormFeedBack';
-import Spinner from '../components/shared/spinner/Spinner';
+import AuthForm from '../../components/shared/Form/AuthForm';
+import FormFeedBack from '../../components/shared/Form/FormFeedBack';
+import Spinner from '../../components/shared/spinner/Spinner';
 
 type Props = {}
 
@@ -17,8 +17,10 @@ const ChangePassword = (props: Props) => {
   let passwordRef = React.useRef<any>();
 
 
-  let oldpasswordData = { ref: oldpasswordRef, name: "Password", placeholder: "Type your Password", required: true };
-  let passwordData = { ref: passwordRef, name: "Password", placeholder: "Type your new Password", required: true };
+  let oldpasswordData = { ref: oldpasswordRef, name: "Password", label: "your password", placeholder: "Type your Password", required: true };
+  let passwordData = { ref: passwordRef, name: "Password", label: "new password", placeholder: "Type your new Password", required: true };
+  let reTypepasswordData = { ref: passwordRef, name: "Password", label: "Re-Type new password", placeholder: "Re-Type your new Password", required: true };
+
 
   async function Submit(e: any) {
     setLoading(true);
@@ -51,7 +53,7 @@ const ChangePassword = (props: Props) => {
   }
 
   return (
-    <AuthForm Error={Error} Success={{ ...Success, Cta: "Sign in", CtaLink: "/Login" }} Submit={Submit} FormTitle='Change Password' Inputs={[oldpasswordData, passwordData]} ButtonText={"Change Password"} ></AuthForm>
+    <AuthForm Error={Error} Success={{ ...Success, Cta: "Sign in", CtaLink: "/Login" }} Submit={Submit} FormTitle='Change Password' Inputs={[oldpasswordData, passwordData, reTypepasswordData]} ButtonText={"Change Password"}></AuthForm>
 
   )
 }

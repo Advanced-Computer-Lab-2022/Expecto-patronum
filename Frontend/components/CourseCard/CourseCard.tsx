@@ -26,7 +26,7 @@ const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
 
 
   return (
-    <Link href={`/Courses/${CourseData._id}`}>
+    <Link href={`/Courses/${CourseData._id}`} >
       <div
         onMouseEnter={() => {
           SetFlag(true);
@@ -98,7 +98,7 @@ const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
           </div>
         </div>
       </div>
-    </Link>
+    </Link >
 
   );
 };
