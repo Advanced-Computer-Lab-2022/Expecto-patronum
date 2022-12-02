@@ -338,14 +338,16 @@ async function discount(req, res, next) {
 
   
   async function viewCourseRatings(req,res,next){
+    var CurrentPage = req.query.page ? req.query.page : 1;
     try{
       var currentID=await req.body.userID;
       var currentCourseID=await req.body.courseID;
       var ratings=await CourseTable.find({
         "instructorID":currentID, "_id":currentCourseID
 
-      }).select({ "title": 1, "summary": 1,"rating":1,"review":1});
+      }).select({ "_id":0,"rating":1,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
       //const rates=[Object.values(ratings)[4]];
+      //{$slice:[CurrentPage-1,CurrentPage*2]}
       res.send(ratings);
     }
     catch(error){
