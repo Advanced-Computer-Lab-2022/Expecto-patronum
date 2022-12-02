@@ -377,8 +377,22 @@ async function testingAll(req,res){
       }
     }
 
+async function viewInstructorRatingsAndReviews(req, res) {
+
+  try {
+    const ratings = await User.findById({ _id: req.query.instructorID }).select({ instructorRating: 1, instructorReview: 1});
+    
+    res.send(ratings);
+    
+  } catch(error) {
+    console.log(error);
+  }
+
+}
 
 
 
-
-module.exports = { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,updateBio,testingAll,viewProfile};
+module.exports = { 
+  viewCourses, filterCourses, addCourse, discount, viewCourseRatings, 
+  updateBio, testingAll, viewProfile, viewInstructorRatingsAndReviews,
+};

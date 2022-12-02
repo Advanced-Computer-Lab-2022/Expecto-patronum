@@ -29,10 +29,9 @@ const InstructorCourseCard = (props: Props) => {
                 <p>Level: <span className='italic'>{props.course.level === 'AllLevels' ? 'All Levels': props.course.level}</span></p>
                 <p className={`${!props.isViewList ? '' : 'sb:mr-32'} overflow-hidden whitespace-nowrap text-ellipsis`}>{props.course.summary}</p>
             </div>
-            <Link href={`../Courses/${props.course._id}`}><span>xsddsdsds</span></Link>
         </div>
         <a className='whitespace-nowrap absolute bottom-5 right-5 rounded-full bg-input text-white shadow-md hover:shadow-lg border-1.5 border-input hover:bg-white hover:text-input transition-all duration-300 px-2 py-0.5'>Open Course</a>
-        <label className={`${!props.isViewList ? 'bottom-6 left-5': 'sb-max:bottom-6 sb-max:left-5 sb:top-3 sb:right-28'} whitespace-nowrap absolute text-sm font-bold`}>{Math.floor(props.course.price * Rate.rate).toLocaleString()} {Rate.curr}</label>
+        <label className={`${!props.isViewList ? 'bottom-6 left-5': 'sb-max:bottom-6 sb-max:left-5 sb:top-1.5 sb:right-28'} whitespace-nowrap absolute text-sm font-bold text-[#038470] bg-[#D7FFE0] px-2 py-0.5 rounded-full`}>{Math.floor(props.course.price * Rate.rate).toLocaleString()} {Rate.curr}</label>
         <OneStar className='bg-white rounded-tr-xl rounded-bl-xl absolute top-0 right-0 py-2 px-3 shadow-md hover:shadow-sm transition-all duration-200' rating={props.course.rating === undefined ? 3.8: props.course.rating.avg} />
     </div>
   )
