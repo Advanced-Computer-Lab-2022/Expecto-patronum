@@ -41,19 +41,20 @@ const SubmittedExam = () => {
     const getQuestionsAnswers = async () => { //need to be callled on loading page
 
 
-        await axios.get('http://localhost:5000/User/viewAnswer', {
+        await axios.get('http://localhost:5000/User/viewAnswers', {
             params: {
-                exerciseID:"6383e073de30152bc8991dd5" ,
+                exerciseID:"637f97cb7c7a24250c993aee" ,
                 userID:"6383d9da6670d09304d2b016",
-                courseID:"6383e073de30152bc8991dc9",
+                courseID:"637f97cb7c7a24250c993ae2",
             },
           }).then(
             (res) => {
-                const q = res.data[0].questions;
-                console.log(q);
+             
+                console.log(res);
+                const q = res.data.questions;
                 setQuestions(q);
-                const a=res.data[0].yourAnswers;
-                setMyAnswers(q);
+                const a=res.data.yourAnswers;
+                setMyAnswers(a);
 
             });
 

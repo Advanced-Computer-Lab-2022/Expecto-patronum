@@ -72,7 +72,7 @@ const CourseTable = require('../models/CourseSchema');
         }
         q.exerciseTitle = x.exerciseTitle;
         q.exerciseID = x._id;
-        q.totalGrade = x.totalGrade;
+        q.totalGrade = y.totalGrade;
         q.questions = x.questions;
         res.status(200).send(q);
     } catch (error) {

@@ -6,6 +6,7 @@ import CompPagination from "../../components/shared/pagination/CompPagination";
 import ExamQuestionCard from "../../components/exam/ExamQuestionCard";
 import ExamHeader from "../../components/exam/ExamHeader";
 import classNames from "classnames";
+import Link from "next/link";
 // import { Pagination } from "flowbite-react"
 // import Input from "../components/shared/Input/Input";
 const wrongAnswer = classNames(
@@ -17,10 +18,13 @@ const rightAnswer = classNames(
 const notChosen = classNames(
     "inline-flex justify-between items-center p-5 w-full text-black-600 bg-white rounded-lg border-2 border-black-600"
 );
-
+// const { viewPopupMessage } = useContext(PopupMessageContext);
 const Exam = () => {
     const [index, setIndex] = useState<number>(0);
-    const [totalGrade, settotalGrade] = useState<number>(0);
+    const [totalGrade, setTotalGrade] = useState<number>(0);
+    const [userID, setUserID] = useState<string>("");
+    const [exerciseID, setExerciseID] = useState<string>("");
+    const [courseID, setCourseID] = useState<string>("");
     const [totalQuestions, settotalQuestions] = useState<number>(0);
     const [skipped, setSkipped] = useState([""]);
     // const [answered, setAnswered] = useState([""]);
@@ -33,8 +37,8 @@ const Exam = () => {
         answer: "",
         isVisible: false,
     }]
-    ); // or use effect or use context
-    // 👇️ this only runs once
+    ); 
+
     useEffect(() => {
 
         // const questionsDummyData = [
@@ -47,6 +51,9 @@ const Exam = () => {
         //     { question: "what about ur 5th oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
         //     { question: "what about ur 6th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true }];
         // setQuestions(questionsDummyData);
+        setUserID("6383d9da6670d09304d2b016");
+        setExerciseID("6383e073de30152bc8991dd5");
+        setCourseID("6383e073de30152bc8991dc9");
         getQuestions();
     }, [])
     useEffect(() => {
@@ -209,15 +216,14 @@ const Exam = () => {
                         }
                     }
                 }
-                axios.defaults.withCredentials = true;
                 response = await axios.put("http://localhost:5000/User/submitAnswer", {
-                    userID:"6383d9da6670d09304d2b016",
+                    userID:"6383d9da6670d09304d2b016", 
                     courseID:"6383e073de30152bc8991dc9",
                     exerciseID:"6383e073de30152bc8991dd5",
                     answers:empty,
                 }).then((res: { data: any; }) => { return res.data });
-            
-                console.log(response);
+                // viewPopupMessage(isSuccess, text);
+                // console.log(response);
 
             //     if (chosenAnswerIndex >= 0 && chosenAnswerIndex <= 3) {
             //         if (questions[i].answer === questions[i].choices[chosenAnswerIndex]) {
@@ -367,18 +373,20 @@ const Exam = () => {
                             ></path>
                         </svg>
                     </button>
-
+                    {/* <Link href={/User/SubmittedExam/${user}?id=${CourseData._id}} as={/Courses/${CourseData.title}}>  */}
                     <button
                         id="submit-btn"
                         type={type}
                         className="hidden text-lg hover:bg-red-600 hover:text-white hover:rounded-md h-10 mb-4 items-center py-2 px-4 ml-3 font-medium text-red-600 bg-transparent"
                     >
+                     
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
                         Submit
                     </button>
+                       {/* </Link> */}
                 </div>
             </div>
 
