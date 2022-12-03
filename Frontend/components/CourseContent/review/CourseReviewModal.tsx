@@ -14,7 +14,6 @@ type Props = {
 }
 
 const CourseReviewModal = (props: Props) => {
-  const [ClickedRate, setClickedRate] = React.useState({})
   return (
     <Modal SetOpen={props.SetOpen}>
       <div className="bg-white  w-[80vw] overflow-scroll h-[100vh] pl-10 mt-20 py-5  ">
