@@ -25,9 +25,9 @@ function Navbar() {
       value={{ isSearchOpen, setIsSearchOpen, isCurtainOpen, setIsCurtainOpen }}
     >
       <div ref={parentRef} className={navbar}>
-        <div className={navLogoDiv}>
+        <a href="/" className={navLogoDiv}>
           <img className={navLogo} src="/images/logo.png" />
-        </div>
+        </a>
 
         <div className="flex">
           <SearchBar />

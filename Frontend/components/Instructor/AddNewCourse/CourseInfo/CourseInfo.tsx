@@ -6,7 +6,7 @@ type Props = {}
 
 const CourseInfo = React.forwardRef((props: Props, ref) => {
 
-  const { newCourseInfo, setNewCourseInfo } = useContext(AddNewCourseContext);
+  const { newCourseInfo, setNewCourseInfo, titleRef, subjectRef, priceRef, summaryRef, levelRef, courseVideoRef } = useContext(AddNewCourseContext);
 
   const getTitle = (e: any) => {
     const info = newCourseInfo;
@@ -32,6 +32,13 @@ const CourseInfo = React.forwardRef((props: Props, ref) => {
     setNewCourseInfo(info);
   }
 
+  const getCourseVideoURL = (e: any) => {
+    const info = newCourseInfo;
+    info.courseVideoURL = e.target.value;
+    setNewCourseInfo(info);
+  }
+
+
   const getLevel = (selectedRadio: any) => {
     const info = newCourseInfo;
     info.level = selectedRadio;
@@ -39,19 +46,22 @@ const CourseInfo = React.forwardRef((props: Props, ref) => {
   }
 
   return (
-    <div ref={ref as any}>
+    <div ref={ref as any} className='w-[50%] mx-auto mb-4 sb-max:w-full sb-max:px-7'>
       <h1 className='text-center text-3xl py-4 text-black'>Fill Course Information</h1>
       <hr />
-      <Input onChange={getTitle} required placeholder={"Title"} />
-      <div className='row mx-0 relative'>
-        <Input onChange={getSubject} inputDivStyle='col-12 col-md-6' required placeholder={"Subject"} />
-        <div className='col-12 col-md-6 px-0'>
-          <label className='text-gray-400 absolute ml-4 mt-9 pt-px'>$</label>
-          <Input onChange={getPrice} inputDivStyle='min-w-[6rem]' type="number" labelStyle="ml-3" required placeholder={"Price"} />
+      <div>
+        <Input ref={titleRef} onChange={getTitle} required placeholder={"Title"} />
+        <div className='row mx-0 flex justify-between'>
+          <Input ref={subjectRef} onChange={getSubject} inputDivStyle='col-12 col-md-6' required placeholder={"Subject"} />
+          <div className='col-12 col-md-6 px-0'>
+            <label className='text-gray-400 absolute ml-4 mt-9 pt-px'>$</label>
+            <Input ref={priceRef} onChange={getPrice} inputDivStyle='min-w-[6rem]' type="number" labelStyle="ml-3" required placeholder={"Price"} />
+          </div>
         </div>
+        <Input ref={courseVideoRef} onChange={getCourseVideoURL} placeholder={"Course Video URL"} />
+        <Input ref={summaryRef} onChange={getSummary} type='textarea' placeholder={"Summary"} />
+        <Input ref={levelRef} onChange={getLevel} type='radio' title='Select Level' enum={['Beginner', 'Intermediate', 'Advanced', 'All Levels']} placeholder={"Level"} />
       </div>
-      <Input onChange={getSummary} type='textarea' placeholder={"Summary"} />
-      <Input onChange={getLevel} type='radio' title='Select Level' enum={['Beginner', 'Intermediate', 'Advanced', 'All Levels']} placeholder={"Level"} />
     </div>
   )
 })

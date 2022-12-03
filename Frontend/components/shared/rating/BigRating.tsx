@@ -6,7 +6,7 @@ type Props = {
   Rate: number;
   RateAction:boolean;
   Setter?: (value: number) => void;
-
+  className?: string,
 };
 
 const BigRating = (props: Props) => {
@@ -18,6 +18,7 @@ function OnChange(v: number){
 
   return (
     <Rate
+    className={props.className}
     disabled={!props.RateAction}
     defaultValue={props.Rate}
     onChange={props.Setter?OnChange:undefined}

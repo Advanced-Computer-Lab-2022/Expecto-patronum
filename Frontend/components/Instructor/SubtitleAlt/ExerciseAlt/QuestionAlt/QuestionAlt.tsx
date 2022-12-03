@@ -51,13 +51,13 @@ const QuestionAlt = (props: Props) => {
           <div className='flex justify-center' key={questionIndex}>
             {/* <InputAlt value={q.question} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuestion(questionIndex, e)} /> */}
             <input className='border-2 border-black rounded-lg m-2' value={q.question} onChange={e => setQuestion(props.exerciseIndex, questionIndex, e)} />
-            <button type='button' onClick={() => addChoice(props.exerciseIndex, questionIndex)} className='bg-navlink-bg rounded-full text-white w-6'>+</button>
+            <button type='button' onClick={() => addChoice(props.exerciseIndex, questionIndex)} className='bg-input rounded-full text-white w-6'>+</button>
 
             {
               q.choices.map((c: any, childIndex: number) => (
                 <div key={childIndex}>
                   {/* <InputAlt value={c} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setChoice(questionIndex, childIndex, e)} /> */}
-                  <input className='bg-navlink-bg border-2 border-black rounded-lg m-2' value={c} onChange={e => setChoice(props.exerciseIndex, questionIndex, childIndex, e)} />
+                  <input className='bg-input border-2 border-black rounded-lg m-2' value={c} onChange={e => setChoice(props.exerciseIndex, questionIndex, childIndex, e)} />
                   <input name={'choices-of-' + questionIndex} onClick={() => chooseCorrectAnswer(props.exerciseIndex, questionIndex, childIndex)} type="radio" />
                   <button type='button' onClick={() => removeChoice(props.exerciseIndex, questionIndex, childIndex)} className='bg-red-600 rounded-full text-white w-6'>-</button>
                 </div>  

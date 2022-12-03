@@ -1,5 +1,6 @@
 const Course = require('../models/CourseSchema');
 const schedule = require('node-schedule');
+const User = require('../models/UserSchema');
 
 var start1 = schedule.scheduleJob('* * * * *', async function(){
   const dateNow = new Date();
@@ -80,7 +81,6 @@ async function discountStartDate(){
         res.status(400).send({error:error.message});
       }   
 };
-
 
 async function CourseSearch(req, res) {
   var PriceFilter = req.query.price;
@@ -308,17 +308,24 @@ async function GetCourse(req, res) {
 
 async function CreateCourse(req, res) {
 
+  const user = await User.findById({ _id: req.body.instructorID }).select({ firstname: 1, lastname: 1 });
+
     const result = await Course.create({
       title: req.body.courseInfo.title,
       subject: req.body.courseInfo.subject,
-      instructorName: 'Rodin Salem',
+      instructorName: user.firstname + ' ' + user.lastname,
+      instructorID: '63877fb65c8dac5284aaa3c2',
       price: req.body.courseInfo.price,
       level: req.body.courseInfo.level,
       courseHours: req.body.courseHours,
       summary: req.body.courseInfo.summary,
       subtitles: req.body.subtitles,
+      courseImage: req.body.courseImage,
+      courseVideo: req.body.courseInfo.courseVideoURL,
     });
-    res.send(result);
+
+
+    res.send(await Course.find({ instructorID: '63877fb65c8dac5284aaa3c2' }));
 
 
   // const result = await Course.create({
@@ -344,4 +351,54 @@ async function GetAllCourses(req, res) {
   res.send(result);
 }
 
-module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses };
+async function GenerateCourses(req, res) {
+
+  // for(var i = 0; i < courses.length; i++) {
+  //   var subtitles = courses[i].subtitles;
+  //   var courseHours = 0;
+
+  //   subtitles.map((subtitle) => {
+  //       subtitle.totalMinutes = 0;
+  //       subtitle.contents.map((content) => {
+  //           subtitle.totalMinutes += content.duration;
+  //       })
+  //       courseHours += subtitle.totalMinutes / 60;
+  //   });
+
+  //   var currency = courses[i].price;
+  //   var number = Number(currency.replace(/[^0-9.-]+/g,""));
+
+  //   await Course.create({
+  //     title: courses[i].title,
+  //     subject: courses[i].subject,
+  //     instructorName: courses[i].instructorName,
+  //     courseVideo: courses[i].courseVideo,
+  //     discount: {
+  //       discount: courses[i].discount.discount,
+  //       startDate: courses[i].discount.startDate,
+  //       endDate: courses[i].discount.endDate,
+  //     },
+  //     price: number,
+  //     level: courses[i].level,
+  //     courseHours: courseHours,
+  //     summary: courses[i].summary,
+  //     subtitles: courses[i].subtitles,
+  //     rating: {
+  //       one: courses[i].rating.one,
+  //       two: courses[i].rating.two,
+  //       three: courses[i].rating.three,
+  //       four: courses[i].rating.four,
+  //       five: courses[i].rating.five,
+  //       avg: (courses[i].rating.one + courses[i].rating.two*2 + courses[i].rating.three*3 + courses[i].rating.four*4 + courses[i].rating.five*5) / (courses[i].rating.one + courses[i].rating.two + courses[i].rating.three + courses[i].rating.four + courses[i].rating.five),
+  //     },
+  //     review: courses[i].review,
+  //     courseImage: courses[i].courseImage,
+  //   });
+  // }
+
+  // res.send("success: " + courses.length);
+
+  res.send("uncomment first an comment this line");
+}
+
+module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses };

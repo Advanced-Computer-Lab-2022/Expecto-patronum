@@ -15,6 +15,13 @@ interface ContextState {
   subtitles: any,
   setSubtitles: any,
   setCourseIcon: any,
+  titleRef: any,
+  subjectRef: any,
+  priceRef: any,
+  summaryRef: any,
+  levelRef: any,
+  courseVideoRef: any,
+  errorMessageRef: any,
 }
 
 const AddNewCourseContext = createContext({} as ContextState);
@@ -28,6 +35,14 @@ const AddNewCourse = (props: Props) => {
   const courseSubtitlesRef = useRef<any>();
   const courseIconRef = useRef<any>();
 
+  const titleRef = useRef<any>();
+  const subjectRef = useRef<any>();
+  const priceRef = useRef<any>();
+  const summaryRef = useRef<any>();
+  const levelRef = useRef<any>(null);
+  const courseVideoRef = useRef<any>(null);
+  const errorMessageRef = useRef<any>();
+
   const addNewCourseSteps = [courseInfoRef, courseSubtitlesRef, courseIconRef];
   const [currentStep, setCurrentStep] = useState<number>(0);
 
@@ -36,6 +51,7 @@ const AddNewCourse = (props: Props) => {
       title: '',
       subject: '',
       price: '',
+      courseVideoURL: '',
       summary: '',
       level: '',
     }
@@ -44,8 +60,6 @@ const AddNewCourse = (props: Props) => {
   const [courseIcon, setCourseIcon] = useState<any>('/images/Trophy.png');
 
   async function submitNewCourse(e: any) {
-
-    e.preventDefault();
 
     var courseHours = 0;
     subtitles.map((subtitle: any) => {
@@ -57,20 +71,23 @@ const AddNewCourse = (props: Props) => {
     });
 
     axios.defaults.withCredentials = true;
-        response = await axios.post("http://localhost:5000/Course/CreateCourse", {
-            courseInfo: newCourseInfo,
-            courseHours: courseHours,
-            subtitles: subtitles,
-            courseIcon: courseIcon,
-        }).then(res => {return res.data});
+    response = await axios.post("http://localhost:5000/Courses/CreateCourse", {
+        instructorID: '63877fb65c8dac5284aaa3c2',
+        courseInfo: newCourseInfo,
+        courseHours: courseHours,
+        subtitles: subtitles,
+        courseImage: courseIcon,
+    }).then(res => {return res.data});
 
-        console.log(response);
+    console.log(response);
+
+    e.preventDefault();
   }
 
   return (
     <Layout>
-        <AddNewCourseContext.Provider value={{addNewCourseSteps, currentStep, setCurrentStep, newCourseInfo, setNewCourseInfo, subtitles, setSubtitles, setCourseIcon}}>
-          <form className='sb-max:min-w-fit'>
+        <AddNewCourseContext.Provider value={{addNewCourseSteps, currentStep, setCurrentStep, newCourseInfo, setNewCourseInfo, subtitles, setSubtitles, setCourseIcon, titleRef, subjectRef, priceRef, summaryRef, levelRef, courseVideoRef, errorMessageRef}}>
+          <form className='sb-max:min-w-fit' onChange={() => errorMessageRef.current.innerHTML = ''}>
             <CourseInfo ref={courseInfoRef} />
             <CourseSubtitles ref={courseSubtitlesRef} />
             <CourseIcon ref={courseIconRef} />
@@ -85,11 +102,13 @@ export default AddNewCourse;
 export { AddNewCourseContext }; 
 export class Subtitle {
   header: string;
+  courseSummary: string;
   exercise: { exerciseTitle: string; questions: { question: string; choices: string[]; answer: string; }[]; };
   contents: { contentTitle: string; video: string; preview: boolean; duration: number; description: string; }[];
   totalMinutes: number;
   constructor() {
       this.header = "";
+      this.courseSummary = "";
       this.contents = [
           {
               contentTitle: "",

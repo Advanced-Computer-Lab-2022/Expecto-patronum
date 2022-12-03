@@ -1,9 +1,9 @@
 import React from 'react'
-import Layout from './Layout'
+import Layout from './Layout';
 
 type Props = {}
 
-const Settings = (props: Props) => {
+const EditCourse = (props: Props) => {
   return (
     <Layout>
       
@@ -11,4 +11,4 @@ const Settings = (props: Props) => {
   )
 }
 
-export default Settings
+export default EditCourse;

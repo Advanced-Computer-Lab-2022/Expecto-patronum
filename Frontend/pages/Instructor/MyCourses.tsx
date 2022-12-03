@@ -2,99 +2,181 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import OneStar from '../../components/shared/rating/OneStar';
 import Layout from './Layout';
-import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
+import { BiSearchAlt2 } from 'react-icons/bi';
+import { BsGridFill } from 'react-icons/bs';
+import { HiViewBoards } from 'react-icons/hi';
+import classNames from 'classnames';
+import Pagination from '../../components/shared/pagination/Pagination';
+import FilterDropdown from '../../components/shared/FilterDropdown/FilterDropdown';
+import { AiOutlineClear } from 'react-icons/ai';
+import { MdModeEditOutline } from 'react-icons/md';
+import { TbDiscount2 } from 'react-icons/tb';
+import InstructorCourseCard from '../../components/Instructor/InstructorCourseCard/InstructorCourseCard';
 
 type Props = {}
 
 const MyCourses = (props: Props) => {
 
-  const [courses, setCourses] = useState([]);
-  const numberOfPages = Math.ceil(courseData?.length/10);
-  const pages = Array.from({length: numberOfPages}, (_, i) => i + 1);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [paginationScroll, setPaginationScroll] = useState(0);
-  const pagesRef = useRef<any>();
-  const [direction, setDirection] = useState(1);
+  const [courses, setCourses] = useState();
+  const [totalCount, setTotalCount] = useState(0);
+  const [numberOfPages, setNumberOfPages] = useState(Math.ceil(totalCount/10));
+  const [search, setSearch] = useState('');
+  const [isViewList, setIsViewList] = useState(true);
+  const [isSearch, setIsSearch] = useState(false);
+  const [filter, setFilter] = useState({
+    subject: '',
+    price: {
+      min: '',
+      max: '',
+    }
+  });
 
-  // useEffect(() => {
-  //     const getCourses = async () => {
-  //       axios.defaults.withCredentials = true;
-  //       setCourses(await axios.post("http://localhost:5000/Course/GetAllCourses").then(res => {return res.data}));
-  //     }
+  const [page, setPage] = useState<number>(0);
 
-  //     getCourses();
+  useEffect(() => {
+    setNumberOfPages(Math.ceil(totalCount/10));
+  }, [totalCount])
 
-  // }, []) 
+
+  function getCourses(pageIndex: number) {
+    isSearch ? courseSearch(pageIndex) : allCourses(pageIndex);
+  }
+
+  async function allCourses(pageIndex: number) {
+    axios.defaults.withCredentials = true;
+    await axios.get("http://localhost:5000/Instructor/filterCourses", {
+      params: {
+        instructorID: '63877fb65c8dac5284aaa3c2',
+        page: !isSearch ? pageIndex + 1: 1,
+        coursesPerPage: 10,
+      },
+    }).then((res: { data: any }) => {
+        console.log( 'Get',res.data.Courses);
+        setCourses(res.data.Courses);
+        setTotalCount(res.data.TotalCount);
+      });
+
+      setPage(!isSearch ? pageIndex: 0);
+  }
+
+  // On Load & on Page Change
+  useEffect(() => {
+    getCourses(page);
+  }, [page])
+
+  // On Clear Search
+  useEffect(() => {
+    !isSearch ? getCourses(page): null;
+  }, [isSearch])
 
   function levelColor(level: string) {
       switch(level) {
-          case 'Beginner': return 'from-[#1D948E] to-[#3FE0D0]';
-          case 'Intermediate': return 'from-[#2f8608] to-[#52EB0E]';
+          case 'Beginner': return 'from-[#2f8608] to-[#52EB0E]';
+          case 'Intermediate': return 'from-[#C29904] to-[#FDE143]';
           case 'Advanced': return 'from-[#B20000] to-[#FF4542]';
-          case 'AllLevels': return 'from-[#C29904] to-[#FDE143]';
-          default: return 'from-[#C29904] to-[#FDE143]';
+          case 'AllLevels': return 'from-[#2B32B2] to-[#1488CC]';
+          default: return 'from-[#1D948E] to-[#3FE0D0]';
       }
   }
 
-  function selectPage(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, i: number) {
-    setCurrentPage(i);
-    setDirection(i);
-
-    global.window.scrollTo(0,75);
-
-    if(i > direction) {
-        pagesRef.current.scrollTo(paginationScroll+40,0);
-        setPaginationScroll(paginationScroll+40);
-    } else if(i < direction) {
-        pagesRef.current.scrollTo(paginationScroll-40,0);
-        setPaginationScroll(paginationScroll-40);
-    }
-
+  const expandDescription = (e: any) => {
+    e.target.classList.toggle('whitespace-nowrap');
+    e.target.classList.toggle('overflow-hidden');
+    e.target.classList.toggle('text-ellipsis');
+    e.target.classList.toggle('h-fit');
   }
 
-  function scroll(direction: number) {
-    
-    if(direction == -1) {
-      paginationScroll <= 0 ?  null: pagesRef.current.scrollTo(paginationScroll-80,0);
-      paginationScroll <= 0 ?  null: setPaginationScroll(paginationScroll-80);
-    } else {
-      paginationScroll + 160 >= pagesRef.current.scrollWidth ? null: pagesRef.current.scrollTo(paginationScroll+80,0);
-      paginationScroll + 160 >= pagesRef.current.scrollWidth ? null: setPaginationScroll(paginationScroll+80);
-    }
+  async function courseSearch(pageIndex: number) {
+    await axios.get("http://localhost:5000/Instructor/filterCourses", {
+      params: {
+          instructorID: '63877fb65c8dac5284aaa3c2',
+          keyword: search,
+          page: isSearch ? page + 1: 1,
+          coursesPerPage: 10,
+          subject: filter.subject === '' ? undefined: filter.subject,
+          price: {
+            gte: filter.price.min === '' ? undefined: parseInt(filter.price.min),
+            lte: filter.price.max === '' ? undefined: parseInt(filter.price.max),
+          }
+        },
+      })
+      .then((res: { data: any }) => {
+        console.log( 'Search',res.data.TotalCount, isSearch);
+        setTotalCount(res.data.TotalCount);
+        setCourses(res.data.Courses);
+      });
+      setPage(isSearch ? pageIndex: 0);
+      setIsSearch(true);
+  }
+
+  function clearSearchAndFilter() {
+    setIsSearch(false);
+    setSearch('');
+    setFilter({
+      subject: '',
+      price: {
+        min: '',
+        max: '',
+      }
+    });
   }
 
   return ( 
     <Layout>
-        <div className='sb-max:min-w-fit text-white'>
-          {courseData.slice(10*(currentPage - 1), 10*currentPage).map((course: any, index: number) => {
-            return (
-              <div key={index} className={`h-fit w-full my-10 p-4 relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg bg-gradient-to-br ${levelColor(course.level)}`}>
-                <h1 className='text-xl nv-max:pr-14'>{course.title}</h1>
-                <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
-                    <OneStar rating={2.47} />
-                </div>
-                <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level}</span></p>
-                <label className='pl-3'>Description:</label>
-                <p className='pl-6'>{course.summary}</p>
-              </div>
-            );
-          })}
-
-          <div className='text-center divide-x divide-bright-gray w-fit bg-dark-gray mx-auto h-6 rounded-md flex'>
-            <button type='button' className='px-2 hover:bg-gray-600 rounded-l-md' onClick={() => {currentPage === 1 ? null: setCurrentPage(currentPage-1)}}><BiChevronLeft className='scale-125' /></button>
-            <button type='button' className='px-2 hover:bg-gray-600' onClick={() => scroll(-1)}>...</button>
-            <div ref={pagesRef} className='relative divide-bright-gray overflow-hidden flex w-[10rem] text-left'>
-              {pages.map((i) => (
-                  <button key={i} type='button' className={`px-2 w-10 min-w-[2.5rem] right-0 hover:bg-gray-600 ${currentPage === i ? 'bg-canadian-red': 'bg-dark-gray'}`} onClick={(e) => selectPage(e, i)}>{i}</button>
-              ))}
+        <div className='sb-max:min-w-[100vw] pt-2'>
+          <div className='flex mx-12 my-4 sb-max:mx-4 items-center sb:justify-between'>
+            <div className='flex items-center'>
+              <form id='instructor-search-course' className={searchInputDiv}>
+                <input onChange={(e) => setSearch(e.target.value)} value={search} placeholder="Search for a course" className={searchInput}/>
+                <button type='submit' form='instructor-search-course' onClick={(e) => {courseSearch(page); e.preventDefault()}} className={searchButton + ' ' + (search === '' ? 'cursor-not-allowed': '')} disabled={search === ''}>
+                  <BiSearchAlt2 className='scale-125 hover:scale-135 transition-all duration-300' />
+                </button>
+              </form>
+              <button title='Clear Search & Filter' onClick={() => clearSearchAndFilter()} className='rounded-full border-1.5 border-canadian-red text-white bg-canadian-red hover:text-canadian-red hover:bg-main sb-max:ml-1 ml-4 p-1.5 hover:scale-105 transition-all duration-200'><AiOutlineClear /></button>
             </div>
-            <button type='button' className='px-2 hover:bg-gray-600' onClick={() => scroll(1)}>...</button>
-            <button type='button' className='px-2 hover:bg-gray-600 rounded-r-md' onClick={() => {currentPage === numberOfPages ? null: setCurrentPage(currentPage+1)}}><BiChevronRight className='scale-125' /></button>
+            
+            <div className='ml-2 flex items-center'>
+              <FilterDropdown filter={filter} setFilter={setFilter} submit={() => courseSearch(page)} />
+              <div className='sb-max:hidden flex items-center'>
+                <button onClick={() => setIsViewList(true)} className={(isViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.195] rounded-full border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-[0.271rem] hover:scale-[1.295] hover:text-main hover:bg-gray-700 transition-all duration-200 rotate-90'}><HiViewBoards /></button>
+                <button onClick={() => setIsViewList(false)} className={(!isViewList ? 'text-main bg-gray-700': 'text-gray-700') + ' mx-2 scale-[1.0665] rounded-full border-1.5 border-gray-700 border-opacity-70 text-opacity-95 p-1.5 hover:scale-[1.1665] hover:text-main hover:bg-gray-700 transition-all duration-200'}><BsGridFill /></button>
+              </div>
+            </div>
           </div>
+
+          <div className={(!isViewList ? 'grid grid-flow-row grid-cols-1 md:grid-cols-2 3lg:grid-cols-3 gap-x-20': '') + ' sb-max:ml-8 sb-max:mr-22 mx-8'}>
+            {(courses ? courses: courseData).map((course: any, index: number) => {
+              return (
+                <InstructorCourseCard key={index} course={course} color={levelColor(course.level)} isViewList={isViewList} />
+                // <div key={index} className={` ${!isViewList ? `inline ${levelColor(course.level)}`: 'flex flex-row-reverse justify-end'} bg-white w-full mb-10 bg-gradient-to-br relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg cursor-pointer`}>
+                //   <div className='align-top min-h-0 min-w-0'>
+                //     <a href='/Instructor/Settings/AddDiscount/' title='Add Promotion' className={`${(!isViewList ? 'bottom-12 right-4': 'right-40 sb:top-3')} scale-160 absolute opacity-70 hover:opacity-100 sb-max:bottom-12 sb-max:right-4 transition-all duration-300`}><TbDiscount2 /></a>
+                //     <a href='/Instructor/Settings/EditCourse/' title='Edit Course' className={`${(!isViewList ? 'bottom-4 right-4': 'right-28 sb:top-3')} scale-150 absolute opacity-70 hover:opacity-100 sb-max:bottom-4 sb-max:right-4 transition-all duration-300`}><MdModeEditOutline /></a>
+                //     <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
+                //         <OneStar rating={(courses ? course.rating.avg: 2.8)} />
+                //     </div>
+                //     <div className='p-4'>
+                //       <h1 className='text-2xl pr-16'>{course.title}</h1>
+                //       <p className='pl-3'>Subject: <span className='opacity-95'>{course.subject}</span></p>
+                //       <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level === 'AllLevels' ? 'All Levels': course.level}</span></p>
+                //       <label className='pl-3'>Description:</label>
+                //       <p onClick={expandDescription} className='pl-6 whitespace-nowrap overflow-hidden sb-max:w-48 text-ellipsis mr-18 sb-max:mr-4'>{course.summary}</p>
+                //     </div>
+                //   </div>
+                //   <img className={`rounded-l-lg ${!isViewList ? 'w-34': `w-40 ${levelColor(course.level)} bg-gradient-to-br`} p-3`} src={courses ? course.courseImage : '/Trophy.png'} />
+                // </div>
+              );
+            })}
+          </div>
+          <Pagination pageCount={numberOfPages} page={page} setPage={setPage} onClick={courseSearch} getCourses={getCourses} />
         </div>
     </Layout>
   )
 }
+
+const searchInputDiv = classNames("flex items-center relative sb-max:mr-1");
+const searchInput = classNames("rounded-xl relative w-80 h-8 nv-max:pr-3 bg-main pl-2.5 sb-max:w-48 border-1.5 border-gray-700 border-opacity-50 placeholder:italic placeholder:text-sm bg-transparent tracking-wide focus:outline-0 transition-all duration-300");
+const searchButton = classNames("rounded-lg text-gray-300 absolute hover:text-gray-100 h-6 bg-gray-600 px-2 align-top right-1");
 
 
 const courseData = [
@@ -105,7 +187,7 @@ const courseData = [
     "price": 1272.78,
     "level": "Intermediate",
     "courseHours": 141,
-    "summary": "Viral pericarditis",
+    "summary": "sdffd fddsf fdsdf fddsfds df sdd f dsd f dsffsddf dfdsfdsfdsdf ffddfdd fdddfddf f dsddsf sdfds dfdfsdsdfdsfd dfdfdfdf dsf dsfdfsdds fddfds ddfd dsdfdfd fd fd fd dsfds d sfds fdsfdfdffddfd dsddfddsdfdfdsddssddsds dddsdsf dsfdfd fdfdf sd dsffddfddff sf",
     "subtitles": [
       {
         "header": "Budget/Accounting Analyst IV",
@@ -13714,7 +13796,7 @@ const courseData = [
     "subject": "Human Resources",
     "instructorName": "Rodin Salem",
     "price": 1545.45,
-    "level": "All Levels",
+    "level": "AllLevels",
     "courseHours": 163,
     "summary": "Pathological fracture, left tibia, subs for fx w nonunion",
     "subtitles": [
@@ -18071,7 +18153,7 @@ const courseData = [
     "subject": "Product Management",
     "instructorName": "Rodin Salem",
     "price": 2217.22,
-    "level": "All Levels",
+    "level": "AllLevels",
     "courseHours": 138,
     "summary": "Sltr-haris Type II physl fx low end r fibula, 7thK",
     "subtitles": [
@@ -19150,7 +19232,7 @@ const courseData = [
     "subject": "Business Development",
     "instructorName": "Rodin Salem",
     "price": 585.97,
-    "level": "All Levels",
+    "level": "AllLevels",
     "courseHours": 127,
     "summary": "Poisoning by antitussives, accidental (unintentional), init",
     "subtitles": [

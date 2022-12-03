@@ -9,7 +9,7 @@ const Layout = (props: Props) => {
   return (
     <div className='flex relative'>
         <Sidebar />
-        <div className='overflow-hidden sb-max:w-without-instructor-sidebar-closed sb:w-without-instructor-sidebar p-8 pt-2'>
+        <div className='overflow-hidden sb-max:w-without-instructor-sidebar-closed sb:w-without-instructor-sidebar'>
           {props.children}
         </div>
     </div>

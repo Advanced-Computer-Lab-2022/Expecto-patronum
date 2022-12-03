@@ -8,7 +8,7 @@ const passport = require('passport');
 const { isAuth } = require('../middleware/AuthMiddleware');
 const { Logout } = require('../controller/UserController');
 const { register } = require('../controller/UserController');
-const { giveCourseRating, buyCourse, ViewMyCourses } = require('../controller/UserController');
+const { giveCourseRating, buyCourse, ViewMyCourses, GenerateUsers, ConnectInstructorsWithCourses, getInstructorInfo, updateInstructorInfo } = require('../controller/UserController');
 const UserTable = require('../models/UserSchema');
 const { SelectExercise, viewAnswer } = require('../controller/UserController2');
 
@@ -55,6 +55,12 @@ router.get("/viewAnswers",viewAnswer);
 router.get("/viewMyCourses", ViewMyCourses);
 
 router.put("/giveCourseRating", giveCourseRating);
+
+
+router.post("/GenerateUsers", GenerateUsers);
+router.post("/ConnectInstructorsWithCourses", ConnectInstructorsWithCourses);
+router.get("/getInstructorInfo", getInstructorInfo);
+router.post("/updateInstructorInfo", updateInstructorInfo);
 
 router.put("/giveInstructorRating", giveInstructorRating );
 

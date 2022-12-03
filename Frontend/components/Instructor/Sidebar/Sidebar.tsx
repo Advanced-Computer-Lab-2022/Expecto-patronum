@@ -8,6 +8,7 @@ import { HiOutlineMail } from 'react-icons/hi';
 import { TbLayoutDashboard } from 'react-icons/tb';
 import { AiOutlineAlignLeft } from 'react-icons/ai';
 import { IoMdClose } from 'react-icons/io';
+import { MdOutlineReviews } from 'react-icons/md';
 
 type Props = {}
 
@@ -40,7 +41,7 @@ const Sidebar = (props: Props) => {
         sidebarHoverRef.current.classList.remove('opacity-0');
         sidebarHoverRef.current.style.width = (e.currentTarget.offsetWidth - 7) + "px";
         sidebarHoverRef.current.style.height = e.currentTarget.offsetHeight + "px";
-        sidebarHoverRef.current.style.top = e.currentTarget.offsetTop + "px";
+        sidebarHoverRef.current.style.top = (e.currentTarget.offsetTop + 0.5) + "px";
         sidebarHoverRef.current.style.left = e.currentTarget.offsetLeft + "px";
 
         const icon = e.target.children[0].children[0];
@@ -115,6 +116,9 @@ const Sidebar = (props: Props) => {
           </li>
           <li id='Instructor-Messages-btn' className={listedItem} onMouseOver={autoMove} onMouseLeave={hide}>
             <Link onClick={changePrevAndCurr} href="/Instructor/Messages"><span className={link}><HiOutlineMail className={linkIcon} /><span className={linkText}>Messages</span></span></Link>
+          </li>
+          <li id='Instructor-RatingsAndReviews-btn' className={listedItem} onMouseOver={autoMove} onMouseLeave={hide}>
+            <Link onClick={changePrevAndCurr} href="/Instructor/RatingsAndReviews"><span className={link}><MdOutlineReviews className={linkIcon} /><span className={linkText}>Rates & Reviews</span></span></Link>
           </li>
           <li id='Instructor-MyCourses-btn' className={listedItem} onMouseOver={autoMove} onMouseLeave={hide}>
             <Link onClick={changePrevAndCurr} href="/Instructor/MyCourses"><span className={link}><GiTeacher className={linkIcon} /><span className={linkText}>My Courses</span></span></Link>

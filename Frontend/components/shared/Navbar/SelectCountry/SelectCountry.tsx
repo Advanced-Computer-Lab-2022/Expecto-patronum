@@ -91,6 +91,13 @@ const SelectCountry = (props: Props) => {
         });
     },[])
 
+    function closeSearch() {
+      selectRef.current.classList.add("h-0");
+      selectRef.current.classList.remove("h-48");
+      selectRef.current.classList.remove("pb-2");
+      selectRef.current.classList.remove("border-1.5");
+    }
+
   return (
     <div ref={selectCountryRef}>
         <button type="button" onClick={toggleSelect} className={selectButton}><GiEarthAmerica className={selectButtonIcon} /></button>

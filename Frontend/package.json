@@ -26,6 +26,8 @@
     "rc-pagination": "^3.2.0",
     "rc-rate": "^2.9.2",
     "react": "18.2.0",
+    "react-animate-height": "^3.0.5",
+    "react-calendar": "^4.0.0",
     "react-device-detect": "^2.2.2",
     "react-dom": "18.2.0",
     "react-flags-select": "^2.2.3",
@@ -43,6 +45,7 @@
   "devDependencies": {
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
+    "@types/react-calendar": "^3.9.0",
     "@types/react-dom": "18.0.8",
     "@types/react-select-country-list": "^2.2.1",
     "@types/styled-components": "^5.1.26",
