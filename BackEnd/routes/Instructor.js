@@ -4,35 +4,35 @@ const instructorTable = require('../models/InstructorSchema');
 //const { isInstructor } = require('../middleware/RolesMiddleware');
 const CourseTable = require('../models/CourseSchema');
 const { query } = require('express');
-const { viewCourses, filterCourses, addCourse, discount, viewCourseRatings,updateBio,testingAll,viewProfile,cancelDiscount,filterByRatings } = require('../controller/InstructorController');
+const { viewCourses, filterCourses, addCourse, discount, viewCourseRatings, updateBio, testingAll, viewProfile, cancelDiscount, filterByRatings } = require('../controller/InstructorController');
 
 
 router.get("/", (req, res, next) => {
   res.send("Hello, Instructor");
 });
 
-router.get("/viewCourses",viewCourses);
+router.get("/viewCourses", viewCourses);
 
- router.get("/filterCourses",filterCourses);
+router.get("/filterCourses", filterCourses);
 
- router.get("/viewCourseRatings",viewCourseRatings)
+router.get("/viewCourseRatings", viewCourseRatings)
 
- router.get("/updateBio",updateBio);
-
- 
- router.get("/viewProfile",viewProfile);
+router.get("/updateBio", updateBio);
 
 
- router.get("/testingAll",testingAll);
- router.put("/filterByRatings",filterByRatings);
+router.get("/viewProfile", viewProfile);
+
+
+router.get("/testingAll", testingAll);
+router.put("/filterByRatings", filterByRatings);
 
 
 
-router.post('/addCourse',addCourse);
+router.post('/addCourse', addCourse);
 
-router.put("/discount",discount);
+router.put("/discount", discount);
 
-router.put("/cancelDiscount",cancelDiscount);
+router.put("/cancelDiscount", cancelDiscount);
 
 
 module.exports = router;
