@@ -849,6 +849,10 @@ async function test(req,res){
   }
 };
 
+async function getInstructorInfo(req, res) {
+  res.send(await User.findById({ _id: req.query.id}).select({ email: 1, biography: 1 }))
+}
+
 async function updateInstructorInfo(req, res) {
   const { id, email , biography } = req.body;
 
