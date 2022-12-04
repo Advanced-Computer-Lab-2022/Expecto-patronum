@@ -742,6 +742,49 @@ async function GenerateUsers(req, res) {
   //   var saltHash = genPassword(instructors[i].password);
   //   var salt = saltHash.salt;
   //   var hash = saltHash.hash;
+async function submitAnswer(req,res){
+  try{
+    var grade;
+    var user_id=req.body.userID;
+    var counter=0;
+    var course_id=req.body.courseID;
+    var course =await CourseTable.findById(course_id);
+    //var subtitles=course.subtitles;
+    var excerciseID=req.body.excerciseID
+    var actualExcercise=await ExerciseTable.findById(excerciseID);
+    var answers=req.body.answers;
+    for(let i=0;i<answers.length;i++){
+      if(answers[i]==actualExcercise.questions[i].answer){
+        counter++
+      }
+    }
+    grade=counter/answers.length *100;
+    
+    var exists=await User.findOne({"purchasedCourses.excercises.excerciseID":excerciseID,"_id":user_id})
+    console.log(actualExcercise);
+    console.log(exists);
+    
+
+    //var user=await User.findById(user_id);
+    if(exists){const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
+    { "$set": { "purchasedCourses.$.excercises": 
+    {"excerciseID":excerciseID,"grade":grade,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
+    );
+    res.send(re);
+    }
+    else{
+      const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
+    { "$push": { "purchasedCourses.$.excercises": 
+    {"excerciseID":excerciseID,"grade":grade,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
+    );
+    res.send(re);
+    }
+    
+    
+  }
+  catch (error) {
+    console.log(error);
+  }
 
   //   await User.create({
   //     username: instructors[i].username,
@@ -792,50 +835,6 @@ async function ConnectInstructorsWithCourses(req, res) {
   res.send("uncomment first and comment this line");
 }
 
-async function submitAnswer(req,res){
-  try{
-    var grade=req.body.grade;
-    var user_id=req.body.userID;
-    var counter=0;
-    var course_id=req.body.courseID;
-    var course =await CourseTable.findById(course_id);
-    //var subtitles=course.subtitles;
-    var excerciseID=req.body.excerciseID
-    var actualExcercise=await ExerciseTable.findById(excerciseID);
-    var answers=req.body.answers;
-   /* for(let i=0;i<answers.length;i++){
-      if(answers[i]==actualExcercise.questions[i].answer){
-        counter++
-      }*/
-    
-    
-    var exists=await User.findOne({"purchasedCourses.excercises.excerciseID":excerciseID,"_id":user_id})
-    console.log(actualExcercise);
-    console.log(exists);
-    
-
-    //var user=await User.findById(user_id);
-    if(exists){const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
-    { "$set": { "purchasedCourses.$.excercises": 
-    {"excerciseID":excerciseID,"grade":grade,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
-    );
-    res.send(re);
-    }
-    else{
-      const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
-    { "$push": { "purchasedCourses.$.excercises": 
-    {"excerciseID":excerciseID,"grade":grade,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
-    );
-    res.send(re);
-    }
-    
-    
-  }
-  catch (error) {
-    console.log(error);
-  }
-
-};
 
 async function test(req,res){
     try{
