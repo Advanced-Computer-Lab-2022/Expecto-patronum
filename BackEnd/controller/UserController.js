@@ -801,7 +801,7 @@ async function submitAnswer(req,res){
 
   // res.send("success: " + instructors.length);
 
-  res.send("uncomment first an comment this line");
+  // res.send("uncomment first an comment this line");
 }
 
 async function ConnectInstructorsWithCourses(req, res) {
@@ -876,11 +876,10 @@ module.exports = {
   register, Logout, ViewAll, viewRatings, getRate, giveCourseRating, buyCourse, 
   ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
   ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview, 
-  giveInstructorReview, submitAnswer, takeExam, test, GenerateUsers, ConnectInstructorsWithCourses,
-  getInstructorInfo, updateInstructorInfo 
+  giveInstructorReview, submitAnswer, takeExam, test, GenerateUsers, ConnectInstructorsWithCourses,updateInstructorInfo 
 }
 
-}
+
 /*{
   "user_id":"6383d9da6670d09304d2b016",
   "courseID":"637f97cb7c7a24250c993ae2",
