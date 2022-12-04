@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const connection = require('../config/database');
-const { getRate, forgetPassword, ValidateUser, ChangeEmail, UseChangeEmailToken, ChangePassword, ChangeForgottenPassword, 
-        giveInstructorRating, selectCourse, giveCourseReview, giveInstructorReview,submitAnswer,takeExam,test } = require('../controller/UserController');
+const { getRate, forgetPassword, ValidateUser, ChangeEmail, UseChangeEmailToken, ChangePassword, ChangeForgottenPassword,
+  giveInstructorRating, selectCourse, giveCourseReview, giveInstructorReview, submitAnswer, takeExam, test } = require('../controller/UserController');
 const { genPassword } = require('../lib/passwordUtils');
 const { VerifyTokenMiddleware } = require('../middleware/VerifyTokenMiddleware');
 const passport = require('passport');
@@ -26,7 +26,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 router.post('/register', register)
 router.get('/MailVerify/:token', VerifyTokenMiddleware, ValidateUser);
-router.get('/test',test)
+router.get('/test', test)
 
 router.post("/forgetPassword", forgetPassword);
 router.get("/forgetPassword/:token", VerifyTokenMiddleware, (req, res) => {
@@ -48,9 +48,9 @@ router.put('/submitAnswer', submitAnswer);
 
 router.put("/buyCourse", buyCourse);
 
-router.get("/takeExam",takeExam);
+router.get("/takeExam", takeExam);
 
-router.get("/viewAnswers",viewAnswer);
+router.get("/viewAnswers", viewAnswer);
 
 router.get("/viewMyCourses", ViewMyCourses);
 
@@ -62,13 +62,13 @@ router.post("/ConnectInstructorsWithCourses", ConnectInstructorsWithCourses);
 // router.get("/getInstructorInfo", getInstructorInfo);
 router.post("/updateInstructorInfo", updateInstructorInfo);
 
-router.put("/giveInstructorRating", giveInstructorRating );
+router.put("/giveInstructorRating", giveInstructorRating);
 
 router.put("/selectCourse", selectCourse);
 
-router.put("/selectExercise",SelectExercise);
+router.put("/selectExercise", SelectExercise);
 
-router.put("/giveCourseReview", giveCourseReview );
+router.put("/giveCourseReview", giveCourseReview);
 
-router.put("/giveInstructorReview", giveInstructorReview );
+router.put("/giveInstructorReview", giveInstructorReview);
 module.exports = router;

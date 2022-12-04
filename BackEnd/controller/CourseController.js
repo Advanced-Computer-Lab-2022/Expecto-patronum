@@ -2,84 +2,108 @@ const Course = require('../models/CourseSchema');
 const schedule = require('node-schedule');
 const User = require('../models/UserSchema');
 
-var start1 = schedule.scheduleJob('* * * * *', async function(){
+var start1 = schedule.scheduleJob('* * * * *', async function () {
   const dateNow = new Date();
-  try{
-  var allCourses = await Course.updateMany({ $and:[
-    {"discount.endDate": { $exists: true } } ,{"discount.endDate":{$lte: dateNow} }
-      ]},[
-      {"$set":{discountPrice: "$price","discount.discount":0}},
-      { $unset: ["discount.startDate","discount.endDate","discount.duration"]}
+  try {
+    var allCourses = await Course.updateMany({
+      $and: [
+        { "discount.endDate": { $exists: true } }, { "discount.endDate": { $lte: dateNow } }
       ]
-      );
+    }, [
+      { "$set": { discountPrice: "$price", "discount.discount": 0 } },
+      { $unset: ["discount.startDate", "discount.endDate", "discount.duration"] }
+    ]
+    );
 
-  console.log("I ran schedule EndDate");
-  start1.cancel();
-    } catch(error){
-      res.status(400).send({error:error.message});
-    }   
+    console.log("I ran schedule EndDate");
+    start1.cancel();
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
 });
 
 
-var start2 =schedule.scheduleJob('* * * * *', async function(){
+var start2 = schedule.scheduleJob('* * * * *', async function () {
   const dateNow = new Date();
-  try{
-  var allCourses = await Course.updateMany({ $and:[
-    {"discount.startDate": { $exists: true } } ,{"discount.startDate":{$lte: dateNow} },
-    {"discount.duration" : { $exists: true } },{"discount.duration":0}
-      ]},[
-      {"$set":{discountPrice: { $round :[ { $multiply: [ "$price",
-       { $subtract: [ 1, { $divide: [ "$discount.discount", 100 ] }] } ] },2]},
-        "discount.duration" :1  }},
-      ]);
+  try {
+    var allCourses = await Course.updateMany({
+      $and: [
+        { "discount.startDate": { $exists: true } }, { "discount.startDate": { $lte: dateNow } },
+        { "discount.duration": { $exists: true } }, { "discount.duration": 0 }
+      ]
+    }, [
+      {
+        "$set": {
+          discountPrice: {
+            $round: [{
+              $multiply: ["$price",
+                { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
+            }, 2]
+          },
+          "discount.duration": 1
+        }
+      },
+    ]);
 
-  console.log("I ran schedule startDate");  
-  start2.cancel();
-    } catch(error){
-      res.status(400).send({error:error.message});
-    }   
+    console.log("I ran schedule startDate");
+    start2.cancel();
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
 });
 
 
-schedule.scheduleJob('*/15 * * * *',discountEndDate);
-schedule.scheduleJob('*/15 * * * *',discountStartDate);
+schedule.scheduleJob('*/15 * * * *', discountEndDate);
+schedule.scheduleJob('*/15 * * * *', discountStartDate);
 
- async function discountEndDate(){
+async function discountEndDate() {
   const dateNow = new Date();
-  try{
-    var allCourses = await Course.updateMany({ $and:[
-      {"discount.endDate": { $exists: true } } ,{"discount.endDate":{$lte: dateNow} }
-        ]},[
-        {"$set":{discountPrice: "$price","discount.discount":0}},
-        { $unset: ["discount.startDate","discount.endDate","discount.duration"]}
-        ]
-        );
+  try {
+    var allCourses = await Course.updateMany({
+      $and: [
+        { "discount.endDate": { $exists: true } }, { "discount.endDate": { $lte: dateNow } }
+      ]
+    }, [
+      { "$set": { discountPrice: "$price", "discount.discount": 0 } },
+      { $unset: ["discount.startDate", "discount.endDate", "discount.duration"] }
+    ]
+    );
 
-    console.log("I ran schedule EndDate"); 
-      }
-      catch(error){
-        res.status(400).send({error:error.message});
-      }   
+    console.log("I ran schedule EndDate");
+  }
+  catch (error) {
+    res.status(400).send({ error: error.message });
+  }
 };
 
 
-async function discountStartDate(){
+async function discountStartDate() {
   const dateNow = new Date();
-  try{
-    var allCourses = await Course.updateMany({ $and:[
-      {"discount.startDate": { $exists: true } } ,{"discount.startDate":{$lte: dateNow} },
-      {"discount.duration" : { $exists: true } },{"discount.duration":0}
-        ]},[
-        {"$set":{discountPrice: { $round :[ { $multiply: [ "$price",
-         { $subtract: [ 1, { $divide: [ "$discount.discount", 100 ] }] } ] },2]},
-          "discount.duration" :1  }},
-        ]);
+  try {
+    var allCourses = await Course.updateMany({
+      $and: [
+        { "discount.startDate": { $exists: true } }, { "discount.startDate": { $lte: dateNow } },
+        { "discount.duration": { $exists: true } }, { "discount.duration": 0 }
+      ]
+    }, [
+      {
+        "$set": {
+          discountPrice: {
+            $round: [{
+              $multiply: ["$price",
+                { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
+            }, 2]
+          },
+          "discount.duration": 1
+        }
+      },
+    ]);
 
-    console.log("I ran schedule startDate");    
-      }
-      catch(error){
-        res.status(400).send({error:error.message});
-      }   
+    console.log("I ran schedule startDate");
+  }
+  catch (error) {
+    res.status(400).send({ error: error.message });
+  }
 };
 
 async function CourseSearch(req, res) {
@@ -310,22 +334,22 @@ async function CreateCourse(req, res) {
 
   const user = await User.findById({ _id: req.body.instructorID }).select({ firstname: 1, lastname: 1 });
 
-    const result = await Course.create({
-      title: req.body.courseInfo.title,
-      subject: req.body.courseInfo.subject,
-      instructorName: user.firstname + ' ' + user.lastname,
-      instructorID: '63877fb65c8dac5284aaa3c2',
-      price: req.body.courseInfo.price,
-      level: req.body.courseInfo.level,
-      courseHours: req.body.courseHours,
-      summary: req.body.courseInfo.summary,
-      subtitles: req.body.subtitles,
-      courseImage: req.body.courseImage,
-      courseVideo: req.body.courseInfo.courseVideoURL,
-    });
+  const result = await Course.create({
+    title: req.body.courseInfo.title,
+    subject: req.body.courseInfo.subject,
+    instructorName: user.firstname + ' ' + user.lastname,
+    instructorID: '63877fb65c8dac5284aaa3c2',
+    price: req.body.courseInfo.price,
+    level: req.body.courseInfo.level,
+    courseHours: req.body.courseHours,
+    summary: req.body.courseInfo.summary,
+    subtitles: req.body.subtitles,
+    courseImage: req.body.courseImage,
+    courseVideo: req.body.courseInfo.courseVideoURL,
+  });
 
 
-    res.send(await Course.find({ instructorID: '63877fb65c8dac5284aaa3c2' }));
+  res.send(await Course.find({ instructorID: '63877fb65c8dac5284aaa3c2' }));
 
 
   // const result = await Course.create({

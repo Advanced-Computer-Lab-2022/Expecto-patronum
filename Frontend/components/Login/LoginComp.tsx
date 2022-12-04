@@ -66,15 +66,15 @@ const LoginComp = (props: Props) => {
                   </div>
                 </div>
                 <Link href="/ForgetPassword">
-                <p
-                  className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  Forgot password?
-                </p>
+                  <p
+                    className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  >
+                    Forgot password?
+                  </p>
                 </Link>
 
-             
-                
+
+
               </div>
               <button
                 type="submit"
