@@ -928,7 +928,7 @@ module.exports =
   ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
   ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview,
   giveInstructorReview, submitAnswer, takeExam, test, GenerateUsers, ConnectInstructorsWithCourses,
-  updateInstructorInfo
+  updateInstructorInfo, getInstructorInfo
 }
 
 
