@@ -879,7 +879,7 @@ module.exports = {
   getInstructorInfo, updateInstructorInfo 
 }
 
-
+}
 /*{
   "user_id":"6383d9da6670d09304d2b016",
   "courseID":"637f97cb7c7a24250c993ae2",
