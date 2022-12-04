@@ -792,44 +792,53 @@ async function ConnectInstructorsWithCourses(req, res) {
   res.send("uncomment first and comment this line");
 }
 
-async function submitAnswer(req,res){
-  try{
-    var grade=req.body.grade;
-    var user_id=req.body.userID;
-    var counter=0;
-    var course_id=req.body.courseID;
-    var course =await CourseTable.findById(course_id);
+async function submitAnswer(req, res) {
+  try {
+    var grade = req.body.grade;
+    var user_id = req.body.userID;
+    var counter = 0;
+    var course_id = req.body.courseID;
+    var course = await CourseTable.findById(course_id);
     //var subtitles=course.subtitles;
-    var excerciseID=req.body.excerciseID
-    var actualExcercise=await ExerciseTable.findById(excerciseID);
-    var answers=req.body.answers;
-   /* for(let i=0;i<answers.length;i++){
-      if(answers[i]==actualExcercise.questions[i].answer){
-        counter++
-      }*/
-    
-    
-    var exists=await User.findOne({"purchasedCourses.excercises.excerciseID":excerciseID,"_id":user_id})
+    var excerciseID = req.body.excerciseID
+    var actualExcercise = await ExerciseTable.findById(excerciseID);
+    var answers = req.body.answers;
+    /* for(let i=0;i<answers.length;i++){
+       if(answers[i]==actualExcercise.questions[i].answer){
+         counter++
+       }*/
+
+
+    var exists = await User.findOne({ "purchasedCourses.excercises.excerciseID": excerciseID, "_id": user_id })
     console.log(actualExcercise);
     console.log(exists);
-    
+
 
     //var user=await User.findById(user_id);
-    if(exists){const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
-    { "$set": { "purchasedCourses.$.excercises": 
-    {"excerciseID":excerciseID,"grade":grade,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
-    );
-    res.send(re);
+    if (exists) {
+      const re = await User.updateOne({ "_id": user_id, "purchasedCourses.courseID": course_id },
+        {
+          "$set": {
+            "purchasedCourses.$.excercises":
+              { "excerciseID": excerciseID, "grade": grade, "exercisesAnswers": { "exerciseTitle": actualExcercise.exerciseTitle, "answer": answers } }
+          }
+        }
+      );
+      res.send(re);
     }
-    else{
-      const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
-    { "$push": { "purchasedCourses.$.excercises": 
-    {"excerciseID":excerciseID,"grade":grade,"exercisesAnswers":{"exerciseTitle":actualExcercise.exerciseTitle,"answer":answers}} }}
-    );
-    res.send(re);
+    else {
+      const re = await User.updateOne({ "_id": user_id, "purchasedCourses.courseID": course_id },
+        {
+          "$push": {
+            "purchasedCourses.$.excercises":
+              { "excerciseID": excerciseID, "grade": grade, "exercisesAnswers": { "exerciseTitle": actualExcercise.exerciseTitle, "answer": answers } }
+          }
+        }
+      );
+      res.send(re);
     }
-    
-    
+
+
   }
   catch (error) {
     console.log(error);
@@ -837,11 +846,11 @@ async function submitAnswer(req,res){
 
 };
 
-async function test(req,res){
-    try{
-      var x = await User.find()
-      res.send(x);
-      
+async function test(req, res) {
+  try {
+    var x = await User.find()
+    res.send(x);
+
 
   }
   catch (error) {
@@ -850,21 +859,21 @@ async function test(req,res){
 };
 
 async function updateInstructorInfo(req, res) {
-  const { id, email , biography } = req.body;
+  const { id, email, biography } = req.body;
 
-  if(email === '' && biography === '') {
+  if (email === '' && biography === '') {
     res.send('No data entered to update.');
     return;
-  } else if(email !== '' && biography !== '') {
+  } else if (email !== '' && biography !== '') {
 
     await User.findOneAndUpdate({ _id: id }, { email: email, biography: biography });
 
   } else {
 
-    if(email !== '')
+    if (email !== '')
       await User.findOneAndUpdate({ _id: id }, { email: email });
-  
-    if(biography !== '')
+
+    if (biography !== '')
       await User.findOneAndUpdate({ _id: id }, { biography: biography });
 
   }
@@ -872,12 +881,13 @@ async function updateInstructorInfo(req, res) {
   res.send("Your information have been updated successfully.");
 }
 
-module.exports = { 
-  register, Logout, ViewAll, viewRatings, getRate, giveCourseRating, buyCourse, 
+module.exports =
+{
+  register, Logout, ViewAll, viewRatings, getRate, giveCourseRating, buyCourse,
   ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
-  ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview, 
+  ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview,
   giveInstructorReview, submitAnswer, takeExam, test, GenerateUsers, ConnectInstructorsWithCourses,
-  getInstructorInfo, updateInstructorInfo 
+  updateInstructorInfo
 }
 
 

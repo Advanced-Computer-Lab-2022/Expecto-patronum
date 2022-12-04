@@ -72,7 +72,7 @@ const SearchBar = (props: Props) => {
   };
 
   function checkEmptySearch() {
-    isDisabled ? submitSearchRef.current.classList.add("cursor-not-allowed"): submitSearchRef.current.classList.remove("cursor-not-allowed");
+    isDisabled ? submitSearchRef.current.classList.add("cursor-not-allowed") : submitSearchRef.current.classList.remove("cursor-not-allowed");
   }
 
   function closeSearch() {
@@ -98,14 +98,14 @@ const SearchBar = (props: Props) => {
   return (
     <form className={search}>
       <div ref={searchRef} className={searchInputDiv}>
-         <input ref={searchInputRef} value={searchValue} onChange={setDisableAndValue} placeholder="Search for anything" className={searchInput}/>
-          <button type="submit" ref={submitSearchRef} disabled={isDisabled} onClick={submit} onMouseOver={checkEmptySearch} className={searchButton}>
+        <input ref={searchInputRef} value={searchValue} onChange={setDisableAndValue} placeholder="Search for anything" className={searchInput} />
+        <button type="submit" ref={submitSearchRef} disabled={isDisabled} onClick={submit} onMouseOver={checkEmptySearch} className={searchButton}>
           <BiSearchAlt2 />
         </button>
       </div>
 
       <button type="button" onClick={toggleSearch} ref={closeButtonRef} className={toggleSearchButton}>
-        { isSearchOpen ? <IoMdClose className={buttonIcon} /> : <BiSearchAlt2 className={buttonIcon} /> }
+        {isSearchOpen ? <IoMdClose className={buttonIcon} /> : <BiSearchAlt2 className={buttonIcon} />}
       </button>
     </form>
   );

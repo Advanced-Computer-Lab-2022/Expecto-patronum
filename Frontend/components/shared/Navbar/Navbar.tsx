@@ -4,6 +4,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import SearchBar from "./SearchBar/SearchBar";
 import BurgerButton from "./BurgerButton/BurgerButton";
 import SelectCountry from "./SelectCountry/SelectCountry";
+import Link from "next/link";
 
 interface ContextState {
   isCurtainOpen: any;
@@ -36,9 +37,9 @@ function Navbar() {
               Inspire Learners
             </a>
             <hr className="nv:hidden" />
-            <a className={navWideButton} href="">
+            <Link className={navWideButton} href="Auth/Signup">
               Sign Up
-            </a>
+            </Link>
           </div>
           <div className={navIconsDiv}>
             <a className={navButton} href="">
