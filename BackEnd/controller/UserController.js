@@ -742,6 +742,7 @@ async function GenerateUsers(req, res) {
   //   var saltHash = genPassword(instructors[i].password);
   //   var salt = saltHash.salt;
   //   var hash = saltHash.hash;
+}
 async function submitAnswer(req,res){
   try{
     var grade;
@@ -878,7 +879,7 @@ module.exports = {
   giveInstructorReview, submitAnswer, takeExam, test, GenerateUsers, ConnectInstructorsWithCourses,
   getInstructorInfo, updateInstructorInfo 
 }
-}
+
 
 /*{
   "user_id":"6383d9da6670d09304d2b016",
