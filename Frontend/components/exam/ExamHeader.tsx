@@ -17,42 +17,42 @@ const navContentDiv = classNames(
 );
 
 const ExamHeader = (props: Props) => {
-  return (
-    <div className={navbar}>
-    <div className={navLogoDiv}>
-        <img className={navLogo} src="/images/logo.png" />
-    </div>
+    return (
+        <div className={navbar}>
+            <div className={navLogoDiv}>
+                <img className={navLogo} src="/images/logo.png" />
+            </div>
 
-    <div className="flex">
-        <div className={navContentDiv}>
-            <Timer id="timer" style={{display:""}} active pause duration={null}>
-                <Timecode />
-            </Timer>
-            <div className="flex items-center space-x-4">
-                <img id="avatarButton" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" className="w-10 h-10 rounded-full cursor-pointer" src="/images/x8PhM.png" alt="" />
-                <div id="userDropdown" className="hidden z-10 w-44 bg-white rounded ">
-                    <div className="py-3 px-4 text-sm text-gray-900 dark:text-black">
-                        <div className="font-medium truncate">Rodin@3azma.com</div>
+            <div className="flex">
+                <div className={navContentDiv}>
+                    <Timer id="timer" style={{ display: "" }} active pause duration={null}>
+                        <Timecode />
+                    </Timer>
+                    <div className="flex items-center space-x-4">
+                        <img id="avatarButton" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" className="w-10 h-10 rounded-full cursor-pointer" src="/images/x8PhM.png" alt="" />
+                        <div id="userDropdown" className="hidden z-10 w-44 bg-white rounded ">
+                            <div className="py-3 px-4 text-sm text-gray-900 dark:text-black">
+                                <div className="font-medium truncate">Rodin@3azma.com</div>
+                            </div>
+                            <ul className="py-1 text-sm text-gray-700 dark:text-black" aria-labelledby="avatarButton">
+                                <li>
+                                    <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-red-600 dark:hover:text-white">Home</a>
+                                </li>
+                            </ul>
+                            <div className="py-1">
+                                <a href="#" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-red-600 dark:text-black dark:hover:text-white">Sign out</a>
+                            </div>
+                        </div>
+                        <script src="https://unpkg.com/flowbite@1.4.5/dist/flowbite.js"></script>
+                        <div className="font-medium dark:text-black">
+                            <div>Rodin Salem</div>
+                        </div>
                     </div>
-                    <ul className="py-1 text-sm text-gray-700 dark:text-black" aria-labelledby="avatarButton">
-                        <li>
-                            <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-red-600 dark:hover:text-white">Home</a>
-                        </li>
-                    </ul>
-                    <div className="py-1">
-                        <a href="#" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-red-600 dark:text-black dark:hover:text-white">Sign out</a>
-                    </div>
-                </div>
-                <script src="https://unpkg.com/flowbite@1.4.5/dist/flowbite.js"></script>
-                <div className="font-medium dark:text-black">
-                    <div>Rodin Salem</div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-  )
+    )
 
 };
 
