@@ -878,7 +878,7 @@ module.exports = {
   giveInstructorReview, submitAnswer, takeExam, test, GenerateUsers, ConnectInstructorsWithCourses,
   getInstructorInfo, updateInstructorInfo 
 }
-
+}
 
 /*{
   "user_id":"6383d9da6670d09304d2b016",
