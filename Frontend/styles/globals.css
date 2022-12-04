@@ -2,29 +2,197 @@
 @tailwind components;
 @tailwind utilities;
 
-body, html {
+body,
+html {
   font-family: "Amino Alt";
   margin: 0px;
   padding: 0px;
+  scroll-behavior: smooth;
+  background-color: #f5f5f5;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  
+}div::-webkit-scrollbar {
+  width: 0.4em;
+}
+
+div::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
+}
+
+div::-webkit-scrollbar-thumb {
+  background-color: rgba(200, 200, 200, 0.5);
+  border-radius: 20px;
+}
+
+div::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(200, 200, 200, 0.6);
+  border-radius: 20px;
+}
+
+.react-calendar {
+  border: 0px !important;
+}
+
+.react-calendar button {
+  transition: all 0.2s linear;
+}
+
+.react-calendar__navigation__label {
+  border-radius: 15px !important;
+}
+
+.react-calendar__navigation__arrow {
+  width: 35px;
+  height: 35px;
+  border-radius: 100% !important;
+  min-width: 0px !important;
+  margin: 10px 10px !important;
+}
+
+.react-calendar__navigation__label {
+  margin-top: 10px !important;
+}
+
+.react-calendar__navigation__arrow:disabled {
+  color: #959493 !important;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  width: 35px !important;
+  margin: auto 7px !important;
+  flex-basis: auto !important;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none !important;
+}
+
+.react-calendar .react-calendar__tile {
+  border-radius: 100%;
+  width: 35px;
+  height: 35px;
+  margin: 7px !important;
+  flex-basis: auto !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.react-calendar .react-calendar__tile:hover {
+  background-color: #E6E6E6;
+}
+
+.react-calendar .react-calendar__tile:disabled {
+  color: #959493 !important;
+}
+
+.react-calendar .react-calendar__tile:disabled:hover {
+  background-color: #f0f0f0 !important;
+}
+
+.react-calendar__tile--active.react-calendar__tile--now {
+  background-color: #D80621 !important;
+  color: white !important;
+}
+
+.react-calendar__tile--active.react-calendar__tile--now:hover {
+  background-color: #D80621 !important;
+  color: white !important;
+}
+
+.react-calendar__tile--active {
+  background-color: #D80621 !important;
+  color: white !important;
+}
+
+.react-calendar__tile--now {
+  border: #D80621 solid 1.5px !important;
+  background-color: white !important;
+}
+
+.react-calendar__tile--now:hover {
+  background-color: #E6E6E6 !important;
+}
+
+@media (max-width: 935px) {
+  #country-picker {
+    position: absolute;
+    right: 150px;
+    top: 10px;
+  }
+}
+
+.selected-instructor-tab::after {
+  content: "";
+  position: absolute;
+  background-color: transparent;
+  z-index: -1;
+  bottom: -50px;
+  right: 0px;
+  height: 50px;
+  width: 25px;
+  border-top-right-radius: 15px;
+  box-shadow: 0px -25px 0px 0px #d80621;
+}
+
+.delete-button-reject {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(1px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(2px, 0, 0);
+  }
+}
+
+#select-country:after {
+  background-color: blue;
 }
 
 .drawer-button {
-    transform: scale(1);
-    position: absolute;
-    bottom: 5px;
-    right: 15px;
-    transition: all 0.2s linear;
+  transform: scale(1);
+  margin-left: 18px;
+  transition: all 0.2s linear;
+  height: fit-content;
 }
 
 .hamburger-ingredients {
-    background-color: #e6e6e6;
-    opacity: 100%;
-    margin: 7px auto;
-    width: 50px;
-    height: 2px;
-    border-radius: 10px;
-    display: block;
-    transition: all 0.2s linear;
+  background-color: black;
+  opacity: 100%;
+  margin: 7px auto;
+  width: 50px;
+  height: 2px;
+  border-radius: 10px;
+  display: block;
+  transition: all 0.2s linear;
 }
 
 #submit-btn {
@@ -43,7 +211,7 @@ body, html {
   left: -100%;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #0088A8);
+  background: linear-gradient(90deg, transparent, #083248);
   animation: btn-anim1 3s linear infinite;
 }
 
@@ -63,7 +231,7 @@ body, html {
   right: 0;
   width: 2px;
   height: 100%;
-  background: linear-gradient(180deg, transparent, #0088A8);
+  background: linear-gradient(180deg, transparent, #083248);
   animation: btn-anim2 3s linear infinite;
   animation-delay: 0.75s;
 }
@@ -84,7 +252,7 @@ body, html {
   right: -100%;
   width: 100%;
   height: 2px;
-  background: linear-gradient(270deg, transparent, #0088A8);
+  background: linear-gradient(270deg, transparent, #083248);
   animation: btn-anim3 3s linear infinite;
   animation-delay: 1.5s;
 }
@@ -105,7 +273,7 @@ body, html {
   left: 0;
   width: 2px;
   height: 100%;
-  background: linear-gradient(360deg, transparent, #0088A8);
+  background: linear-gradient(360deg, transparent, #083248);
   animation: btn-anim4 3s linear infinite;
   animation-delay: 2.25s;
 }
@@ -122,8 +290,7 @@ body, html {
 }
 
 @font-face {
-  src: url("../public/fonts/Amino-Alt\ 5/Amino Alt Medium.ttf")
-    format("truetype");
+  src: url("../public/fonts/Amino-Alt\ 5/Amino Alt Medium.otf");
   font-family: "Amino Alt";
   font-weight: normal;
   font-style: normal;
@@ -142,118 +309,140 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "Roboto", sans-serif;
+  /* font-family: "Roboto", sans-serif; */
 }
 
-.SectionHome {
+
+
+
+
+/* -----Search-filter */
+
+
+
+
+
+/* -----Pagination */
+
+.pagination-data {
+  padding: 0;
+  margin: 0;
+}
+.pagination-data li {
+  list-style: none;
+}
+.table-filter-info {
+  padding: 15px;
+}
+.thead-primary tr th {
+  background-color: #5a8dee;
+  border-color: #5a8dee;
+  color: #fff;
+}
+
+.rc-pagination {
   display: flex;
-  gap: 15vw;
-  height: 100vh;
-  background-color: #f8f8f8;
-  overflow: hidden;
+  align-items: center;
+  justify-content: flex-end;
 }
-.TextContainer {
-  flex: 1;
-  padding-top: 6vw;
-  padding-left: 4vw;
-}
-
-.BtnContainer {
-  display: flex;
-  margin-top: 2.2vw;
-  gap: 2vw;
-  margin-left: 4.5vw;
-}
-.TextInfoContainer {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 4vw;
-  margin-right: 7vw;
-}
-.TextInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2vw;
-  font-weight: 500;
+.rc-pagination-item,
+.rc-pagination-prev,
+.rc-pagination-jump-prev,
+.rc-pagination-jump-next {
+  margin-right: 8px;
 }
 
-.HeroImage {
-  width: 40%;
-  padding-right: 2vw;
-  position: relative;
-}
-.RocketImage {
-  width: 32vw;
-  top: -5vw;
-  right: 25vw;
-
-  position: absolute;
-}
-.TrophyImage {
-  width: 20vw;
-  top: 32vw;
-  left: 20vw;
-  position: absolute;
-}
-.EllipseLeft {
-  width: 15vw;
-  top: 30vw;
-  right: 35vw;
-  position: absolute;
+.rc-pagination-total-text {
+  margin-right: 12px;
+  cursor: initial;
 }
 
-.EllipseRight {
-  width: 10vw;
-  top: 5vw;
-  left: 25vw;
-
-  position: absolute;
+.rc-pagination-jump-next,
+.rc-pagination-jump-prev,
+.rc-pagination-next,
+.rc-pagination-prev {
+  display: inline-block;
+  min-width: 28px;
+  height: 28px;
+  color: rgba(0, 0, 0, 0.85);
+  font-family: Arial;
+  line-height: 28px;
+  text-align: center;
+  vertical-align: middle;
+  list-style: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.3s;
 }
-
-/********************************* Buttons*/
-.Btn {
-  font-size: 1.3vw;
-  transition: all 0.1s;
-  width: 13vw;
-  padding: 1vw 1vw;
-  font-weight: 600;
-  border-radius: 200px;
-  border: 0;
+.rc-pagination-jump-next button,
+.rc-pagination-jump-prev button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #666;
+}
+.rc-pagination-jump-next button:after,
+.rc-pagination-jump-prev button:after {
+  display: block;
+  content: "•••";
+}
+.rc-pagination-item,
+.rc-pagination-prev,
+.rc-pagination-next,
+.rc-pagination-total-text {
+  min-width: initial;
+  height: auto;
+  line-height: initial;
+  background-color: transparent;
+  border: none;
   cursor: pointer;
 }
-.Btn_main {
-  color: white;
-  background-color: #1971c2;
-}
-
-.Btn_main:hover {
-  background-color: #1766af;
-}
-
-.Btn_side {
-  color: #1971c2;
-  background-color: white;
-  outline: 2px solid #1971c2;
-}
-.Btn_side:hover {
-  outline: 1px solid #1971c2;
-}
-.Shiny {
-  content: "";
-  position: absolute;
-  height: 100px;
-  width: 20px;
-  background-color: #f3f3f3;
-  box-shadow: 0 0 10px #fff;
-  filter: blur(1px);
-  opacity: 0.9;
-  transition: 0.7s;
-  transform: rotate(40deg) translateX(-60) translateY(-60);
-}
-.gridSystem {
-  display: grid;
-  justify-content: center;
+.rc-pagination-item a,
+.rc-pagination-item button,
+.rc-pagination-prev a,
+.rc-pagination-prev button,
+.rc-pagination-next a,
+.rc-pagination-next button,
+.rc-pagination-total-text a,
+.rc-pagination-total-text button {
+  padding: 6px 8px;
+  height: auto;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-color: transparent;
+  display: flex;
   align-items: center;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: #656f84 !important;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
 }
-
+.rc-pagination-item.rc-pagination-item-active a,
+.rc-pagination-item.rc-pagination-item-active a:hover,
+.rc-pagination-prev.rc-pagination-item-active a,
+.rc-pagination-prev.rc-pagination-item-active a:hover,
+.rc-pagination-next.rc-pagination-item-active a,
+.rc-pagination-next.rc-pagination-item-active a:hover,
+.rc-pagination-total-text.rc-pagination-item-active a,
+.rc-pagination-total-text.rc-pagination-item-active a:hover {
+  background-color: #5a8dee;
+  border-color: #5a8dee;
+  color: #ffffff !important;
+}
+.rc-pagination-item a:hover,
+.rc-pagination-item button:hover,
+.rc-pagination-prev a:hover,
+.rc-pagination-prev button:hover,
+.rc-pagination-next a:hover,
+.rc-pagination-next button:hover,
+.rc-pagination-total-text a:hover,
+.rc-pagination-total-text button:hover {
+  background-color: #eceff5;
+  border-color: #eceff5;
+}

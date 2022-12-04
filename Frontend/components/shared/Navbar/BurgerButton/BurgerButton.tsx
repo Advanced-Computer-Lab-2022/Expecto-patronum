@@ -8,27 +8,26 @@ type Props = {
 const BurgerButton = (props: Props) => {
 
     const [isClicked, setIsClicked] = useState(false);
-    const {isSearchToggled, setIsSearchToggled, isCurtainOpen, setIsCurtainOpen} = useContext(curtainSearchSwitching);
+    const {isSearchOpen, isCurtainOpen, setIsCurtainOpen} = useContext(curtainSearchSwitching);
 
     useEffect(() => {
-        if(isSearchToggled && isClicked) {
-            document.getElementById("drawer-button")?.click();
-            setIsCurtainOpen(false);
-        }
-    },[isSearchToggled])
+        isSearchOpen && isClicked ? toggleX(): null;
+    },[isSearchOpen])
 
 
     function toggleX() {
 
+        setIsCurtainOpen(!isCurtainOpen);
+        setIsClicked(!isClicked);
+
         // Toggles curtain when responsive
         if(!isCurtainOpen) {
-            props.curtainRef.current.style.bottom = "-115px";
+            props.curtainRef.current.style.bottom = "-5rem";
             props.curtainRef.current.style.opacity = "100%";
         } else {
-            props.curtainRef.current.style.bottom = "9rem";
+            props.curtainRef.current.style.bottom = "5.5rem";
             props.curtainRef.current.style.opacity = "0%";
         }
-        setIsCurtainOpen(!isCurtainOpen);
 
         // Transform Burger shape to an X-shape
         const ingredients = Array.from(document.getElementsByClassName("hamburger-ingredients") as HTMLCollectionOf<HTMLElement>);
@@ -57,7 +56,6 @@ const BurgerButton = (props: Props) => {
             transformIngredient(3, 0, 0, "bottom");
         }
 
-        setIsClicked(!isClicked);
     }
   
     //Helper function for transforming ingredients

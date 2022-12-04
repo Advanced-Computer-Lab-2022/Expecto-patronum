@@ -8,6 +8,19 @@ const CourseSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  courseVideo: {
+    type: String,
+    required: true
+  }
+  ,
+  courseImage: {
+    type: String,
+    required: true
+  },
+  courseVideo: {
+    type: String,
+    required: true
+  },
   summary: {
     type: String,
     required: true
@@ -18,11 +31,16 @@ const CourseSchema = new mongoose.Schema({
   },
   discountPrice: {
     type: Number,
-    required: true
   },
   discount: {
-    type: Number,
-    default: 0
+    discount: {
+      type: Number,
+      default: 0,
+    },
+    startDate: Date,
+    duration: Number,
+    endDate: Date,
+    //expiration: moment().add(, "days").valueOf()
   },
 
   subject: {
@@ -51,34 +69,60 @@ const CourseSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  // exercises: [{
+  //   title: String,
+  //   questions: [{
+  //     question: String,
+  //     choices: [String],
+  //     answer: Number,
+  //     isVisible: Boolean,
+  //   }],
+  //   totalGrade: Number
+  // }],
   subtitles: [{
     header: String,
+    summary: String,
     contents: [{
-      title: String,
+      contentTitle: String,
       video: String,
       preview: Boolean,
       duration: Number,
-      description: String
+      description: String,
     }],
+    exercise: {
+      exerciseName: String
+      , exerciseID: {
+        type: mongoose.Types.ObjectId,
+        ref: 'ExcerciseSchema',
+      }
+    },
     totalMinutes: Number,
   }],
-  exercises: [{
-    title: String,
-    questions: [{
-      question: String,
-      choices: [String],
-      answer: Number,
-      isVisible: Boolean,
-    }],
-    totalGrade: Number
-  }]
-  ,
+  finalExam: {
+    type: mongoose.Types.ObjectId,
+    ref: 'ExcerciseSchema',
+  },
   rating: {
-    one: Number,
-    two: Number,
-    three: Number,
-    four: Number,
-    five: Number,
+    one: {
+      type: Number,
+      default: 0
+    },
+    two: {
+      type: Number,
+      default: 0
+    },
+    three: {
+      type: Number,
+      default: 0
+    },
+    four: {
+      type: Number,
+      default: 0
+    },
+    five: {
+      type: Number,
+      default: 0
+    },
     avg: {
       type: Number,
       default: 0
@@ -88,6 +132,12 @@ const CourseSchema = new mongoose.Schema({
     //   / (this.one + this.two + this.three + this.four + this.five)
     // }
   },
+  review: [{
+    username: String,
+    reviewBody: String,
+    rating: Number
+  }]
+
 
 });
 

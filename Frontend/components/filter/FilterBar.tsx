@@ -27,6 +27,7 @@ const FilterBar: React.FC<FilterProps> = ({
 }) => {
   const router = useRouter();
   const [FlagHelper, SetFlagHelper] = useState(false);
+  const [FirstFilter, SetFirstFilter] = useState<true | false | null>(false);
 
   const { Filter, SetFilter } = useContext(DataContext);
 
@@ -76,6 +77,7 @@ const FilterBar: React.FC<FilterProps> = ({
       }
     }
     function GetUrl() {
+      SetFirstFilter(true);
       let subject: string[] = [];
       let rating: string[] = [];
       let price: string[] = [];
@@ -141,7 +143,7 @@ const FilterBar: React.FC<FilterProps> = ({
   }
 
   useEffect(() => {
-    if (FlagHelper === false && router.isReady) {
+    if (router.isReady) {
       if (
         router.query.rating ||
         router.query.subject ||
@@ -151,16 +153,34 @@ const FilterBar: React.FC<FilterProps> = ({
       ) {
         FilterFunction("GetFromUrl");
       }
-      SetFlagHelper(true);
+      else {
+        SetFirstFilter(null);
+      }
     }
 
+
+  }, [router.isReady]);
+
+  useEffect(() => {
     if (FlagHelper) {
-      FilterFunction("PushToUrl");
+      if (FirstFilter == null) {
+        FilterFunction("PushToUrl");
+      }
+      else {
+        if (FirstFilter === true) {
+          SetFirstFilter(null);
+        }
+      }
     }
-  }, [Filter, router.isReady]);
+    SetFlagHelper(true);
+
+  }, [Filter])
+
+
+
 
   return (
-    <div className="mt-32 ">
+    <div className="mt-32 xs:hidden">
       <h1 className="text-xl mb-10 font-bold">Filter By</h1>
       <FilterType
         Choosen={Filter.Subject}
