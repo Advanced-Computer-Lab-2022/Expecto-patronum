@@ -52,8 +52,8 @@ const Exam = () => {
         //     { question: "what about ur 6th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true }];
         // setQuestions(questionsDummyData);
         setUserID("6383d9da6670d09304d2b016");
-        setExerciseID("6383e073de30152bc8991dd5");
-        setCourseID("6383e073de30152bc8991dc9");
+        setExerciseID("6383e073de30152bc8991dc9");
+        setCourseID("6383e073de30152bc8991dd5");
         getQuestions();
     }, [])
     useEffect(() => {
@@ -219,7 +219,7 @@ const Exam = () => {
                 response = await axios.put("http://localhost:5000/User/submitAnswer", {
                     userID:"6383d9da6670d09304d2b016", 
                     courseID:"6383e073de30152bc8991dc9",
-                    exerciseID:"6383e073de30152bc8991dd5",
+                    excerciseID:"6383e073de30152bc8991dd5",
                     answers:empty,
                 }).then((res: { data: any; }) => { return res.data });
                 // viewPopupMessage(isSuccess, text);
@@ -350,7 +350,7 @@ const Exam = () => {
                         </svg>
                         Go Back
                     </button>
-                    <div id="pagination"><CompPagination totalCount={20 * 5} /></div>
+                    <div id="pagination"><CompPagination totalCount={20 * 5} Setter={goToNext} FromLink={false} /></div>
 
                     <button
                         id="next-btn"

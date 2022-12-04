@@ -68,11 +68,11 @@ const CourseTable = require('../models/CourseSchema');
             break;
           };
         }
-
+        q.totalGrade = y.grade;
         }
         q.exerciseTitle = x.exerciseTitle;
         q.exerciseID = x._id;
-        q.totalGrade = y.totalGrade;
+        q.totalGrade=x.totalGrade;
         q.questions = x.questions;
         res.status(200).send(q);
     } catch (error) {

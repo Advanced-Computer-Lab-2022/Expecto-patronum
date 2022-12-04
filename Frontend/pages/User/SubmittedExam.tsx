@@ -43,9 +43,9 @@ const SubmittedExam = () => {
 
         await axios.get('http://localhost:5000/User/viewAnswers', {
             params: {
-                exerciseID:"637f97cb7c7a24250c993aee" ,
-                userID:"6383d9da6670d09304d2b016",
-                courseID:"637f97cb7c7a24250c993ae2",
+                userID:"6383d9da6670d09304d2b016", 
+                courseID:"6383e073de30152bc8991dc9",
+                exerciseID:"6383e073de30152bc8991dd5",
             },
           }).then(
             (res) => {
