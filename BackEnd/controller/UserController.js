@@ -895,6 +895,10 @@ async function test(req, res) {
   }
 };
 
+async function getInstructorInfo(req, res) {
+  res.send(await User.findById({ _id: req.query.id}).select({ email: 1, biography: 1 }))
+}
+
 async function updateInstructorInfo(req, res) {
   const { id, email, biography } = req.body;
 
@@ -924,7 +928,7 @@ module.exports =
   ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
   ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview,
   giveInstructorReview, submitAnswer, takeExam, test, GenerateUsers, ConnectInstructorsWithCourses,
-  updateInstructorInfo
+  updateInstructorInfo, getInstructorInfo
 }
 
 

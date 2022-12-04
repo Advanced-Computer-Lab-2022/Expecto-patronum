@@ -9,7 +9,7 @@ type Props = {
 
 const OneStar = (props: Props) => {
   return (
-    <div className={Container + `${props.className} ` + (props.size === "lg" ? "text-2xl" : props.size === "md" ? "text-xl" : "text-lg")}>
+    <div className={Container + ` ${props.className} ` + (props.size === "lg" ? "text-2xl" : props.size === "md" ? "text-xl" : "text-lg")}>
       <svg
         aria-hidden="true"
         className={"text-yellow-400" + " " + (props.size === "lg" ? StarSizelg : props.size === "md" ? StarSizemd : StarSizesm)}

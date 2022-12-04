@@ -59,7 +59,7 @@ router.put("/giveCourseRating", giveCourseRating);
 
 router.post("/GenerateUsers", GenerateUsers);
 router.post("/ConnectInstructorsWithCourses", ConnectInstructorsWithCourses);
-// router.get("/getInstructorInfo", getInstructorInfo);
+router.get("/getInstructorInfo", getInstructorInfo);
 router.post("/updateInstructorInfo", updateInstructorInfo);
 
 router.put("/giveInstructorRating", giveInstructorRating);
