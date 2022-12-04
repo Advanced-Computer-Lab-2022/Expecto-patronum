@@ -742,6 +742,7 @@ async function GenerateUsers(req, res) {
   //   var saltHash = genPassword(instructors[i].password);
   //   var salt = saltHash.salt;
   //   var hash = saltHash.hash;
+}
 async function submitAnswer(req,res){
   try{
     var grade;
