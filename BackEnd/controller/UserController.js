@@ -786,22 +786,6 @@ async function submitAnswer(req,res){
   catch (error) {
     console.log(error);
   }
-
-  //   await User.create({
-  //     username: instructors[i].username,
-  //     email: instructors[i].email,
-  //     hash: hash,
-  //     salt: salt,
-  //     firstname: instructors[i].firstname,
-  //     lastname: instructors[i].lastname,
-  //     role: instructors[i].role,
-  //     biography: instructors[i].biography,
-  //   });
-  // }
-
-  // res.send("success: " + instructors.length);
-
-  // res.send("uncomment first an comment this line");
 }
 
 async function ConnectInstructorsWithCourses(req, res) {
