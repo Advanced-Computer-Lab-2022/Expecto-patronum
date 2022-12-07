@@ -92,11 +92,10 @@ function forgetPassword(req, res, next) {
       if (err) {
         console.log("Mail Sent");
       }
-
       else {
         if (user) {
           let Token = CreateToken({ id: user._id });
-          MailValidate(userMail, "http://localhost:3000/ForgetPassword", Token);
+          MailValidate(userMail, `http://localhost:3000/Auth/ForgetPassword`, Token);
           console.log("Mail Sent");
         }
         else {
@@ -112,45 +111,6 @@ function forgetPassword(req, res, next) {
 
 }
 
-// function Usef orgetPasswordToken(req, res) {
-//   if (req.userid) {
-//     User.findById(req.userid, (err, user) => {
-//       if (err) {
-//         res.send("Invalid Token");
-//       } else
-//         if (user) {
-
-//           if (!VerifyTokenDate(user.passwordTimeStamp, req.iat)) {
-//             res.send("Token expired");
-//           }
-
-//           else {
-//             user.forgotPasswrod = true;
-//             user.save((err, newUser) => {
-//               if (err) {
-//                 console.log(err);
-//               }
-//               else {
-//                 res.send("Done");
-
-//               }
-
-//             })
-
-
-//           }
-
-
-
-//         }
-//         else {
-//           res.send("user not found");
-//         }
-//     })
-
-
-//   }
-// }
 
 
 function ChangeForgottenPassword(req, res) {
@@ -184,8 +144,6 @@ function ChangeForgottenPassword(req, res) {
           })
 
         }
-
-
 
       }
       else {
@@ -308,8 +266,6 @@ function ChangeEmail(req, res) {
       }
     }
   });
-
-
 }
 
 function UseChangeEmailToken(req, res) {
@@ -318,7 +274,6 @@ function UseChangeEmailToken(req, res) {
   }
   else
     if (req.user._id) {
-
       User.findById(req.user._id, (err, user) => {
         if (err) {
           res.send("Invalid Token " + err);
@@ -896,7 +851,7 @@ async function test(req, res) {
 };
 
 async function getInstructorInfo(req, res) {
-  res.send(await User.findById({ _id: req.query.id}).select({ email: 1, biography: 1 }))
+  res.send(await User.findById({ _id: req.query.id }).select({ email: 1, biography: 1 }))
 }
 
 async function updateInstructorInfo(req, res) {

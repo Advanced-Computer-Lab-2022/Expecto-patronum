@@ -29,7 +29,6 @@ const ChangePassword = (props: Props) => {
       .post("http://localhost:5000/User/ChangePassword", {
         password: passwordRef.current.value,
         oldpasswordData: oldpasswordRef.current.value
-
       })
       .then((res: { data: { Error: boolean, Message: string } | undefined }) => {
         setLoading(false);

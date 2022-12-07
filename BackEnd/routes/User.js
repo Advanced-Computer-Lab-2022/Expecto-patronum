@@ -36,7 +36,9 @@ router.post("/ChangeForgottenPassword/:token", VerifyTokenMiddleware, ChangeForg
 router.post("/ChangePassword", isAuth, ChangePassword);
 
 router.post("/ChangeEmail", isAuth, ChangeEmail);
-router.get("/resetEmail/:token", VerifyTokenMiddleware, isAuth, UseChangeEmailToken);
+router.get("/resetEmail/:token", VerifyTokenMiddleware, isAuth, UseChangeEmailToken, (req, res) => {
+  res.redirect('http://localhost:3000/User/Profile');
+});
 
 router.get("/countryRate", getRate);
 
