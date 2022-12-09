@@ -12,7 +12,7 @@ const ProblemSchema = new mongoose.Schema({
     },
     status:{
         type:String,
-        enum:['accepted','pending','rejected'],
+        enum:['resolved','pending'],
         default:'pending'
     },
     body:{
