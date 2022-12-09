@@ -13,6 +13,7 @@
     "@formkit/auto-animate": "^1.0.0-beta.3",
     "@headlessui/react": "^1.7.4",
     "@heroicons/react": "^1.0.6",
+    "@hookform/resolvers": "^2.9.10",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.13",
     "@tailwindcss/line-clamp": "^0.4.2",
@@ -31,6 +32,7 @@
     "react-device-detect": "^2.2.2",
     "react-dom": "18.2.0",
     "react-flags-select": "^2.2.3",
+    "react-hook-form": "^7.40.0",
     "react-icons": "^4.6.0",
     "react-player": "^2.11.0",
     "react-query": "^3.39.2",
@@ -40,7 +42,8 @@
     "react-timecode": "^1.2.0",
     "react-timer-wrapper": "^0.4.1",
     "reactjs-popup": "^2.0.5",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/node": "18.11.9",
