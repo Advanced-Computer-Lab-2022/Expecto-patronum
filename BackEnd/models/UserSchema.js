@@ -105,11 +105,21 @@ const UserSchema = new mongoose.Schema({
       default:0
     },
     instructorReview:String,
-    
+    watchedMinutes: Number,
+    watchedVideos:[String]
 }],
 
   biography:{
     type:String
+  },
+  wallet:{
+    type:Number
+  },
+  creditCard:{
+    cardNumber:Number,
+    expiryDate:Date,
+    name:String,
+    signature:String
   }
 
 });
