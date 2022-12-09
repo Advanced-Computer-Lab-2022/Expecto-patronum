@@ -26,6 +26,12 @@ const ProblemSchema = new mongoose.Schema({
     },
     startDate:{
         type:Date
+    },
+
+    seen:{
+        type: String,
+        enum: ['seen', 'unseen'],
+        default:'unseen'
     }
 
       
