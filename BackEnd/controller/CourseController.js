@@ -425,4 +425,9 @@ async function GenerateCourses(req, res) {
   res.send("uncomment first an comment this line");
 }
 
-module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses };
+async function MostRated(req, res) {
+  res.send(await Course.find({}).sort({ "rating.avg": -1 }).limit(5));
+  
+}
+
+module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses, MostRated };

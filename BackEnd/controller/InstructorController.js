@@ -451,10 +451,14 @@ async function viewInstructorRatingsAndReviews(req, res) {
 
 }
 
+async function searchCourses(req, res) {
+  res.send(await CourseTable.find({ instructorID: req.query.instructorID }).select({ title: 1 }));
+}
+
 
 
 module.exports = { 
   viewCourses, filterCourses, addCourse, discount, viewCourseRatings, 
   updateBio, testingAll, viewProfile, cancelDiscount, viewInstructorRatingsAndReviews,
-  filterByRatings, 
+  filterByRatings, searchCourses,
 };

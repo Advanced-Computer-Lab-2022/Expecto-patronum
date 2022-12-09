@@ -138,7 +138,7 @@ const Sidebar = (props: Props) => {
   )
 }
 
-const sideBar = classNames('w-52 min-w-[13rem] h-screen sb-max:w-14 sb-max:min-w-[3.5rem] text-left text-lg py-4 pl-2 pr-[1.75px] bg-main flex border-r-2 border-gray-300 shadow-lg flex-col sticky top-0 sb:left-0 z-10 transition-all overflow-hidden duration-200');
+const sideBar = classNames('w-52 min-w-[13rem] h-screen sb-max:w-14 sb-max:min-w-[3.5rem] text-left text-lg py-4 pl-2 pr-[1.5px] bg-main flex border-r-2 border-gray-300 shadow-lg flex-col sticky top-0 sb:left-0 z-10 transition-all overflow-hidden duration-200');
 const burgerButton = classNames('relative left-2 mb-4 rounded-md w-fit p-0.5 hover:text-canadian-red hover:scale-160 transition-all duration-200 scale-150 hidden sb-max:block');
 const profileIconImg = classNames('rounded-full shadow-lg border-2 border-canadian-red h-16 w-16 sb-max:h-10 sb-max:w-10');
 const instructorNT = classNames('flex flex-col sb-max:opacity-0 text-gray-800 pl-3 sb-max:hidden whitespace-nowrap transition-all duration-1000');
