@@ -4,14 +4,16 @@ import FormFeedBack from './FormFeedBack'
 
 type Props = {
   Submit: any,
-  Inputs: { ref: any, name: string, label?: string, placeholder: string, required: boolean }[],
+  Inputs: { ref: any, type: string, name: string, label?: string, placeholder: string, required: boolean }[],
   ButtonText: string
   FormTitle: string
   Error?: { Error: boolean, Message: string, Cta?: string, CtaLink?: string }
   Success?: { Success: boolean, Message: string, Cta?: string, CtaLink?: string }
+  ValidationErrors: any
 }
 
 const AuthForm = (props: Props) => {
+
 
 
   return (
@@ -23,7 +25,7 @@ const AuthForm = (props: Props) => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               {props.FormTitle}
             </h1>
-            {!props.Error?.Error && !props.Success?.Success && <FormContent Submit={props.Submit} Inputs={props.Inputs} ButtonText={props.ButtonText} />}
+            {!props.Error?.Error && !props.Success?.Success && <FormContent ValidationErrors={props.ValidationErrors} Submit={props.Submit} Inputs={props.Inputs} ButtonText={props.ButtonText} />}
             {props.Error?.Error && <FormFeedBack Data={props.Error} ></FormFeedBack>}
             {props.Success?.Success && <FormFeedBack Data={props.Success} ></FormFeedBack>}
 
