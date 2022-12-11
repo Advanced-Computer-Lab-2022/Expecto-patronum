@@ -304,7 +304,7 @@ async function discount(req, res, next) {
     queryCond.endDate = endDate;
     discount = 1 - (discount / 100);
     try {
-      queryCond.duration = 1;
+      queryCond.set = true;
       const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
       var z = Object.values(y)[0];
       var discountPrice = (z.price * discount);
@@ -320,7 +320,7 @@ async function discount(req, res, next) {
   }else{
     endDate = new Date(req.body.endDate);
     queryCond.endDate = endDate;
-    queryCond.duration = 0;
+    queryCond.set = false;
     discount = 1 - (discount / 100);
     try {
       const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
@@ -377,7 +377,7 @@ async function updateBio(req,res){
         "discount.startDate": { $exists: true }},
         [
           {"$set":{discountPrice: "$price","discount.discount":0}},
-          { $unset: ["discount.startDate","discount.endDate","discount.duration"]}
+          { $unset: ["discount.startDate","discount.endDate","discount.set"]}
         ]
         );
         if(allCourses){

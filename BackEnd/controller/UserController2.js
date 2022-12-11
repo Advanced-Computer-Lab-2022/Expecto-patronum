@@ -10,6 +10,7 @@ const { VerifyTokenDate } = require("../lib/VerfiyTokenDate");
 const { Passport } = require("passport");
 const ExerciseTable = require('../models/ExcerciseSchema');
 const CourseTable = require('../models/CourseSchema');
+const requestTable = require('../models/RequestSchema');
 
   async function SelectExercise(req, res, next) {
     try {
@@ -81,5 +82,26 @@ const CourseTable = require('../models/CourseSchema');
     }
   };
 
+  async function requestCourse(req, res, next) {
 
-  module.exports = { SelectExercise,viewAnswer}
+    var x = await User.findOne({ "_id": req.body.userID }, {role:1, _id: 1 });
+    if(x.role =="CorporateTrainee"){
+     const date = new Date();
+      const newRequest = new requestTable({
+        type:'requestCourse',
+        userId: req.body.userID,
+        courseID:req.body.courseID,
+        startDate:date,
+        body:req.body.body
+      });
+      try {
+        newRequest.save();
+        res.status(200).json(newRequest);  
+      } catch (err) {
+        res.status(400).json({error:err.message})
+      };
+    }
+  };
+
+
+  module.exports = { SelectExercise,viewAnswer,requestCourse}

@@ -29,7 +29,7 @@ var start2 = schedule.scheduleJob('* * * * *', async function () {
     var allCourses = await Course.updateMany({
       $and: [
         { "discount.startDate": { $exists: true } }, { "discount.startDate": { $lte: dateNow } },
-        { "discount.duration": { $exists: true } }, { "discount.duration": 0 }
+        { "discount.set": { $exists: true } }, { "discount.set": false }
       ]
     }, [
       {
@@ -40,7 +40,7 @@ var start2 = schedule.scheduleJob('* * * * *', async function () {
                 { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
             }, 2]
           },
-          "discount.duration": 1
+          "discount.set": true
         }
       },
     ]);
@@ -83,7 +83,7 @@ async function discountStartDate() {
     var allCourses = await Course.updateMany({
       $and: [
         { "discount.startDate": { $exists: true } }, { "discount.startDate": { $lte: dateNow } },
-        { "discount.duration": { $exists: true } }, { "discount.duration": 0 }
+        { "discount.set": { $exists: true } }, { "discount.set": false }
       ]
     }, [
       {
@@ -94,7 +94,7 @@ async function discountStartDate() {
                 { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
             }, 2]
           },
-          "discount.duration": 1
+          "discount.set": true
         }
       },
     ]);
