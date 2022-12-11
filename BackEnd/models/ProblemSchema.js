@@ -12,8 +12,8 @@ const ProblemSchema = new mongoose.Schema({
     },
     status:{
         type:String,
-        enum:['resolved','pending'],
-        default:'pending'
+        enum:['unseen','resolved','pending'],
+        default:'unseen'
     },
     body:{
         type:String
@@ -28,14 +28,10 @@ const ProblemSchema = new mongoose.Schema({
         type:Date
     },
 
-    seen:{
-        type: String,
-        enum: ['seen', 'unseen'],
-        default:'unseen'
-    }
-
+    comment:[{
+        type:string
+    }],
       
-
 })
 
 const Problem = connection.model('Problem', ProblemSchema);
