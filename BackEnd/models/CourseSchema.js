@@ -140,6 +140,10 @@ const CourseSchema = new mongoose.Schema({
     //expiration: moment().add(, "days").valueOf()
   },
 
+  purchases:{
+    times:Number
+  }
+
 
 });
 

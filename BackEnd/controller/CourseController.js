@@ -377,52 +377,91 @@ async function GetAllCourses(req, res) {
 
 async function GenerateCourses(req, res) {
 
-  // for(var i = 0; i < courses.length; i++) {
-  //   var subtitles = courses[i].subtitles;
-  //   var courseHours = 0;
+   for(var i = 0; i < courses.length; i++) {
+    var subtitles = courses[i].subtitles;
+    var courseHours = 0;
 
-  //   subtitles.map((subtitle) => {
-  //       subtitle.totalMinutes = 0;
-  //       subtitle.contents.map((content) => {
-  //           subtitle.totalMinutes += content.duration;
-  //       })
-  //       courseHours += subtitle.totalMinutes / 60;
-  //   });
+    subtitles.map((subtitle) => {
+        subtitle.totalMinutes = 0;
+        subtitle.contents.map((content) => {
+             subtitle.totalMinutes += content.duration;
+         })
+        courseHours += subtitle.totalMinutes / 60;
+     });
 
-  //   var currency = courses[i].price;
-  //   var number = Number(currency.replace(/[^0-9.-]+/g,""));
+    var currency = courses[i].price;
+     var number = Number(currency.replace(/[^0-9.-]+/g,""));
 
-  //   await Course.create({
-  //     title: courses[i].title,
-  //     subject: courses[i].subject,
-  //     instructorName: courses[i].instructorName,
-  //     courseVideo: courses[i].courseVideo,
-  //     discount: {
-  //       discount: courses[i].discount.discount,
-  //       startDate: courses[i].discount.startDate,
-  //       endDate: courses[i].discount.endDate,
-  //     },
-  //     price: number,
-  //     level: courses[i].level,
-  //     courseHours: courseHours,
-  //     summary: courses[i].summary,
-  //     subtitles: courses[i].subtitles,
-  //     rating: {
-  //       one: courses[i].rating.one,
-  //       two: courses[i].rating.two,
-  //       three: courses[i].rating.three,
-  //       four: courses[i].rating.four,
-  //       five: courses[i].rating.five,
-  //       avg: (courses[i].rating.one + courses[i].rating.two*2 + courses[i].rating.three*3 + courses[i].rating.four*4 + courses[i].rating.five*5) / (courses[i].rating.one + courses[i].rating.two + courses[i].rating.three + courses[i].rating.four + courses[i].rating.five),
-  //     },
-  //     review: courses[i].review,
-  //     courseImage: courses[i].courseImage,
-  //   });
-  // }
+     await Course.create({
+       title: courses[i].title,
+       subject: courses[i].subject,
+       instructorName: courses[i].instructorName,
+      courseVideo: courses[i].courseVideo,
+       discount: {
+         discount: courses[i].discount.discount,
+         startDate: courses[i].discount.startDate,
+         endDate: courses[i].discount.endDate,
+       },
+       price: number,
+      level: courses[i].level,
+       courseHours: courseHours,
+       summary: courses[i].summary,
+      subtitles: courses[i].subtitles,
+       rating: {
+         one: courses[i].rating.one,
+         two: courses[i].rating.two,
+         three: courses[i].rating.three,
+         four: courses[i].rating.four,
+         five: courses[i].rating.five,
+         avg: (courses[i].rating.one + courses[i].rating.two*2 + courses[i].rating.three*3 + courses[i].rating.four*4 + courses[i].rating.five*5) / (courses[i].rating.one + courses[i].rating.two + courses[i].rating.three + courses[i].rating.four + courses[i].rating.five),
+      },
+       review: courses[i].review,
+       courseImage: courses[i].courseImage,
+     });
+   }
 
-  // res.send("success: " + courses.length);
+   res.send("success: " + courses.length);
+  
 
-  res.send("uncomment first an comment this line");
+  //res.send("uncomment first an comment this line");
 }
 
-module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses };
+async function userFilterByRatings(req,res){
+  var CurrentPage = req.query.page ? req.query.page : 1;
+try{
+  //var currentID=await req.body.userID;
+  var stars=req.body.rating;
+  var currentCourseID=await req.body.courseID;
+  var ratings=await Course.find({
+     "_id":currentCourseID,"review.rating":stars
+
+  }).select({ "_id":0,"rating":1,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
+  //const rates=[Object.values(ratings)[4]];
+  //{$slice:[CurrentPage-1,CurrentPage*2]}
+  res.send(ratings);
+}
+catch(error){
+  res.status(400).json({error:error.message})
+}
+}
+
+async function userViewCourseRatings(req,res,next){
+  var CurrentPage = req.query.page ? req.query.page : 1;
+  try{
+    //var currentID=await req.body.userID;
+    var currentCourseID=await req.body.courseID;
+    var ratings=await Course.find({
+       "_id":currentCourseID
+
+    }).select({ "_id":0,"rating":1,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
+    //const rates=[Object.values(ratings)[4]];
+    //{$slice:[CurrentPage-1,CurrentPage*2]}
+    res.send(ratings);
+  }
+  catch(error){
+    res.status(400).json({error:error.message})
+  }
+  
+}
+
+module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses,userViewCourseRatings,userFilterByRatings };

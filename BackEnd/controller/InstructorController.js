@@ -389,15 +389,7 @@ async function updateBio(req,res){
       }
     }
 
-    async function testingAll(req,res){
-      try{
-        var whatever=await ExerciseTable.find();
-        res.send(whatever);
-      }
-      catch(error){
-        console.log(error);
-      }
-    }
+    
     
     async function viewProfile(req,res,next){
       try{
@@ -428,7 +420,7 @@ async function updateBio(req,res){
       var ratings=await CourseTable.find({
         "instructorID":currentID, "_id":currentCourseID,"review.rating":stars
 
-      }).select({ "_id":0,"rating":1,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
+      }).select({ "_id":0,"rating":1,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+2]}})
       //const rates=[Object.values(ratings)[4]];
       //{$slice:[CurrentPage-1,CurrentPage*2]}
       res.send(ratings);
@@ -449,6 +441,16 @@ async function viewInstructorRatingsAndReviews(req, res) {
     console.log(error);
   }
 
+}
+async function testingAll(req,res){
+  var x=1;
+  try{
+    var whatever=await CourseTable.findOne({"_id":"637bbb38ae65da68c4e57726","review.rating":x}).select({"review":1,"_id":0});
+    res.send(whatever);
+  }
+  catch(error){
+    console.log(error);
+  }
 }
 
 
