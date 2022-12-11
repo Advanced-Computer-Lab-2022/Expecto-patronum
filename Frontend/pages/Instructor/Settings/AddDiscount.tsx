@@ -48,19 +48,21 @@ const AddDiscount = (props: Props) => {
   async function submitDiscount() {
 
     if(courseID === undefined || startDate === undefined || endDate === undefined || discount === undefined) {
-      viewPopupMessage(false, "Please fill in the required fields");
+      viewPopupMessage(false, "Please fill in the required fields.");
       return; 
     }
 
-    // axios.defaults.withCredentials = true;
-    //   await axios.get("http://localhost:5000/Instructor/discount", {
-    //     params: {
-    //       instructorID: '63877fb65c8dac5284aaa3c2',
-    //       courseID: courseID,
-    //     },
-    //   }).then((res: { data: any }) => {
-    //     setCourses(res.data);
-    //   });
+    axios.defaults.withCredentials = true;
+      await axios.post("http://localhost:5000/Instructor/discount", {
+          instructorID: '63877fb65c8dac5284aaa3c2',
+          courseID: courseID,
+          discount: discount,
+          startDate: startDate,
+          endDate: endDate,
+      }).then((res: { data: any }) => {
+        console.log(res.data);
+        viewPopupMessage(true, "Discount has been added successfully.");
+      });
 
     console.log(courseID);
     console.log(startDate);

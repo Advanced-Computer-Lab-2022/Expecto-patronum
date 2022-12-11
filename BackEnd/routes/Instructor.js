@@ -37,7 +37,7 @@ router.get("/viewCourses",viewCourses);
 
 router.post('/addCourse',addCourse);
 
-router.put("/discount",discount);
+router.post("/discount",discount);
 
 router.put("/cancelDiscount",cancelDiscount);
 
