@@ -27,7 +27,7 @@ const ProblemSchema = new mongoose.Schema({
     },
 
     comment:[{
-        type:string
+        type:String
     }],
       
 })
