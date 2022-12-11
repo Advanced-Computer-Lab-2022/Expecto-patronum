@@ -18,11 +18,9 @@ const ProblemSchema = new mongoose.Schema({
     body:{
         type:String
     },
-    courseID:{
-        courseID: {
-            type: mongoose.Types.ObjectId,
-            ref:'CourseSchema'
-          }
+    courseID: {
+        type: mongoose.Types.ObjectId,
+        ref:'CourseSchema'
     },
     startDate:{
         type:Date

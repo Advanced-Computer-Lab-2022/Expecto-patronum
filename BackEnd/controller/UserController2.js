@@ -89,14 +89,14 @@ const requestTable = require('../models/RequestSchema');
      const date = new Date();
       const newRequest = new requestTable({
         type:'requestCourse',
-        userId: req.body.userID,
+        userID: req.body.userID,
         courseID:req.body.courseID,
         startDate:date,
         body:req.body.body
       });
       try {
         newRequest.save();
-        res.status(200).json(newRequest);  
+        res.status(200).send(newRequest);  
       } catch (err) {
         res.status(400).json({error:err.message})
       };
