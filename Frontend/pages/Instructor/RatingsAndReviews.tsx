@@ -51,6 +51,7 @@ const RatingsAndReviews = (props: Props) => {
     <Layout>
       {ratings && reviews && totalRatings && <div className='sb-max:min-w-[fit] text-center'>
         <div className='mt-10 space-y-2'>
+          <h1 className='text-3xl'>Personal Ratings & Reviews</h1>
           <h1 className='text-5xl'>{ratings.avg.toFixed(1)}</h1>
           <p>{totalRatings.toLocaleString()} Ratings &#128900; {reviews.length} Reviews</p>
           <BigRating Rate={ratings.avg.toFixed(1)} RateAction={false} />

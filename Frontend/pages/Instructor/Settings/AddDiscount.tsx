@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import Layout from './Layout';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -26,6 +27,9 @@ const AddDiscount = (props: Props) => {
   const selectCourseRef = useRef<any>();
   const coursesDropdownRef = useRef<any>();
 
+  const router = useRouter();
+  const data = router.query
+
   useEffect(() => {
     const getCourses = async () => {
       axios.defaults.withCredentials = true;
@@ -35,6 +39,17 @@ const AddDiscount = (props: Props) => {
         },
       }).then((res: { data: any }) => {
         setCourses(res.data);
+        if(data.courseID !== undefined) {
+          var currentCourse = (res.data).filter((course: any) => course._id === data.courseID);
+          setInput(currentCourse[0].title);
+          setCourseID(data.courseID);
+          selectCourseRef.current.children[1].value = currentCourse[0].title;
+          coursesDropdownRef.current.classList.add('hidden');
+          selectCourseRef.current.children[0].style.top = "0.55rem";
+          selectCourseRef.current.children[0].style.color = "black";
+          selectCourseRef.current.children[0].style.fontSize = "0.86rem";
+          selectCourseRef.current.children[0].style.transition = "font-size 0.3s, top 0.3s, color 0.3s linear 0.3s";
+        }
       });
     }
 
@@ -64,10 +79,10 @@ const AddDiscount = (props: Props) => {
         viewPopupMessage(true, "Discount has been added successfully.");
       });
 
-    console.log(courseID);
-    console.log(startDate);
-    console.log(endDate);
-    console.log(discount);
+    // console.log(courseID);
+    // console.log(startDate);
+    // console.log(endDate);
+    // console.log(discount);
   }
 
   const selectCourse = (e: any) => {

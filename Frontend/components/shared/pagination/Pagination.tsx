@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
+import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
 import { CgPushChevronLeft, CgPushChevronRight } from 'react-icons/cg';
 
 type Props = {
@@ -51,18 +52,18 @@ const Pagination = (props: Props) => {
 
     return (
     <div className='flex items-center justify-center text-center mb-4'>
-        <button className={pageButton + ' '+ ( props.page === 0 ? disabledButton: 'hover:bg-input hover:text-white')} disabled={props.page === 0} onClick={() => buildPagination(0)}><CgPushChevronLeft className='scale-125' /></button>
+        <button className={'w-26 pr-3 text-base ' + pageButton + ' ' + ( props.page === 0 ? disabledButton: ' hover:bg-input hover:text-white')} disabled={props.page === 0} onClick={() => buildPagination(0)}><BiChevronLeft className='scale-125 mx-1' />Previous</button>
         {
             pages.map((pageIndex: number) =>(
                 <button className={pageButton + ' '+ (pageIndex === props.page ? activeButton: '') + (pageIndex + 1 > props.pageCount ? disabledButton : ' hover:bg-input hover:text-white')} disabled={pageIndex + 1 > props.pageCount} onClick={() => {buildPagination(pageIndex);}} key={pageIndex} type='button'>{ pageIndex + 1 }</button>
             ))
         }
-        <button className={pageButton + ' '+ (props.page === props.pageCount - 1 ? disabledButton: '')} disabled={props.page === props.pageCount - 1} onClick={() => buildPagination(props.pageCount - 1)}><CgPushChevronRight className='scale-125' /></button>
+        <button className={'w-20 pl-3 text-base ' + pageButton + ' ' + (props.page === props.pageCount - 1 ? disabledButton: ' hover:bg-input hover:text-white')} disabled={props.page === props.pageCount - 1} onClick={() => buildPagination(props.pageCount - 1)}>Next<BiChevronRight className='scale-125 mx-1' /></button>
     </div>
   )
 }
 
-const pageButton = classNames('rounded-md mx-1 w-6 h-6 flex items-center justify-center border-1.5 border-input text-sm');
+const pageButton = classNames('rounded-md mx-1 w-8 h-8 flex items-center justify-center border-1.5 border-input text-sm');
 const activeButton = classNames('bg-input text-white');
 const disabledButton = classNames('opacity-50');
 

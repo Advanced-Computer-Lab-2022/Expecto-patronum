@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import OneStar from '../../components/shared/rating/OneStar';
 import Layout from './Layout';
@@ -12,6 +12,7 @@ import { AiOutlineClear } from 'react-icons/ai';
 import { MdModeEditOutline } from 'react-icons/md';
 import { TbDiscount2 } from 'react-icons/tb';
 import InstructorCourseCard from '../../components/Instructor/InstructorCourseCard/InstructorCourseCard';
+import DataContext from '../../context/DataContext';
 
 type Props = {}
 
@@ -32,6 +33,7 @@ const MyCourses = (props: Props) => {
   });
 
   const [page, setPage] = useState<number>(0);
+  const { Rate } = useContext(DataContext);
 
   useEffect(() => {
     setNumberOfPages(Math.ceil(totalCount/10));
@@ -95,8 +97,8 @@ const MyCourses = (props: Props) => {
           coursesPerPage: 10,
           subject: filter.subject === '' ? undefined: filter.subject,
           price: {
-            gte: filter.price.min === '' ? undefined: parseInt(filter.price.min),
-            lte: filter.price.max === '' ? undefined: parseInt(filter.price.max),
+            gte: filter.price.min === '' ? undefined: parseInt(filter.price.min) / Rate.rate,
+            lte: filter.price.max === '' ? undefined: parseInt(filter.price.max) / Rate.rate,
           }
         },
       })
@@ -148,23 +150,6 @@ const MyCourses = (props: Props) => {
             {(courses ? courses: courseData).map((course: any, index: number) => {
               return (
                 <InstructorCourseCard key={index} course={course} color={levelColor(course.level)} isViewList={isViewList} />
-                // <div key={index} className={` ${!isViewList ? `inline ${levelColor(course.level)}`: 'flex flex-row-reverse justify-end'} bg-white w-full mb-10 bg-gradient-to-br relative rounded-lg hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 shadow-lg cursor-pointer`}>
-                //   <div className='align-top min-h-0 min-w-0'>
-                //     <a href='/Instructor/Settings/AddDiscount/' title='Add Promotion' className={`${(!isViewList ? 'bottom-12 right-4': 'right-40 sb:top-3')} scale-160 absolute opacity-70 hover:opacity-100 sb-max:bottom-12 sb-max:right-4 transition-all duration-300`}><TbDiscount2 /></a>
-                //     <a href='/Instructor/Settings/EditCourse/' title='Edit Course' className={`${(!isViewList ? 'bottom-4 right-4': 'right-28 sb:top-3')} scale-150 absolute opacity-70 hover:opacity-100 sb-max:bottom-4 sb-max:right-4 transition-all duration-300`}><MdModeEditOutline /></a>
-                //     <div className="bg-white absolute top-0 right-0 w-20 h-10 shadow-lg ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-lg rounded-tl-none ">
-                //         <OneStar rating={(courses ? course.rating.avg: 2.8)} />
-                //     </div>
-                //     <div className='p-4'>
-                //       <h1 className='text-2xl pr-16'>{course.title}</h1>
-                //       <p className='pl-3'>Subject: <span className='opacity-95'>{course.subject}</span></p>
-                //       <p className='pl-3'>Level: <span className='italic opacity-95'>{course.level === 'AllLevels' ? 'All Levels': course.level}</span></p>
-                //       <label className='pl-3'>Description:</label>
-                //       <p onClick={expandDescription} className='pl-6 whitespace-nowrap overflow-hidden sb-max:w-48 text-ellipsis mr-18 sb-max:mr-4'>{course.summary}</p>
-                //     </div>
-                //   </div>
-                //   <img className={`rounded-l-lg ${!isViewList ? 'w-34': `w-40 ${levelColor(course.level)} bg-gradient-to-br`} p-3`} src={courses ? course.courseImage : '/Trophy.png'} />
-                // </div>
               );
             })}
           </div>
