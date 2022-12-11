@@ -417,13 +417,24 @@ async function updateBio(req,res){
       var currentID=await req.body.userID;
       var stars=req.body.rating;
       var currentCourseID=await req.body.courseID;
-      var ratings=await CourseTable.find({
+      var ratings=await CourseTable.findOne({
         "instructorID":currentID, "_id":currentCourseID,"review.rating":stars
 
-      }).select({ "_id":0,"rating":1,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+2]}})
+      }).select({ "_id":0,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
+      var x=ratings.review;
+      var y=[];
+      for(let i=0;i<x.length;i++){
+        if(x[i].rating==stars){
+          y.push(x[i]);
+        }
+      }
       //const rates=[Object.values(ratings)[4]];
+      //{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+7]}
+      //{$elemMatch : {rating:stars}}
       //{$slice:[CurrentPage-1,CurrentPage*2]}
-      res.send(ratings);
+      //res.send(ratings.review);
+      //console.log(stars);
+      res.send(y);
     }
     catch(error){
       res.status(400).json({error:error.message})
@@ -445,7 +456,8 @@ async function viewInstructorRatingsAndReviews(req, res) {
 async function testingAll(req,res){
   var x=1;
   try{
-    var whatever=await CourseTable.findOne({"_id":"637bbb38ae65da68c4e57726","review.rating":x}).select({"review":1,"_id":0});
+    var whatever=await CourseTable.findOne({"_id":"637bbb38ae65da68c4e57726","review.rating":x}).select({"review.rating":1,"_id":0});
+    
     res.send(whatever);
   }
   catch(error){

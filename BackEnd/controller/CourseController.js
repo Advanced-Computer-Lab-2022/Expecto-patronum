@@ -426,19 +426,30 @@ async function GenerateCourses(req, res) {
   //res.send("uncomment first an comment this line");
 }
 
-async function userFilterByRatings(req,res){
+async function userfilterByRatings(req,res){
   var CurrentPage = req.query.page ? req.query.page : 1;
 try{
-  //var currentID=await req.body.userID;
+  var currentID=await req.body.userID;
   var stars=req.body.rating;
   var currentCourseID=await req.body.courseID;
-  var ratings=await Course.find({
-     "_id":currentCourseID,"review.rating":stars
+  var ratings=await Course.findOne({
+    "instructorID":currentID, "_id":currentCourseID,"review.rating":stars
 
-  }).select({ "_id":0,"rating":1,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
+  }).select({ "_id":0,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
+  var x=ratings.review;
+  var y=[];
+  for(let i=0;i<x.length;i++){
+    if(x[i].rating==stars){
+      y.push(x[i]);
+    }
+  }
   //const rates=[Object.values(ratings)[4]];
+  //{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+7]}
+  //{$elemMatch : {rating:stars}}
   //{$slice:[CurrentPage-1,CurrentPage*2]}
-  res.send(ratings);
+  //res.send(ratings.review);
+  //console.log(stars);
+  res.send(y);
 }
 catch(error){
   res.status(400).json({error:error.message})
@@ -450,13 +461,13 @@ async function userViewCourseRatings(req,res,next){
   try{
     //var currentID=await req.body.userID;
     var currentCourseID=await req.body.courseID;
-    var ratings=await Course.find({
+    var ratings=await Course.findOne({
        "_id":currentCourseID
 
-    }).select({ "_id":0,"rating":1,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
+    }).select({ "_id":0,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
     //const rates=[Object.values(ratings)[4]];
     //{$slice:[CurrentPage-1,CurrentPage*2]}
-    res.send(ratings);
+    res.send(ratings.review);
   }
   catch(error){
     res.status(400).json({error:error.message})
@@ -464,4 +475,4 @@ async function userViewCourseRatings(req,res,next){
   
 }
 
-module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses,userViewCourseRatings,userFilterByRatings };
+module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses,userViewCourseRatings,userfilterByRatings };
