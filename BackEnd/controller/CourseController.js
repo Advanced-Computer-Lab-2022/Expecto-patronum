@@ -2,55 +2,55 @@ const Course = require('../models/CourseSchema');
 const schedule = require('node-schedule');
 const User = require('../models/UserSchema');
 
-var start1 = schedule.scheduleJob('* * * * *', async function () {
-  const dateNow = new Date();
-  try {
-    var allCourses = await Course.updateMany({
-      $and: [
-        { "discount.endDate": { $exists: true } }, { "discount.endDate": { $lte: dateNow } }
-      ]
-    }, [
-      { "$set": { discountPrice: "$price", "discount.discount": 0 } },
-      { $unset: ["discount.startDate", "discount.endDate", "discount.duration"] }
-    ]
-    );
+// var start1 = schedule.scheduleJob('* * * * *', async function () {
+//   const dateNow = new Date();
+//   try {
+//     var allCourses = await Course.updateMany({
+//       $and: [
+//         { "discount.endDate": { $exists: true } }, { "discount.endDate": { $lte: dateNow } }
+//       ]
+//     }, [
+//       { "$set": { discountPrice: "$price", "discount.discount": 0 } },
+//       { $unset: ["discount.startDate", "discount.endDate", "discount.duration"] }
+//     ]
+//     );
 
-    console.log("I ran schedule EndDate");
-    start1.cancel();
-  } catch (error) {
-    res.status(400).send({ error: error.message });
-  }
-});
+//     console.log("I ran schedule EndDate");
+//     start1.cancel();
+//   } catch (error) {
+//     res.status(400).send({ error: error.message });
+//   }
+// });
 
 
-var start2 = schedule.scheduleJob('* * * * *', async function () {
-  const dateNow = new Date();
-  try {
-    var allCourses = await Course.updateMany({
-      $and: [
-        { "discount.startDate": { $exists: true } }, { "discount.startDate": { $lte: dateNow } },
-        { "discount.set": { $exists: true } }, { "discount.set": false }
-      ]
-    }, [
-      {
-        "$set": {
-          discountPrice: {
-            $round: [{
-              $multiply: ["$price",
-                { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
-            }, 2]
-          },
-          "discount.set": true
-        }
-      },
-    ]);
+// var start2 = schedule.scheduleJob('* * * * *', async function () {
+//   const dateNow = new Date();
+//   try {
+//     var allCourses = await Course.updateMany({
+//       $and: [
+//         { "discount.startDate": { $exists: true } }, { "discount.startDate": { $lte: dateNow } },
+//         { "discount.set": { $exists: true } }, { "discount.set": false }
+//       ]
+//     }, [
+//       {
+//         "$set": {
+//           discountPrice: {
+//             $round: [{
+//               $multiply: ["$price",
+//                 { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
+//             }, 2]
+//           },
+//           "discount.set": true
+//         }
+//       },
+//     ]);
 
-    console.log("I ran schedule startDate");
-    start2.cancel();
-  } catch (error) {
-    res.status(400).send({ error: error.message });
-  }
-});
+//     console.log("I ran schedule startDate");
+//     start2.cancel();
+//   } catch (error) {
+//     res.status(400).send({ error: error.message });
+//   }
+// });
 
 
 schedule.scheduleJob('*/15 * * * *', discountEndDate);

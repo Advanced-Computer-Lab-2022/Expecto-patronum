@@ -84,26 +84,53 @@ const problemTable = require('../models/ProblemSchema');
   };
 
   async function requestCourse(req, res, next) {
-
-    var x = await User.findOne({ "_id": req.body.userID }, {role:1, _id: 1,username:1 });
+    var x = await User.findOne({ "_id": req.body.userID }, {purchasedCourses:{ $elemMatch : {courseID:req.body.courseID}},role:1, _id: 1,username:1 });
+    var prog = x.purchasedCourses[0].progress;
     var y = await CourseTable.findOne({ "_id": req.body.courseID }, {_id: 1,title:1 });
-    if(x.role =="CorporateTrainee"){
-     const date = new Date();
-      const newRequest = new requestTable({
-        type:'requestCourse',
-        userID: req.body.userID,
-        username: x.username,
-        courseID:req.body.courseID,
-        courseTitle:y.title,
-        startDate:date,
-        body:req.body.body
-      });
-      try {
-        newRequest.save();
-        res.status(200).send(newRequest);  
-      } catch (err) {
-        res.status(400).json({error:err.message})
-      };
+    if(req.body.request=="requestCourse"){
+      if(x.role =="CorporateTrainee"){
+        const date = new Date();
+         const newRequest = new requestTable({
+           type:'requestCourse',
+           userID: req.body.userID,
+           username: x.username,
+           courseID:req.body.courseID,
+           courseTitle:y.title,
+           startDate:date,
+           body:req.body.body
+         });
+         try {
+           newRequest.save();
+           res.status(200).send(newRequest);  
+         } catch (err) {
+           res.status(400).json({error:err.message})
+         };
+       }
+
+    }
+    else{
+      if(prog<=49){
+        const date = new Date();
+        const newRequest = new requestTable({
+          type:'refund',
+          userID: req.body.userID,
+          username: x.username,
+          courseID:req.body.courseID,
+          courseTitle:y.title,
+          startDate:date,
+          body:req.body.body,
+          progress: prog
+        });
+        try {
+          newRequest.save();
+          res.status(200).send(newRequest);  
+        } catch (err) {
+          res.status(400).json({error:err.message})
+        };
+      }
+      else{
+        res.status(200).send("your have watched more than 50% of the course")
+      }
     }
   };
 
@@ -127,5 +154,63 @@ const problemTable = require('../models/ProblemSchema');
 
   }
 
+  async function watchVideo(req,res){
+    try{
+      var user_id=req.body.userID;
+      var course_id=req.body.courseID;
+      var course =await CourseTable.findById(course_id,{_id:1,courseHours:1});
+      console.log(course.courseHours);
+      var courseTotalMin = (course.courseHours)*60;
+      console.log(courseTotalMin);
+      var url=req.body.videoURL;
+      var time = req.body.videotime;
+       
+      var exists=await User.findOne({"purchasedCourses.watchedVideos":url,"_id":user_id})
+      console.log(exists);
+      
+  
+      //var user=await User.findById(user_id);
+      if(exists){
+        var yy = await User.findOne({"_id": user_id},
+        {_id:1,purchasedCourses:{ $elemMatch : {courseID:course_id}}}
+        );
+        console.log(yy.purchasedCourses)
+        var x = yy.purchasedCourses[0].progress;
+ 
+       res.status(200).send({progress: x});
+      }
+      else{
+        const re = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
+      { "$push": { "purchasedCourses.$.watchedVideos":url},
+        "$inc":{"purchasedCourses.$.watchedMinutes":time} },
+      );
+      var y = await User.findOne({"_id": user_id},
+      {_id:1,purchasedCourses:{ $elemMatch : {courseID:course_id}}}
+      );
+      
+     var progress =(((y.purchasedCourses[0].watchedMinutes)/courseTotalMin)*100);
+     var prog = progress.toFixed(0);
+      
+       const re2 = await User.updateOne({ "_id": user_id,"purchasedCourses.courseID":course_id},
+       { 
+         "$set":{"purchasedCourses.$.progress":prog}
+       },
+       );
 
-  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem}
+       var yy = await User.findOne({"_id": user_id},
+       {_id:1,purchasedCourses:{ $elemMatch : {courseID:course_id}}}
+       );
+       console.log(yy.purchasedCourses)
+       var x = yy.purchasedCourses[0].progress;
+
+      res.status(200).send({progress: x});
+      }
+    }
+    catch (error) {
+      console.log(error);
+    }
+  
+  };
+
+
+  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,watchVideo}

@@ -30,8 +30,10 @@ const RequestSchema = new mongoose.Schema({
     },
     startDate:{
         type:Date
+    },
+    progress:{
+        type:Number
     }
-
 
 })
 

@@ -94,7 +94,10 @@ const UserSchema = new mongoose.Schema({
       },
 
     }],
-    progress:Number,
+    progress:{
+      type:Number,
+      default:0
+     },  
     courseRating:{
       type :Number,
       default:0
@@ -105,7 +108,10 @@ const UserSchema = new mongoose.Schema({
       default:0
     },
     instructorReview:String,
-    watchedMinutes: Number,
+    watchedMinutes: {
+     type:Number,
+     default:0
+    },
     watchedVideos:[String]
 }],
 
@@ -113,7 +119,8 @@ const UserSchema = new mongoose.Schema({
     type:String
   },
   wallet:{
-    type:Number
+    type:Number,
+    default:0
   },
   creditCard:{
     cardNumber:Number,

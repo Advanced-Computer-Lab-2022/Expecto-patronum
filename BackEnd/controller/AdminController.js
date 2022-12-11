@@ -41,6 +41,28 @@ async function viewCourseRequests(req, res, next) {
      
   };
 
+  async function AcceptOrRejectRefund(req, res, next) {
+    try {
+        if(req.body.refund=="Accept"){
+
+    const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
+        { $pull: { "purchasedCourses":{courseID:req.body.courseID }},
+            $inc :{wallet:20}}, { new: true });
+        const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
+        { $set: { "status": "accepted" } }, { new: true });
+        res.status(200).send("refund accepted");
+        }
+        else{
+            const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
+            { $set: { "status": "rejected" } }, { new: true });
+            res.status(200).send("refund rejected");
+        }
+      }
+      catch (err) {
+        res.status(400).json({error:err.message})
+      }
+     
+  };
   
   async function viewReportedFunctions(req,res,next){
     try{
@@ -52,4 +74,4 @@ async function viewCourseRequests(req, res, next) {
     }
   }
 
-  module.exports = {viewCourseRequests,grantOrRejectAccess,viewReportedFunctions}
+  module.exports = {viewCourseRequests,grantOrRejectAccess,viewReportedFunctions,AcceptOrRejectRefund}
