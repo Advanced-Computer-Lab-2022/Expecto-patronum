@@ -429,11 +429,11 @@ async function GenerateCourses(req, res) {
 async function userfilterByRatings(req,res){
   var CurrentPage = req.query.page ? req.query.page : 1;
 try{
-  var currentID=await req.body.userID;
+  //var currentID=await req.body.userID;
   var stars=req.body.rating;
   var currentCourseID=await req.body.courseID;
   var ratings=await Course.findOne({
-    "instructorID":currentID, "_id":currentCourseID,"review.rating":stars
+     "_id":currentCourseID,"review.rating":stars
 
   }).select({ "_id":0,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
   var x=ratings.review;
