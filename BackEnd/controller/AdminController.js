@@ -23,16 +23,16 @@ async function viewCourseRequests(req, res, next) {
     try {
         if(req.body.granted=="true"){
         const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
-        { $push: { "purchasedCourses.courseID": req.body.courseID } }, { new: true });
+        { $push: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
 
         const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
         { $set: { "status": "accepted" } }, { new: true });
-        res.send(200).send("access granted");
+        res.status(200).send("access granted");
         }
         else{
             const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
             { $set: { "status": "rejected" } }, { new: true });
-            res.send(200).send("access denied");
+            res.status(200).send("access denied");
         }
       }
       catch (err) {
