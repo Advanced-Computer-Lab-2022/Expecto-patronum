@@ -5,6 +5,7 @@ const CourseTable = require('../models/CourseSchema');
 const User = require('../models/UserSchema');
 const ExerciseTable = require('../models/ExcerciseSchema');
 const requestTable = require('../models/RequestSchema');
+const problemTable=require('../models/ProblemSchema');
 
 async function viewCourseRequests(req, res, next) {
     var CurrentPage = req.query.page ? req.query.page : 1;
@@ -39,5 +40,15 @@ async function viewCourseRequests(req, res, next) {
       }
      
   };
+
+  async function viewReportedFunctions(req,res,next){
+    try{
+      var problems=await problemTable.find();
+      res.send(problems);
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
 
   module.exports = {viewCourseRequests}
