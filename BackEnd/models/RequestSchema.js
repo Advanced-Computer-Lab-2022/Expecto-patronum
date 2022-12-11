@@ -10,6 +10,9 @@ const RequestSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref:'UserSchema'
     },
+    username:{
+        type:String
+    },
     status:{
         type:String,
         enum:['accepted','pending','rejected'],
@@ -22,11 +25,13 @@ const RequestSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref:'CourseSchema'
     },
+    courseTitle:{
+        type:String
+    },
     startDate:{
         type:Date
     }
 
-      
 
 })
 

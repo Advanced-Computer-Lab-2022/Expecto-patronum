@@ -85,13 +85,16 @@ const problemTable = require('../models/ProblemSchema');
 
   async function requestCourse(req, res, next) {
 
-    var x = await User.findOne({ "_id": req.body.userID }, {role:1, _id: 1 });
+    var x = await User.findOne({ "_id": req.body.userID }, {role:1, _id: 1,username:1 });
+    var y = await CourseTable.findOne({ "_id": req.body.courseID }, {_id: 1,title:1 });
     if(x.role =="CorporateTrainee"){
      const date = new Date();
       const newRequest = new requestTable({
         type:'requestCourse',
         userID: req.body.userID,
+        username: x.username,
         courseID:req.body.courseID,
+        courseTitle:y.title,
         startDate:date,
         body:req.body.body
       });
