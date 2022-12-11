@@ -11,6 +11,7 @@ const { Passport } = require("passport");
 const ExerciseTable = require('../models/ExcerciseSchema');
 const CourseTable = require('../models/CourseSchema');
 const requestTable = require('../models/RequestSchema');
+const problemTable = require('../models/ProblemSchema');
 
   async function SelectExercise(req, res, next) {
     try {
@@ -103,5 +104,25 @@ const requestTable = require('../models/RequestSchema');
     }
   };
 
+  async function reportProblem(req,res,next){
+    try{
+      const result = await problemTable.create({
+        type: req.body.type,
+        userID: req.body.userID,
+        //status: req.body.status,
+        body: req.body.body,
+        courseID: req.body.courseID,
+        startDate: Date.now(),
+        //comment: req.body.comment,
+      });
+      result.save();
+      res.status(200).send(result);
+    }
+    catch(error){
+      console.log(error);
+    }
 
-  module.exports = { SelectExercise,viewAnswer,requestCourse}
+  }
+
+
+  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem}

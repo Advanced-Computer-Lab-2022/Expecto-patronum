@@ -18,16 +18,16 @@ const ProblemSchema = new mongoose.Schema({
     body:{
         type:String
     },
-    courseID: {
-        type: mongoose.Types.ObjectId,
-        ref:'CourseSchema'
+    courseID:{
+            type: mongoose.Types.ObjectId,
+            ref:'CourseSchema'
     },
     startDate:{
         type:Date
     },
 
     comment:[{
-        type:string
+        type:String
     }],
       
 })
