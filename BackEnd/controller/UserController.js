@@ -561,8 +561,6 @@ async function selectCourse(req, res, next) {
     let exercise = {};
     if (req.body.courseId) {
       if (req.body.userId) {
-        //var user1 = await User.findOne({ "_id": req.body.userId }, { role : 1 });
-        //if(user1.role=='Instructor')
         var instructor = await CourseTable.findOne({ "instructorID": req.body.userId }, { instructorID: 1 });
         if (instructor) {
           ////////////////instructor/////////////////////
@@ -585,7 +583,7 @@ async function selectCourse(req, res, next) {
 
         }
         ////////////////indivTrainee/Corp/////////////////////
-        var x = await User.findOne({ "_id": req.body.userId }).select({ purchasedCourses: 1, _id: 1 });
+        var x = await User.findOne({ "_id": req.body.userId }).select({ role:1,purchasedCourses: 1, _id: 1 });
         //var y = Object.values(x);
         //console.log(x);
         if (x.purchasedCourses) {
