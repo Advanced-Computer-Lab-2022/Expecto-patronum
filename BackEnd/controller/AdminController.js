@@ -74,4 +74,6 @@ async function viewCourseRequests(req, res, next) {
     }
   }
 
+  
+
   module.exports = {viewCourseRequests,grantOrRejectAccess,viewReportedFunctions,AcceptOrRejectRefund}

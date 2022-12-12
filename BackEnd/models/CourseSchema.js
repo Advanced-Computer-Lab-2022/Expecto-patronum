@@ -141,9 +141,9 @@ const CourseSchema = new mongoose.Schema({
   },
 
   purchases:{
-    times:Number
+    type:Number,
+    default:0,
   }
-
 
 });
 

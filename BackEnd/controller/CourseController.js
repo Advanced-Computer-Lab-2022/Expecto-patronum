@@ -475,4 +475,36 @@ async function userViewCourseRatings(req,res,next){
   
 }
 
-module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses,userViewCourseRatings,userfilterByRatings };
+async function viewPopularCourses(req, res, next) {
+  var CurrentPage = req.query.page ? req.query.page : 1;
+  var coursesPerPage = req.query.coursesPerPage?req.query.coursesPerPage:10;
+  try {
+    const Courses = await Course.find({}, {
+      _id: 1,
+      title: 1,
+      courseHours: 1,
+      price: 1,
+      courseImage: 1,
+      rating: 1,
+      instructorName: 1,
+      subject: 1,
+      level: 1,
+      summary: 1,
+      discount: 1,
+      discountPrice: 1,
+      purchases:1
+    }).sort({purchases:-1}).skip((CurrentPage - 1) * coursesPerPage).limit(coursesPerPage);
+
+    var TotalCount = await Course.countDocuments({});
+    res.status(200).send({ Courses: Courses, TotalCount: TotalCount });
+
+  }
+  catch (err) {
+    res.status(400).json({error:err.message})
+  }
+};
+
+
+
+
+module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses,userViewCourseRatings,userfilterByRatings,viewPopularCourses };

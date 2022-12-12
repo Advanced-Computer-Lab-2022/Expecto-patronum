@@ -9,6 +9,7 @@ const { query, response } = require('express');
 
 async function viewCourses(req, res, next) {
   var CurrentPage = req.query.page ? req.query.page : 1;
+  var coursesPerPage = req.query.coursesPerPage ?req.query.coursesPerPage : 10;
   try {
     let queryCond = {};
     if (req.query.instructorID) {
@@ -23,7 +24,6 @@ async function viewCourses(req, res, next) {
       rating: 1,
       instructorName: 1,
       subject: 1,
-      level: 1,
       level: 1,
       summary: 1,
       discount: 1,
