@@ -29,19 +29,19 @@ const InstructorCourseCard = (props: Props) => {
                     <p className='opacity-50'>TITLE</p>
                     <h1 className='text-2xl'>{props.course.title}</h1>
                 </div>
-                <p>Level: <span className='italic'>{props.course.level === 'AllLevels' ? 'All Levels': props.course.level}</span></p>
+                <p>Difficulty: <span className='italic'>{props.course.level === 'AllLevels' ? 'All Levels': props.course.level}</span></p>
                 <p className={`${!props.isViewList ? '' : 'sb:mr-32'} overflow-hidden whitespace-nowrap text-ellipsis`}>{props.course.summary}</p>
             </div>
         </div>
-        <a className='whitespace-nowrap absolute bottom-5 right-5 rounded-full bg-input text-white shadow-md hover:shadow-lg border-1.5 border-input hover:bg-white hover:text-input transition-all duration-300 px-2 py-0.5'>Open Course</a>
+        <Link href={`/Courses/${props.course._id}`} className='whitespace-nowrap absolute text-sm bottom-5 right-5 rounded-full bg-input text-white shadow-md hover:shadow-lg border-1.5 border-input hover:bg-white hover:text-input transition-all duration-300 px-2 py-0.5'>Open Course</Link>
         <label className={`${!props.isViewList ? `top-34 ${parseInt(props.course.discount?.discount) === 0 ? 'right-4': 'left-3'}`: `sb-max:top-34 ${parseInt(props.course.discount?.discount) === 0 ? 'right-4': 'sb-max:left-3'} sb:top-1.5 sb:right-24`} whitespace-nowrap absolute text-sm font-bold text-[#038470] bg-[#D7FFE0] px-2 py-0.5 rounded-full`}><span className={`${parseInt(props.course.discount?.discount) === 0 ? '': `${lineThrough} text-xs text-gray-500`} relative`}>{(Math.floor(props.course.price * Rate.rate) - 0.01).toLocaleString()}</span> <span className={`${parseInt(props.course.discount?.discount) === 0 ? 'hidden': ''} ml-2`}>{Math.max((Math.floor(props.course.discountPrice * Rate.rate) - 0.01), 0).toLocaleString()}</span> {Rate.curr}</label>
         <label className={`${!props.isViewList ? 'top-[10.6rem]': 'sb-max:top-[10.6rem] sb:top-[3.9rem]'} right-3 text-white absolute px-1 py-0.5 rounded-full z-0 ${parseInt(props.course.discount?.discount) === 0 ? 'hidden': saleRibbon}`}><span className={`${!props.isViewList ? 'bottom-1.25 left-4': 'sb-max:bottom-1.25 sb-max:left-4 left-3'} relative`}>SAVE {props.course.discount?.discount}%</span></label>
-        <Link href={`/Instructor/Settings/AddDiscount?courseID=${props.course._id}`} as='/Instructor/Settings/AddDiscount/' className={`${(!props.isViewList ? 'bottom-5 left-4': 'sb:bottom-5 sb:right-38 sb-max:bottom-5 sb-max:left-4')} whitespace-nowrap absolute rounded-full text-input bg-white shadow-md hover:shadow-lg border-1.5 border-input hover:text-white hover:bg-input transition-all duration-300 px-2 py-0.5`}>Add Discount</Link>
+        <Link href={`/Instructor/Settings/AddDiscount?courseID=${props.course._id}`} as='/Instructor/Settings/AddDiscount/' className={`${(!props.isViewList ? 'bottom-5 left-4': 'sb:bottom-5 sb:right-38 sb-max:bottom-5 sb-max:left-4')} whitespace-nowrap absolute text-sm rounded-full text-input bg-white shadow-md hover:shadow-lg border-1.5 border-input hover:text-white hover:bg-input transition-all duration-300 px-2 py-0.5`}>Add Discount</Link>
         <OneStar className='bg-white rounded-tr-xl rounded-bl-xl absolute top-0 right-0 py-2 px-3 shadow-md hover:shadow-sm transition-all duration-200' rating={props.course.rating === undefined ? 3.8: props.course.rating.avg} />
     </div>
   )
 }
 
-const lineThrough = classNames('after:content-[""] after:absolute after:h-[0.075rem] after:w-full after:bg-gray-500 after:left-0 after:rotate-[-10deg] after:top-1');
+const lineThrough = classNames('after:content-[""] after:pointer-events-none after:absolute after:h-[0.075rem] after:w-full after:bg-gray-500 after:left-0 after:rotate-[-10deg] after:top-1');
 
 export default InstructorCourseCard;

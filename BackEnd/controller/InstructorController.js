@@ -328,7 +328,7 @@ async function discount(req, res, next) {
       var discountPrice = (z.price * discount);
   
       discountPrice = discountPrice.toFixed(2);
-      const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond, discountPrice : discountPrice }, { new: true });
+      const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond }, { new: true });
       res.status(200).json(x);
   
     } catch (error) {
