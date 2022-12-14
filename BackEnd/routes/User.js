@@ -10,7 +10,7 @@ const { Logout } = require('../controller/UserController');
 const { register } = require('../controller/UserController');
 const { giveCourseRating, buyCourse, ViewMyCourses,GenerateUsers, ConnectInstructorsWithCourses, getInstructorInfo, updateInstructorInfo } = require('../controller/UserController');
 const UserTable = require('../models/UserSchema');
-const { SelectExercise, viewAnswer,requestCourse,reportProblem } = require('../controller/UserController2');
+const { SelectExercise, viewAnswer,requestCourse,reportProblem,viewPreviousReports } = require('../controller/UserController2');
 
 router.get("/", (req, res) => {
   res.send("Hello, User");
@@ -57,6 +57,8 @@ router.get("/takeExam", takeExam);
 router.get("/viewAnswers", viewAnswer);
 
 router.get("/viewMyCourses", ViewMyCourses);
+router.get("/viewPreviousReports", viewPreviousReports);
+
 
 router.put("/giveCourseRating", giveCourseRating);
 
