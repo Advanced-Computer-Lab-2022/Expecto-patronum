@@ -25,6 +25,7 @@ function OnChange(v: number){
     style={{ fontSize: 30 }}
     allowHalf
     allowClear={false}
+    value={props.Rate}
   />
     // <ul className="flex ">
     //   {stars.map((star, index) => {

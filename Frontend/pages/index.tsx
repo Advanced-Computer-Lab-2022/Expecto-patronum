@@ -64,6 +64,7 @@ const Home: NextPage = () => {
               new opportunities. Learn from Industry Experts and land your Dream
               Job.
             </p>
+            <button className="rounded-md border-1.5 border-canadian-red bg-calm-red h-10 px-4 ml-4 text-white hover:bg-canadian-red transition-all duration-300">Join Now!</button>
         </div>
         
         <div className="relative nv:ml-20 min-w-[24rem] min-h-[24rem] nv-max:min-h-[19rem] pointer-events-none flex justify-center">
@@ -71,12 +72,12 @@ const Home: NextPage = () => {
             <div className="w-[22rem] h-[22rem] nv-max:w-[16.5rem] nv-max:h-[16.5rem] bg-calm-red rounded-full"></div>
           </div>
           <div ref={homePageImageRef}>
-            <Image as='image' width={'640'} height={'120'} priority className={`${homePageImage} delay-75`} src="/images/Home Page/Part 1.png" alt={""} />
-            <Image as='image' width={'640'} height={'120'} priority className={`${homePageImage}`} src="/images/Home Page/Part 2.png" alt={""} />
-            <Image as='image' width={'640'} height={'120'} priority className={`${homePageImage}`} src="/images/Home Page/Part 3.png" alt={""} />
-            <Image as='image' width={'640'} height={'120'} priority className={`${homePageImage} delay-150`} src="/images/Home Page/Part 4.png" alt={""} />
-            <Image as='image' width={'640'} height={'120'} priority className={`${homePageImage} delay-150`} src="/images/Home Page/Part 5.png" alt={""} />
-            <Image as='image' width={'640'} height={'120'} priority className={`${homePageImage} delay-75`} src="/images/Home Page/Part 6.png" alt={""} />
+            <Image as='image' width={'640'} height={'120'} className={`${homePageImage} delay-75`} src="/images/Home Page/Part 1.png" alt={""} />
+            <Image as='image' width={'640'} height={'120'} className={`${homePageImage}`} src="/images/Home Page/Part 2.png" alt={""} />
+            <Image as='image' width={'640'} height={'120'} className={`${homePageImage}`} src="/images/Home Page/Part 3.png" alt={""} />
+            <Image as='image' width={'640'} height={'120'} className={`${homePageImage} delay-150`} src="/images/Home Page/Part 4.png" alt={""} />
+            <Image as='image' width={'640'} height={'120'} className={`${homePageImage} delay-150`} src="/images/Home Page/Part 5.png" alt={""} />
+            <Image as='image' width={'640'} height={'120'} className={`${homePageImage} delay-75`} src="/images/Home Page/Part 6.png" alt={""} />
           </div>
         </div>
       </section>
@@ -86,10 +87,13 @@ const Home: NextPage = () => {
       <h1 className="text-4xl text-left font-bold italic m-10 mt-6">A handful Variety of Courses</h1>
 
       <section id="most-viewed" className="text-left px-20 nv-max:px-0 mb-5">
-        <a className="flex justify-between items-center mx-6 hover:text-blue-700 transition-all duration-200">
+        <div className="flex justify-between items-center mx-6">
           <h1 className="text-xl font-bold">Popular Among Learners</h1>
-          <HiArrowNarrowRight className='scale-160' />
-        </a>
+          <a className="flex items-center space-x-3 hover:text-blue-700 transition-all duration-200 relative">
+            <span className="underline">View All</span>
+            <HiArrowNarrowRight className='scale-160' />
+          </a>
+        </div>
         <div className="overflow-x-auto flex items-center my-1 p-3">
           {
             courseData.slice(0, 7).map((course: any, index: number) => (
@@ -97,7 +101,7 @@ const Home: NextPage = () => {
                 <div className={`rounded-2xl z-10 relative bg-white shadow-lg min-w-[15rem] max-w-[15rem] h-[17rem] mr-4`}>
                   <div className={`bg-gradient-to-r relative flex h-30 justify-center items-center rounded-t-2xl ${levelColor(course.level)}`}>
                     <div className="bg-white rounded-full p-3">
-                      <Image as='image' height={50} width={50} priority className='min-h-[4rem] min-w-[4rem]' src={`/images/Course Icons/${icons[index]}`} alt={""} />
+                      <Image as='image' height={50} width={50} priority className='min-h-[4rem] min-w-[4rem] pointer-events-none' src={`/images/Course Icons/${icons[index]}`} alt={""} />
                     </div>
                     <button onClick={addToWishlist} title="Add to Wishlist" className="absolute right-2 top-2 rounded-full bg-white h-7 w-7 p-2 hover:scale-110 transition-all duration-200">
                       <MdOutlineFavoriteBorder className="scale-125 absolute right-1.5 top-1.5 transition-all duration-200" />
@@ -122,10 +126,13 @@ const Home: NextPage = () => {
       </section>
 
       <section id="most-rated" className="text-left px-20 nv-max:px-0 mt-5">
-        <a className="flex justify-between items-center mx-6 hover:text-blue-700 transition-all duration-200">
+        <div className="flex justify-between items-center mx-6">
           <h1 className="text-xl font-bold">Students' Favorite</h1>
-          <HiArrowNarrowRight className='scale-160' />
-        </a>
+          <a className="flex items-center space-x-3 hover:text-blue-700 transition-all duration-200 relative">
+            <span className="underline">View All</span>
+            <HiArrowNarrowRight className='scale-160' />
+          </a>
+        </div>
         <div className="overflow-x-auto flex items-center my-1 p-3">
         {
             courseData.slice(7, 14).map((course: any, index: number) => (
@@ -133,7 +140,7 @@ const Home: NextPage = () => {
                 <div className={`rounded-2xl z-10 relative bg-white shadow-lg min-w-[15rem] max-w-[15rem] h-[17rem] mr-4`}>
                   <div className={`bg-gradient-to-r relative flex h-30 justify-center items-center rounded-t-2xl ${levelColor(course.level)}`}>
                     <div className="bg-white rounded-full p-3">
-                      <Image as='image' height={50} width={50} priority className='min-h-[4rem] min-w-[4rem]' src={`/images/Course Icons/${icons[index + 7]}`} alt={""} />
+                      <Image as='image' height={50} width={50} priority className='min-h-[4rem] min-w-[4rem] pointer-events-none' src={`/images/Course Icons/${icons[index + 7]}`} alt={""} />
                     </div>
                     <button onClick={addToWishlist} title="Add to Wishlist" className="absolute right-2 top-2 rounded-full bg-white h-7 w-7 p-2 hover:scale-110 transition-all duration-200">
                       <MdOutlineFavoriteBorder className="scale-125 absolute right-1.5 top-1.5 transition-all duration-200" />
@@ -145,8 +152,8 @@ const Home: NextPage = () => {
                     <h1 className="text-lg font-semibold line-clamp-2">{course.title}</h1>
                     <p className="text-sm text-gray-500">{course.instructorName}</p>
                     <div className="flex items-center justify-around text-sm">
-                      <p>4.3</p>
-                      <BigRating className='scale-75 whitespace-nowrap w-40' Rate={4.3} RateAction={false} />
+                      <p>4.7</p>
+                      <BigRating className='scale-75 whitespace-nowrap w-40' Rate={4.7} RateAction={false} />
                     </div>
                     <p className="italic text-right absolute bottom-2 right-4 text-[#00A15D]">{Math.floor(course.price * Rate.rate)} {Rate.curr}</p>
                   </div>
@@ -160,7 +167,7 @@ const Home: NextPage = () => {
   );
 };
 
-var homePageImage = classNames('absolute scale-[1.65] -right-[40rem] top-19 nv-max:scale-135 nv-max:top-9 transition-all duration-1000');
+var homePageImage = classNames('absolute scale-[1.65] -right-[40rem] top-19 nv-max:scale-135 nv-max:top-9 transition-all duration-1000 pointer-events-none');
 
 export default Home;
 
