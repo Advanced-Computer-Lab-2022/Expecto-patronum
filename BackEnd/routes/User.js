@@ -10,7 +10,8 @@ const { Logout } = require('../controller/UserController');
 const { register } = require('../controller/UserController');
 const { giveCourseRating, buyCourse, ViewMyCourses,GenerateUsers, ConnectInstructorsWithCourses, getInstructorInfo, updateInstructorInfo } = require('../controller/UserController');
 const UserTable = require('../models/UserSchema');
-const { SelectExercise, viewAnswer,requestCourse,reportProblem,watchVideo } = require('../controller/UserController2');
+
+const { SelectExercise, viewAnswer,requestCourse,reportProblem,viewPreviousReports,followUpOnProblem,watchVideo } = require('../controller/UserController2');
 
 router.get("/", (req, res) => {
   res.send("Hello, User");
@@ -30,6 +31,7 @@ router.get('/test', test)
 
 router.post("/forgetPassword", forgetPassword);
 router.post("/reportProblem", reportProblem);
+
 
 router.get("/forgetPassword/:token", VerifyTokenMiddleware, (req, res) => {
   res.send({ Error: false, Message: 'Token is valid' });
@@ -57,8 +59,11 @@ router.get("/takeExam", takeExam);
 router.get("/viewAnswers", viewAnswer);
 
 router.get("/viewMyCourses", ViewMyCourses);
+router.get("/viewPreviousReports", viewPreviousReports);
+
 
 router.put("/giveCourseRating", giveCourseRating);
+router.put("/followUpOnProblem", followUpOnProblem);
 
 router.put('/watchVideo',watchVideo)
 

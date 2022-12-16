@@ -76,4 +76,24 @@ async function viewCourseRequests(req, res, next) {
 
   
 
-  module.exports = {viewCourseRequests,grantOrRejectAccess,viewReportedFunctions,AcceptOrRejectRefund}
+  
+  async function markReportedProblem(req,res,next){
+    try{
+      var status=req.body.status;
+      var problemID=req.body.problemID
+      var problem=await problemTable.findById(problemID);
+      if(status=="resolved"){
+        problem.status="resolved";
+      }
+      else if(status=="pending"){
+        problem.status="pending";
+      }
+      problem.save();
+      res.send(problem);
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+
+  module.exports = {viewCourseRequests,grantOrRejectAccess,viewReportedFunctions,markReportedProblem,AcceptOrRejectRefund}
