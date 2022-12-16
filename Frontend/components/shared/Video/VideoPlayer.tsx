@@ -13,6 +13,10 @@ interface Video {
 }
 const VideoPlayer: React.FC<Video> = ({ videoData, VideoOpen, SetVideoOpen, SetVideoPictureApear }) => {
 
+  let ref = React.useRef(null);
+
+
+
 
 
   return (
@@ -34,6 +38,8 @@ const VideoPlayer: React.FC<Video> = ({ videoData, VideoOpen, SetVideoOpen, SetV
             url={"https://www.youtube.com/embed/SKF7Ue1BeW8"}
             controls={true}
             playing={true}
+            onEnded={() => { SetVideoOpen(false); SetVideoPictureApear(true); }}
+
           />
         </div>
 

@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { MdOndemandVideo } from "react-icons/md";
 import { GrAchievement, GrFormClock } from "react-icons/gr";
-import { CourseInstructorDataInterface } from "../../Interface/CourseInstructorDataInterface";
+import { CourseInstructorDataInterface } from "../../Interface//NotPurchasedCourse/CourseInstructorDataInterface";
 import OneStar from "../shared/rating/OneStar";
 type Props = {
   instructorData: CourseInstructorDataInterface

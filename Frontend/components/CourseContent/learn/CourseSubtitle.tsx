@@ -2,7 +2,7 @@ import React from "react";
 import CourseSubtitleData from "../CourseSubtitleData";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
-import { OneSubtitleData } from "../../../Interface/OneSubtitleData";
+import { OneSubtitleData } from "../../../Interface//NotPurchasedCourse/OneSubtitleData";
 
 type Props = {
   Data: OneSubtitleData

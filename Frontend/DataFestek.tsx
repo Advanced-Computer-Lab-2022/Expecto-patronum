@@ -89,5 +89,74 @@ export const CardData = [{
   skills:
     "Computer Programming, Python Programming, Statistical ProgrammingData Management, SQL, Databases, Extract, Transform, Load, Computer Networking, Network Model, Other Programming Languages, Computational Logic, Computer Programming Tools, Data Structures, Javascript",
 }]
+export const subtitlesData: {
+  _id: string,
+  header: string,
+  contents: {
+    _id: string,
+    video: string,
+    preview: boolean,
+    duration: number,
+    description: string
+  }[],
+  exercise?: {
+    exerciseID: string,
+    exerciseName: string
+  },
+
+  totalMinutes: number
+
+
+}[] = [
+    {
+      "_id": "63966e85abce268194684c82",
+      "header": "Introduction",
+      "contents": [
+        {
+          "_id": "63966e85abce268194684c83",
+          "video": "https://www.youtube.com/embed/tuSbQ8osGPc",
+          "preview": true,
+          "duration": 120,
+          "description": "welcome"
+        },
+        {
+          "_id": "63966e85abce268194684c84",
+          "video": "https://www.youtube.com/embed/vDQ9GZsJkms",
+          "preview": false,
+          "duration": 150,
+          "description": "test"
+        }
+      ],
+      "totalMinutes": 400
+    },
+
+    {
+      "exercise":
+      {
+        "exerciseID": "63966e85abce268194684c88",
+        "exerciseName": "Quiz 1"
+      }
+      ,
+      "_id": "63966e85abce268194684c85",
+      "header": "JavaScript",
+      "contents": [
+        {
+          "_id": "63966e85abce268194684c86",
+          "video": "url2",
+          "preview": true,
+          "duration": 120,
+          "description": "welcome"
+        },
+        {
+          "_id": "63966e85abce268194684c87",
+          "video": "test",
+          "preview": false,
+          "duration": 150,
+          "description": "test"
+        }
+      ],
+      "totalMinutes": 400
+    }
+  ]
 
 const totalHours = []

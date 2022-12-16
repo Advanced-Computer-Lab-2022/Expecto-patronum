@@ -19,51 +19,60 @@ router.get("/", (req, res) => {
 router.get("/login", (req, res) => {
   res.send("Login");
 });
+
+
+
+router.get('/MailVerify/:token', VerifyTokenMiddleware, ValidateUser);
+
+
+router.get('/test', test)
+
+router.post('/register', register)
+router.post("/forgetPassword", forgetPassword);
+router.post("/ChangeForgottenPassword/:token", VerifyTokenMiddleware, ChangeForgottenPassword);
+router.post("/ChangePassword", isAuth, ChangePassword);
+router.post("/ChangeEmail", isAuth, ChangeEmail);
+
+
 router.post('/login', passport.authenticate('local'), (req, res) => {
   res.send("Logged in")
 });
 
 
-router.post('/register', register)
-router.get('/MailVerify/:token', VerifyTokenMiddleware, ValidateUser);
-router.get('/test', test)
 
-router.post("/forgetPassword", forgetPassword);
+// router.post("/GenerateUsers", GenerateUsers);
+// router.post("/ConnectInstructorsWithCourses", ConnectInstructorsWithCourses);
+// router.post("/updateInstructorInfo", updateInstructorInfo);
+// router.get("/getInstructorInfo", getInstructorInfo);
+
+
 router.get("/forgetPassword/:token", VerifyTokenMiddleware, (req, res) => {
   res.send({ Error: false, Message: 'Token is valid' });
 })
-router.post("/ChangeForgottenPassword/:token", VerifyTokenMiddleware, ChangeForgottenPassword);
-router.post("/ChangePassword", isAuth, ChangePassword);
 
-router.post("/ChangeEmail", isAuth, ChangeEmail);
 router.get("/resetEmail/:token", VerifyTokenMiddleware, isAuth, UseChangeEmailToken, (req, res) => {
   res.redirect('http://localhost:3000/User/Profile');
 });
-
 router.get("/countryRate", getRate);
-
-
+router.get("/takeExam", takeExam);
+router.get("/viewAnswers", viewAnswer);
+router.get("/viewMyCourses", ViewMyCourses);
 router.get('/logout', Logout);
+
+
+
+
+
+router.put("/giveCourseRating", giveCourseRating);
+
+
+
+
 
 router.put('/submitAnswer', submitAnswer);
 
 
 router.put("/buyCourse", buyCourse);
-
-router.get("/takeExam", takeExam);
-
-router.get("/viewAnswers", viewAnswer);
-
-router.get("/viewMyCourses", ViewMyCourses);
-
-router.put("/giveCourseRating", giveCourseRating);
-
-
-router.post("/GenerateUsers", GenerateUsers);
-router.post("/ConnectInstructorsWithCourses", ConnectInstructorsWithCourses);
-router.get("/getInstructorInfo", getInstructorInfo);
-router.post("/updateInstructorInfo", updateInstructorInfo);
-
 router.put("/giveInstructorRating", giveInstructorRating);
 
 router.put("/selectCourse", selectCourse);

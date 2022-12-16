@@ -8,7 +8,7 @@ import FormLogic from "../components/shared/Form/FormLogic";
 const Home: NextPage = () => {
   return (
     <div>
-      <FormLogic FormType='Login'></FormLogic>
+      {/* <FormLogic FormType='Login'></FormLogic> */}
     </div>
     // <div className="text-center w-fullscreen p-4">
     //   <div className="flex justify-center py-20">
@@ -25,3 +25,4 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
