@@ -85,7 +85,6 @@ const problemTable = require('../models/ProblemSchema');
 
   async function requestCourse(req, res, next) {
     var x = await User.findOne({ "_id": req.body.userID }, {purchasedCourses:{ $elemMatch : {courseID:req.body.courseID}},role:1, _id: 1,username:1 });
-    var prog = x.purchasedCourses[0].progress;
     var y = await CourseTable.findOne({ "_id": req.body.courseID }, {_id: 1,title:1 });
     if(req.body.request=="requestCourse"){
       if(x.role =="CorporateTrainee"){
@@ -109,6 +108,8 @@ const problemTable = require('../models/ProblemSchema');
 
     }
     else{
+      var xx = await User.findOne({ "_id": req.body.userID }, {purchasedCourses:{ $elemMatch : {courseID:req.body.courseID}},role:1, _id: 1,username:1 });
+      var prog = xx.purchasedCourses[0].progress;
       if(prog<=49){
         const date = new Date();
         const newRequest = new requestTable({

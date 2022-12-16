@@ -27,8 +27,15 @@ async function viewCourseRequests(req, res, next) {
 
         const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
         { $set: { "status": "accepted" } }, { new: true });
+
+
+        const course =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
+        { $inc: { "purchases": 1 } }, { new: true });
         res.status(200).send("access granted");
+        
         }
+
+
         else{
             const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
             { $set: { "status": "rejected" } }, { new: true });
@@ -50,6 +57,9 @@ async function viewCourseRequests(req, res, next) {
             $inc :{wallet:20}}, { new: true });
         const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
         { $set: { "status": "accepted" } }, { new: true });
+
+        const course =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
+        { $inc: { "purchases": -1 } }, { new: true });
         res.status(200).send("refund accepted");
         }
         else{
