@@ -151,7 +151,6 @@ const problemTable = require('../models/ProblemSchema');
     catch(error){
       console.log(error);
     }
-
   }
 
   async function watchVideo(req,res){
@@ -213,4 +212,36 @@ const problemTable = require('../models/ProblemSchema');
   };
 
 
-  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,watchVideo}
+  
+    async function viewPreviousReports(req,res,next){
+      try{
+        var userID=req.body.userID;
+        var problems=await problemTable.find({"userID":userID}).select({"type":1,"body":1,"startDate":1,"status":1});
+        res.send(problems);
+      }
+      catch(error){
+        console.log(error);
+      }
+    }
+
+    async function followUpOnProblem(req,res,next){
+      try{
+        var userID=req.body.userID;
+        var problemID=req.body.problemID;
+        var followUp=req.body.followUp
+        var problem=await problemTable.findOne({"_id":problemID});
+        problem.comment.push(followUp);
+        problem.save;
+        res.send(problem);
+      }
+      catch(error){
+        console.log(error);
+      }
+      
+      
+    }
+
+  
+
+
+  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,followUpOnProblem,watchVideo}
