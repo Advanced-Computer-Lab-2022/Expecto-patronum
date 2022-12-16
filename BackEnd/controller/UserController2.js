@@ -238,10 +238,44 @@ const problemTable = require('../models/ProblemSchema');
         console.log(error);
       }
       
-      
+
+    }
+
+    async function addNote(req,res,next){
+      var courseID=req.body.courseID;
+      var userID=req.body.userID;
+      var content=req.body.contentID;
+      var timestamp=req.body.timestamp;
+      var note=req.body.note;
+      const fullNote={contentID:content,timestamp:timestamp,note:note}
+      try{
+        const re = await User.updateOne({ "_id": userID,"purchasedCourses.courseID":courseID},
+    { "$push": { "purchasedCourses.$.notes": 
+    {"contentID":content,"timestamp":timestamp,"note":note} }}
+    );
+    res.send(re);
+
+        
+        // y.purchasedCourses[0].notes.push(fullNote)
+        // y.save;
+        // res.send(y)
+      }
+      catch(error){
+        console.log(error);
+      }
+
+    }
+
+    async function viewNotes(req,res,next){
+      var courseID=req.body.courseID;
+      var userID=req.body.userID;
+      var y = await User.findOne({"_id": userID},
+        {_id:1,purchasedCourses:{ $elemMatch : {courseID:courseID}}}
+        );
+      res.send(y.purchasedCourses[0].notes);
     }
 
   
 
 
-  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,followUpOnProblem,watchVideo}
+  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,followUpOnProblem,watchVideo,addNote,viewNotes}
