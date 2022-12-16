@@ -134,7 +134,24 @@ const problemTable = require('../models/ProblemSchema');
       }
     }
 
+    async function followUpOnProblem(req,res,next){
+      try{
+        var userID=req.body.userID;
+        var problemID=req.body.problemID;
+        var followUp=req.body.followUp
+        var problem=await problemTable.findOne({"_id":problemID});
+        problem.comment.push(followUp);
+        problem.save;
+        res.send(problem);
+      }
+      catch(error){
+        console.log(error);
+      }
+      
+      
+    }
+
   
 
 
-  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports}
+  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,followUpOnProblem}
