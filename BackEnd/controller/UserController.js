@@ -784,7 +784,7 @@ async function submitAnswer(req,res){
 
   async function test(req,res){
     try{
-      var x = await User.find()
+      var x = await CourseTable.find()
       res.send(x);
       
 
