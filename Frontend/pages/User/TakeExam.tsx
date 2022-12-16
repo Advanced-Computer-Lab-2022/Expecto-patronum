@@ -222,64 +222,6 @@ const Exam = () => {
                     excerciseID:"6383e073de30152bc8991dd5",
                     answers:empty,
                 }).then((res: { data: any; }) => { return res.data });
-                // viewPopupMessage(isSuccess, text);
-                // console.log(response);
-
-            //     if (chosenAnswerIndex >= 0 && chosenAnswerIndex <= 3) {
-            //         if (questions[i].answer === questions[i].choices[chosenAnswerIndex]) {
-            //             correctAnswers++;
-            //             if (QuestionChoices[chosenAnswerIndex].nextElementSibling != null) {
-            //                 QuestionChoices[chosenAnswerIndex].nextElementSibling.className = rightAnswer;
-            //             }
-            //         } else {
-            //             if (QuestionChoices[chosenAnswerIndex].nextElementSibling != null) {
-            //                 QuestionChoices[chosenAnswerIndex].nextElementSibling.className = wrongAnswer;
-            //             }
-            //         }
-            //     }
-            // }
-            // const questionsCards = document.getElementsByClassName("question") as any;
-            // if (questionsCards != undefined) {
-            //     for (var i = 0; i < questionsCards.length; i++) {
-            //         questionsCards[i].style.display = "";
-            //     }
-            // }
-            // settotalGrade((correctAnswers / questions.length) * 100);
-            // const grade = document.getElementById("grade") as HTMLParagraphElement;
-            // grade.style.display = "";
-            // const submit = document.getElementById("submit-btn");
-            // if (submit != undefined) {
-            //     submit.style.display = "none";
-            // }
-            // const timer = document.getElementById("timer");
-            // if (timer != undefined) {
-            //     timer.style.display = "none";
-            // }
-            // const info = document.getElementById("info");
-            // if (info != undefined) {
-            //     info.style.display = "none";
-            // }
-            // const pagination = document.getElementById("pagination");
-            // if (pagination != undefined) {
-            //     pagination.style.display = "none";
-            // }
-            // const prev = document.getElementById("prev-btn");
-            // if (prev != undefined) {
-            //     prev.style.display = "none";
-            // }
-            // const goback = document.getElementById("go-back");
-            // if (goback != undefined) {
-            //     goback.style.display = "";
-            // }
-            // setAnswered(empty);
-            // console.log(answered);
-        // axios.defaults.withCredentials =true;
-        // Response = await axios
-        //     .post("http://localhost:5000/", {
-        //     })
-        //     .then((res) => {
-        //         return res.data;
-        //     });
     }
 }
 
@@ -312,7 +254,7 @@ const Exam = () => {
                         id="prev-btn"
                         type="button"
                         onClick={goToPrev}
-                        className="inline-flex h-10 mb-4 items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 bg-[#222222] dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        className="inline-flex h-10 mb-4 items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500  rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 bg-[#222222] dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                         <svg
                             aria-hidden="true"
@@ -333,7 +275,7 @@ const Exam = () => {
                         style={{ display: 'none' }}
                         id="go-back"
                         type="button"
-                        className="inline-flex h-10 mb-4 items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 bg-[#222222] dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        className="inline-flex h-10 mb-4 items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500  rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 bg-[#222222] dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                         <svg
                             aria-hidden="true"
