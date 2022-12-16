@@ -1,6 +1,7 @@
 import { CourseVideoData } from "./CourseVideoData";
 
 export interface OneSubtitleData {
+  _id: string,
   header: string,
   summary: string,
   contents: [CourseVideoData],
@@ -8,4 +9,7 @@ export interface OneSubtitleData {
     exerciseTitle: string,
   },
   totalMinutes: number,
+
+
+
 }

@@ -44,9 +44,9 @@ const UserSchema = new mongoose.Schema({
     type: Date, default: Date.now
   }
 
-,
+  ,
 
-  instructorRating:{
+  instructorRating: {
     one: {
       type: Number,
       default: 0
@@ -59,7 +59,7 @@ const UserSchema = new mongoose.Schema({
       type: Number,
       default: 0
     },
-   four: {
+    four: {
       type: Number,
       default: 0
     },
@@ -73,61 +73,62 @@ const UserSchema = new mongoose.Schema({
     }
   },
 
-  instructorReview:[{
-    username:String,
-    reviewBody:String,
-    rating:Number
+  instructorReview: [{
+    username: String,
+    reviewBody: String,
+    rating: Number
   }],
-  purchasedCourses:[{
-    courseID:{
-    type: mongoose.Types.ObjectId,
-    ref: 'CourseSchema'
-    },
-    excercises:[{
-      excerciseID:{
+  purchasedCourses: [{
+    courseID: {
       type: mongoose.Types.ObjectId,
-      ref:'ExcerciseSchema'},
-      grade:Number,
-      exercisesAnswers:{
+      ref: 'CourseSchema'
+    },
+    excercises: [{
+      excerciseID: {
+        type: mongoose.Types.ObjectId,
+        ref: 'ExcerciseSchema'
+      },
+      grade: Number,
+      exercisesAnswers: {
         exerciseTitle: String,
         answer: [String],
       },
 
     }],
-    progress:{
-      type:Number,
-      default:0
-     },  
-    courseRating:{
-      type :Number,
-      default:0
+    progress: {
+      type: Number,
+      default: 0
     },
-    courseReview:String,
-    instructorRating:{
-      type :Number,
-      default:0
+    courseRating: {
+      type: Number,
+      default: 0
     },
-    instructorReview:String,
+    courseReview: String,
+    instructorRating: {
+      type: Number,
+      default: 0
+    },
+    instructorReview: String,
     watchedMinutes: {
-     type:Number,
-     default:0
+      type: Number,
+      default: 0
     },
-    watchedVideos:[String]
-}],
+    watchedVideos: [String]
+  }],
 
-  biography:{
-    type:String
+  biography: {
+    type: String
   },
-  wallet:{
-    type:Number,
-    default:0
+  wallet: {
+    type: Number,
+    default: 0
   },
-  creditCard:{
-    cardNumber:Number,
-    expiryDate:Date,
-    name:String,
-    signature:String
-  }
+  paymentMethods: [{
+    last4: Number,
+    expiration: Date,
+    name: String,
+    customerId: String
+  }]
 
 });
 
