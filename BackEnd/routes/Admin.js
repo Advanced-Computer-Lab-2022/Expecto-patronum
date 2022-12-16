@@ -2,7 +2,7 @@ const router = require('express').Router();
 const connection = require('../config/database');
 
 const Admin = require('../models/AdminSchema');
-const {viewCourseRequests,grantOrRejectAccess,viewReportedFunctions,markReportedProblem,AcceptOrRejectRefund}= require('../controller/AdminController')
+const {viewCourseRequests,grantOrRejectAccess,viewReportedFunctions,markReportedProblem,AcceptOrRejectRefund,promotion,cancelPromotion}= require('../controller/AdminController')
 
 
 router.get("/", (req, res) => {
@@ -15,7 +15,9 @@ router.put("/grantAccess",grantOrRejectAccess);
 
 router.put("/refund",AcceptOrRejectRefund);
 
+router.put("/givePromotion",promotion);
 
+router.put("/cancelPromotion",cancelPromotion);
 
 router.get("/viewReportedFunctions", viewReportedFunctions);
 router.put("/markReportedProblem", markReportedProblem);
