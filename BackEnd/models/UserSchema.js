@@ -113,8 +113,13 @@ const UserSchema = new mongoose.Schema({
       type: Number,
       default: 0
     },
-    watchedVideos: [String]
-  }],
+    watchedVideos:[String],
+    notes:[{
+      contentID:String,
+      timestamp:String,
+      note:String
+    }]
+}],
 
   biography: {
     type: String
