@@ -267,15 +267,43 @@ const problemTable = require('../models/ProblemSchema');
     }
 
     async function viewNotes(req,res,next){
-      var courseID=req.body.courseID;
-      var userID=req.body.userID;
-      var y = await User.findOne({"_id": userID},
-        {_id:1,purchasedCourses:{ $elemMatch : {courseID:courseID}}}
-        );
-      res.send(y.purchasedCourses[0].notes);
+      try{
+        var courseID=req.body.courseID;
+        var userID=req.body.userID;
+        var y = await User.findOne({"_id": userID},
+          {_id:1,purchasedCourses:{ $elemMatch : {courseID:courseID}}}
+          );
+        res.send(y.purchasedCourses[0].notes);}
+        catch(error){
+          console.log(error);
+        }
+      
+    }
+
+    async function filterNotes(req,res,next){
+      try{
+        var contentID=req.body.contentID;
+        var courseID=req.body.courseID;
+        var userID=req.body.userID;
+        var result=[];
+        var y = await User.findOne({"_id": userID},
+          {_id:1,purchasedCourses:{ $elemMatch : {courseID:courseID}}}
+          );
+        for(let i=0;i<y.purchasedCourses[0].notes.length;i++){
+          if(y.purchasedCourses[0].notes[i].contentID==contentID){
+            result.push(y.purchasedCourses[0].notes[i]);
+          }
+        }
+        res.send(result);
+      }
+      catch(error){
+        console.log(error);
+      }
+      
     }
 
   
 
 
-  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,followUpOnProblem,watchVideo,addNote,viewNotes}
+  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,
+    followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes}
