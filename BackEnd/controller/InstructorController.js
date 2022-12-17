@@ -305,9 +305,9 @@ async function discount(req, res, next) {
     discount = 1 - (discount / 100);
     try {
       queryCond.set = true;
-      const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
+      const y = await CourseTable.find({ "_id": courseID }).select({discountPrice:1, price: 1 });
       var z = Object.values(y)[0];
-      var discountPrice = (z.price * discount);
+      var discountPrice = (z.discountPrice * discount);
   
       discountPrice = discountPrice.toFixed(2);
       const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond,discountPrice : discountPrice  }, { new: true });
@@ -321,13 +321,7 @@ async function discount(req, res, next) {
     endDate = new Date(req.body.endDate);
     queryCond.endDate = endDate;
     queryCond.set = false;
-    discount = 1 - (discount / 100);
     try {
-      const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
-      var z = Object.values(y)[0];
-      var discountPrice = (z.price * discount);
-  
-      discountPrice = discountPrice.toFixed(2);
       const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond }, { new: true });
       res.status(200).json(x);
   
@@ -374,16 +368,35 @@ async function updateBio(req,res){
     async function cancelDiscount(req,res){
       try{
         var allCourses = await CourseTable.updateOne( {"_id" : req.body.courseId,
-        "discount.startDate": { $exists: true }},
+        "discount.startDate": { $exists: true },"discount.set":true},
         [
-          {"$set":{discountPrice: "$price","discount.discount":0}},
-          { $unset: ["discount.startDate","discount.endDate","discount.set"]}
+          {"$set":
+          {  discountPrice: {
+            $round: [{
+            $divide: ["$discountPrice",
+              { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
+          }, 2]}
+        , "discount.discount": 0 }  },
+
+      { $unset: ["discount.startDate","discount.endDate","discount.set"]}
         ]
         );
-        if(allCourses){
-          res.status(200).send("discount removed");
-        }
-      }
+       
+          var allCourses2 = await CourseTable.updateOne( {"_id" : req.body.courseId,
+          "discount.startDate": { $exists: true },"discount.set":false},
+          [
+            {"$set":
+            { "discount.discount": 0 }  },
+        { $unset: ["discount.startDate","discount.endDate","discount.set"]} ]
+          );
+
+          if(allCourses2.nModified==1 || allCourses.nModified==1  ){
+            res.status(200).send("discount removed");
+          }
+            else{
+              res.status(200).send("no discount"); 
+            }
+    }
       catch(error){
         console.log(error);
       }
