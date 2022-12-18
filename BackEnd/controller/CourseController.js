@@ -377,6 +377,8 @@ async function GetAllCourses(req, res) {
 
 async function GenerateCourses(req, res) {
 
+  // await Course.updateMany({}, [{ $set: { purchases: Math.floor(Math.random() + 100000) + 10000 }}]);
+
   // for(var i = 0; i < courses.length; i++) {
   //   var subtitles = courses[i].subtitles;
   //   var courseHours = 0;
@@ -420,7 +422,7 @@ async function GenerateCourses(req, res) {
   //   });
   // }
 
-  // res.send("success: " + courses.length);
+  // res.send('success');
 
   res.send("uncomment first an comment this line");
 }
@@ -430,4 +432,81 @@ async function MostRated(req, res) {
   
 }
 
-module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses, MostRated };
+async function userfilterByRatings(req,res){
+  var CurrentPage = req.query.page ? req.query.page : 1;
+try{
+  //var currentID=await req.body.userID;
+  var stars=req.body.rating;
+  var currentCourseID=await req.body.courseID;
+  var ratings=await Course.findOne({
+     "_id":currentCourseID,"review.rating":stars
+
+  }).select({ "_id":0,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
+  var x=ratings.review;
+  var y=[];
+  for(let i=0;i<x.length;i++){
+    if(x[i].rating==stars){
+      y.push(x[i]);
+    }
+  }
+  //const rates=[Object.values(ratings)[4]];
+  //{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+7]}
+  //{$elemMatch : {rating:stars}}
+  //{$slice:[CurrentPage-1,CurrentPage*2]}
+  //res.send(ratings.review);
+  //console.log(stars);
+  res.send(y);
+}
+catch(error){
+  res.status(400).json({error:error.message})
+}
+}
+
+async function userViewCourseRatings(req,res,next){
+  var CurrentPage = req.query.page ? req.query.page : 1;
+  try{
+    //var currentID=await req.body.userID;
+    var currentCourseID=await req.body.courseID;
+    var ratings=await Course.findOne({
+       "_id":currentCourseID
+
+    }).select({ "_id":0,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
+    //const rates=[Object.values(ratings)[4]];
+    //{$slice:[CurrentPage-1,CurrentPage*2]}
+    res.send(ratings.review);
+  }
+  catch(error){
+    res.status(400).json({error:error.message})
+  }
+  
+}
+
+async function viewPopularCourses(req, res, next) {
+  var CurrentPage = req.query.page ? req.query.page : 1;
+  var coursesPerPage = req.query.coursesPerPage?req.query.coursesPerPage:10;
+  try {
+    const Courses = await Course.find({}, {
+      _id: 1,
+      title: 1,
+      courseHours: 1,
+      price: 1,
+      courseImage: 1,
+      rating: 1,
+      instructorName: 1,
+      subject: 1,
+      level: 1,
+      summary: 1,
+      discount: 1,
+      discountPrice: 1,
+      purchases:1
+    }).sort({purchases:-1}).limit(20);
+
+    res.status(200).send(Courses);
+
+  }
+  catch (err) {
+    res.status(400).json({error:err.message})
+  }
+};
+
+module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses, MostRated, userfilterByRatings, userViewCourseRatings, viewPopularCourses };

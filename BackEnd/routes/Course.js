@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Course = require('../models/CourseSchema');
-const { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses, MostRated } = require('../controller/CourseController')
+const { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses, MostRated, userfilterByRatings, userViewCourseRatings, viewPopularCourses } = require('../controller/CourseController')
 
 router.get("/POP", async (req, res) => {
   var subject = "Node";
@@ -82,6 +82,12 @@ router.get("/GetCourse", GetCourse);
 router.post("/CreateCourse", CreateCourse);
 router.post("/GetAllCourses", GetAllCourses);
 
+
+router.put("/userfilterByRatings", userfilterByRatings);
+router.put("/userViewCourseRatings", userViewCourseRatings);
+
 router.post("/GenerateCourses", GenerateCourses);
+
+router.get("/popularCourses",viewPopularCourses);
 
 module.exports = router;

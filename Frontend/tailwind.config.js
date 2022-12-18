@@ -41,6 +41,7 @@ module.exports = {
         'mob': { 'max': '574px' },
         'not-mob': '575px',
         '3lg': '1275px',
+        '4lg': '1500px',
         'lg': '1024px',
         '3xl': '1665px',
         '2xl-max': { 'max': '1535px' },
@@ -77,14 +78,14 @@ module.exports = {
         'fullscreen': 'calc(100vw - 16.667px)',
         'beside-sidebar': 'calc(100% - 3.5rem)',
         'without-instructor-sidebar': 'calc(100% - 208px)',
-        'without-instructor-sidebar-closed': 'calc(100% - 56px)',
+        'without-instructor-sidebar-closed': 'calc(100vw - 56px)',
       },
       borderWidth: {
         'px': '1px',
         '1.5': '1.5px',
       },
       minWidth: {
-        'without-instructor-sidebar-closed': 'calc(100% - 56px)',
+        'without-instructor-sidebar-closed': 'calc(100vw - 56px)',
       },
       backgroundImage: theme => ({
         'All': "linear-gradient(#2B32B2, #1488CC)",

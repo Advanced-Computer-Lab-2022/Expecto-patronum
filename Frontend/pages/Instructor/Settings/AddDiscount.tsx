@@ -104,10 +104,10 @@ const AddDiscount = (props: Props) => {
 
   return (
     <Layout>
-      <div className='sb-max:min-w-fit mx-48 text-center'>
+      <div className='sb-max:min-w-without-instructor-sidebar-closed sb-max:px-3 sb:mx-48 text-center'>
         <div className='relative'>
           <Input placeholder='Course Title' ref={selectCourseRef} onChange={selectCourse} />
-          <div ref={coursesDropdownRef} className='hidden flex-col absolute left-8 overflow-y-scroll h-fit max-h-[20rem] w-96 bg-main z-50 rounded-2xl py-3 border-1.5'>
+          <div ref={coursesDropdownRef} className='hidden flex-col absolute left-4 overflow-y-scroll h-fit max-h-[20rem] w-96 bg-main z-50 rounded-2xl py-3 border-1.5'>
             {
               searchResults?.map((course: any, index: any) => (
                 <button key={index} className='relative mx-auto w-full hover:bg-canadian-red hover:text-white rounded-full' onClick={() => chooseCourse(course)}>{course.title}</button>
@@ -115,10 +115,12 @@ const AddDiscount = (props: Props) => {
             }
           </div>
         </div>
-        <div className='flex justify-around items-center px-2 mt-4'>
+        <div className='space-y-4 mt-4'>
             <Input onChange={(e: any) => setDiscount(e.target.value)} placeholder='Discount %' inputDivStyle='relative bottom-2' />
-            <DateInput placeholder='Choose Start Date' date={startDate} setDate={setStartDate} />
-            <DateInput placeholder='Choose End Date' date={endDate} setDate={setEndDate} minDate={startDate} />
+            <div className='flex justify-between items-center row mx-0 sb-max:space-y-4'>
+              <DateInput placeholder='Choose Start Date' date={startDate} setDate={setStartDate} />
+              <DateInput placeholder='Choose End Date' date={endDate} setDate={setEndDate} minDate={startDate} />
+            </div>
         </div>
         <button onClick={submitDiscount} className={submitButton} id='submit-btn'>
           <span /><span /><span /><span />
@@ -128,7 +130,7 @@ const AddDiscount = (props: Props) => {
     </Layout>
   )
 }
-const submitButton = classNames('mt-20 text-lg hover:bg-input hover:text-white hover:rounded-md h-10 py-2 px-4 font-medium text-input bg-transparent');
+const submitButton = classNames('mt-4 text-lg hover:bg-input hover:text-white hover:rounded-md h-10 py-2 px-4 font-medium text-input bg-transparent');
 
 
 type DateProps = {
@@ -148,9 +150,9 @@ const DateInput = (props: DateProps) => {
   }
    
   return (
-    <div className='relative p-2'>
-      <div className='relative flex items-center' onClick={toggleCalendar}>
-        <input className='pl-2 pr-8 h-12 bg-transparent rounded-lg border-2 border-input cursor-pointer shadow-lg' disabled type='text' placeholder={props.placeholder} value={props.date?.toLocaleDateString() || ''} />
+    <div className='relative col-12 col-md-6 p-2'>
+      <div className='relative w-full flex items-center' onClick={toggleCalendar}>
+        <input className='pl-2 pr-8 w-full h-12 bg-transparent rounded-lg border-2 border-input cursor-pointer shadow-lg' disabled type='text' placeholder={props.placeholder} value={props.date?.toLocaleDateString() || ''} />
         <button className='absolute right-2 hover:text-canadian-red transition-all duration-300 scale-125'><MdCalendarToday /></button>
       </div>
       <div className='w-full' ref={calendarRef}>

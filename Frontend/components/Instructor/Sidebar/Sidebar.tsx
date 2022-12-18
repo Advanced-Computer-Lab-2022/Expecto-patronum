@@ -27,12 +27,18 @@ const Sidebar = (props: Props) => {
 
       const path = global.window?.location.pathname.split('/').at(-1) === 'Instructor' ? 'Dashboard': global.window?.location.pathname.split('/').at(-1);
       setCurr(path);
-      
-      const current = document.getElementById("Instructor-" + path + "-btn");
-            current?.classList.add("bg-canadian-red");
-            current?.classList.add("text-white");
-            current?.classList.remove("text-gray-800");
-            current?.classList.add("selected-instructor-tab");
+
+      var current;
+
+      if(global.window?.location.pathname.includes("Instructor/Settings"))
+        current = document.getElementById("Instructor-Settings-btn");
+      else
+        current = document.getElementById("Instructor-" + path + "-btn");
+
+      current?.classList.add("bg-canadian-red");
+      current?.classList.add("text-white");
+      current?.classList.remove("text-gray-800");
+      current?.classList.add("selected-instructor-tab");
 
     }, [global.window?.location.pathname]);
 
@@ -41,7 +47,7 @@ const Sidebar = (props: Props) => {
         sidebarHoverRef.current.classList.remove('opacity-0');
         sidebarHoverRef.current.style.width = (e.currentTarget.offsetWidth - 7) + "px";
         sidebarHoverRef.current.style.height = e.currentTarget.offsetHeight + "px";
-        sidebarHoverRef.current.style.top = (e.currentTarget.offsetTop + 0.5) + "px";
+        sidebarHoverRef.current.style.top = e.currentTarget.offsetTop + "px";
         sidebarHoverRef.current.style.left = e.currentTarget.offsetLeft + "px";
 
         const icon = e.target.children[0].children[0];
@@ -144,7 +150,7 @@ const profileIconImg = classNames('rounded-full shadow-lg border-2 border-canadi
 const instructorNT = classNames('flex flex-col sb-max:opacity-0 text-gray-800 pl-3 sb-max:hidden whitespace-nowrap transition-all duration-1000');
 const listedItem = classNames('w-full z-10 relative my-2 text-gray-800 hover:text-white rounded-lg rounded-br-none transition-all duration-200 ml-0.5');
 const link = classNames('flex items-center p-2 rounded-md pointer-events-none');
-const linkIcon = classNames('mr-4 mb-1.25 sb-max:mr-0 opacity-70 scale-120');
+const linkIcon = classNames('mr-4 mb-1 sb-max:mr-0 opacity-70 scale-120');
 const linkText = classNames('sb-max:hidden whitespace-nowrap');
 const hoverPointer = classNames('absolute opacity-0 transition-all z-0 top-0 left-0 duration-200 bg-canadian-red py-1 rounded-lg');
 
