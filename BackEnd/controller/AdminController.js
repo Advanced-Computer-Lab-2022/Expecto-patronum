@@ -10,9 +10,21 @@ const problemTable=require('../models/ProblemSchema');
 async function viewCourseRequests(req, res, next) {
     var CurrentPage = req.query.page ? req.query.page : 1;
     try {
-      const request = await requestTable.find( {type :"requestCourse"}).skip((CurrentPage - 1) * 10).limit(10);
+      const request = await requestTable.find( {type :"RequestCourse"}).skip((CurrentPage - 1) * 10).limit(10);
       var TotalCount = await requestTable.countDocuments({type :"requestCourse"});
       res.send({ requests: request, TotalCount: TotalCount});
+    }
+    catch (err) {
+      res.status(400).json({error:err.message})
+    }
+  };
+
+  async function viewRefundRequests(req, res, next) {
+    var CurrentPage = req.query.page ? req.query.page : 1;
+    try {
+      const request = await requestTable.find( {type :"Refund"}).skip((CurrentPage - 1) * 10).limit(10);
+      var TotalCount = await requestTable.countDocuments({type :"Refund"});
+      res.send({ refunds: request, TotalCount: TotalCount});
     }
     catch (err) {
       res.status(400).json({error:err.message})
@@ -22,14 +34,13 @@ async function viewCourseRequests(req, res, next) {
   async function grantOrRejectAccess(req, res, next) {
     try {
         if(req.body.granted=="true"){
-        const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
-        { $push: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
+          const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
+          { $set: { "status": "accepted" } }, { new: true });
+    
+        const user = await User.findByIdAndUpdate({ "_id": request.userID },
+        { $push: { "purchasedCourses":{courseID:request.courseID }} }, { new: true });
 
-        const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
-        { $set: { "status": "accepted" } }, { new: true });
-
-
-        const course =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
+        const course =  await CourseTable.findByIdAndUpdate({ "_id": request.courseID },
         { $inc: { "purchases": 1 } }, { new: true });
         res.status(200).send("access granted");
         
@@ -52,13 +63,14 @@ async function viewCourseRequests(req, res, next) {
     try {
         if(req.body.refund=="Accept"){
 
-    const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
-        { $pull: { "purchasedCourses":{courseID:req.body.courseID }},
-            $inc :{wallet:20}}, { new: true });
         const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
         { $set: { "status": "accepted" } }, { new: true });
 
-        const course =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
+        const user = await User.findByIdAndUpdate({ "_id": request.userID },
+        { $pull: { "purchasedCourses":{courseID:request.courseID }},
+            $inc :{wallet:20}}, { new: true });
+
+        const course =  await CourseTable.findByIdAndUpdate({ "_id": request.courseID },
         { $inc: { "purchases": -1 } }, { new: true });
         res.status(200).send("refund accepted");
         }
@@ -106,56 +118,6 @@ async function viewCourseRequests(req, res, next) {
     }
   }
 
-  async function discount(req, res, next) {
-    let queryCond = {};
-    const courseID = req.body.courseID;
-    var discount = req.body.discount;
-    queryCond.discount = req.body.discount;
-    startDate = new Date(req.body.startDate);
-    queryCond.startDate = req.body.startDate;
-    const dateNow = new Date();
-    //queryCond.duration = req.body.duration;
-    if(startDate<= dateNow){
-      endDate = new Date(req.body.endDate);
-      queryCond.endDate = endDate;
-      discount = 1 - (discount / 100);
-      try {
-        queryCond.set = true;
-        const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
-        var z = Object.values(y)[0];
-        var discountPrice = (z.price * discount);
-    
-        discountPrice = discountPrice.toFixed(2);
-        const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond,discountPrice : discountPrice  }, { new: true });
-        res.status(200).json(x);
-    
-      } catch (error) {
-        res.status(400).json({error:error.message})
-      }
-      
-    }else{
-      endDate = new Date(req.body.endDate);
-      queryCond.endDate = endDate;
-      queryCond.set = false;
-      discount = 1 - (discount / 100);
-      try {
-        const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
-        var z = Object.values(y)[0];
-        var discountPrice = (z.price * discount);
-    
-        discountPrice = discountPrice.toFixed(2);
-        const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond }, { new: true });
-        res.status(200).json(x);
-    
-      } catch (error) {
-        res.status(400).json({error:error.message})
-      }
-  
-    }
-  }
-  
-  
-    
     async function viewCourseRatings(req,res,next){
       var CurrentPage = req.query.page ? req.query.page : 1;
       try{
@@ -306,4 +268,4 @@ async function viewCourseRequests(req, res, next) {
   }
 
   module.exports = {viewCourseRequests,grantOrRejectAccess,viewReportedFunctions,markReportedProblem,
-    AcceptOrRejectRefund,promotion,cancelPromotion}
+    AcceptOrRejectRefund,promotion,cancelPromotion,viewRefundRequests}

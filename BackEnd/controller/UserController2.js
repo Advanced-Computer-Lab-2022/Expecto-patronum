@@ -86,11 +86,11 @@ const problemTable = require('../models/ProblemSchema');
   async function requestCourse(req, res, next) {
     var x = await User.findOne({ "_id": req.body.userID }, {purchasedCourses:{ $elemMatch : {courseID:req.body.courseID}},role:1, _id: 1,username:1 });
     var y = await CourseTable.findOne({ "_id": req.body.courseID }, {_id: 1,title:1 });
-    if(req.body.request=="requestCourse"){
+    if(req.body.request=="RequestCourse"){
       if(x.role =="CorporateTrainee"){
         const date = new Date();
          const newRequest = new requestTable({
-           type:'requestCourse',
+           type:'RequestCourse',
            userID: req.body.userID,
            username: x.username,
            courseID:req.body.courseID,
@@ -113,7 +113,7 @@ const problemTable = require('../models/ProblemSchema');
       if(prog<=49){
         const date = new Date();
         const newRequest = new requestTable({
-          type:'refund',
+          type:'Refund',
           userID: req.body.userID,
           username: x.username,
           courseID:req.body.courseID,
