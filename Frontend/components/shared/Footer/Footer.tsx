@@ -7,7 +7,7 @@ type Props = {}
 const Footer = (props: Props) => {
 
   return (
-    <div style={{backgroundColor: '#222222'}} className='text-white mx-0 fluid-container block'>
+    <div style={{backgroundColor: '#222222'}} className='text-white mx-0 fluid-container block relative z-50'>
         <div className='row mx-0'>
             <div className={footerCol}>
                 <h4 className={colHeader}><div className={colHeaderText}>Website</div></h4>

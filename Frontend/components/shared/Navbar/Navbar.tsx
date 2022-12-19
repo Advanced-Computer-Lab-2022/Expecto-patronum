@@ -26,9 +26,9 @@ function Navbar() {
       value={{ isSearchOpen, setIsSearchOpen, isCurtainOpen, setIsCurtainOpen }}
     >
       <div ref={parentRef} className={navbar}>
-        <a href="/" className={navLogoDiv}>
+        <Link href="/" className={navLogoDiv}>
           <img className={navLogo} src="/images/logo.png" />
-        </a>
+        </Link>
 
         <div className="flex">
           <SearchBar />
@@ -55,7 +55,7 @@ function Navbar() {
 }
 
 const navbar = classNames(
-  "relative z-50 flex justify-between items-center nv:px-2 h-16 py-10 shadow-sm"
+  "relative z-50 flex justify-between items-center nv:px-2 h-16 py-10 shadow-sm bg-main"
 );
 const navLogoDiv = classNames(
   "nv-max:absolute z-behind 1030:overflow-hidden 1030:w-[3.75rem] transition-all duration-300"

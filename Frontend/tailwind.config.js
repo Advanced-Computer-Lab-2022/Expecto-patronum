@@ -53,7 +53,9 @@ module.exports = {
         'sb-max': { 'max': '856px' },
         'sb': '857px',
         'nv-max-mob': { 'min': '451px', 'max': '935px' },
+        'from-mob-to-sb': { 'min': '575px', 'max': '856px' },
         '1030': { 'max': '1030px' },
+        '1031': '1031px',
       },
       zIndex: {
         'behind': '-1',
