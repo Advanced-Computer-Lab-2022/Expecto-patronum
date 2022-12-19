@@ -44,7 +44,6 @@ async function viewCourseRequests(req, res, next) {
         const course =  await CourseTable.findByIdAndUpdate({ "_id": request.courseID },
         { $inc: { "purchases": 1 } }, { new: true });
         res.status(200).send("access granted");
-        
         }
 
 
@@ -55,6 +54,7 @@ async function viewCourseRequests(req, res, next) {
         }
       }
       catch (err) {
+        console.log(err);
         res.status(400).json({error:err.message})
       }
      
@@ -85,6 +85,7 @@ async function viewCourseRequests(req, res, next) {
           transactionAmount : w,
         });
         result.save();
+        // const trans =  await transactionTable.deleteOne({ "userID":request.userID,"courseID" : request.courseID});
 
         res.status(200).send("refund accepted");
         }

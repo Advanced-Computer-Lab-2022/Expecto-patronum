@@ -11,6 +11,7 @@ const { MailValidate } = require("../lib/MailValidation");
 const { VerifyTokenDate } = require("../lib/VerfiyTokenDate");
 const { Passport } = require("passport");
 const ExerciseTable = require('../models/ExcerciseSchema');
+const requestTable = require('../models/RequestSchema');
 
  async function register(req, res) {
   const saltHash = genPassword(req.body.password);
@@ -596,9 +597,7 @@ async function selectCourse(req, res, next) {
 
         }
         ////////////////indivTrainee/Corp/////////////////////
-        var x = await User.findOne({ "_id": req.body.userId }).select({ role:1,purchasedCourses: 1, _id: 1 });
-        //var y = Object.values(x);
-        //console.log(x);
+        var x = await User.findOne({ "_id": req.body.userId }).select({ role:1,purchasedCourses:{ $elemMatch : {courseID:req.body.courseId}}, _id: 1 });
         if (x.purchasedCourses) {
           for (var i = 0; i < x.purchasedCourses.length; i++) {
             var z = Object.values(x.purchasedCourses)[i];
@@ -635,8 +634,51 @@ async function selectCourse(req, res, next) {
               //////////////////////////////////////////////////////////////////////////
             }
           }
+          //////////CorporateTraineeRequest///////////////////////////////////
+           if(x.role == "CorporateTrainee"){
+            var exists=await requestTable.findOne({"userID":req.body.userId,"courseID":req.body.courseId,"type":"RequestCourse","status":"Pending"});
+            if(exists){
+              var x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
+                _id: 1,
+                title: 1,
+                summary: 1,
+                rating: 1,
+                instructorName: 1,
+                courseVideo: 1,
+                courseHours: 1,
+                level: 1,
+                price: 1,
+                discount: 1,
+                discountPrice: 1,
+                subject: 1,
+                "subtitles.header": 1,
+                "subtitles.summary": 1,
+                "subtitles.totalMinutes": 1,
+                "subtitles.contents.contentTitle": 1,
+                "subtitles.contents.duration": 1,
+                "subtitles.exercises.exerciseTitle": 1,
+                courseImage: 1,
+                instructorID: 1,
+                review: { "$slice": 3 }
+              });
+              //console.log(x);
+              var instructor = await User.findOne({ "_id": (x.instructorID) }).select({
+                instructorRating: 1,
+                biography: 1,
+                _id: 1,
+                firstname: 1,
+                lastname: 1,
+              });
+              let q = {};
+              q.purchased = "Pending";
+              q.course = x;
+              q.instructor = instructor;
+              res.send(q);
 
+            }
+          }
 
+          
         }
       }
       ////////////////Guest/////////////////////
@@ -663,7 +705,6 @@ async function selectCourse(req, res, next) {
         instructorID: 1,
         review: { "$slice": 3 }
       });
-      console.log(x);
       var instructor = await User.findOne({ "_id": (x.instructorID) }).select({
         instructorRating: 1,
         biography: 1,

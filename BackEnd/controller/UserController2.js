@@ -21,16 +21,17 @@ const transactionTable = require('../models/transactionSchema');
             totalGrade:1,
             _id:1
         });
-        console.log(x);
-        var y = await User.findOne({"_id": req.query.userID,"purchasedCourses.excercises.excerciseID":req.query.exerciseID},
-        {purchasedCourses:{ $elemMatch : {courseID:req.query.courseID}}}
+       // console.log(x);
+        var y = await User.findOne({"_id": req.body.userID,"purchasedCourses.excercises.excerciseID":req.body.exerciseID},
+        {purchasedCourses:{ $elemMatch : {courseID:req.body.courseID}}}
         );
         let q = {};
         if(y){
           var exe = y.purchasedCourses[0].excercises;
           for(var i = 0; i<exe.length;i++){
-            if(exe[i].excerciseID ==req.query.exerciseID){
-              if(exe[i].grade){
+            if(exe[i].excerciseID ==req.body.exerciseID){
+              console.log(exe[i]);
+              if(exe[i].grade || exe[i].grade==0 ){
               q.yourGrade =exe[i].grade;
               }
               break;
