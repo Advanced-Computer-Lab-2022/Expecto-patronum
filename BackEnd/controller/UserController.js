@@ -12,11 +12,26 @@ const { VerifyTokenDate } = require("../lib/VerfiyTokenDate");
 const { Passport } = require("passport");
 const ExerciseTable = require('../models/ExcerciseSchema');
 
-function register(req, res) {
+ async function register(req, res) {
   const saltHash = genPassword(req.body.password);
   const salt = saltHash.salt;
   const hash = saltHash.hash;
 
+  var exists1=await User.findOne({"email":req.body.email});
+ 
+  var exists2=await User.findOne({"username":req.body.username});
+  if(exists1 || exists2 ){
+    if(exists1 && exists2 ){
+      res.status(400).send("username and email already used");
+    }
+    else if(exists1){
+      res.status(400).send("email already used"); 
+    }
+    else{
+    res.status(400).send("username already used");
+    }
+  }
+  else{
   const newUser = new User({
     username: req.body.username,
     hash: hash,
@@ -40,6 +55,7 @@ function register(req, res) {
     }
 
   })
+}
 
 };
 

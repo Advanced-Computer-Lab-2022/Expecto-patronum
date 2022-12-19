@@ -6,6 +6,7 @@ const User = require('../models/UserSchema');
 const ExerciseTable = require('../models/ExcerciseSchema');
 const requestTable = require('../models/RequestSchema');
 const problemTable=require('../models/ProblemSchema');
+const transactionTable = require('../models/transactionSchema');
 
 async function viewCourseRequests(req, res, next) {
     var CurrentPage = req.query.page ? req.query.page : 1;
@@ -66,12 +67,25 @@ async function viewCourseRequests(req, res, next) {
         const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
         { $set: { "status": "accepted" } }, { new: true });
 
+        const trans =  await transactionTable.findOne({ "userID":request.userID,"courseID" : request.courseID});
+
         const user = await User.findByIdAndUpdate({ "_id": request.userID },
         { $pull: { "purchasedCourses":{courseID:request.courseID }},
-            $inc :{wallet:20}}, { new: true });
+            $inc :{wallet:trans.transactionAmount}}, { new: true });
 
         const course =  await CourseTable.findByIdAndUpdate({ "_id": request.courseID },
         { $inc: { "purchases": -1 } }, { new: true });
+
+          var w = -trans.transactionAmount;
+        const result = await transactionTable.create({
+          userID: request.userID,
+          instructorID: course.instructorID,
+          courseID: request.courseID,
+          transactionDate: Date.now(),
+          transactionAmount : w,
+        });
+        result.save();
+
         res.status(200).send("refund accepted");
         }
         else{
@@ -81,6 +95,7 @@ async function viewCourseRequests(req, res, next) {
         }
       }
       catch (err) {
+        console.log(err);
         res.status(400).json({error:err.message})
       }
      

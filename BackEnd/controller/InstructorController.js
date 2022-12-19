@@ -195,42 +195,21 @@ async function filterCourses(req, res, next) {
 
 async function addCourse(req, res, next) {
 
-  var x = await User.find({ "_id": req.body.instructorID }, { firstname: 1, lastname: 1, _id: 0 });
-  var y = Object.values(x)[0];
-  console.log(y);
-  var name = y.firstname + " " + y.lastname;
-  console.log(name);
-  //  const subtitles = req.body.subtitles;
-  //  console.log(subtitles);
 
-  //  var sum = 0;
-  //  var sum1 = [];
-  //  var tempsum = 0;
-  //  const sum2 = [];
-  // for(var i =0;i< subtitles.length;i++){
-  //   var z = Object.values(subtitles)[i] ;
-  //   for(var j =0;j< z.contents.length;j++){
-  //     var w = Object.values(z.contents)[j] ;
-  //     sum1.push(w.duration);
-  //     console.log(w);
-  //   }
-  //   console.log(sum1);
-  //   for(var a = 0 ;a< sum1.length;a++){
-  //     var intvalue = Math.floor(a);
-  //     tempsum = tempsum + Object.values(sum1)[a];
-  //     if(a == sum1.length-1){
-  //       sum2.push(tempsum);
-  //     }
-  //   }
-  //   tempsum=0;
-  //   console.log(sum1);
-  //   sum1= [];
-  //   sum = sum + z.totalMinutes;
-  // }
-  // console.log(sum);
-  // console.log(sum2);
 
-  const newCourse = new CourseTable({
+  try {
+    var exists=await CourseTable.findOne({"title":req.body.title});
+    if(exists){
+      res.status(400).send("Course title already used");
+    }
+    else{
+      var x = await User.find({ "_id": req.body.instructorID }, { firstname: 1, lastname: 1, _id: 0 });
+    var y = Object.values(x)[0];
+    console.log(y);
+    var name = y.firstname + " " + y.lastname;
+    console.log(name);
+
+    const newCourse = new CourseTable({
     instructorID: req.body.instructorID,
     title: req.body.title,
     summary: req.body.summary,
@@ -247,9 +226,7 @@ async function addCourse(req, res, next) {
     discountPrice: req.body.price,
     review:req.body.review,
     courseImage:req.body.courseImage
-  });
-
-  try {
+    });  
     newCourse.save();
    // res.send(newCourse);
     console.log("course added succsessfully");
@@ -286,6 +263,7 @@ async function addCourse(req, res, next) {
      }
     }
     res.send("Course Added");
+  }
 
   } catch (err) {
     res.status(400).json({error:err.message})
