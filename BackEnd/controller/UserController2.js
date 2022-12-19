@@ -12,6 +12,7 @@ const ExerciseTable = require('../models/ExcerciseSchema');
 const CourseTable = require('../models/CourseSchema');
 const requestTable = require('../models/RequestSchema');
 const problemTable = require('../models/ProblemSchema');
+const transactionTable = require('../models/transactionSchema');
 
   async function SelectExercise(req, res, next) {
     try {
@@ -145,6 +146,25 @@ const problemTable = require('../models/ProblemSchema');
         courseID: req.body.courseID,
         startDate: Date.now(),
         //comment: req.body.comment,
+      });
+      result.save();
+      res.status(200).send(result);
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+
+  async function createTransaction(req,res,next){
+    try{
+      const x = await CourseTable.findOne({_id:req.body.courseID});
+      const result = await transactionTable.create({
+        userID: req.body.userID,
+        instructorID: x.instructorID,
+        courseID: req.body.courseID,
+        transactionDate: req.body.transactionDate,
+        //transactionDate: Date.now(),
+        transactionAmount : req.body.transactionAmount,
       });
       result.save();
       res.status(200).send(result);
@@ -307,4 +327,4 @@ const problemTable = require('../models/ProblemSchema');
 
 
   module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,
-    followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes}
+    followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes,createTransaction}

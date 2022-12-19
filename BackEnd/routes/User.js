@@ -11,7 +11,8 @@ const { register } = require('../controller/UserController');
 const { giveCourseRating, buyCourse, ViewMyCourses, GenerateUsers, ConnectInstructorsWithCourses, getInstructorInfo, updateInstructorInfo } = require('../controller/UserController');
 const UserTable = require('../models/UserSchema');
 
-const { SelectExercise, viewAnswer,requestCourse,reportProblem,viewPreviousReports,followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes } = require('../controller/UserController2');
+const { SelectExercise, viewAnswer,requestCourse,reportProblem,viewPreviousReports,followUpOnProblem,watchVideo,addNote,
+  viewNotes,filterNotes,createTransaction } = require('../controller/UserController2');
 
 router.get("/", (req, res) => {
   res.send("Hello, User");
@@ -44,6 +45,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 router.post("/forgetPassword", forgetPassword);
 router.post("/reportProblem", reportProblem);
 
+router.post("/createTransaction", createTransaction);
 
 router.get("/forgetPassword/:token", VerifyTokenMiddleware, (req, res) => {
   res.send({ Error: false, Message: 'Token is valid' });

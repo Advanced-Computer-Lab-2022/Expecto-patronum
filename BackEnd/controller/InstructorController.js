@@ -1,10 +1,12 @@
 const connection = require('../config/database');
 const instructorTable = require('../models/InstructorSchema');
 const User = require('../models/UserSchema');
+const mongoose = require('mongoose');
 //const { isInstructor } = require('../middleware/RolesMiddleware');
 const CourseTable = require('../models/CourseSchema');
 const ExerciseTable = require('../models/ExcerciseSchema');
 const { query, response } = require('express');
+const transactionTable = require('../models/transactionSchema');
 
 
 async function viewCourses(req, res, next) {
@@ -478,10 +480,36 @@ async function testingAll(req,res){
   }
 }
 
+async function viewAmountOwned(req, res, next) {
+  try {
+
+    //const Courses = await transactionTable.find({"instructorID":req.body.userID}).sort({transactionDate:1});
+    let idToSearch = mongoose.Types.ObjectId(req.body.userID);
+    const Courses = await transactionTable.aggregate(
+    [
+      { "$match":{ "instructorID": idToSearch}},
+      { 
+        $group:
+          {
+            _id: { month: { $month: "$transactionDate"}, year: { $year: "$transactionDate" } },
+            totalAmount: { $sum: { $multiply: [ "$transactionAmount", 1 ] } },
+            count: { $sum: 1 }
+          }
+      }
+    ]);
+  
+    res.send({ Courses: Courses});
+
+  }
+  catch (err) {
+    res.status(400).json({error:err.message})
+  }
+};
+
 
 
 module.exports = { 
   viewCourses, filterCourses, addCourse, discount, viewCourseRatings, 
   updateBio, testingAll, viewProfile, cancelDiscount, viewInstructorRatingsAndReviews,
-  filterByRatings, 
+  filterByRatings,viewAmountOwned 
 };
