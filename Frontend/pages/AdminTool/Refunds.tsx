@@ -152,7 +152,7 @@ function RejectRefund(index: number) {
         <h6 className='text-center text-2xl text-navbar p-0'>Refund Requests</h6>
         <div className="flex flex-col p-0">
       <div className="my-2">
-        <div className="py-2 align-middle inline-block min-w-full">
+        <div className="py-2 align-middle inline-block min-w-full ">
           <div className="shadow overflow-hidden border-b mx-4 border-gray-200 sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -220,7 +220,7 @@ function RejectRefund(index: number) {
                       type="button"
                       onClick={()=>AcceptRefund(index)}
                       style={refund.status != "Pending" ? { display: "none" } : {}} 
-                      className=" w-15 h-10 flex justify-center py-2 px-4 border border-green-500 rounded-md shadow-sm text-medium font-medium text-white bg-green-500 hover:bg-white hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      className=" w-15 h-10 flex justify-center py-2 px-4 border-2 border-green-500 rounded-md shadow-sm text-medium font-medium text-white bg-green-500 hover:bg-white hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                       Accept
                       </button>
@@ -229,7 +229,7 @@ function RejectRefund(index: number) {
                   type="button"
                   onClick={()=>RejectRefund(index)}
                       style={refund.status != "Pending" ? { display: "none" } : {}} 
-                      className="ml-2 w-15 h-10 flex justify-center py-2 px-4 border border-red-500 rounded-md shadow-sm text-medium font-medium text-white bg-red-600 hover:bg-white hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      className="ml-2 w-15 h-10 flex justify-center py-2 px-4 border-2 border-red-500 rounded-md shadow-sm text-medium font-medium text-white bg-red-600 hover:bg-white hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                       Reject
                       </button>

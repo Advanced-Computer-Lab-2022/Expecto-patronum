@@ -98,11 +98,11 @@ console.log(reports);
       <AdminHeader />
       <div className="flex">
         <SideBar></SideBar>
-        <form id="course-form" className="w-full mx-4 p-20r">
+        <form id="course-form" className='w-full sb-max:w-without-instructor-sidebar-closed sb:w-without-instructor-sidebar'>
           <div className="row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl ">
             <h6 className="text-center text-2xl text-navbar">Reports</h6>
             <div className="flex flex-col">
-              <div className="my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div className="my-2 ">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                   <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     <table className="min-w-full divide-y divide-gray-200">
@@ -198,7 +198,7 @@ console.log(reports);
                                 id={"staticModal" + index}
                                 style={{display:"none"}}
                                 data-modal-backdrop="static"
-                                className="fixed top-0 left-0 right-0 z-50 w-full p-[425px] py-40 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full backdrop-blur-sm bg-black bg-opacity-50"
+                                className="fixed top-0 left-0 right-0 z-50 w-full p-[425px] py-40 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full backdrop-blur-[2px] bg-black bg-opacity-90"
                               >
                                 <div className="relative w-full h-full max-w-2xl md:h-auto">
                                   <div className="relative bg-white rounded-lg shadow">
@@ -235,7 +235,7 @@ console.log(reports);
                                         Reason: {report.body}
                                       </p>
                                     </div>
-                                    <h4 className="px-6 pb-2">FollowUps</h4>
+                                    <h4 className="px-6 pb-2 text-lg">Follow-Ups</h4>
                                     {reports[index]?.comment.map(
                                       (comment:any, index2:number) => (
                                         <p className="text-base leading-relaxed text-gray-500 px-6 ">
@@ -244,12 +244,12 @@ console.log(reports);
                                       )
                                     )}
 
-                                    <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
+                                    <div className="flex justify-center p-6 space-x-2 rounded-b">
                                       <button
                                         id={"Resolve" + index}
                                         onClick={() => ResolveReport(index)}
                                         type="button"
-                                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        className="flex justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                       >
                                         Resolve
                                       </button>
@@ -264,16 +264,17 @@ console.log(reports);
                     </table>
 
                     <div id="pagination">
-                      <CompPagination
-                        totalCount={20 * 5}
-                        Setter={go}
-                        FromLink={false}
-                      />
+
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <CompPagination
+                        totalCount={20 * 5}
+                        Setter={go}
+                        FromLink={false}
+                      />
           </div>
         </form>
       </div>

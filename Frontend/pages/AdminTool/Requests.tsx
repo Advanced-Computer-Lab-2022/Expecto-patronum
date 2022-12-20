@@ -128,11 +128,11 @@ function RejectRequest(index: number) {
     <AdminHeader/>
     <div className="flex">
       <SideBar></SideBar>
-      <form id='course-form' className='w-full mx-4 p-20r'>
+      <form id='course-form' className='w-full sb-max:w-without-instructor-sidebar-closed sb:w-without-instructor-sidebar'>
         <div className='row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl '>
         <h6 className='text-center text-2xl text-navbar'>Corporate Trainees' Course Requests</h6>
         <div className="flex flex-col">
-      <div className="my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div className="my-2 ">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
@@ -181,7 +181,7 @@ function RejectRequest(index: number) {
                       type="button"
                       onClick={()=>AcceptRequest(index)}
                       style={request.status != "Pending" ? { display: "none" } : {}} 
-                      className=" w-15 h-10 flex justify-center py-2 px-4 border border-green-500 rounded-md shadow-sm text-medium font-medium text-white bg-green-500 hover:bg-white hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      className=" w-15 h-10 flex justify-center py-2 px-4 border-2 border-green-500 rounded-md shadow-sm text-medium font-medium text-white bg-green-500 hover:bg-white hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                       Accept
                       </button>
@@ -190,7 +190,7 @@ function RejectRequest(index: number) {
                   type="button"
                   onClick={()=>RejectRequest(index)}
                       style={request.status != "Pending" ? { display: "none" } : {}} 
-                      className="ml-2 w-15 h-10 flex justify-center py-2 px-4 border border-red-500 rounded-md shadow-sm text-medium font-medium text-white bg-red-600 hover:bg-white hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      className="ml-2 w-15 h-10 flex justify-center py-2 px-4 border-2 border-red-500 rounded-md shadow-sm text-medium font-medium text-white bg-red-600 hover:bg-white hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                       Reject
                       </button>
@@ -199,11 +199,12 @@ function RejectRequest(index: number) {
                 ))}
               </tbody>
             </table>
-            <div id="pagination"><CompPagination totalCount={20 * 5} Setter={go} FromLink={false} /></div>
+           
           </div>
         </div>
       </div>
     </div>
+    <div id="pagination"><CompPagination totalCount={20 * 5} Setter={go} FromLink={false} /></div>
         </div>
       </form>
 
