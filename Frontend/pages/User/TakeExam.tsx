@@ -37,7 +37,7 @@ const Exam = () => {
         answer: "",
         isVisible: false,
     }]
-    );
+    ); 
 
     useEffect(() => {
 
@@ -66,9 +66,9 @@ const Exam = () => {
     const getQuestions = async () => { //need to be callled on loading page
         await axios.get('http://localhost:5000/User/takeExam', {
             params: {
-                examID: "6383e073de30152bc8991dd5",
+                examID:"6383e073de30152bc8991dd5" ,
             },
-        }).then(
+          }).then(
             (res) => {
                 console.log(res.data[0]);
                 const q = res.data[0].questions;
@@ -191,97 +191,39 @@ const Exam = () => {
         e.preventDefault();
         // const AnswerLabel = document.getElementsByClassName("answer") as HTMLCollectionOf<HTMLLabelElement>;
         var empty = new Array(questions.length);
-        for (var i = 0; i < empty.length; i++) {
+        for(var i=0;i<empty.length;i++){
             empty[i] = '';
         }
-
+        
         // if (AnswerLabel != undefined) {
         //     for (var i = 0; i < AnswerLabel.length; i++) {
         //         AnswerLabel[i].style.display = "";
         //     }
         // }
-        var correctAnswers = 0;
-        for (var i = 0; i < questions.length; i++) {
-            const QuestionChoices = document.getElementsByClassName("Q" + i) as any;
-            var chosenAnswerIndex = 100; // out of bounds
-            for (var j = 0; j < QuestionChoices.length; j++) {
-                if (QuestionChoices[j].nextElementSibling != null) {
-                    // QuestionChoices[j].nextElementSibling.className = notChosen;
-                    if (QuestionChoices[j].checked) {
-                        chosenAnswerIndex = j;
-                        var selected = questions[i].choices[chosenAnswerIndex];
-                        console.log(selected);
-                        empty[i] = selected;
-                        console.log(empty);
+            var correctAnswers = 0;
+            for (var i = 0; i < questions.length; i++) {
+                const QuestionChoices = document.getElementsByClassName("Q" + i) as any;
+                var chosenAnswerIndex = 100; // out of bounds
+                for (var j = 0; j < QuestionChoices.length; j++) {
+                    if (QuestionChoices[j].nextElementSibling != null) {
+                        // QuestionChoices[j].nextElementSibling.className = notChosen;
+                        if (QuestionChoices[j].checked) {
+                            chosenAnswerIndex = j;
+                            var selected=questions[i].choices[chosenAnswerIndex];
+                            console.log(selected);
+                            empty[i]=selected;
+                            console.log(empty);
+                        }
                     }
                 }
-            }
-            response = await axios.put("http://localhost:5000/User/submitAnswer", {
-                userID: "6383d9da6670d09304d2b016",
-                courseID: "6383e073de30152bc8991dc9",
-                excerciseID: "6383e073de30152bc8991dd5",
-                answers: empty,
-            }).then((res: { data: any; }) => { return res.data });
-            // viewPopupMessage(isSuccess, text);
-            // console.log(response);
-
-            //     if (chosenAnswerIndex >= 0 && chosenAnswerIndex <= 3) {
-            //         if (questions[i].answer === questions[i].choices[chosenAnswerIndex]) {
-            //             correctAnswers++;
-            //             if (QuestionChoices[chosenAnswerIndex].nextElementSibling != null) {
-            //                 QuestionChoices[chosenAnswerIndex].nextElementSibling.className = rightAnswer;
-            //             }
-            //         } else {
-            //             if (QuestionChoices[chosenAnswerIndex].nextElementSibling != null) {
-            //                 QuestionChoices[chosenAnswerIndex].nextElementSibling.className = wrongAnswer;
-            //             }
-            //         }
-            //     }
-            // }
-            // const questionsCards = document.getElementsByClassName("question") as any;
-            // if (questionsCards != undefined) {
-            //     for (var i = 0; i < questionsCards.length; i++) {
-            //         questionsCards[i].style.display = "";
-            //     }
-            // }
-            // settotalGrade((correctAnswers / questions.length) * 100);
-            // const grade = document.getElementById("grade") as HTMLParagraphElement;
-            // grade.style.display = "";
-            // const submit = document.getElementById("submit-btn");
-            // if (submit != undefined) {
-            //     submit.style.display = "none";
-            // }
-            // const timer = document.getElementById("timer");
-            // if (timer != undefined) {
-            //     timer.style.display = "none";
-            // }
-            // const info = document.getElementById("info");
-            // if (info != undefined) {
-            //     info.style.display = "none";
-            // }
-            // const pagination = document.getElementById("pagination");
-            // if (pagination != undefined) {
-            //     pagination.style.display = "none";
-            // }
-            // const prev = document.getElementById("prev-btn");
-            // if (prev != undefined) {
-            //     prev.style.display = "none";
-            // }
-            // const goback = document.getElementById("go-back");
-            // if (goback != undefined) {
-            //     goback.style.display = "";
-            // }
-            // setAnswered(empty);
-            // console.log(answered);
-            // axios.defaults.withCredentials =true;
-            // Response = await axios
-            //     .post("http://localhost:5000/", {
-            //     })
-            //     .then((res) => {
-            //         return res.data;
-            //     });
-        }
+                response = await axios.put("http://localhost:5000/User/submitAnswer", {
+                    userID:"6383d9da6670d09304d2b016", 
+                    courseID:"6383e073de30152bc8991dc9",
+                    excerciseID:"6383e073de30152bc8991dd5",
+                    answers:empty,
+                }).then((res: { data: any; }) => { return res.data });
     }
+}
 
     return (
         <form
@@ -312,7 +254,7 @@ const Exam = () => {
                         id="prev-btn"
                         type="button"
                         onClick={goToPrev}
-                        className="inline-flex h-10 mb-4 items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 bg-[#222222] dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        className="inline-flex h-10 mb-4 items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500  rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 bg-[#222222] dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                         <svg
                             aria-hidden="true"
@@ -333,7 +275,7 @@ const Exam = () => {
                         style={{ display: 'none' }}
                         id="go-back"
                         type="button"
-                        className="inline-flex h-10 mb-4 items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 bg-[#222222] dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        className="inline-flex h-10 mb-4 items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500  rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 bg-[#222222] dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                         <svg
                             aria-hidden="true"
@@ -379,14 +321,14 @@ const Exam = () => {
                         type={type}
                         className="hidden text-lg hover:bg-red-600 hover:text-white hover:rounded-md h-10 mb-4 items-center py-2 px-4 ml-3 font-medium text-red-600 bg-transparent"
                     >
-
+                     
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
                         Submit
                     </button>
-                    {/* </Link> */}
+                       {/* </Link> */}
                 </div>
             </div>
 

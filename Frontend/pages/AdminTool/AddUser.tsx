@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import Input from '../components/shared/Input/Input';
-import SideBar from '../components/SideBar/SideBar';
+import Input from '../../components/shared/Input/Input';
+import SideBar from '../../components/AdminTool/SideBar';
+import AdminHeader from '../../components/AdminTool/AdminHeader';
 type Props = {}
 
 var isReset = false;
@@ -20,17 +21,17 @@ const AddUser = (props: Props) => {
   const firstname = useRef<any>();
   const lastname = useRef<any>();
 
+function getRole(selectedRadio: any) {
+  setSelectedRadio(selectedRadio);
+}
 
-  function resetError(e: React.FormEvent<HTMLFormElement> ) {
+  async function createUser(e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const error = document.getElementById("error-message");
 
     if(error != undefined)
         error.innerHTML = "";
 
     isReset = true;
-}
-
-  async function createUser(e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 
     const inputFields = document.getElementsByClassName("create-course-input") as HTMLCollectionOf<HTMLElement>;
     var missing = false;
@@ -38,13 +39,8 @@ const AddUser = (props: Props) => {
       const field = inputFields[i] as HTMLTextAreaElement | any;
       if(field.nodeName === "DIV") {
           var selected = false;
-          // console.log(field.children[1].children.length);
-          for(let j = 0; j < field.children[1].children.length; j++) {
-
-            // console.log(field.children[1].children[j].children[0]);
-
-            if(field.children[1].children[j].children[0].checked) {
-                radio=field.children[1].children[j].children[2].innerHTML.replace(" ", "");
+          for(let j = 1; j < field.children.length; j++) {
+            if(field.children[j].children[0].checked) {
                 selected = true;
                 break;
             }
@@ -61,7 +57,6 @@ const AddUser = (props: Props) => {
           }
       }
   }
-  const error = document.getElementById("error-message");
   if(missing) {
       if(error != undefined)
           error.innerHTML = "Please fill in the required fields marked with a '*'.";
@@ -76,17 +71,19 @@ const AddUser = (props: Props) => {
       email: email.current.value,
       firstname: firstname.current.value,
       lastname: lastname.current.value,
-      role: radio,
+      role: selectedRadio,
     }).then((res: { data: any; }) => { return res.data });
 
     console.log(response);
   }
   return (
+    <aside>
+    <AdminHeader/>
     <div className="flex">
       <SideBar></SideBar>
       <form id='course-form' className='w-full mx-4 p-20r'>
-        <div className='row tab mx-auto pt-10 bg-navbar h-full w-full rounded-t-2xl shadow-xl '>
-          <h1 className='text-center text-3xl pb-6 text-white'>Add User</h1>
+        <div className='row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl '>
+          <h1 className='text-center text-3xl pb-6 text-navbar'>Add User</h1>
           <div className="col">
             <Input ref={username} required={true} placeholder={"User Name *"} />
             <Input ref={password} required={true} placeholder={"Password *"} />
@@ -97,13 +94,13 @@ const AddUser = (props: Props) => {
     
             <Input ref={firstname} required={true} placeholder={"First Name *"} />
             <Input ref={lastname} required={true} placeholder={"Last Name *"} />
-            <Input ref={radioRef} type='radio' title='User Type*' enum={['Admin', 'Instructor', 'CorporateTrainee']} required={true} placeholder={"User Type"} />
+            <Input ref={radioRef} type='radio' onChange={getRole} title='User Type*' enum={['Admin', 'Instructor', 'CorporateTrainee']} required={true} placeholder={"User Type"} />
            
           </div>
-          <div className='mx-auto w-700 rounded-b-2xl bg-navbar'>
+          <div className='mx-auto w-700 rounded-b-2xl bg-main'>
             <p id='error-message' className='text-red-700 h-auto mb-2 text-center'></p>
             <div className='text-center flex justify-center '>
-            <button id='submit-btn' type="button" onClick={(e) => createUser(e)} className="text-lg hover:bg-navlink-bg hover:text-gray-900 hover:rounded-md h-10 mb-4 items-center py-2 px-4 ml-3 font-medium text-navlink-bg bg-transparent">
+            <button id='submit-btn' type="button" onClick={(e) => createUser(e)} className="text-lg hover:bg-red-600 hover:text-white hover:rounded-md h-10 mb-4 items-center py-2 px-4 ml-3 font-medium text-red-600 bg-transparent">
                     <span />
                     <span />
                     <span />
@@ -116,6 +113,7 @@ const AddUser = (props: Props) => {
       </form>
 
     </div>
+    </aside>
   )
 }
 
