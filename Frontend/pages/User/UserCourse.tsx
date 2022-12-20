@@ -14,6 +14,7 @@ const UserCourse = (props: Props) => {
   const { ContentChoosen, SetContentChoosen } = React.useContext(DataContext);
   const [Next, SetNext] = React.useState(false);
   const [Prev, SetPrev] = React.useState(false);
+  const [CloseSideBar, SetCloseSideBar] = React.useState(false);
   console.log(ContentChoosen)
   useEffect(() => {
     async function fetchData() {
@@ -159,10 +160,10 @@ const UserCourse = (props: Props) => {
 
 
   return (
-    <div className={UserCourseContainer}>
+    <div className={UserCourseContainer + " " + (CloseSideBar && "overflow-x-hidden")}>
       <WatchContent Next={Next} Prev={Prev} HandleNext={HandleNext} HandlePrev={HandlePrev}></WatchContent>
-      <CourseSideBar></CourseSideBar>
-
+      <CourseSideBar SetCloseSideBar={SetCloseSideBar} CloseSideBar={CloseSideBar}></CourseSideBar>
+      {CloseSideBar && <div onClick={() => { SetCloseSideBar(false) }} className='absolute bg-red-800 w-11  top-20  right-0'>Arrow</div>}
     </div>
   )
 }
