@@ -33,10 +33,10 @@ const Tabs = (props: Props) => {
         </ul>
         <button onClick={props.HandleNext}>Next</button>
 
-
-
-
       </div >
+
+
+
       {selected == "OverView" && <OverView></OverView>}
       {selected == "Notes" && <Notes setPause={props.setPause} videoRef={props.videoRef}></Notes>}
       {selected == "Q/A" && <div>Q/A</div>}

@@ -3,12 +3,17 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import { RemoveScrollBar } from 'react-remove-scroll-bar';
+import { AiOutlineClose } from "react-icons/ai";
+
 
 interface Modalinterface {
   children: any;
   SetOpen: Function;
   SetVideoPictureApear?: Function;
   ExtraClass?: string;
+  CloseBtn?: boolean;
+  CloseBtnFunc?: Function;
+  CloseBtnColor?: string;
 
 }
 
@@ -42,9 +47,15 @@ function Modal(props: Modalinterface) {
   const ModalContent = (
     <div className={ModalWrapper + " " + props?.ExtraClass}>
       <RemoveScrollBar />
-      <div ref={ModalRef}>
-
-
+      <div className='relative' ref={ModalRef}>
+        {
+          props.CloseBtn &&
+          <AiOutlineClose
+            className="cursor-pointer absolute top-0 right-0 mr-2 mt-2 z-50"
+            color={props.CloseBtnColor ? props.CloseBtnColor : "black"}
+            onClick={() => { props.CloseBtnFunc ? props.CloseBtnFunc() : props.SetOpen(false) }}
+            fontSize={30} />
+        }
 
         {props.children}
       </div>
@@ -63,4 +74,4 @@ function Modal(props: Modalinterface) {
 }
 
 export default Modal;
-const ModalWrapper = classNames("fixed z-50  top-0  left-0  w-full  h-full   bg-gray-900  bg-opacity-50  flex  justify-center  items-center");
+const ModalWrapper = classNames("fixed z-50   top-0  left-0  w-full  h-full   bg-gray-900  bg-opacity-50  flex  justify-center  items-center");

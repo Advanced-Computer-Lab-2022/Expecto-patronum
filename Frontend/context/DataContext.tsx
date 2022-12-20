@@ -26,9 +26,6 @@ interface ContentChoosen {
 }
 
 
-
-
-
 export interface InterfaceFilter {
   Subject: string[];
   Rating: string[];
@@ -49,6 +46,7 @@ const defualtFilter = {
   },
   SetContentChoosen: () => { },
 }
+
 
 const DataContext = React.createContext<InterfaceDataContext>(defualtFilter);
 
