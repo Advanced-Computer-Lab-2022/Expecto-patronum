@@ -5,6 +5,7 @@ import SideBar from '../../components/AdminTool/SideBar';
 import AdminHeader from '../../components/AdminTool/AdminHeader';
 import classNames from "classnames";
 import CompPagination from "../../components/shared/pagination/CompPagination";
+import ProgressBar2 from '../../components/shared/progress/ProgressBar2';
 
 const pending = classNames(
   "px-1 py-1 rounded-md whitespace-nowrap text-sm bg-yellow-200 text-yellow-700"
@@ -16,22 +17,34 @@ const rejected = classNames(
   "px-1 py-1 rounded-md whitespace-nowrap text-sm bg-red-100 text-red-700"
 );
 
+const pendingBar = classNames(
+  "bg-[#F7E632] rounded-l-full transition-all duration-700"
+  );
+  const acceptedBar = classNames(
+    "bg-green-600 rounded-l-full transition-all duration-700"
+    
+  );
+  const rejectedBar = classNames(
+    "bg-red-600 rounded-l-full transition-all duration-700"
+
+  );
+
 type Props = {}
 var response = null;
-const requests = [
+const refunds = [
   //api
   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"requestCourse",
-     userID:"1",courseID:"2",body:""},
+     userID:"1",courseID:"2",body:"",progress:50},
   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"requestCourse",
-     userID:"1",courseID:"2",body:""},
+     userID:"1",courseID:"2",body:"",progress:25},
   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Accepted', date: '23-12-2022' , type:"requestCourse",
-     userID:"1",courseID:"2",body:""},
+     userID:"1",courseID:"2",body:"",progress:15},
   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Rejected', date: '23-12-2022' , type:"requestCourse",
-     userID:"1",courseID:"2",body:""},
+     userID:"1",courseID:"2",body:"",progress:100},
   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"requestCourse",
-     userID:"1",courseID:"2",body:""},
+     userID:"1",courseID:"2",body:"",progress:45},
 ]
-const Requests = (props: Props) => {
+const Refunds = (props: Props) => {
   const [characterLeft, setCharacterLeft] = useState(250);
   const [selectedRadio, setSelectedRadio] = useState<string>("");
   const [type, setType] = useState<"button" | "submit" | "reset" | undefined>("button");
@@ -46,9 +59,9 @@ const Requests = (props: Props) => {
 
 function go() {
 }
-function AcceptRequest(index: number) {
-    //api
+function AcceptRefund(index: number) {
   const status = document.getElementsByClassName("Status"+index);
+  const Bar=document.getElementById("ProgressBar"+index) as HTMLElement;
   const AcceptButton=document.getElementById("AcceptButton"+index);
   const RejectButton=document.getElementById("RejectButton"+index);
   if (status[0].children!= undefined){
@@ -59,11 +72,14 @@ function AcceptRequest(index: number) {
     AcceptButton.style.display="none";
     RejectButton.style.display="none";
   }
-
+  if(Bar!=undefined){
+    Bar.className=acceptedBar;
+  }
+  //api
 }
-function RejectRequest(index: number) {
-    //api
+function RejectRefund(index: number) {
   const status = document.getElementsByClassName("Status"+index);
+  const Bar=document.getElementById("ProgressBar"+index) as HTMLElement;
   const AcceptButton=document.getElementById("AcceptButton"+index);
   const RejectButton=document.getElementById("RejectButton"+index);
   if (status[0].children!= undefined){
@@ -73,6 +89,9 @@ function RejectRequest(index: number) {
   if(AcceptButton!= undefined && RejectButton!=undefined){
     AcceptButton.style.display="none";
     RejectButton.style.display="none";
+  }
+  if(Bar!=undefined){
+    Bar.className=rejectedBar;
   }
   //api
 }
@@ -126,15 +145,15 @@ function RejectRequest(index: number) {
   return (
     <aside>
     <AdminHeader/>
-    <div className="flex">
+    <div className="flex sb-max:min-h-fit">
       <SideBar></SideBar>
-      <form id='course-form' className='w-full mx-4 p-20r'>
+      <form id='course-form' className='w-full sb-max:w-without-instructor-sidebar-closed sb:w-without-instructor-sidebar'>
         <div className='row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl '>
-        <h6 className='text-center text-2xl text-navbar'>Corporate Trainees' Course Requests</h6>
-        <div className="flex flex-col">
-      <div className="my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <h6 className='text-center text-2xl text-navbar p-0'>Refund Requests</h6>
+        <div className="flex flex-col p-0">
+      <div className="my-2">
+        <div className="py-2 align-middle inline-block min-w-full">
+          <div className="shadow overflow-hidden border-b mx-4 border-gray-200 sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -160,6 +179,12 @@ function RejectRequest(index: number) {
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
+                    Progress
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Status
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -168,19 +193,33 @@ function RejectRequest(index: number) {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {requests.map((request,index) => (
-                  <tr key={request.date}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{request.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{request.title}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{request.date}</td>
-                    <td className={"Status"+index+" "+"px-6 py-4 whitespace-nowrap text-sm text-gray-500"}><span className={request.status=="Pending" ? pending : request.status=="Accepted" ? accepted : rejected }>{request.status}</span></td>
+                {refunds.map((refund,index) => (
+                  <tr key={refund.date}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{refund.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{refund.title}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{refund.date}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">  
+                    {/* <div className ="w-full bg-gray-200 rounded-full dark:bg-gray-200">
+                    <div id={"ProgressBar"+index}
+                      className={refund.status=="Pending" ? pendingBar : refund.status=="Accepted" ? acceptedBar : rejectedBar + " pr-6"} style={{width: `${refund.progress}%` }}> {refund.progress}%</div>
+
+                    </div> */}
+                        <div className='relative flex items-center justify-between'>
+        <div className='mr-2'>{refund.progress.toString() + '%'}</div>
+        <div className="w-72 h-3 sb-max:w-52 bg-black bg-opacity-[0.04] shadow-sm hover:shadow-md hover:opacity-95 transition-all duration-200 rounded-full flex overflow-hidden relative">
+            <div id={"ProgressBar"+index} className={refund.status=="Pending" ? pendingBar : refund.status=="Accepted" ? acceptedBar : rejectedBar} style={{width: refund.progress.toString() + '%'}} aria-valuenow={0} aria-valuemin={0} aria-valuemax={100}></div>
+        </div>
+    </div>
+                    {/* <ProgressBar2 id={"ProgressBar"+index} percentage={refund.progress/100} barColor={refund.status} text={refund.progress.toString() + '%'}/> */}
+                    </td>
+                    <td className={"Status"+index+" "+"px-6 py-4 whitespace-nowrap text-sm text-gray-500"}><span className={refund.status=="Pending" ? pending : refund.status=="Accepted" ? accepted : rejected }>{refund.status}</span></td>
                    <td
                   className="flex px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
                     id={"AcceptButton"+index}
                       type="button"
-                      onClick={()=>AcceptRequest(index)}
-                      style={request.status != "Pending" ? { display: "none" } : {}} 
+                      onClick={()=>AcceptRefund(index)}
+                      style={refund.status != "Pending" ? { display: "none" } : {}} 
                       className=" w-15 h-10 flex justify-center py-2 px-4 border border-green-500 rounded-md shadow-sm text-medium font-medium text-white bg-green-500 hover:bg-white hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                       Accept
@@ -188,8 +227,8 @@ function RejectRequest(index: number) {
                     <button
                       id={"RejectButton"+index}
                   type="button"
-                  onClick={()=>RejectRequest(index)}
-                      style={request.status != "Pending" ? { display: "none" } : {}} 
+                  onClick={()=>RejectRefund(index)}
+                      style={refund.status != "Pending" ? { display: "none" } : {}} 
                       className="ml-2 w-15 h-10 flex justify-center py-2 px-4 border border-red-500 rounded-md shadow-sm text-medium font-medium text-white bg-red-600 hover:bg-white hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                       Reject
@@ -199,12 +238,14 @@ function RejectRequest(index: number) {
                 ))}
               </tbody>
             </table>
-            <div id="pagination"><CompPagination totalCount={20 * 5} Setter={go} FromLink={false} /></div>
+         
           </div>
         </div>
       </div>
     </div>
+    <div id="pagination"><CompPagination totalCount={20 * 5} Setter={go} FromLink={false} /></div>
         </div>
+        
       </form>
 
     </div>
@@ -213,4 +254,4 @@ function RejectRequest(index: number) {
 }
 
 
-export default Requests;
+export default Refunds;
