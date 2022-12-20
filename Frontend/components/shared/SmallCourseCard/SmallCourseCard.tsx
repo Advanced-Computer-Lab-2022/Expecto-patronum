@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Link from 'next/link';
 import Image from "next/image";
 import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md';
@@ -46,8 +46,8 @@ const SmallCourseCard = (props: Props) => {
               <p className="text-sm text-gray-500">{props.course.instructorName}</p>
             </div>
             <div className="flex items-center justify-around text-sm">
-              <p>{props.course.rating ? props.course.rating.avg.toFixed(1): 4.6}</p>
-              <BigRating className='scale-75 whitespace-nowrap w-40' Rate={props.course.rating ? props.course.rating.avg.toFixed(1): 4.6} RateAction={false} />
+              <p>{props.course.rating ? parseFloat(props.course.rating.avg.toFixed(1)): 4.6}</p>
+              <BigRating className='scale-75 whitespace-nowrap w-40' Rate={props.course.rating ? parseFloat(props.course.rating.avg.toFixed(1)): 4.6} RateAction={false} />
             </div>
           </div>
         </Link>

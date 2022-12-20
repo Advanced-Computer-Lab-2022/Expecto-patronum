@@ -67,7 +67,7 @@ const Instructor = (props: Props) => {
     <Layout>
       <div className='sb-max:min-w-without-instructor-sidebar-closed p-3'>
         <section className={userBar}>
-          <h1 className='text-2xl'>Welcome back,<br className='sb:hidden' /> Rodin Salem</h1>
+          <h1 className='text-3xl font-semibold italic'>Welcome back,<br className='sb:hidden' /> Rodin Salem</h1>
           <div className='flex items-center'>
             <button className={notifications}><BsChatDots className='scale-110 pointer-events-none' /></button>
             <button className={newFeedback + " " + notifications}><IoIosNotificationsOutline className='scale-135 pointer-events-none' /></button>
@@ -89,7 +89,7 @@ const Instructor = (props: Props) => {
             </div>
 
             <div className="mt-8 ml-2">
-              <h1 className='text-xl font-bold'>Q&A</h1>
+              <h1 className='text-xl font-bold'>Q & A's</h1>
               <p className='-pl-2 indent-2'>Here are some questions asked by your students that they wish for you to answer when available.</p>
               <hr className='my-1 mr-2' />
               <div className='text-left m-3 mb-0 max-h-[40rem] overflow-y-auto'>

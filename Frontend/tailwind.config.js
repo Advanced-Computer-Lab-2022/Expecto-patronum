@@ -94,11 +94,14 @@ module.exports = {
         'Beg': "linear-gradient(#2f8608, #52EB0E)",
         'Int': "linear-gradient(#C29904, #FDE143)",
         'Adv': "linear-gradient(#B20000, #FF4542)",
-
       }),
-
+      textShadow: {
+        'engraved': 'rgba(255, 255, 255, 0.15) 0.5px 1px 0.5px',
+      }
     },
   },
-  plugins: [require('@tailwindcss/line-clamp'),
+  plugins: [
+    require('@tailwindcss/line-clamp'),
+    require('tailwindcss-textshadow'),
   ],
 }

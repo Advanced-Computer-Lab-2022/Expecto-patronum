@@ -78,12 +78,12 @@ const Login = () => {
           <form action="#" method="POST" id="sign-in" className="mt-6 space-y-4">
             <div className="flex flex-col text-left">
               <label className="text-lg mb-1">E-mail Address</label>
-              <input className="border-b-2 border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your email" type='email' required />
+              <input className="border-b-2 bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your email" type='email' required />
             </div>
 
             <div className="flex flex-col text-left">
               <label className="text-lg mb-1">Password</label>
-              <input className="border-b-2 border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your password" type='password' />
+              <input className="border-b-2 bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your password" type='password' />
             </div>
 
             <div className="flex items-center justify-between text-sm">
