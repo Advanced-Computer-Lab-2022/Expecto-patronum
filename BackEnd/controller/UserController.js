@@ -12,6 +12,7 @@ const { VerifyTokenDate } = require("../lib/VerfiyTokenDate");
 const { Passport } = require("passport");
 const ExerciseTable = require('../models/ExcerciseSchema');
 const requestTable = require('../models/RequestSchema');
+const transactionTable = require('../models/transactionSchema');
 
  async function register(req, res) {
   const saltHash = genPassword(req.body.password);
@@ -773,18 +774,46 @@ async function takeExam(req, res, next) {
 
 
 async function buyCourse(req, res, next) {
-  // let obj = {
-  //   "purchasedCourses":[
-  //     {
-  //   "courseID":req.body.courseId
-  // }]};
+  //endpoints userID ,courseID
   try {
-    const xx = await User.findByIdAndUpdate({ "_id": req.body.userId },
-      { $push: { "purchasedCourses": req.body.purchasedCourses } }, { new: true });
-    res.send(xx);
+        const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
+        { $push: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
+
+        const course =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
+        { $inc: { "purchases": 1 } }, { new: true });
+
+        const result = await transactionTable.create({
+          userID: user._id,
+          instructorID: course.instructorID,
+          courseID: course._id,
+          transactionDate: Date.now(),
+          transactionAmount : req.body.amount,
+        });
+        result.save();
+
+        next();
 
   } catch (error) {
     console.log(error);
+    res.status(400).send({error:error.message});
+  }
+};
+
+async function unbuyCourse(req, res, next) {
+  //endpoints userID ,courseID
+  try {
+        const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
+        { $pull: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
+
+        const course =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
+        { $inc: { "purchases": -1 } }, { new: true });
+
+        const transaction = await transactionTable.deleteOne({userID:user._id,courseID:course._id});
+
+        res.status(400).send("payment unsucessful");
+
+  } catch (error) {
+    res.status(400).send({error:error.message});
   }
 };
 
@@ -857,7 +886,7 @@ async function test(req, res) {
 
 module.exports = {
   register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
-  buyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
+  buyCourse,unbuyCourse,ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
   ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview, giveInstructorReview, submitAnswer, test, takeExam
 }
 

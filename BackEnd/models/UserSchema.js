@@ -130,7 +130,7 @@ const UserSchema = new mongoose.Schema({
   },
   paymentMethods: [{
     last4: Number,
-    expiration: Date,
+    expiration: String,
     name: String,
     customerId: String
   }]

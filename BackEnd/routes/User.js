@@ -4,11 +4,12 @@ const { getRate, forgetPassword, ValidateUser, ChangeEmail, UseChangeEmailToken,
   giveInstructorRating, selectCourse, giveCourseReview, giveInstructorReview, submitAnswer, takeExam, test } = require('../controller/UserController');
 const { genPassword } = require('../lib/passwordUtils');
 const { VerifyTokenMiddleware } = require('../middleware/VerifyTokenMiddleware');
+const { Charge,addPaymentMethod,getPaymentMethods,deletePaymentMethod } = require('../middleware/StripePayments');
 const passport = require('passport');
 const { isAuth } = require('../middleware/AuthMiddleware');
 const { Logout } = require('../controller/UserController');
 const { register } = require('../controller/UserController');
-const { giveCourseRating, buyCourse, ViewMyCourses, GenerateUsers, ConnectInstructorsWithCourses, getInstructorInfo, updateInstructorInfo } = require('../controller/UserController');
+const { giveCourseRating, buyCourse, unbuyCourse,ViewMyCourses, GenerateUsers, ConnectInstructorsWithCourses, getInstructorInfo, updateInstructorInfo } = require('../controller/UserController');
 const UserTable = require('../models/UserSchema');
 
 const { SelectExercise, viewAnswer,requestCourse,reportProblem,viewPreviousReports,followUpOnProblem,watchVideo,addNote,
@@ -61,11 +62,7 @@ router.get("/viewMyCourses", ViewMyCourses);
 router.get('/logout', Logout);
 
 
-
-
-
 router.put("/giveCourseRating", giveCourseRating);
-
 
 
 
@@ -73,7 +70,14 @@ router.put("/giveCourseRating", giveCourseRating);
 router.put('/submitAnswer', submitAnswer);
 
 
-router.put("/buyCourse", buyCourse);
+router.put("/buyCourse",buyCourse,Charge,unbuyCourse);
+
+router.put("/getPaymentMethods", getPaymentMethods);
+
+router.put("/addPaymentMethod", addPaymentMethod);
+
+router.delete("/deletePaymentMethod", deletePaymentMethod);
+
 
 router.get("/takeExam", takeExam);
 
