@@ -52,13 +52,13 @@ const Pagination = (props: Props) => {
 
     return (
     <div className='flex items-center justify-center text-center mb-4'>
-        <button className={'w-26 pr-3 text-base ' + pageButton + ' ' + ( props.page === 0 ? disabledButton: ' hover:bg-input hover:text-white')} disabled={props.page === 0} onClick={() => buildPagination(0)}><BiChevronLeft className='scale-125 mx-1' />Previous</button>
+        <button className={`w-26 pr-3 text-base ${pageButton} ${props.pageCount <= 5 && 'hidden'} ${( props.page === 0 ? disabledButton: ' hover:bg-input hover:text-white')}`} disabled={props.page === 0} onClick={() => buildPagination(0)}><BiChevronLeft className='scale-125 mx-1' />Previous</button>
         {
             pages.map((pageIndex: number) =>(
                 <button className={pageButton + ' '+ (pageIndex === props.page ? activeButton: '') + (pageIndex + 1 > props.pageCount ? disabledButton : ' hover:bg-input hover:text-white')} disabled={pageIndex + 1 > props.pageCount} onClick={() => {buildPagination(pageIndex);}} key={pageIndex} type='button'>{ pageIndex + 1 }</button>
             ))
         }
-        <button className={'w-20 pl-3 text-base ' + pageButton + ' ' + (props.page === props.pageCount - 1 ? disabledButton: ' hover:bg-input hover:text-white')} disabled={props.page === props.pageCount - 1} onClick={() => buildPagination(props.pageCount - 1)}>Next<BiChevronRight className='scale-125 mx-1' /></button>
+        <button className={`min-w-[5rem] pl-3 text-base ${pageButton} ${props.pageCount <= 5 && 'hidden'} ${props.page === props.pageCount - 1 ? disabledButton: ' hover:bg-input hover:text-white'}`} disabled={props.page === props.pageCount - 1} onClick={() => buildPagination(props.pageCount - 1)}>Next<BiChevronRight className='scale-125 mx-1' /></button>
     </div>
   )
 }

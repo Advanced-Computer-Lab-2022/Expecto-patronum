@@ -45,9 +45,9 @@ function Navbar() {
             </Link>
           </div>
           <div className={navIconsDiv}>
-            <Link className={navButton} href="/Login">
+            <a className={navButton} href="/Login">
               <AiOutlineUser className={navButtonIcon} />
-            </Link>
+            </a>
             <SelectCountry />
             <BurgerButton curtainRef={curtainRef} />
           </div>
