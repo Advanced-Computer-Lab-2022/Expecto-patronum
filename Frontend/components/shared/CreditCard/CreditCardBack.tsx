@@ -1,21 +1,22 @@
 import React from 'react';
-import Image from 'next/image';
 import { IoMdArrowDropright } from 'react-icons/io';
-import { SiContactlesspayment } from 'react-icons/si';
 
 type Props = {
     cardDetails: {
+        type: string,
         cardNumber: string;
         expiryDate: string;
         securityCode: string;
         cardholderName: string;
     },
     setCardDetails: React.Dispatch<React.SetStateAction<{
+        type: string,
         cardNumber: string;
         expiryDate: string;
         securityCode: string;
         cardholderName: string;
     }>>,
+    viewCardNumber: boolean,
     secretCardNumber: string,
     setSecretCardNumber: React.Dispatch<React.SetStateAction<string>>,
 }
@@ -36,11 +37,11 @@ const CreditCardBack = (props: Props) => {
         <div className='h-[0.21rem] relative z-[1] bg-gradient-to-r from-orange-300 via-orange-200 to-orange-300' />
         <div className='h-[0.21rem] relative z-[1] bg-gradient-to-r from-blue-100 via-blue-400 to-blue-100' />
         <div className='h-[0.21rem] relative z-[1] bg-gradient-to-r from-orange-300 via-orange-200 to-orange-300' />
-        <div className='h-5 w-20 bg-white absolute top-1.25 -left-10 text-black text-right text-xs font-sans font-bold pr-1.5 pt-px -scale-x-100 pointer-events-auto'><div className='skew-x-[15deg] placeholder:text-black w-fit px-1 float-right cursor-pointer'>{props.cardDetails.securityCode === '' ? '372': props.cardDetails.securityCode}</div></div>
+        <div className={`${props.cardDetails.securityCode === '' ? 'after:border-canadian-red after:absolute after:right-0 after:-top-0.5 after:border-2 after:h-6 after:rounded-[100%] after:-rotate-12 after:w-10':''} h-5 w-20 bg-white absolute top-1.25 -left-10 text-black text-right text-xs font-sans font-bold pr-1.5 pt-px -scale-x-100`}><input placeholder='372' type={props.viewCardNumber ? 'text': 'password'} readOnly disabled value={props.cardDetails.securityCode} className='skew-x-[15deg] placeholder:text-black bg-transparent w-7 px-1 cursor-pointer' /></div>
       </div>
       <div className='h-10 w-14 bg-gradient-to-bl from-[#BBB] via-[#EEE,#BBB,#EEE] to-[#BBB] absolute bottom-5 right-8 rounded-md' />
       <div className='py-5 pl-5 pr-4'>
-        <h1 className='text-[1rem] w-[17rem] text-transparent bg-clip-text bg-[rgba(0,0,0,0.5)] text-shadow-engraved placeholder:text-transparent absolute bottom-16 ml-1 tracking-widest'>{props.secretCardNumber === '' ? '**** ****  ****  3517': props.secretCardNumber}</h1>
+        <h1 className='text-[1rem] w-[17rem] text-transparent bg-clip-text bg-[rgba(0,0,0,0.5)] text-shadow-engraved placeholder:text-transparent absolute bottom-16 ml-1 tracking-widest'>{props.secretCardNumber === '' ? '3140 5926 5358 9793': props.secretCardNumber}</h1>
         <div className='flex justify-center text-xs absolute left-22 bottom-8 scale-75'>
           <h1 style={{textShadow: 'rgba(255, 255, 255, 0.15) 0.5px 1px 0.5px'}} className='text-transparent bg-clip-text bg-[rgba(0,0,0,0.5)]'>VALID <span className='flex items-center'>THRU <IoMdArrowDropright className='relative top-[0.075rem] scale-x-200'/></span></h1>
           <h1 style={{textShadow: 'rgba(255, 255, 255, 0.15) 0.5px 1px 0.5px'}} className='relative top-4 text-transparent bg-clip-text bg-[rgba(0,0,0,0.5)]'>{props.cardDetails.expiryDate === ''? '02/21': props.cardDetails.expiryDate}</h1>

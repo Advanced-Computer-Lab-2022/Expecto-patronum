@@ -73,12 +73,12 @@ const Input = React.forwardRef((props: Props, ref) => {
   } else if(props.type === "radio") {
     
     return (
-        <div ref={ref as any} onInput={() => labelRef.current.style.color = "rgb(156, 163, 175)"} className={(props.required ? ' create-course-input ': "") + ' w-fit row justify-center mx-auto pt-4 min-w-[8.9rem]'}>
-            <label ref={labelRef} className={(props.required ? 'create-course-input-label': "") + ' text-gray-400 text-center pb-2'}>{props.title}</label>
+        <div ref={ref as any} onInput={() => labelRef.current.style.color = "rgb(156, 163, 175)"} className={(props.required ? ' create-course-input ': "") + ' w-fit row justify-center mx-auto relative pt-4 min-w-[8.9rem]'}>
+            <label ref={labelRef} className={(props.required ? 'create-course-input-label': "") + (!props.title && ' hidden ') + ' text-gray-400 text-center pb-2'}>{props.title}</label>
             {props.enum?.map((item) => {
                 return (
-                    <div key={item} className={props.inputDivStyle + ' col-6 col-sm-3 text-center px-0 mx-0 py-2'}>
-                        <input onChange={() => props.onChange(item)} type="radio" name={props.placeholder + "-button"} className={props.style + ' checked:border-8 checked:border-main checked:bg-[#0B80F3] transition-all duration-300 h-8 w-8 bg-transparent shadow-[0px_0px_5px_#A7AEC2] rounded-[50%] border-[#A7AEC2] border-[0.2vw] appearance-none'}></input>
+                    <div key={item} className={`${props.inputDivStyle} col-6 col-sm-3 text-center px-0 py-2`}>
+                        <input onChange={() => props.onChange(item)} type="radio" name={props.placeholder + "-button"} className={props.style + ' checked:border-8 checked:border-main checked:bg-[#0B80F3] transition-all duration-300 h-8 w-8 min-h-[2rem] min-w-[2rem] bg-transparent shadow-[0px_0px_5px_#A7AEC2] rounded-[50%] border-[#A7AEC2] border-[0.2vw] appearance-none'}></input>
                         <br />
                         <label className={props.labelStyle + ' pointer-events-none text-gray-400 text-xs h-4 px-1'}>{item}</label>
                     </div>

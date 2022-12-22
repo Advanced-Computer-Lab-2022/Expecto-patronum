@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BsFillCalendarFill, BsFillCreditCardFill, BsFillInfoCircleFill } from 'react-icons/bs';
 import { FaUserAlt } from 'react-icons/fa';
 import Input from '../Input/Input';
@@ -11,6 +11,7 @@ const CreditCard = (props: Props) => {
 
   const [cardDetails, setCardDetails] = useState(
     {
+      type: 'Visa',
       cardNumber: '',
       expiryDate: '',
       securityCode: '',
@@ -21,6 +22,7 @@ const CreditCard = (props: Props) => {
   const [secretCardNumber, setSecretCardNumber] = useState<string>('');
 
   const [focusCardNumber, setFocusCardNumber] = useState<boolean>(false);
+  const [viewCardNumber, setViewCardNumber] = useState<boolean>(false);
   const [focusExpiryDate, setFocusExpiryDate] = useState<boolean>(false);
   const [focusSecurityCode, setFocusSecurityCode] = useState<boolean>(false);
   const [focusCardName, setFocusCardName] = useState<boolean>(false);
@@ -45,7 +47,7 @@ const CreditCard = (props: Props) => {
     const isValid = isAdding ? (e.target.value.slice(-1).charCodeAt(0) >= 48 && e.target.value.slice(-1).charCodeAt(0) <= 57): true;
 
     if(isValid) {
-      const num = e.target.value.replaceAll(' ', '').length <= 12 ? "*".repeat(e.target.value.replaceAll(' ', '').length): e.target.value.replaceAll(' ', '');
+      const num = e.target.value.replaceAll(' ', '');
       const viewedNum = num.match(/.{1,4}/g)?.join(' ');
       setSecretCardNumber(viewedNum === undefined ? '': viewedNum);
     }
@@ -53,6 +55,18 @@ const CreditCard = (props: Props) => {
 
   const setExpiryDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const details = {...cardDetails};
+    e.target.value = e.target.value.replace(
+        /[^0-9]/g, '' // To allow only numbers
+    ).replace(
+        /^([2-9])$/g, '0$1' // To handle 3 > 03
+    ).replace(
+        /^(1{1})([3-9]{1})$/g, '0$1/$2' // 13 > 01/3
+    ).replace(
+        /^0{1,}/g, '0' // To handle 00 > 0
+    ).replace(
+        /^([0-1]{1}[0-9]{1})([0-9]{1,2}).*/g, '$1/$2' // To handle 113 > 11/3
+    );
+
     details.expiryDate = e.target.value;
     setCardDetails(details);
   }
@@ -66,20 +80,34 @@ const CreditCard = (props: Props) => {
   const setCardholderName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const details = {...cardDetails};
     details.cardholderName = e.target.value;
+    e.target.value = e.target.value.toLocaleUpperCase();
+    setCardDetails(details);
+  }
+
+  const setCardType = (selectedRadio: any) => {
+    const details = {...cardDetails};
+    details.type = selectedRadio;
     setCardDetails(details);
   }
 
   return (
-    <div className='flex items-center space-y-4 p-3 flex-col relative w-[24rem] rounded-xl shadow-md'>
-      <div className='flip-card'>
-        <div className={`${focusSecurityCode ? 'rotate-y-180': ''} flip-card-inner`}>
+    <div className='flex items-center space-y-4 p-3 flex-col absolute left-0 bg-main z-50 w-[24rem] rounded-xl shadow-md'>
+      <div className='flip-card relative z-20'>
+        <div className={`${focusSecurityCode ? 'rotate-y-180': ''} flip-card-inner`} onMouseDown={() => setViewCardNumber(true)} onMouseUp={() => setViewCardNumber(false)}>
           <CreditCardFront cardDetails={cardDetails} setCardDetails={setCardDetails} secretCardNumber={secretCardNumber} setSecretCardNumber={setSecretCardNumber} />
-          <CreditCardBack cardDetails={cardDetails} setCardDetails={setCardDetails} secretCardNumber={secretCardNumber} setSecretCardNumber={setSecretCardNumber} />
+          <CreditCardBack viewCardNumber={viewCardNumber} cardDetails={cardDetails} setCardDetails={setCardDetails} secretCardNumber={secretCardNumber} setSecretCardNumber={setSecretCardNumber} />
         </div>
       </div>
 
-      <form className='w-full'>
+      <form className='w-full relative'>
         <div className='-space-y-2'>
+          <div className='absolute -top-10 mob:left-2 not-mob:-left-7 z-10'>
+            <Input type='radio' onChange={setCardType} inputDivStyle='flex items-center not-mob:mx-2 w-full ' style='mr-1 scale-[0.6]' enum={['Visa', 'Mastercard']} />
+          </div>
+          <div className='relative mt-2'>
+            <Input onChange={setCardholderName} setFocus={setFocusCardName} placeholder='Cardholder Name' />
+            <FaUserAlt className={`absolute right-4 top-10 ${focusCardName ? 'text-[#0B80F3]': 'text-[#7580A0]'} transition-all duration-300`} />
+          </div>
           <div className='relative'>
             <Input onKeyDown={setCardNumber} onChange={secureCardNumber} value={secretCardNumber} setFocus={setFocusCardNumber} maxLength={19} placeholder='Card Number' />
             <BsFillCreditCardFill className={`absolute right-4 top-10 ${focusCardNumber ? 'text-[#0B80F3]': 'text-[#7580A0]'} transition-all duration-300 scale-110`} />
@@ -90,13 +118,9 @@ const CreditCard = (props: Props) => {
               <BsFillCalendarFill className={`absolute right-4 top-10 ${focusExpiryDate ? 'text-[#0B80F3]': 'text-[#7580A0]'} transition-all duration-300`} />
             </div>
             <div className='relative'>
-              <Input onChange={setSecurityCode} setFocus={setFocusSecurityCode} maxLength={3} placeholder='Security Code' />
+              <Input onChange={setSecurityCode} setFocus={setFocusSecurityCode} maxLength={3} type='password' placeholder='Security Code' />
               <BsFillInfoCircleFill className={`absolute right-4 top-10 ${focusSecurityCode ? 'text-[#0B80F3]': 'text-[#7580A0]'} transition-all duration-300`} />
             </div>
-          </div>
-          <div className='relative'>
-            <Input onChange={setCardholderName} setFocus={setFocusCardName} placeholder='Cardholder Name' />
-            <FaUserAlt className={`absolute right-4 top-10 ${focusCardName ? 'text-[#0B80F3]': 'text-[#7580A0]'} transition-all duration-300`} />
           </div>
         </div>
         <button type='submit' className='rounded-md text-white bg-[#0B80F3] px-14 py-2 mt-3 block mx-auto hover:bg-[#096BCB] transition-all duration-200'>Save Card</button>
