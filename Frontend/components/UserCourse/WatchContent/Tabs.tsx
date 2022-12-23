@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import React from 'react'
+import { AllCourseDataInterface } from '../../../Interface/PurchasedCourse/AllCourseDataInterface';
 import BigRating from '../../shared/rating/BigRating';
 import Notes from './Notes';
 import OverView from './OverView';
@@ -37,7 +38,7 @@ const Tabs = (props: Props) => {
 
 
 
-      {selected == "OverView" && <OverView></OverView>}
+      {selected == "OverView" && <OverView ></OverView>}
       {selected == "Notes" && <Notes setPause={props.setPause} videoRef={props.videoRef}></Notes>}
       {selected == "Q/A" && <div>Q/A</div>}
     </div>
