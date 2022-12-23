@@ -607,17 +607,31 @@ async function selectCourse(req, res, next) {
               if (z.courseRating) {
                 info.yourCourseRating = z.courseRating;
               }
+              else{
+                info.yourCourseRating = null;
+              }
               if (z.instructorRating) {
                 info.yourInstructorRating = z.instructorRating;
+              }
+              else{
+                info.yourInstructorRating = null;
               }
               if (z.courseReview) {
                 info.yourCourseReview = z.courseReview;
               }
+              else{
+                info.yourCourseReview = null;
+              }
               if (z.instructorReview) {
                 info.yourinstructorReview = z.instructorReview;
+              }else{
+                info.yourinstructorReview = null;
               }
               if(z.lastWatched){
                 info.lastWatched = z.lastWatched;
+              }
+              else{
+                info.lastWatched = null;
               }
               info.notes = z.notes; 
               info.purchased = "yes";
