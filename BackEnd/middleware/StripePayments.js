@@ -13,7 +13,7 @@ const Course = require('../models/CourseSchema');
     const userId = req.body.userId;
 
     // Get credit card information from request body
-    const { creditCardNumber, ccv, cardHolderName, expirationMonth,expirationYear,expiration} = req.body;
+    const { creditCardNumber, ccv, cardHolderName,expiration} = req.body;
 
     // Get user collection
     const users = User;
@@ -39,13 +39,14 @@ const Course = require('../models/CourseSchema');
     }
 
 
-    const email = "customer@example.com";
+    const email = user.email;
       const name = cardHolderName;
-
+  const month =   expiration.substring(0, 2);
+  const year = expiration.substring(3,5);
   // Collect payment information
   const cardNumber = creditCardNumber;
-  const cardExpMonth = expirationMonth;
-  const cardExpYear = expirationYear;
+  const cardExpMonth = month;
+  const cardExpYear = year;
   const cardCvc = ccv;
 
 
@@ -73,7 +74,8 @@ const card = await stripe.customers.retrieveSource(
       last4: creditCardNumber.slice(-4),
       expiration,
       name: cardHolderName,
-      customerId: customer.id
+      customerId: customer.id,
+      cardType:cardToken.card.brand,
     };
 
     //console.log(paymentMethod);
@@ -154,9 +156,10 @@ const card = await stripe.customers.retrieveSource(
   //14)if the payment fails return reverse the wallet update and remove the course from the purchase course array
   ////////////////////
   const customerId = req.body.customerId;
+  const amount = (req.body.amount*100);
   if(req.body.customerId){
   const charge = await stripe.charges.create({
-    amount: req.body.amount,
+    amount: amount,
     currency: 'usd',
     customer: customerId,
     description: 'Example charge',
@@ -171,16 +174,35 @@ const card = await stripe.customers.retrieveSource(
     }
   });
 }else{
+  const { creditCardNumber, ccv, cardHolderName,expiration} = req.body;
+
+  const month =   expiration.substring(0, 2);
+  const year = expiration.substring(3,5);
+  // Collect payment information
+  const cardNumber = creditCardNumber;
+  const cardExpMonth = month;
+  const cardExpYear = year;
+  const cardCvc = ccv;
+
+
+const cardToken = await stripe.tokens.create({
+  card: {
+    number: cardNumber,
+    exp_month: cardExpMonth,
+    exp_year: cardExpYear,
+    cvc: cardCvc,
+  },
+});
+
   const charge = await stripe.charges.create({
-    amount: req.body.amount,
-    currency: 'usd',
-    customer: customerId,
+    amount: amount,
+    currency: 'USD',
+    source: cardToken.id,
     description: 'Example charge',
    },(error, charge) => {
     if(error){
       console.log(error);
       next();
-
     }
     else{
       res.status(200).send("Course bought succesfully");

@@ -113,6 +113,10 @@ const UserSchema = new mongoose.Schema({
       type: Number,
       default: 0
     },
+    lastWatched:{
+      type:String,
+      default:"Null"
+    },
     watchedVideos:[String],
     notes:[{
       contentID:String,
@@ -132,7 +136,8 @@ const UserSchema = new mongoose.Schema({
     last4: Number,
     expiration: String,
     name: String,
-    customerId: String
+    customerId: String,
+    cardType:String
   }]
 
 });

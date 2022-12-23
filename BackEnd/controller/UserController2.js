@@ -16,16 +16,22 @@ const transactionTable = require('../models/transactionSchema');
 
   async function SelectExercise(req, res, next) {
     try {
-        var x = await ExerciseTable.findOne({"_id":req.body.exerciseID},{
+        const x = await ExerciseTable.findOne({"_id":req.body.exerciseID},{
             exerciseTitle:1,
             totalGrade:1,
-            _id:1
+            _id:1,
+            averageGrade:{$avg:"$averageMark"}
         });
-       // console.log(x);
+        let q = {};
+        const course = await CourseTable.findOne({_id:req.body.courseID},{_id:1,instructorID:1});
+       if(course.instructorID==req.body.userID){
+        res.status(200).send(x);
+        return;
+       }
+       else{
         var y = await User.findOne({"_id": req.body.userID,"purchasedCourses.excercises.excerciseID":req.body.exerciseID},
         {purchasedCourses:{ $elemMatch : {courseID:req.body.courseID}}}
         );
-        let q = {};
         if(y){
           var exe = y.purchasedCourses[0].excercises;
           for(var i = 0; i<exe.length;i++){
@@ -38,6 +44,7 @@ const transactionTable = require('../models/transactionSchema');
             };
           }
           }
+        }
         q.exerciseTitle = x.exerciseTitle;
         q.exerciseID = x._id;
         q.totalGrade = x.totalGrade;
@@ -324,8 +331,19 @@ const transactionTable = require('../models/transactionSchema');
       
     }
 
+    async function lastWatched(req,res,next){
+      try{
+      const exists = await User.updateOne({ "_id": req.body.userID,"purchasedCourses.courseID":req.body.courseID },
+      {$set:{"purchasedCourses.$.lastWatched":req.body.contentID}});
+      res.status(200).send("changed");
+      }catch(error){
+        console.log(error);
+        res.send({error:error.message});
+      }
+    }
+
   
 
 
   module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,
-    followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes,createTransaction}
+    followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes,createTransaction,lastWatched}

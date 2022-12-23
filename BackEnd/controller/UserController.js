@@ -582,15 +582,15 @@ async function selectCourse(req, res, next) {
           info.Owner = "yes";
           x = await CourseTable.findOne({ "_id": req.body.courseId }, { review: { "$slice": 3 } });
           info.course = x;
-          var instructor = await User.findOne({ "_id": (x.instructorID) }).select({
+          var instructor1 = await User.findOne({ "_id": (x.instructorID) }).select({
             instructorRating: 1,
             biography: 1,
             _id: 1,
             firstname: 1,
             lastname: 1,
-            instructorReview: { "$slice": 3 }
+            instructorReview: { "$slice": 3 },
           });
-          info.instructor = instructor;
+          info.instructor = instructor1;
           info.course = x;
           res.send(info);
           return;
@@ -615,6 +615,9 @@ async function selectCourse(req, res, next) {
               }
               if (z.instructorReview) {
                 info.yourinstructorReview = z.instructorReview;
+              }
+              if(z.lastWatched){
+                info.lastWatched = z.lastWatched;
               }
               info.purchased = "yes";
               x = await CourseTable.findOne({ "_id": req.body.courseId },
@@ -776,6 +779,11 @@ async function takeExam(req, res, next) {
 async function buyCourse(req, res, next) {
   //endpoints userID ,courseID
   try {
+      const exists = await User.findOne({ "_id": req.body.userID,"purchasedCourses.courseID":req.body.courseID });
+      if(exists){
+        res.status(400).send("Course already bought");
+        return;
+      }
         const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
         { $push: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
 
