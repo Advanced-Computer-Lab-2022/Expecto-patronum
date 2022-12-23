@@ -44,6 +44,9 @@ const transactionTable = require('../models/transactionSchema');
             };
           }
           }
+          else{
+            q.yourGrade =Null;
+          }
         }
         q.exerciseTitle = x.exerciseTitle;
         q.exerciseID = x._id;
