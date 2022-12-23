@@ -154,6 +154,7 @@ const card = await stripe.customers.retrieveSource(
   //14)if the payment fails return reverse the wallet update and remove the course from the purchase course array
   ////////////////////
   const customerId = req.body.customerId;
+  if(req.body.customerId){
   const charge = await stripe.charges.create({
     amount: req.body.amount,
     currency: 'usd',
@@ -169,6 +170,24 @@ const card = await stripe.customers.retrieveSource(
       res.status(200).send("Course bought succesfully");
     }
   });
+}else{
+  const charge = await stripe.charges.create({
+    amount: req.body.amount,
+    currency: 'usd',
+    customer: customerId,
+    description: 'Example charge',
+   },(error, charge) => {
+    if(error){
+      console.log(error);
+      next();
+
+    }
+    else{
+      res.status(200).send("Course bought succesfully");
+    }
+  });
+
+}
 
 }
 
