@@ -619,6 +619,7 @@ async function selectCourse(req, res, next) {
               if(z.lastWatched){
                 info.lastWatched = z.lastWatched;
               }
+              info.notes = z.notes; 
               info.purchased = "yes";
               x = await CourseTable.findOne({ "_id": req.body.courseId },
                 { review: { "$slice": 3 } });
