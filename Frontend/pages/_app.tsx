@@ -57,6 +57,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       <PopupMessageContext.Provider value={{ viewPopupMessage }} >
         <DataProvider>
           {/* <Navbar></Navbar> */}
+
+          <UserCourseNavbar></UserCourseNavbar>
           <PopupMessage ref={popupMessageRef} ticker={ticker} icon={popupIcon} setIsPopupOpen={setIsPopupOpen} />
           <Component {...pageProps} />
           <Footer></Footer>

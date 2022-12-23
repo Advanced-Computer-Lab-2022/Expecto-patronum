@@ -1,6 +1,7 @@
 import React, { createContext } from "react";
 import { useState } from "react";
 import { PropsWithChildren } from "react";
+import { AllCourseDataInterface } from "../Interface/PurchasedCourse/AllCourseDataInterface";
 
 export interface InterfaceDataContext {
   Filter: InterfaceFilter;
@@ -11,6 +12,8 @@ export interface InterfaceDataContext {
   SetProfile: React.Dispatch<React.SetStateAction<"AccountInfo" | "Wallet" | "Tickets">>;
   ContentChoosen: ContentChoosen;
   SetContentChoosen: React.Dispatch<React.SetStateAction<ContentChoosen>>;
+  CourseChoosen: AllCourseDataInterface;
+  SetCourseChoosen: React.Dispatch<React.SetStateAction<AllCourseDataInterface>>;
 }
 interface InterfaceRate {
   rate: number;
@@ -26,6 +29,7 @@ interface ContentChoosen {
 }
 
 
+
 export interface InterfaceFilter {
   Subject: string[];
   Rating: string[];
@@ -34,7 +38,7 @@ export interface InterfaceFilter {
   Keyword: string[];
 }
 
-const defualtFilter = {
+const defualts = {
   Filter: { Subject: [], Rating: [], Price: [], Page: 1, Keyword: [] },
   SetFilter: () => { },
   Rate: { rate: 1, curr: "USD", Country: "US" },
@@ -45,10 +49,14 @@ const defualtFilter = {
     SubtitleID: "63966e85abce268194684c82", ContentID: "63966e85abce268194684c83", data: { url: "", time: 0 }, isExercise: false
   },
   SetContentChoosen: () => { },
+  CourseChoosen: {} as AllCourseDataInterface,
+  SetCourseChoosen: () => { }
+
+
 }
 
 
-const DataContext = React.createContext<InterfaceDataContext>(defualtFilter);
+const DataContext = React.createContext<InterfaceDataContext>(defualts);
 
 export const DataProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [Filter, SetFilter] = useState<InterfaceFilter>({
@@ -59,12 +67,13 @@ export const DataProvider: React.FC<PropsWithChildren> = ({ children }) => {
     Keyword: [],
   });
 
-  const [Rate, SetRate] = useState<InterfaceRate>(defualtFilter.Rate);
-  const [Profile, SetProfile] = useState<"AccountInfo" | "Wallet" | "Tickets">(defualtFilter.Profile);
-  const [ContentChoosen, SetContentChoosen] = useState<ContentChoosen>(defualtFilter.ContentChoosen);
+  const [Rate, SetRate] = useState<InterfaceRate>(defualts.Rate);
+  const [Profile, SetProfile] = useState<"AccountInfo" | "Wallet" | "Tickets">(defualts.Profile);
+  const [ContentChoosen, SetContentChoosen] = useState<ContentChoosen>(defualts.ContentChoosen);
+  const [CourseChoosen, SetCourseChoosen] = useState<AllCourseDataInterface>(defualts.CourseChoosen)
 
   return (
-    <DataContext.Provider value={{ Filter, SetFilter, Rate, SetRate, Profile, SetProfile, ContentChoosen, SetContentChoosen }}>
+    <DataContext.Provider value={{ Filter, CourseChoosen, SetCourseChoosen, SetFilter, Rate, SetRate, Profile, SetProfile, ContentChoosen, SetContentChoosen }}>
       {children}
     </DataContext.Provider >
   );

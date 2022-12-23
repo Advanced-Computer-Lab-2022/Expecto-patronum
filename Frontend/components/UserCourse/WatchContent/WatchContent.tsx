@@ -4,12 +4,16 @@ import ReactPlayer from 'react-player/lazy'
 import DataContext from '../../../context/DataContext'
 import Exercise from './ViewExercise'
 import Tabs from './Tabs'
+import { AllCourseDataInterface } from '../../../Interface/PurchasedCourse/AllCourseDataInterface'
+import axios from 'axios'
 
 type Props = {
   Next: boolean;
   Prev: boolean;
   HandleNext: () => void;
   HandlePrev: () => void;
+
+
 }
 
 const WatchContent = (props: Props) => {
@@ -29,6 +33,18 @@ const WatchContent = (props: Props) => {
 
   }, [ContentChoosen])
 
+  async function HandleEnd() {
+    await axios.put("http://localhost:5000/user/updateContent", {
+      userId: "63a59b15f928fa951091f381",
+      courseId: "63a59c15e3b96b22a1dc828a",
+      //@ts-ignore
+      videoURL: ContentChoosen.data.url,
+      //@ts-ignore
+      videotime: videoRef.current?.getCurrentTime() || 1,
+    })
+
+  }
+
   return (
     <div className='w-full'>
       {ContentChoosen.isExercise ?
@@ -43,7 +59,7 @@ const WatchContent = (props: Props) => {
             height={'100%'}
             onPlay={() => setPause(false)}
             ref={videoRef}
-            onEnded={() => { console.log("Finished") }} />
+            onEnded={HandleEnd} />
         </div>
       }
 
