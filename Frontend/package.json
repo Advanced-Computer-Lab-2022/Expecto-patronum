@@ -33,6 +33,7 @@
     "react-dom": "18.2.0",
     "react-flags-select": "^2.2.3",
     "react-icons": "^4.6.0",
+    "react-loading-skeleton": "^3.1.0",
     "react-player": "^2.11.0",
     "react-query": "^3.39.2",
     "react-remove-scroll-bar": "^2.3.4",

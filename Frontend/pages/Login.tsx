@@ -34,7 +34,7 @@ const Login = () => {
       </div>
 
       <div ref={rightSideRef} className="bg-white relative sb:left-[50rem] sb:inline-block sb:align-top sb:h-screen sb:w-1/2 w-full h-full transition-[left] duration-1000">
-        <div className="bg-white absolute scale-y-125 4lg:scale-y-200 4lg:top-[55%] top-28 sb-max:-top-60 mob:-right-[48%] not-mob:right-[-83.5%] from-mob-to-sb:scale-x-[1.7] scale-x-[1] right-0 sb:left-0 sb-max:h-max h-full w-full">
+        <div className="bg-white absolute scale-y-125 4lg:scale-y-200 4lg:top-[60%] top-28 sb-max:-top-60 mob:-right-[48%] not-mob:right-[-83.5%] from-mob-to-sb:scale-x-[1.7] scale-x-[1] right-0 sb:left-0 sb-max:h-max h-full w-full">
           <div className="h-96 absolute left-0 sb-max:rotate-90 z-[-1]">
               <Circle className="bg-white -left-11 -top-16 h-28 w-28" />
               <Circle className="bg-white -left-2.5 bottom-10 h-28 w-28" />

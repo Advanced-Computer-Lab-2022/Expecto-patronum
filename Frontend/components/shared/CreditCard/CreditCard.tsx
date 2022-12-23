@@ -5,7 +5,9 @@ import Input from '../Input/Input';
 import CreditCardBack from './CreditCardBack';
 import CreditCardFront from './CreditCardFront';
 
-type Props = {}
+type Props = {
+  className?: string
+}
 
 const CreditCard = (props: Props) => {
 
@@ -91,17 +93,20 @@ const CreditCard = (props: Props) => {
   }
 
   return (
-    <div className='flex items-center space-y-4 p-3 flex-col absolute left-0 bg-main z-50 w-[24rem] rounded-xl shadow-md'>
-      <div className='flip-card relative z-20'>
-        <div className={`${focusSecurityCode ? 'rotate-y-180': ''} flip-card-inner`} onMouseDown={() => setViewCardNumber(true)} onMouseUp={() => setViewCardNumber(false)}>
-          <CreditCardFront cardDetails={cardDetails} setCardDetails={setCardDetails} secretCardNumber={secretCardNumber} setSecretCardNumber={setSecretCardNumber} />
-          <CreditCardBack viewCardNumber={viewCardNumber} cardDetails={cardDetails} setCardDetails={setCardDetails} secretCardNumber={secretCardNumber} setSecretCardNumber={setSecretCardNumber} />
+    <div className={`${props.className} relative flex items-center space-y-4 px-3 pt-3 pb-4 flex-col justify-around bg-main w-[24rem] nv-max:h-[37.5rem] shadow-md`}>
+      <div>
+        <h1 className='text-center text-3xl'>Payment Details</h1>
+        <div className='flip-card relative z-20 mt-3'>
+          <div className={`${focusSecurityCode ? 'rotate-y-180': ''} flip-card-inner`} onMouseDown={() => setViewCardNumber(true)} onMouseUp={() => setViewCardNumber(false)}>
+            <CreditCardFront cardDetails={cardDetails} setCardDetails={setCardDetails} secretCardNumber={secretCardNumber} setSecretCardNumber={setSecretCardNumber} />
+            <CreditCardBack viewCardNumber={viewCardNumber} cardDetails={cardDetails} setCardDetails={setCardDetails} secretCardNumber={secretCardNumber} setSecretCardNumber={setSecretCardNumber} />
+          </div>
         </div>
       </div>
 
       <form className='w-full relative'>
-        <div className='-space-y-2'>
-          <div className='absolute -top-10 mob:left-2 not-mob:-left-7 z-10'>
+        <div className='nv:-space-y-2'>
+          <div className='absolute -top-10 nv-max:-top-14 mob:left-2 not-mob:-left-7 z-10'>
             <Input type='radio' onChange={setCardType} inputDivStyle='flex items-center not-mob:mx-2 w-full ' style='mr-1 scale-[0.6]' enum={['Visa', 'Mastercard']} />
           </div>
           <div className='relative mt-2'>
@@ -113,17 +118,17 @@ const CreditCard = (props: Props) => {
             <BsFillCreditCardFill className={`absolute right-4 top-10 ${focusCardNumber ? 'text-[#0B80F3]': 'text-[#7580A0]'} transition-all duration-300 scale-110`} />
           </div>
           <div className='flex items-center justify-center space-x-4'>
-            <div className='relative'>
+            <div className='relative w-full'>
               <Input onChange={setExpiryDate} setFocus={setFocusExpiryDate} maxLength={5} placeholder='Expiry Date' />
               <BsFillCalendarFill className={`absolute right-4 top-10 ${focusExpiryDate ? 'text-[#0B80F3]': 'text-[#7580A0]'} transition-all duration-300`} />
             </div>
-            <div className='relative'>
+            <div className='relative w-full'>
               <Input onChange={setSecurityCode} setFocus={setFocusSecurityCode} maxLength={3} type='password' placeholder='Security Code' />
               <BsFillInfoCircleFill className={`absolute right-4 top-10 ${focusSecurityCode ? 'text-[#0B80F3]': 'text-[#7580A0]'} transition-all duration-300`} />
             </div>
           </div>
         </div>
-        <button type='submit' className='rounded-md text-white bg-[#0B80F3] px-14 py-2 mt-3 block mx-auto hover:bg-[#096BCB] transition-all duration-200'>Save Card</button>
+        <button type='submit' className='rounded-md text-white bg-[#0B80F3] px-8 py-2 nv:mt-2 z-10 nv-max:absolute nv-max:-bottom-[6.23rem] nv-max:right-6 block mx-auto hover:bg-[#096BCB] transition-all duration-200'>Confirm Purchase</button>
       </form>
     </div>
   )
