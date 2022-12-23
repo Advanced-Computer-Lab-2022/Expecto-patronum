@@ -40,27 +40,37 @@ const Reports = (props: Props) => {
   const [reports, setReports] = useState<any>();
   useEffect(() => {
     const test = [
-      { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Unseen', date: '23-12-2022' , type:"Technical",
-      userID:"1",courseID:"2",body:"Trash instructor",comment:["Trash Course","Trash Website","Rodin 3azeem","ez"]},
-   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Resolved', date: '23-12-2022' , type:"Technical",
-      userID:"1",courseID:"2",body:"Trash instructor",comment:["Trash Course","Trash Website","Rodin 3azeem"]},
-   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"Technical",
-      userID:"1",courseID:"2",body:"Trash instructor",comment:["Trash Course","Trash Website","Rodin 3azeem"]},
-   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"Other",
-      userID:"1",courseID:"2",body:"Trash instructor",comment:["Trash Course","Trash Website","Rodin 3azeem"]},
-   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Unseen', date: '23-12-2022' , type:"Financial",
-      userID:"1",courseID:"2",body:"Trash instructor",comment:["Trash Course","Trash Website","Rodin 3azeem"]},
+      {
+        name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Unseen', date: '23-12-2022', type: "Technical",
+        userID: "1", courseID: "2", body: "Trash instructor", comment: ["Trash Course", "Trash Website", "Rodin 3azeem", "ez"]
+      },
+      {
+        name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Resolved', date: '23-12-2022', type: "Technical",
+        userID: "1", courseID: "2", body: "Trash instructor", comment: ["Trash Course", "Trash Website", "Rodin 3azeem"]
+      },
+      {
+        name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022', type: "Technical",
+        userID: "1", courseID: "2", body: "Trash instructor", comment: ["Trash Course", "Trash Website", "Rodin 3azeem"]
+      },
+      {
+        name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022', type: "Other",
+        userID: "1", courseID: "2", body: "Trash instructor", comment: ["Trash Course", "Trash Website", "Rodin 3azeem"]
+      },
+      {
+        name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Unseen', date: '23-12-2022', type: "Financial",
+        userID: "1", courseID: "2", body: "Trash instructor", comment: ["Trash Course", "Trash Website", "Rodin 3azeem"]
+      },
     ];
     setReports(test);
   }, []);
 
-console.log(reports);
+  console.log(reports);
 
   function go() { }
   function closeReport(index: number) {
-    const reportView=document.getElementById("staticModal" + index);
-    if(reportView != undefined) {
-      reportView.style.display="none";
+    const reportView = document.getElementById("staticModal" + index);
+    if (reportView != undefined) {
+      reportView.style.display = "none";
     }
   }
   function ResolveReport(index: number) {
@@ -73,9 +83,9 @@ console.log(reports);
     if (ViewButton != undefined) {
       ViewButton.style.display = "none";
     }
-    const reportView=document.getElementById("staticModal" + index);
-    if(reportView != undefined) {
-      reportView.style.display="none";
+    const reportView = document.getElementById("staticModal" + index);
+    if (reportView != undefined) {
+      reportView.style.display = "none";
     }
     //api
   }
@@ -85,11 +95,11 @@ console.log(reports);
       status[0].children[0].className = pending;
       status[0].children[0].innerHTML = "Pending";
     }
-    const reportView=document.getElementById("staticModal" + index);
-    if(reportView != undefined) {
-      reportView.style.display="";
+    const reportView = document.getElementById("staticModal" + index);
+    if (reportView != undefined) {
+      reportView.style.display = "";
     }
-    
+
 
     //api
   }
@@ -145,7 +155,7 @@ console.log(reports);
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {reports?.map((report:any, index:number) => (
+                        {reports?.map((report: any, index: number) => (
                           <tr key={report.date}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                               {report.name}
@@ -183,7 +193,7 @@ console.log(reports);
                               <button
                                 id={"ViewButton" + index}
                                 type="button"
-                                data-modal-toggle={"staticModal"+index}
+                                data-modal-toggle={"staticModal" + index}
                                 onClick={() => viewReport(index)}
                                 style={
                                   report.status == "Resolved"
@@ -196,7 +206,7 @@ console.log(reports);
                               </button>
                               <div
                                 id={"staticModal" + index}
-                                style={{display:"none"}}
+                                style={{ display: "none" }}
                                 data-modal-backdrop="static"
                                 className="fixed top-0 left-0 right-0 z-50 w-full p-[425px] py-40 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full backdrop-blur-[2px] bg-black bg-opacity-90"
                               >
@@ -213,7 +223,7 @@ console.log(reports);
                                       <button
                                         type="button"
                                         className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center "
-                                        onClick={() =>closeReport(index)}
+                                        onClick={() => closeReport(index)}
                                       >
                                         <svg
                                           className="w-5 h-5"
@@ -237,7 +247,7 @@ console.log(reports);
                                     </div>
                                     <h4 className="px-6 pb-2 text-lg">Follow-Ups</h4>
                                     {reports[index]?.comment.map(
-                                      (comment:any, index2:number) => (
+                                      (comment: any, index2: number) => (
                                         <p className="text-base leading-relaxed text-gray-500 px-6 ">
                                           {index2 + 1 + "." + comment}
                                         </p>
@@ -271,10 +281,10 @@ console.log(reports);
               </div>
             </div>
             <CompPagination
-                        totalCount={20 * 5}
-                        Setter={go}
-                        FromLink={false}
-                      />
+              totalCount={20 * 5}
+              Setter={go}
+              FromLink={false}
+            />
           </div>
         </form>
       </div>

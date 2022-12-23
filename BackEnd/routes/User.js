@@ -10,9 +10,9 @@ const { Logout } = require('../controller/UserController');
 const { register } = require('../controller/UserController');
 const { giveCourseRating, buyCourse, ViewMyCourses, GenerateUsers, ConnectInstructorsWithCourses, getInstructorInfo, updateInstructorInfo } = require('../controller/UserController');
 const UserTable = require('../models/UserSchema');
-
-const { SelectExercise, viewAnswer,requestCourse,reportProblem,viewPreviousReports,followUpOnProblem,watchVideo,addNote,
-  viewNotes,filterNotes,createTransaction } = require('../controller/UserController2');
+const { SelectExercise, viewAnswer, requestCourse, reportProblem, viewPreviousReports, followUpOnProblem, watchVideo, addNote,
+  viewNotes, filterNotes, createTransaction } = require('../controller/UserController2');
+const { Test1 } = require('../middleware/StripePayments');
 
 router.get("/", (req, res) => {
   res.send("Hello, User");
@@ -87,15 +87,15 @@ router.put("/filterNotes", filterNotes);
 router.put("/giveCourseRating", giveCourseRating);
 router.put("/followUpOnProblem", followUpOnProblem);
 router.put("/addNote", addNote);
-
-router.put('/watchVideo',watchVideo)
-router.put('/viewNotes',viewNotes)
+router.put('/watchVideo', watchVideo)
+router.put('/viewNotes', viewNotes)
 
 
 //router.post("/GenerateUsers", GenerateUsers);
 //router.post("/ConnectInstructorsWithCourses", ConnectInstructorsWithCourses);
 //router.get("/getInstructorInfo", getInstructorInfo);
 //router.post("/updateInstructorInfo", updateInstructorInfo);
+router.get('/Test1', Test1)
 
 router.put("/giveInstructorRating", giveInstructorRating);
 

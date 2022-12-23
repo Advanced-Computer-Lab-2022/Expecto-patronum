@@ -7,32 +7,14 @@ import CourseSubtitleData from '../../CourseContent/CourseSubtitleData'
 import DataContext from '../../../context/DataContext'
 import { subtitlesData } from '../../../DataFestek'
 import { FaPencilAlt } from 'react-icons/fa'
+import { SideBarInterface } from '../../../Interface/PurchasedCourse/SideBarInterface'
 
 type Props = {
-  subtitle: {
-    _id: string,
-    header: string,
-    contents: {
-      _id: string,
-      video: string,
-      preview: boolean,
-      duration: number,
-      description: string
-    }[],
-    exercise?: {
-      exerciseID: string,
-      exerciseName: string
-    },
-
-    totalMinutes: number
-
-
-  },
+  subtitle: SideBarInterface
   index: number
 }
 
 const Subtitle = (props: Props) => {
-
 
 
   let x = [1, 2, 3, 4, 5];
@@ -64,9 +46,11 @@ const Subtitle = (props: Props) => {
   function handleOnClick(index: number, Exercise = false) {
     SetContentChoosen({
       SubtitleID: props.subtitle._id,
-      ContentID: Exercise ? (props.subtitle.exercise?.exerciseID || "") : props.subtitle.contents[index]._id,
+      //@ts-ignore
+      ContentID: Exercise ? (props.subtitle.exercise[0].exerciseID || "") : props.subtitle.contents[index]._id,
       isExercise: Exercise,
-      data: Exercise ? { name: (props.subtitle.exercise?.exerciseName || "") } : { url: props.subtitle.contents[index].video, time: 0 }
+      //@ts-ignore
+      data: Exercise ? { name: (props.subtitle.exercise[0].exerciseName || "") } : { url: props.subtitle.contents[index].video, time: 0 }
     })
   }
 
@@ -110,15 +94,15 @@ const Subtitle = (props: Props) => {
 
             )
           })}
-          {props.subtitle.exercise && <div onClick={() => handleOnClick(props.subtitle.contents.length, true)}
+          {(props.subtitle.exercise?.length === 1) && <div onClick={() => handleOnClick(props.subtitle.contents.length, true)}
             className={ContentContainer + " " +
               (
                 (
-                  (props.subtitle._id === ContentChoosen?.SubtitleID) && (props.subtitle.exercise.exerciseID === ContentChoosen.ContentID))
+                  (props.subtitle._id === ContentChoosen?.SubtitleID) && (props.subtitle.exercise[0]!.exerciseID === ContentChoosen.ContentID))
                 && SelectedContent)}>
             <input type="checkbox" className={CheckBox} />
             <div className={ContentDataContainer} >
-              <h1 className={ContentHeader}>{props.subtitle.contents.length + 1}.{props.subtitle.exercise.exerciseName}</h1>
+              <h1 className={ContentHeader}>{props.subtitle.contents.length + 1}.{props.subtitle.exercise[0]!.exerciseName}</h1>
               <div className={ContetnSubheaderContainer}>
                 <FaPencilAlt color='gray' />
                 <p className={ContentSubHeader}>Exercise</p>

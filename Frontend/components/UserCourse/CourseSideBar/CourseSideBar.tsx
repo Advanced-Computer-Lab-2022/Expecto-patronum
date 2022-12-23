@@ -3,13 +3,14 @@ import React, { useEffect } from 'react'
 import DataContext from '../../../context/DataContext'
 import Subtitle from './Subtitle'
 import { AiOutlineClose } from 'react-icons/ai';
-import { subtitlesData } from "../../../DataFestek"
+import { SideBarInterface } from '../../../Interface/PurchasedCourse/SideBarInterface';
 
 
 type Props = {
-  data?: any
+  data: SideBarInterface[]
   SetCloseSideBar: Function,
   CloseSideBar: boolean
+
 }
 
 
@@ -18,65 +19,21 @@ type Props = {
 const CourseSideBar = (props: Props) => {
   const { ContentChoosen, SetContentChoosen } = React.useContext(DataContext);
 
-  // useEffect(() => {
-  //   if (ContentChoosen.SubtitleID == "" || ContentChoosen.ContentID == "") {
-  //     SetContentChoosen((prev) => {
-  //       return {
-  //         ...prev,
-  //         SubtitleID: subtitlesData[prev.SubtitleIndex]._id,
-  //         ContentID:
-  //           subtitlesData[prev.SubtitleIndex].contents.length > prev.ContentIndex ?
-  //             subtitlesData[prev.SubtitleIndex].contents[prev.ContentIndex]._id :
-  //             subtitlesData[prev.SubtitleIndex].exercise ?
-  //               // @ts-ignore
-  //               subtitlesData[prev.SubtitleIndex].exercise.exerciseID :
-  //               subtitlesData[prev.SubtitleIndex].contents[0]._id,
-  //         SubtitleLength: subtitlesData[prev.SubtitleIndex].contents.length + (subtitlesData[prev.SubtitleIndex].exercise ? 1 : 0),
-  //         isExercise: subtitlesData[prev.SubtitleIndex].exercise ? true : false,
-  //         data: subtitlesData[prev.SubtitleIndex].exercise ?
-  //           { id: (subtitlesData[prev.SubtitleIndex].exercise?.exerciseID || ""), name: (subtitlesData[prev.SubtitleIndex].exercise?.exerciseName || "") } :
-  //           { ...prev.data, url: subtitlesData[prev.SubtitleIndex].contents[prev.ContentIndex].video }
-  //       }
-  //     })
-  //   }
-  // else {
-  //   if (ContentChoosen.ContentIndex == -1 && ContentChoosen.SubtitleIndex == -1) {
-  //     let subtitleIndex = subtitlesData.findIndex((x) => x._id == ContentChoosen.SubtitleID);
-  //     let contentIndex = subtitlesData[subtitleIndex].contents.findIndex((x) => x._id == ContentChoosen.ContentID);
-  //     SetContentChoosen((prev) => {
-  //       return {
-  //         ...prev,
-  //         SubtitleIndex: subtitleIndex,
-  //         ContentIndex: contentIndex == -1 ? subtitlesData[subtitleIndex].contents.length : contentIndex,
-  //         SubtitleLength: subtitlesData[subtitleIndex].contents.length + (subtitlesData[subtitleIndex].exercise ? 1 : 0),
-  //         isExercise: subtitlesData[subtitleIndex].exercise ? true : false,
-  //         data: subtitlesData[subtitleIndex].exercise ?
-  //           { id: (subtitlesData[subtitleIndex].exercise?.exerciseID || ""), name: (subtitlesData[subtitleIndex].exercise?.exerciseName || "") }
-  //           : { ...prev.data, url: subtitlesData[subtitleIndex].contents[contentIndex].video }
-  //       }
-  //     })
-
-  //   }
-  // }
-
-
-  // }, [ContentChoosen])
 
   useEffect(() => {
     //when we press on a note that is written we get it from the database with the content id and the subtitle id 
     //so we set both of these but we dont have the data so here we check if we have a ContentChoosen with no data we set its data
     //@ts-ignore
     if (ContentChoosen.isExercise && ContentChoosen.data.name == "" || !ContentChoosen.isExercise && ContentChoosen.data.url == "") {
-      let subtitleIndex = subtitlesData.findIndex((x) => x._id == ContentChoosen.SubtitleID);
-      let contentIndex = subtitlesData[subtitleIndex].contents.findIndex((x) => x._id == ContentChoosen.ContentID);
+      let subtitleIndex = props.data.findIndex((x) => x._id == ContentChoosen.SubtitleID);
+      let contentIndex = props.data[subtitleIndex].contents.findIndex((x) => x._id == ContentChoosen.ContentID);
       SetContentChoosen((prev) => {
         return {
           ...prev,
-          isExercise: subtitlesData[subtitleIndex].exercise ? true : false,
-          data: subtitlesData[subtitleIndex].exercise ?
-            { name: (subtitlesData[subtitleIndex].exercise?.exerciseName || "") }
-            // @ts-ignore
-            : { ...prev.data, url: subtitlesData[subtitleIndex].contents[contentIndex].video }
+          isExercise: props.data[subtitleIndex].exercise ? true : false,
+          data: props.data[subtitleIndex].exercise ?
+            { name: (props.data[subtitleIndex].exercise[0]?.exerciseName || "") }
+            : { ...prev.data, url: props.data[subtitleIndex].contents[contentIndex].video }
         }
       })
 
@@ -91,7 +48,7 @@ const CourseSideBar = (props: Props) => {
   // const [scrollY, setScrollY] = React.useState(0);
   const [FixSideBar, SetFixSideBar] = React.useState(false);
 
-  for (let i = 0; i < subtitlesData.length; i++) {
+  for (let i = 0; i < props.data.length; i++) {
     let ref: React.RefObject<HTMLDivElement> = React.useRef<HTMLDivElement>(null);
     RefsArray.push(ref);
   }
@@ -145,7 +102,7 @@ const CourseSideBar = (props: Props) => {
         <AiOutlineClose onClick={() => { props.SetCloseSideBar(true) }} cursor={'pointer'} fontSize={20} />
       </div>
       <div ref={MainRef} className={SideBarSubtitles}>
-        {subtitlesData.map((subtitle, index) => {
+        {props.data.map((subtitle, index) => {
           return (
             <div ref={RefsArray.length > 0 ? RefsArray[index] : null} onClick={(ref) => ScrollTo(RefsArray[index])}>
               <Subtitle subtitle={subtitle} index={index}></Subtitle>
