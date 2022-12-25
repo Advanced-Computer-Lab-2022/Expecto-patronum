@@ -13,7 +13,7 @@ const { giveCourseRating, buyCourse, unbuyCourse,ViewMyCourses, GenerateUsers, C
 const UserTable = require('../models/UserSchema');
 
 const { SelectExercise, viewAnswer,requestCourse,reportProblem,viewPreviousReports,followUpOnProblem,watchVideo,addNote,
-  viewNotes,filterNotes,createTransaction,lastWatched } = require('../controller/UserController2');
+  viewNotes,filterNotes,createTransaction,lastWatched,payWithWallet } = require('../controller/UserController2');
 
 router.get("/", (req, res) => {
   res.send("Hello, User");
@@ -71,6 +71,7 @@ router.put('/submitAnswer', submitAnswer);
 
 
 router.put("/buyCourse",buyCourse,Charge,unbuyCourse);
+router.put("/payWithWallet",payWithWallet);
 
 router.put("/getPaymentMethods", getPaymentMethods);
 
