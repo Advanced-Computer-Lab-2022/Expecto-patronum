@@ -137,7 +137,7 @@ const handleOnChange = (position:any) => {
         <SideBar></SideBar>
         <form
           id="course-form"
-          className="w-full sb-max:w-without-instructor-sidebar-closed sb:w-without-instructor-sidebar"
+          className="w-full mx-4"
         >
           <div className="row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl ">
             <h6 className="text-center text-2xl text-navbar">Courses</h6>
@@ -145,7 +145,7 @@ const handleOnChange = (position:any) => {
               <table className="w-full text-sm text-left text-gray-500">
                 <thead className="text-xs uppercase bg-gray-50">
                   <tr>
-                    <th scope="col" className="p-4"></th>
+                    <th scope="col" className="py-3 px-6"></th>
                     <th scope="col" className="py-3 px-6">
                       Course Title
                     </th>
@@ -197,7 +197,7 @@ const handleOnChange = (position:any) => {
               <div
                   id="selectedCourses"
                   style={{ display: "none" }}
-                  className="fixed top-0 left-0 right-0 z-50 w-full p-[425px] py-40 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full backdrop-blur-[2px] bg-black bg-opacity-90"
+                  className="fixed top-0 left-0 right-0 z-50 w-full p-[425px] py-40  md:inset-0 h-modal md:h-full backdrop-blur-[2px] bg-black bg-opacity-90"
                 >
                   <div className=" relative w-full h-full max-w-2xl md:h-auto">
                     <div className="relative bg-[#F4F4F4] rounded-lg shadow">

@@ -81,7 +81,7 @@ function getRole(selectedRadio: any) {
     <AdminHeader/>
     <div className="flex">
       <SideBar></SideBar>
-      <form id='course-form' className='w-full mx-4 p-20r'>
+      <form id='course-form' className='w-full mx-4'>
         <div className='row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl '>
           <h1 className='text-center text-3xl pb-6 text-navbar'>Add User</h1>
           <div className="col">

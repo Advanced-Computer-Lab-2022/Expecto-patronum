@@ -98,7 +98,7 @@ const Reports = (props: Props) => {
       <AdminHeader />
       <div className="flex">
         <SideBar></SideBar>
-        <form id="course-form" className='w-full sb-max:w-without-instructor-sidebar-closed sb:w-without-instructor-sidebar'>
+        <form id="course-form" className='w-full mx-4'>
           <div className="row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl ">
             <h6 className="text-center text-2xl text-navbar">Reports</h6>
             <div className="flex flex-col">
@@ -189,7 +189,7 @@ const Reports = (props: Props) => {
                                     ? { display: "none" }
                                     : {}
                                 }
-                                className=" w-15 h-10 flex justify-center py-2 px-4 border-2 border-blue-600 rounded-md shadow-sm text-medium font-medium text-white bg-blue-600 hover:bg-white hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                className=" w-15 h-10 flex justify-center py-2 px-4 border-2 border-blue-600 rounded-md shadow-sm text-medium font-medium text-white bg-blue-600 hover:bg-blue-700 "
                               >
                                 View
                               </button>
@@ -247,7 +247,7 @@ const Reports = (props: Props) => {
                                         id={"Resolve" + index}
                                         onClick={() => ResolveReport(index)}
                                         type="button"
-                                        className="flex justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        className="flex justify-center text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                       >
                                         Resolve
                                       </button>
