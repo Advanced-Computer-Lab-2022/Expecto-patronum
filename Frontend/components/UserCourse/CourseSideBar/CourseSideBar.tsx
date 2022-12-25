@@ -16,22 +16,33 @@ type Props = {
 
 
 
+
 const CourseSideBar = (props: Props) => {
   const { ContentChoosen, SetContentChoosen } = React.useContext(DataContext);
-
+  console.log("///////////////////////")
+  console.log(ContentChoosen)
+  console.log("///////////////////////")
 
   useEffect(() => {
+    console.log("///////////////////////")
+    console.log(ContentChoosen)
+    console.log("///////////////////////")
+
     //when we press on a note that is written we get it from the database with the content id and the subtitle id 
     //so we set both of these but we dont have the data so here we check if we have a ContentChoosen with no data we set its data
     //@ts-ignore
     if (ContentChoosen.isExercise && ContentChoosen.data.name == "" || !ContentChoosen.isExercise && ContentChoosen.data.url == "") {
+      let isExercise = false;
       let subtitleIndex = props.data.findIndex((x) => x._id == ContentChoosen.SubtitleID);
       let contentIndex = props.data[subtitleIndex].contents.findIndex((x) => x._id == ContentChoosen.ContentID);
+      if (contentIndex == -1) {
+        isExercise = true;
+      }
       SetContentChoosen((prev) => {
         return {
           ...prev,
-          isExercise: props.data[subtitleIndex].exercise ? true : false,
-          data: props.data[subtitleIndex].exercise ?
+          isExercise,
+          data: isExercise ?
             { name: (props.data[subtitleIndex].exercise[0]?.exerciseName || "") }
             : { ...prev.data, url: props.data[subtitleIndex].contents[contentIndex].video }
         }

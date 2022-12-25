@@ -21,9 +21,59 @@ const RateModal = (props: Props) => {
   const { CourseChoosen, SetCourseChoosen } = React.useContext(DataContext);
   const [Loading, SetLoading] = React.useState(false)
   const [EditReview, SetEditReview] = React.useState(false)
-  const OldReview = "This is a test review"
-  const OldRate = 4
+  const OldReview = null;
+  const OldRate = null;
 
+
+  async function RateOnly() {
+    if (props.CurrentRate === 0) return;
+    if (props.CurrentRate === OldRate) return;
+    if (props.Type === "instructor") {
+      await axios.put("http://localhost:5000/user/giveInstructorRating", {
+        rating: props.CurrentRate,
+        oldRating: OldRate ? OldRate : null,
+        courseId: CourseChoosen._id,
+        instructorId: CourseChoosen.instructorID,
+        userID: "63a59b15f928fa951091f381"
+      })
+    } else {
+
+      let res = await axios.put("http://localhost:5000/user/giveCourseRating", {
+        rating: props.CurrentRate,
+        oldRating: OldRate ? OldRate : null,
+        courseId: CourseChoosen._id,
+        userID: "63a59b15f928fa951091f381"
+      })
+
+    }
+
+  }
+
+  async function RateAndReview() {
+    if (ReviewRef.current === null) return
+    if (ReviewRef.current.value === OldReview && props.CurrentRate == OldRate) return
+    if (props.Type === "instructor") {
+      await axios.put("http://localhost:5000/user/giveInstructorReview", {
+        rating: RateChange,
+        oldReview: OldReview ? OldReview : null,
+        courseId: CourseChoosen._id,
+        userID: "63a59b15f928fa951091f381",
+        review: ReviewRef.current.value,
+        username: "mostafa",
+        instructorId: CourseChoosen.instructorID
+      })
+    } else {
+
+      await axios.put("http://localhost:5000/user/giveCourseReview", {
+        rating: props.CurrentRate,
+        oldReview: OldReview ? OldReview : null,
+        courseId: CourseChoosen._id,
+        userID: "63a59b15f928fa951091f381",
+        review: ReviewRef.current.value,
+        username: "mostafa",
+      })
+    }
+  }
 
 
 
@@ -35,47 +85,16 @@ const RateModal = (props: Props) => {
     if (ReviewRef.current !== null) {
       SetLoading(true)
       if (ReviewRef.current.value === "") {
-        if (props.Type === "instructor") {
-          //Call the api to send the rate to the backend with axios http://localhost:5000/user/giveInstructorRating
-          await axios.put("http://localhost:5000/user/giveInstructorRating", {
-            rating: RateChange,
-            courseId: CourseChoosen._id,
-            instructorId: CourseChoosen.instructorID,
-            userID: "63a59b15f928fa951091f381"
-          })
-        } else {
-          await axios.put("http://localhost:5000/user/giveCourseRating", {
-            rating: RateChange,
-            courseId: CourseChoosen._id,
-            userID: "63a59b15f928fa951091f381"
-          })
-        }
+        await RateOnly();
       } else {
-        if (props.Type === "instructor") {
-          //Call the api to send the rate and the review to the backend
-          await axios.put("http://localhost:5000/user/giveInstructorReview", {
-            rating: RateChange,
-            courseId: CourseChoosen._id,
-            userID: "63a59b15f928fa951091f381",
-            review: ReviewRef.current.value,
-            username: "mostafa",
-            instructorId: CourseChoosen.instructorID
-          })
-        } else {
-          await axios.put("http://localhost:5000/user/giveCourseReview", {
-            rating: RateChange,
-            courseId: CourseChoosen._id,
-            userID: "63a59b15f928fa951091f381",
-            review: ReviewRef.current.value,
-            username: "mostafa",
-          })
-        }
+        await RateAndReview();
       }
-      SetLoading(false)
-      props.setOpen(false);
-      SetEditReview(false);
     }
+    SetLoading(false)
+    props.setOpen(false);
+    SetEditReview(false);
   }
+
 
   function HandleEdit() {
     SetEditReview(true)
@@ -131,9 +150,9 @@ const RateModal = (props: Props) => {
           </div>
         </div> : <div className='flex flex-col items-start'>
           <h1 className='text-2xl font-bold mb-2 mt-2'>Your Review</h1>
-          <BigRating size={20} Rate={OldRate} RateAction={false} ></BigRating>
+          <BigRating Rate={2} size={20} RateAction={false} ></BigRating>
           <div className='w-full'>
-            <TextBox HideLabel={true} Text={OldReview} ShowOnly={true} />
+            <TextBox HideLabel={true} ShowOnly={true} />
           </div>
           <div onClick={HandleEdit} className={ButtonCont}>
             <p>Edit Review</p>

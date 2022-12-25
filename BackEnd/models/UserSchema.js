@@ -113,17 +113,22 @@ const UserSchema = new mongoose.Schema({
       type: Number,
       default: 0
     },
-    lastWatched:{
-      type:String,
-      default:"Null"
+    lastWatched: {
+      type: String,
+      default: "Null"
     },
-    watchedVideos:[String],
-    notes:[{
-      contentID:String,
-      timestamp:String,
-      note:String
+    watchedVideos: [String],
+    notes: [{
+      subtitleName: String,
+      contentName: String,
+      subtitleIndex: Number,
+      contentIndex: Number,
+      contentID: String,
+      subtitleID: String,
+      timestamp: String,
+      note: String
     }]
-}],
+  }],
 
   biography: {
     type: String
@@ -137,7 +142,7 @@ const UserSchema = new mongoose.Schema({
     expiration: String,
     name: String,
     customerId: String,
-    cardType:String
+    cardType: String
   }]
 
 });

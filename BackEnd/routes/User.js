@@ -4,16 +4,16 @@ const { getRate, forgetPassword, ValidateUser, ChangeEmail, UseChangeEmailToken,
   giveInstructorRating, selectCourse, giveCourseReview, giveInstructorReview, submitAnswer, takeExam, test } = require('../controller/UserController');
 const { genPassword } = require('../lib/passwordUtils');
 const { VerifyTokenMiddleware } = require('../middleware/VerifyTokenMiddleware');
-const { Charge,addPaymentMethod,getPaymentMethods,deletePaymentMethod } = require('../middleware/StripePayments');
+const { Charge, addPaymentMethod, getPaymentMethods, deletePaymentMethod } = require('../middleware/StripePayments');
 const passport = require('passport');
 const { isAuth } = require('../middleware/AuthMiddleware');
 const { Logout } = require('../controller/UserController');
 const { register } = require('../controller/UserController');
-const { giveCourseRating, buyCourse, unbuyCourse,ViewMyCourses, GenerateUsers, ConnectInstructorsWithCourses, getInstructorInfo, updateInstructorInfo } = require('../controller/UserController');
+const { giveCourseRating, buyCourse, unbuyCourse, ViewMyCourses, GenerateUsers, ConnectInstructorsWithCourses, getInstructorInfo, updateInstructorInfo } = require('../controller/UserController');
 const UserTable = require('../models/UserSchema');
 
-const { SelectExercise, viewAnswer,requestCourse,reportProblem,viewPreviousReports,followUpOnProblem,watchVideo,addNote,
-  viewNotes,filterNotes,createTransaction,lastWatched } = require('../controller/UserController2');
+const { SelectExercise, viewAnswer, requestCourse, reportProblem, viewPreviousReports, followUpOnProblem, watchVideo, addNote,
+  viewNotes, filterNotes, createTransaction, lastWatched, EditNote, DeleteNote } = require('../controller/UserController2');
 
 router.get("/", (req, res) => {
   res.send("Hello, User");
@@ -70,7 +70,7 @@ router.put('/lastWatched', lastWatched);
 router.put('/submitAnswer', submitAnswer);
 
 
-router.put("/buyCourse",buyCourse,Charge,unbuyCourse);
+router.put("/buyCourse", buyCourse, Charge, unbuyCourse);
 
 router.put("/getPaymentMethods", getPaymentMethods);
 
@@ -92,8 +92,11 @@ router.put("/giveCourseRating", giveCourseRating);
 router.put("/followUpOnProblem", followUpOnProblem);
 router.put("/addNote", addNote);
 
-router.put('/watchVideo',watchVideo)
-router.put('/viewNotes',viewNotes)
+router.put('/watchVideo', watchVideo)
+router.put('/viewNotes', viewNotes)
+router.post('/EditNote', EditNote);
+router.post('/DeleteNote', DeleteNote);
+
 
 
 //router.post("/GenerateUsers", GenerateUsers);
