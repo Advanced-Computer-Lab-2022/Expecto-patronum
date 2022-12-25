@@ -69,7 +69,7 @@ const SideBar = () => {
                </li>
                <li className="group">
                   <a
-                     href="#"
+                     href="Promotions"
                      className="flex items-center p-2 text-base font-normal text-gray-600 hover:text-white rounded-lg hover:bg-red-600"
                   >
 <TbDiscount2 className="w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-100"></TbDiscount2>

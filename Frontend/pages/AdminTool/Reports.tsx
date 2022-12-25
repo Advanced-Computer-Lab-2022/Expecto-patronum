@@ -6,6 +6,7 @@ import AdminHeader from "../../components/AdminTool/AdminHeader";
 import classNames from "classnames";
 import CompPagination from "../../components/shared/pagination/CompPagination";
 
+
 const pending = classNames(
   "px-1 py-1 rounded-md whitespace-nowrap text-sm bg-yellow-200 text-yellow-700"
 );
@@ -54,7 +55,6 @@ const Reports = (props: Props) => {
     setReports(test);
   }, []);
 
-console.log(reports);
 
   function go() { }
   function closeReport(index: number) {
@@ -183,7 +183,6 @@ console.log(reports);
                               <button
                                 id={"ViewButton" + index}
                                 type="button"
-                                data-modal-toggle={"staticModal"+index}
                                 onClick={() => viewReport(index)}
                                 style={
                                   report.status == "Resolved"
@@ -197,7 +196,6 @@ console.log(reports);
                               <div
                                 id={"staticModal" + index}
                                 style={{display:"none"}}
-                                data-modal-backdrop="static"
                                 className="fixed top-0 left-0 right-0 z-50 w-full p-[425px] py-40 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full backdrop-blur-[2px] bg-black bg-opacity-90"
                               >
                                 <div className="relative w-full h-full max-w-2xl md:h-auto">
@@ -262,10 +260,6 @@ console.log(reports);
                         ))}
                       </tbody>
                     </table>
-
-                    <div id="pagination">
-
-                    </div>
                   </div>
                 </div>
               </div>
