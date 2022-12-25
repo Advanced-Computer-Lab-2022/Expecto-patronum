@@ -68,7 +68,7 @@ const RequestComp = (props: Props) => {
           </div>
         }
 
-        <TextBox ShowOnly={props.ShowOnly} Text={props.Type == "Refund" ? "Reason of Refund.." : "Report your problem.."} ></TextBox>
+        <TextBox ShowOnly={props.ShowOnly} placeHolder={props.Type == "Refund" ? "Reason of Refund.." : "Report your problem.."} ></TextBox>
 
         {!props?.ShowOnly ?
           <button onClick={handleSubmit} className={FormButton}>Submit</button> :

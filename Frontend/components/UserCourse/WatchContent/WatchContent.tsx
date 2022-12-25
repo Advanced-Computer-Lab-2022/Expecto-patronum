@@ -19,7 +19,7 @@ type Props = {
 const WatchContent = (props: Props) => {
   let videoRef = React.useRef(null);
   const [pause, setPause] = React.useState(false);
-  const { ContentChoosen, SetContentChoosen } = React.useContext(DataContext);
+  const { ContentChoosen, SetContentChoosen, SetProgress, SetWatchedVideos, WatchedVideos } = React.useContext(DataContext);
   //Video  
   //Tabs   //OverView, Notes, Q/A
   useEffect(() => {
@@ -34,16 +34,23 @@ const WatchContent = (props: Props) => {
   }, [ContentChoosen])
 
   async function HandleEnd() {
-    await axios.put("http://localhost:5000/user/updateContent", {
-      userId: "63a59b15f928fa951091f381",
-      courseId: "63a59c15e3b96b22a1dc828a",
+    let res = await axios.put("http://localhost:5000/user/watchVideo", {
+      userID: "63a59b15f928fa951091f381",
+      courseID: "63a59c15e3b96b22a1dc828a",
       //@ts-ignore
       videoURL: ContentChoosen.data.url,
       //@ts-ignore
-      videotime: videoRef.current?.getCurrentTime() || 1,
+      //in minutes
+      videotime: videoRef.current?.getCurrentTime() / 60 || 1,
     })
+    SetProgress(res.data.progress)
+    SetWatchedVideos(res.data.watchedVideos)
+    console.log("///WATCHED VIDEOS/////")
+    console.log(res.data)
+    console.log("///WATCHED VIDEOS/////")
 
   }
+
 
   return (
     <div className='w-full'>

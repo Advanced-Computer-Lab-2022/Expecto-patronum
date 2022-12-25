@@ -14,50 +14,50 @@ const ExerciseTable = require('../models/ExcerciseSchema');
 const requestTable = require('../models/RequestSchema');
 const transactionTable = require('../models/transactionSchema');
 
- async function register(req, res) {
+async function register(req, res) {
   const saltHash = genPassword(req.body.password);
   const salt = saltHash.salt;
   const hash = saltHash.hash;
 
-  var exists1=await User.findOne({"email":req.body.email});
- 
-  var exists2=await User.findOne({"username":req.body.username});
-  if(exists1 || exists2 ){
-    if(exists1 && exists2 ){
+  var exists1 = await User.findOne({ "email": req.body.email });
+
+  var exists2 = await User.findOne({ "username": req.body.username });
+  if (exists1 || exists2) {
+    if (exists1 && exists2) {
       res.status(400).send("username and email already used");
     }
-    else if(exists1){
-      res.status(400).send("email already used"); 
-    }
-    else{
-    res.status(400).send("username already used");
-    }
-  }
-  else{
-  const newUser = new User({
-    username: req.body.username,
-    hash: hash,
-    salt: salt,
-    email: req.body.email,
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    role: req.body.role
-  });
-
-
-  newUser.save((err, newUser) => {
-    if (err) {
-      console.log(err);
-
+    else if (exists1) {
+      res.status(400).send("email already used");
     }
     else {
-      let token = CreateToken({ id: newUser._id, email: newUser.email });
-      MailValidate(newUser.email, "http://localhost:5000/user/MailVerify", token);
-      res.send("Please verify your email");
+      res.status(400).send("username already used");
     }
+  }
+  else {
+    const newUser = new User({
+      username: req.body.username,
+      hash: hash,
+      salt: salt,
+      email: req.body.email,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      role: req.body.role
+    });
 
-  })
-}
+
+    newUser.save((err, newUser) => {
+      if (err) {
+        console.log(err);
+
+      }
+      else {
+        let token = CreateToken({ id: newUser._id, email: newUser.email });
+        MailValidate(newUser.email, "http://localhost:5000/user/MailVerify", token);
+        res.send("Please verify your email");
+      }
+
+    })
+  }
 
 };
 
@@ -598,7 +598,7 @@ async function selectCourse(req, res, next) {
 
         }
         ////////////////indivTrainee/Corp/////////////////////
-        var x = await User.findOne({ "_id": req.body.userId }).select({ role:1,purchasedCourses:{ $elemMatch : {courseID:req.body.courseId}}, _id: 1 });
+        var x = await User.findOne({ "_id": req.body.userId }).select({ role: 1, purchasedCourses: { $elemMatch: { courseID: req.body.courseId } }, _id: 1 });
         if (x.purchasedCourses) {
           for (var i = 0; i < x.purchasedCourses.length; i++) {
             var z = Object.values(x.purchasedCourses)[i];
@@ -607,34 +607,36 @@ async function selectCourse(req, res, next) {
               if (z.courseRating) {
                 info.yourCourseRating = z.courseRating;
               }
-              else{
+              else {
                 info.yourCourseRating = null;
               }
               if (z.instructorRating) {
                 info.yourInstructorRating = z.instructorRating;
               }
-              else{
+              else {
                 info.yourInstructorRating = null;
               }
               if (z.courseReview) {
                 info.yourCourseReview = z.courseReview;
               }
-              else{
+              else {
                 info.yourCourseReview = null;
               }
               if (z.instructorReview) {
                 info.yourinstructorReview = z.instructorReview;
-              }else{
+              } else {
                 info.yourinstructorReview = null;
               }
-              if(z.lastWatched){
+              if (z.lastWatched) {
                 info.lastWatched = z.lastWatched;
               }
-              else{
+              else {
                 info.lastWatched = null;
               }
-              info.notes = z.notes; 
+              info.notes = z.notes;
+              info.progress = z.progress;
               info.purchased = "yes";
+              info.watchedVideos = z.watchedVideos;
               x = await CourseTable.findOne({ "_id": req.body.courseId },
                 { review: { "$slice": 3 } });
               info.course = x;
@@ -654,9 +656,9 @@ async function selectCourse(req, res, next) {
             }
           }
           //////////CorporateTraineeRequest///////////////////////////////////
-           if(x.role == "CorporateTrainee"){
-            var exists=await requestTable.findOne({"userID":req.body.userId,"courseID":req.body.courseId,"type":"RequestCourse","status":"Pending"});
-            if(exists){
+          if (x.role == "CorporateTrainee") {
+            var exists = await requestTable.findOne({ "userID": req.body.userId, "courseID": req.body.courseId, "type": "RequestCourse", "status": "Pending" });
+            if (exists) {
               var x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
                 _id: 1,
                 title: 1,
@@ -697,7 +699,7 @@ async function selectCourse(req, res, next) {
             }
           }
 
-          
+
         }
       }
       ////////////////Guest/////////////////////
@@ -794,49 +796,49 @@ async function takeExam(req, res, next) {
 async function buyCourse(req, res, next) {
   //endpoints userID ,courseID
   try {
-      const exists = await User.findOne({ "_id": req.body.userID,"purchasedCourses.courseID":req.body.courseID });
-      if(exists){
-        res.status(400).send("Course already bought");
-        return;
-      }
-        const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
-        { $push: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
+    const exists = await User.findOne({ "_id": req.body.userID, "purchasedCourses.courseID": req.body.courseID });
+    if (exists) {
+      res.status(400).send("Course already bought");
+      return;
+    }
+    const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
+      { $push: { "purchasedCourses": { courseID: req.body.courseID } } }, { new: true });
 
-        const course =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
-        { $inc: { "purchases": 1 } }, { new: true });
+    const course = await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
+      { $inc: { "purchases": 1 } }, { new: true });
 
-        const result = await transactionTable.create({
-          userID: user._id,
-          instructorID: course.instructorID,
-          courseID: course._id,
-          transactionDate: Date.now(),
-          transactionAmount : req.body.amount,
-        });
-        result.save();
+    const result = await transactionTable.create({
+      userID: user._id,
+      instructorID: course.instructorID,
+      courseID: course._id,
+      transactionDate: Date.now(),
+      transactionAmount: req.body.amount,
+    });
+    result.save();
 
-        next();
+    next();
 
   } catch (error) {
     console.log(error);
-    res.status(400).send({error:error.message});
+    res.status(400).send({ error: error.message });
   }
 };
 
 async function unbuyCourse(req, res, next) {
   //endpoints userID ,courseID
   try {
-        const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
-        { $pull: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
+    const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
+      { $pull: { "purchasedCourses": { courseID: req.body.courseID } } }, { new: true });
 
-        const course =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
-        { $inc: { "purchases": -1 } }, { new: true });
+    const course = await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
+      { $inc: { "purchases": -1 } }, { new: true });
 
-        const transaction = await transactionTable.deleteOne({userID:user._id,courseID:course._id});
+    const transaction = await transactionTable.deleteOne({ userID: user._id, courseID: course._id });
 
-        res.status(400).send("payment unsucessful");
+    res.status(400).send("payment unsucessful");
 
   } catch (error) {
-    res.status(400).send({error:error.message});
+    res.status(400).send({ error: error.message });
   }
 };
 
@@ -909,7 +911,7 @@ async function test(req, res) {
 
 module.exports = {
   register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
-  buyCourse,unbuyCourse,ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
+  buyCourse, unbuyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
   ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview, giveInstructorReview, submitAnswer, test, takeExam
 }
 

@@ -46,8 +46,8 @@ const OverView = (props: Props) => {
         </div>
 
       </div>
-      {RateModalOpenCourse && <RateModal Type="instructor" CurrentRate={CurrentRateCourse} SetCurrentRate={SetCurrentRateCourse} setOpen={SetRateModalOpenCourse}></RateModal>}
-      {RateModalOpenInstructor && <RateModal Type="course" CurrentRate={CurrentRateInstructor} SetCurrentRate={SetCurrentRateInstructor} setOpen={SetRateModalOpenInstructor}></RateModal>}
+      {RateModalOpenCourse && <RateModal Type="course" CurrentRate={CurrentRateCourse} SetCurrentRate={SetCurrentRateCourse} setOpen={SetRateModalOpenCourse}></RateModal>}
+      {RateModalOpenInstructor && <RateModal Type='instructor' CurrentRate={CurrentRateInstructor} SetCurrentRate={SetCurrentRateInstructor} setOpen={SetRateModalOpenInstructor}></RateModal>}
     </div>
   )
 }
