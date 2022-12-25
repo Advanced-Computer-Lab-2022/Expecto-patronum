@@ -18,7 +18,6 @@ type Props = {
 
 
 const CourseContentHero = (props: Props) => {
-  console.log(props.courseContentData);
   const listInnerRef = useRef(null);
   const [VideoPictureApear, SetVideoPictureApear] = React.useState(false);
   const [VideoOpen, SetVideoOpen] = React.useState(false);

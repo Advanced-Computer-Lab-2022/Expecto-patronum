@@ -7,38 +7,21 @@ import CourseSubtitleData from '../../CourseContent/CourseSubtitleData'
 import DataContext from '../../../context/DataContext'
 import { subtitlesData } from '../../../DataFestek'
 import { FaPencilAlt } from 'react-icons/fa'
+import { SideBarInterface } from '../../../Interface/PurchasedCourse/SideBarInterface'
+import Content from '../../Instructor/Subtitle/Content/Content'
 
 type Props = {
-  subtitle: {
-    _id: string,
-    header: string,
-    contents: {
-      _id: string,
-      video: string,
-      preview: boolean,
-      duration: number,
-      description: string
-    }[],
-    exercise?: {
-      exerciseID: string,
-      exerciseName: string
-    },
-
-    totalMinutes: number
-
-
-  },
+  subtitle: SideBarInterface
   index: number
 }
 
 const Subtitle = (props: Props) => {
 
 
-
   let x = [1, 2, 3, 4, 5];
   // console.log(props.subtitle);
   // const [animationParent] = useAutoAnimate<HTMLDivElement>();
-  const { ContentChoosen, SetContentChoosen } = React.useContext(DataContext);
+  const { ContentChoosen, SetContentChoosen, WatchedVideos } = React.useContext(DataContext);
 
   const [ShowSubtitle, SetShowSubtitle] = React.useState(props.subtitle._id === ContentChoosen?.SubtitleID);
 
@@ -64,9 +47,15 @@ const Subtitle = (props: Props) => {
   function handleOnClick(index: number, Exercise = false) {
     SetContentChoosen({
       SubtitleID: props.subtitle._id,
-      ContentID: Exercise ? (props.subtitle.exercise?.exerciseID || "") : props.subtitle.contents[index]._id,
+      subttitleName: props.subtitle.header,
+      subtitleIndex: props.index,
+      contentIndex: index,
+      contentName: Exercise ? (props.subtitle.exercise[0]!.exerciseName || "") : props.subtitle.contents[index].description,
+      //@ts-ignore
+      ContentID: Exercise ? (props.subtitle.exercise[0].exerciseID || "") : props.subtitle.contents[index]._id,
       isExercise: Exercise,
-      data: Exercise ? { name: (props.subtitle.exercise?.exerciseName || "") } : { url: props.subtitle.contents[index].video, time: 0 }
+      //@ts-ignore
+      data: Exercise ? { name: (props.subtitle.exercise[0].exerciseName || "") } : { url: props.subtitle.contents[index].video, time: 0 }
     })
   }
 
@@ -98,7 +87,7 @@ const Subtitle = (props: Props) => {
                 }>
 
 
-                <input type="checkbox" className={CheckBox} />
+                <input checked={WatchedVideos.length > 0 && WatchedVideos.includes(content.video) ? true : false} type="checkbox" className={CheckBox} />
                 <div className={ContentDataContainer} >
                   <h1 className={ContentHeader}>{index + 1}.{content.description}</h1>
                   <div className={ContetnSubheaderContainer}>
@@ -110,15 +99,15 @@ const Subtitle = (props: Props) => {
 
             )
           })}
-          {props.subtitle.exercise && <div onClick={() => handleOnClick(props.subtitle.contents.length, true)}
+          {(props.subtitle.exercise?.length === 1) && <div onClick={() => handleOnClick(props.subtitle.contents.length, true)}
             className={ContentContainer + " " +
               (
                 (
-                  (props.subtitle._id === ContentChoosen?.SubtitleID) && (props.subtitle.exercise.exerciseID === ContentChoosen.ContentID))
+                  (props.subtitle._id === ContentChoosen?.SubtitleID) && (props.subtitle.exercise[0]!.exerciseID === ContentChoosen.ContentID))
                 && SelectedContent)}>
             <input type="checkbox" className={CheckBox} />
             <div className={ContentDataContainer} >
-              <h1 className={ContentHeader}>{props.subtitle.contents.length + 1}.{props.subtitle.exercise.exerciseName}</h1>
+              <h1 className={ContentHeader}>{props.subtitle.contents.length + 1}.{props.subtitle.exercise[0]!.exerciseName}</h1>
               <div className={ContetnSubheaderContainer}>
                 <FaPencilAlt color='gray' />
                 <p className={ContentSubHeader}>Exercise</p>

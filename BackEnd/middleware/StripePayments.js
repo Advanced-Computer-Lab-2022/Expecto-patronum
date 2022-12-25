@@ -1,19 +1,19 @@
 const mongodb = require('mongodb');
-const stripe = require('stripe');
+const stripe = require('stripe')("sk_test_51MHBLAGj8rHcER8RvXIpGjf8QMh1xBUzapJWcm8eJc9YxEhDGppaut7k7jWXvVnLuRJ2GS977Tp4aXcb8KqfgNPf003hIV58FA");
 const User = require('../models/UserSchema');
 const Course = require('../models/CourseSchema');
 
 
 // Replace with your Stripe API key
-const stripe = stripe("sk_test_51MFkvUKcBqZZ0sjUrFighyNKBV48CtUM78B4l4v19qzCsPGNpidrNnneN5UVRhz2MTVt8lnjlfCiMb8UlQ2ToeYS00frYRLUb4");
+// stripe = stripe("sk_test_51MFkvUKcBqZZ0sjUrFighyNKBV48CtUM78B4l4v19qzCsPGNpidrNnneN5UVRhz2MTVt8lnjlfCiMb8UlQ2ToeYS00frYRLUb4");
 
-export async function addPaymentMethod(req, res) {
+ async function addPaymentMethod(req, res) {
   try {
     // Get user id from session
-    const userId = req.session.userId;
+    const userId = req.body.userId;
 
     // Get credit card information from request body
-    const { creditCardNumber, ccv, cardHolderName, expiration } = req.body;
+    const { creditCardNumber, ccv, cardHolderName,expiration} = req.body;
 
     // Get user collection
     const users = User;
@@ -21,10 +21,13 @@ export async function addPaymentMethod(req, res) {
     // Find user by id
     const user = await users.findOne({ _id: userId });
 
+
     // Check if credit card is already saved
     let cardAlreadyAdded = false;
-    for (const paymentMethod of user.paymentMethods) {
-      if (paymentMethod.ccv === ccv) {
+    console.log(user.paymentMethods.length);
+    let x = user.paymentMethods;
+      for(var i =0;i<x.length;i++){
+      if (x[i].last4 == creditCardNumber.slice(-4)) {
         cardAlreadyAdded = true;
         break;
       }
@@ -35,20 +38,48 @@ export async function addPaymentMethod(req, res) {
       return res.status(400).send({ error: 'Card already added' });
     }
 
-    // Create a new card with Stripe
-    const customer = await stripe.customers.create({
-      description: `Customer for ${cardHolderName}`,
-      source: creditCardNumber
-    });
 
-    // Create payment method object
+    const email = user.email;
+      const name = cardHolderName;
+  const month =   expiration.substring(0, 2);
+  const year = expiration.substring(3,5);
+  // Collect payment information
+  const cardNumber = creditCardNumber;
+  const cardExpMonth = month;
+  const cardExpYear = year;
+  const cardCvc = ccv;
+
+
+const cardToken = await stripe.tokens.create({
+  card: {
+    number: cardNumber,
+    exp_month: cardExpMonth,
+    exp_year: cardExpYear,
+    cvc: cardCvc,
+  },
+});
+
+const customer = await stripe.customers.create({
+  email: email,
+  name: name,
+  source: cardToken.id,
+
+});
+const card = await stripe.customers.retrieveSource(
+  customer.id,
+  customer.default_source
+);
+  // Create payment method object
     const paymentMethod = {
       last4: creditCardNumber.slice(-4),
       expiration,
       name: cardHolderName,
-      customerId: customer.id
+      customerId: customer.id,
+      cardType:cardToken.card.brand,
     };
 
+    //console.log(paymentMethod);
+    
     // Add payment method to user's paymentMethods array
     await users.updateOne(
       { _id: userId },
@@ -59,13 +90,14 @@ export async function addPaymentMethod(req, res) {
     res.send({ message: 'Payment method added successfully' });
   } catch (error) {
     // Return error response
+    console.log(error);
     res.status(500).send({ error: error.message });
   }
 }
 
-export async function getPaymentMethods(req, res) {
+ async function getPaymentMethods(req, res) {
   // Get user id from session
-  const userId = req.session.userId;
+  const userId = req.body.userId;
   // Get user collection
   const users = User;
   // Find user by id
@@ -75,23 +107,27 @@ export async function getPaymentMethods(req, res) {
 
 }
 
-export async function deletePaymentMethod(req, res) {
+ async function deletePaymentMethod(req, res) {
   try {
     // Get user id from session
-    const userId = req.session.userId;
+    const userId = req.body.userId;
     // Get payment method id from request params
     const { paymentMethodId } = req.body;
     // Get user collection
     const users = User;
     // Find user by id
-    const user = await users.findOne({ _id: userId });
-    // Get payment method
-    const paymentMethod = user.paymentMethods[paymentMethodId];
+    const user = await users.findOne({ _id: userId },{
+      paymentMethods:{ $elemMatch : {_id:paymentMethodId}
+    }});
+    // Get payment method {purchasedCourses:{ $elemMatch : {courseID:req.body.courseID}}
+    console.log(user);
+    const payMethod = user.paymentMethods[0];
+    console.log(payMethod);
     // Delete payment method from Stripe
-    await stripe.customers.del(paymentMethod.customerId);
+    await stripe.customers.del(payMethod.customerId);
     // Delete payment method from user's paymentMethods array
     await users.updateOne(
-      { _id: userId }, { $pull: { paymentMethods: { customerId: paymentMethod.customerId } } }
+      { _id: userId }, { $pull: { paymentMethods: { customerId: payMethod.customerId } } }
     );
     // Return success response
     res.send({ message: 'Payment method deleted successfully' });
@@ -103,7 +139,7 @@ export async function deletePaymentMethod(req, res) {
   }
 }
 
-export async function Charge(req, res) {
+ async function Charge(req, res,next) {
   //1) Get the user id from the session
   //2) Get the course id from the request body
   //3) Get the instructor id from the request body
@@ -119,24 +155,66 @@ export async function Charge(req, res) {
   //13)return success response
   //14)if the payment fails return reverse the wallet update and remove the course from the purchase course array
   ////////////////////
-  // const charge = await stripe.charges.create({
-  //   amount: req.body.amount,
-  //   currency: 'usd',
-  //   customer: customerId,
-  //   description: 'Example charge',
-  /* },(error, charge) => {
+  const customerId = req.body.customerId;
+  const amount = (req.body.amount*100);
+  if(req.body.customerId){
+  const charge = await stripe.charges.create({
+    amount: amount,
+    currency: 'usd',
+    customer: customerId,
+    description: 'Example charge',
+   },(error, charge) => {
     if(error){
-      //rollback
+      console.log(error);
+      next();
+
     }
     else{
-      res.send(charge);
+      res.status(200).send("Course bought succesfully");
     }
-  })));*/
+  });
+}else{
+  const { creditCardNumber, ccv, cardHolderName,expiration} = req.body;
+
+  const month =   expiration.substring(0, 2);
+  const year = expiration.substring(3,5);
+  // Collect payment information
+  const cardNumber = creditCardNumber;
+  const cardExpMonth = month;
+  const cardExpYear = year;
+  const cardCvc = ccv;
+
+
+const cardToken = await stripe.tokens.create({
+  card: {
+    number: cardNumber,
+    exp_month: cardExpMonth,
+    exp_year: cardExpYear,
+    cvc: cardCvc,
+  },
+});
+
+  const charge = await stripe.charges.create({
+    amount: amount,
+    currency: 'USD',
+    source: cardToken.id,
+    description: 'Example charge',
+   },(error, charge) => {
+    if(error){
+      console.log(error);
+      next();
+    }
+    else{
+      res.status(200).send("Course bought succesfully");
+    }
+  });
+
+}
 
 }
 
 
-export async function Refund(req, res) {
+ async function Refund(req, res) {
 
   //1) Get the user id from the session
   //2) Get the course id from the request body
@@ -156,3 +234,5 @@ export async function Refund(req, res) {
   // });
   // res.send(refund);
 }
+
+module.exports = { Charge,addPaymentMethod,getPaymentMethods,deletePaymentMethod}

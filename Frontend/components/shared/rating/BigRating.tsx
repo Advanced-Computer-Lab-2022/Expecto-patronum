@@ -4,28 +4,32 @@ import 'rc-rate/assets/index.css';
 
 type Props = {
   Rate: number;
-  RateAction:boolean;
+  RateAction: boolean;
   Setter?: (value: number) => void;
+  Hover?: (value: number) => void;
   className?: string,
+  size?: number
 };
 
 const BigRating = (props: Props) => {
   let stars = [1, 2, 3, 4, 5];
 
-function OnChange(v: number){
-  props.Setter!(v);
-}
+  function OnChange(v: number) {
+    props.Setter!(v);
+  }
 
   return (
     <Rate
-    className={props.className}
-    disabled={!props.RateAction}
-    defaultValue={props.Rate}
-    onChange={props.Setter?OnChange:undefined}
-    style={{ fontSize: 30 }}
-    allowHalf
-    allowClear={false}
-  />
+      className={props.className}
+      disabled={!props.RateAction}
+      value={props.Rate}
+
+      onHoverChange={props.Hover ? props.Hover : undefined}
+      onChange={props.Setter ? OnChange : undefined}
+      style={{ fontSize: props.size ? props.size : 30 }}
+      allowHalf
+      allowClear={false}
+    />
     // <ul className="flex ">
     //   {stars.map((star, index) => {
     //     return (

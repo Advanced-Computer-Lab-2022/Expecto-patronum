@@ -1,28 +1,65 @@
 import axios from 'axios'
 import classNames from 'classnames'
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import Spinner from '../../components/shared/spinner/Spinner'
 import CourseSideBar from '../../components/UserCourse/CourseSideBar/CourseSideBar'
 import WatchContent from '../../components/UserCourse/WatchContent/WatchContent'
 import UserCourseCard from '../../components/UserHome/UserCourseCard'
 import DataContext from '../../context/DataContext'
-import { subtitlesData } from '../../DataFestek'
+import { AllCourseDataInterface } from '../../Interface/PurchasedCourse/AllCourseDataInterface'
 
 type Props = {}
 
 const UserCourse = (props: Props) => {
-  const [course, setCourse] = React.useState(null);
-  const { ContentChoosen, SetContentChoosen } = React.useContext(DataContext);
-  const [Next, SetNext] = React.useState(false);
-  const [Prev, SetPrev] = React.useState(false);
-  console.log(ContentChoosen)
+  const [Course, setCourse] = useState<AllCourseDataInterface>();
+  const { ContentChoosen, SetContentChoosen, SetNotes, SetProgress, WatchedVideos, SetWatchedVideos } = useContext(DataContext);
+  const [Next, SetNext] = useState(false);
+  const [Prev, SetPrev] = useState(false);
+  const [CloseSideBar, SetCloseSideBar] = useState(false);
+  const { SetCourseChoosen } = useContext(DataContext);
+  const [Loading, SetLoading] = useState(true);
+  const [Error, SetError] = useState({ Message: "", hasError: false });
   useEffect(() => {
     async function fetchData() {
-      const res = await axios("http://localhost:3000/api/course/1");
-      setCourse(res.data);
+      try {
+        SetLoading(true);
+        const res = await axios.put("http://localhost:5000/user/selectCourse", {
+          userId: "63a59b15f928fa951091f381",
+          courseId: "63a59c15e3b96b22a1dc828a"
+        })
+        let Coursedata: AllCourseDataInterface = res.data.course
+        let Notes = res.data.notes;
+        let instructorData = res.data.instructor
+        let progress = res.data.progress
+        let WatchedVideos = res.data.watchedVideos
+        setCourse(Coursedata);
+        SetCourseChoosen(Coursedata);
+        SetNotes(Notes);
+        SetProgress(progress);
+        SetWatchedVideos(WatchedVideos);
+        SetContentChoosen({
+          SubtitleID: Coursedata.subtitles[0]._id,
+          subttitleName: Coursedata.subtitles[0].header,
+          subtitleIndex: 0,
+          contentName: Coursedata.subtitles[0].contents[0].description,
+          contentIndex: 0,
+          ContentID: Coursedata.subtitles[0].contents[0]._id,
+          data: { url: Coursedata.subtitles[0].contents[0].video, time: 0 },
+          isExercise: false
+        })
+      } catch (error) {
+        //@ts-ignore
+        SetError({ Message: error.message + "", hasError: true });
+      }
+      SetLoading(false);
+
     }
+
+
     fetchData();
 
   }, [])
+
 
   function HandleNext() {
     //first loop on the subtitles with to get the index of the subttitle id
@@ -35,59 +72,67 @@ const UserCourse = (props: Props) => {
     // if the subtitle index is not the last one of the course then we will go to the next subtitle
     //we set the data of each content in the content choosen according if it is exercise or not
 
+    if (Course?.subtitles) {
 
-    let SubtitleIndex = subtitlesData.findIndex((subtitle) => subtitle._id === ContentChoosen.SubtitleID);
-    let ContentIndex = subtitlesData[SubtitleIndex].contents.findIndex((content) => content._id === ContentChoosen.ContentID);
-    if (ContentIndex === subtitlesData[SubtitleIndex].contents.length - 1) {
-      if (subtitlesData[SubtitleIndex].exercise) {
-        SetContentChoosen(prev => {
-          return {
-            ...prev,
-            SubtitleID: subtitlesData[SubtitleIndex]._id,
-            ContentID: subtitlesData[SubtitleIndex].exercise?.exerciseID || "",
-            data: { name: subtitlesData[SubtitleIndex].exercise?.exerciseName || "" },
-            isExercise: true
-          }
-        })
-      }
-      else {
-        if (SubtitleIndex === subtitlesData.length - 1) {
-          return;
+      let SubtitleIndex = Course.subtitles.findIndex((subtitle) => subtitle._id === ContentChoosen.SubtitleID);
+      let ContentIndex = Course.subtitles[SubtitleIndex].contents.findIndex((content) => content._id === ContentChoosen.ContentID);
+      if (ContentIndex === Course.subtitles[SubtitleIndex].contents.length - 1) {
+        if (Course.subtitles[SubtitleIndex]?.exercise?.length === 1) {
+          SetContentChoosen(
+            {
+              SubtitleID: Course.subtitles[SubtitleIndex]._id,  //@ts-ignore
+              subttitleName: Course.subtitles[SubtitleIndex].header,
+              subtitleIndex: SubtitleIndex,
+              contentName: Course.subtitles[SubtitleIndex].exercise[0]!.exerciseName,
+              contentIndex: ContentIndex + 1,
+              ContentID: Course.subtitles[SubtitleIndex].exercise[0]!.exerciseID || "", //@ts-ignore
+              data: { name: Course.subtitles[SubtitleIndex].exercise[0].exerciseName || "" },
+              isExercise: true
+
+            }
+          )
         }
         else {
-          SetContentChoosen(prev => {
-            return {
-              ...prev,
-              SubtitleID: subtitlesData[SubtitleIndex + 1]._id,
-              ContentID: subtitlesData[SubtitleIndex + 1].contents[0]._id,
-              data: { url: subtitlesData[SubtitleIndex + 1].contents[0].video, time: 0 },
+          if (SubtitleIndex === Course.subtitles.length - 1) {
+            return;
+          }
+          else {
+            SetContentChoosen({
+              SubtitleID: Course.subtitles[SubtitleIndex + 1]._id,
+              subttitleName: Course.subtitles[SubtitleIndex + 1].header,
+              subtitleIndex: SubtitleIndex + 1,
+              contentName: Course.subtitles[SubtitleIndex + 1].contents[0].description,
+              contentIndex: 0,
+              ContentID: Course.subtitles[SubtitleIndex + 1].contents[0]._id,
+              data: { url: Course.subtitles[SubtitleIndex + 1].contents[0].video, time: 0 },
               isExercise: false
             }
-          })
+            )
+          }
         }
       }
+      else {
+        SetContentChoosen(
+          {
+            SubtitleID: ContentChoosen.SubtitleID,
+            subttitleName: ContentChoosen.subttitleName,
+            subtitleIndex: SubtitleIndex,
+            contentName: Course.subtitles[SubtitleIndex].contents[ContentIndex + 1].description,
+            contentIndex: ContentIndex + 1,
+            ContentID: Course.subtitles[SubtitleIndex].contents[ContentIndex + 1]._id,
+            data: { url: Course.subtitles[SubtitleIndex].contents[ContentIndex + 1].video, time: 0 },
+            isExercise: false
+          }
+        )
+      }
+      if (ContentIndex === Course.subtitles[SubtitleIndex].contents.length - 2) {
+        SetNext(false);
+      }
+      SetPrev(true);
     }
-    else {
-      SetContentChoosen(prev => {
-        return {
-          ...prev,
-          SubtitleID: ContentChoosen.SubtitleID,
-          ContentID: subtitlesData[SubtitleIndex].contents[ContentIndex + 1]._id,
-          data: { url: subtitlesData[SubtitleIndex].contents[ContentIndex + 1].video, time: 0 },
-          isExercise: false
-        }
-      })
-    }
-    if (ContentIndex === subtitlesData[SubtitleIndex].contents.length - 2) {
-      SetNext(false);
-    }
-    SetPrev(true);
+
 
   }
-
-
-
-
   function HandlePrev() {
     //first loop on the subtitles with to get the index of the subttitle id
     // second loop on the contents of the subtitle to get the index of the content id
@@ -99,72 +144,99 @@ const UserCourse = (props: Props) => {
     // if the subtitle index is not the first one of the course then we will go to the prev subtitle
     //we set the data of each content in the content choosen according if it is exercise or not
     //we set the next and prev button according to the content index
+    if (Course?.subtitles) {
 
-
-    let SubtitleIndex = subtitlesData.findIndex((subtitle) => subtitle._id === ContentChoosen.SubtitleID);
-    let ContentIndex = 0;
-    if (ContentChoosen.isExercise) {
-      ContentIndex = subtitlesData[SubtitleIndex].contents.length;
-    }
-    else {
-      ContentIndex = subtitlesData[SubtitleIndex].contents.findIndex((content) => content._id === ContentChoosen.ContentID);
-
-    }
-    if (ContentIndex === 0) {
-      if (SubtitleIndex === 0) {
-        return;
+      let SubtitleIndex = Course.subtitles.findIndex((subtitle) => subtitle._id === ContentChoosen.SubtitleID);
+      let ContentIndex = 0;
+      if (ContentChoosen.isExercise) {
+        ContentIndex = Course.subtitles[SubtitleIndex].contents.length;
       }
       else {
-        if (subtitlesData[SubtitleIndex - 1].exercise) {
-          SetContentChoosen(prev => {
-            return {
-              ...prev,
-              SubtitleID: subtitlesData[SubtitleIndex - 1]._id,
-              ContentID: subtitlesData[SubtitleIndex - 1].exercise?.exerciseID || "",
-              data: { name: subtitlesData[SubtitleIndex - 1].exercise?.exerciseName || "" },
-              isExercise: true
-            }
-          })
+        ContentIndex = Course.subtitles[SubtitleIndex].contents.findIndex((content) => content._id === ContentChoosen.ContentID);
+
+      }
+      if (ContentIndex === 0) {
+        if (SubtitleIndex === 0) {
+          return;
         }
         else {
-          SetContentChoosen(prev => {
-            return {
-              ...prev,
-              SubtitleID: subtitlesData[SubtitleIndex - 1]._id,
-              ContentID: subtitlesData[SubtitleIndex - 1].contents[subtitlesData[SubtitleIndex - 1].contents.length - 1]._id,
-              data: { url: subtitlesData[SubtitleIndex - 1].contents[subtitlesData[SubtitleIndex - 1].contents.length - 1].video, time: 0 },
-              isExercise: false
-            }
-          })
+          if (Course.subtitles[SubtitleIndex - 1].exercise?.length === 1) {
+            SetContentChoosen(
+              {
+                SubtitleID: Course.subtitles[SubtitleIndex - 1]._id,             //@ts-ignore
+                subttitleName: Course.subtitles[SubtitleIndex - 1].header,
+                subtitleIndex: SubtitleIndex - 1,
+                contentName: Course.subtitles[SubtitleIndex - 1].exercise[0]!.exerciseName,
+                contentIndex: Course.subtitles[SubtitleIndex - 1].contents.length,
+                ContentID: Course.subtitles[SubtitleIndex - 1].exercise[0]!.exerciseID || "", //@ts-ignore
+                data: { name: Course.subtitles[SubtitleIndex - 1].exercise[0].exerciseName || "" },
+                isExercise: true
+              }
+            )
+          }
+          else {
+            SetContentChoosen(
+              {
+                SubtitleID: Course.subtitles[SubtitleIndex - 1]._id,
+                subttitleName: Course.subtitles[SubtitleIndex - 1].header,
+                subtitleIndex: SubtitleIndex - 1,
+                contentName: Course.subtitles[SubtitleIndex - 1].contents[Course.subtitles[SubtitleIndex - 1].contents.length - 1].description,
+                contentIndex: Course.subtitles[SubtitleIndex - 1].contents.length - 1,
+                ContentID: Course.subtitles[SubtitleIndex - 1].contents[Course.subtitles[SubtitleIndex - 1].contents.length - 1]._id,
+                data: { url: Course.subtitles[SubtitleIndex - 1].contents[Course.subtitles[SubtitleIndex - 1].contents.length - 1].video, time: 0 },
+                isExercise: false
+
+              })
+          }
         }
       }
-    }
-    else {
+      else {
 
-      SetContentChoosen(prev => {
-        return {
-          ...prev,
-          SubtitleID: ContentChoosen.SubtitleID,
-          ContentID: subtitlesData[SubtitleIndex].contents[ContentIndex - 1]._id,
-          data: { url: subtitlesData[SubtitleIndex].contents[ContentIndex - 1].video, time: 0 },
-          isExercise: false
-        }
-      })
+        SetContentChoosen(
+          {
+            SubtitleID: ContentChoosen.SubtitleID,
+            subttitleName: ContentChoosen.subttitleName,
+            subtitleIndex: SubtitleIndex,
+            contentName: Course.subtitles[SubtitleIndex].contents[ContentIndex - 1].description,
+            contentIndex: ContentIndex - 1,
+            ContentID: Course.subtitles[SubtitleIndex].contents[ContentIndex - 1]._id,
+            data: { url: Course.subtitles[SubtitleIndex].contents[ContentIndex - 1].video, time: 0 },
+            isExercise: false
+          }
+        )
+      }
+      if (ContentIndex === 0 && SubtitleIndex === 0) {
+        SetPrev(false);
+      }
+      SetNext(true);
     }
-    if (ContentIndex === 0 && SubtitleIndex === 0) {
-      SetPrev(false);
-    }
-    SetNext(true);
+
   }
 
+  if (Loading) {
+    return (
+      <Spinner></Spinner>
+    )
+  }
+  if (Error.hasError) {
+    return (
+      <div className="overflow-x-hidden">
+        <div className='flex w-[100vw] h-[100vh] justify-center items-center  bg-navbar'>
+          <p className=' text-4xl font-bold text-white'>{Error.Message}</p>
+        </div>
+      </div>
+    )
+  }
 
-  return (
-    <div className={UserCourseContainer}>
-      <WatchContent Next={Next} Prev={Prev} HandleNext={HandleNext} HandlePrev={HandlePrev}></WatchContent>
-      <CourseSideBar></CourseSideBar>
-
-    </div>
-  )
+  if (Course) {
+    return (
+      <div className={UserCourseContainer + " " + (CloseSideBar && "overflow-x-hidden")}>
+        <WatchContent Next={Next} Prev={Prev} HandleNext={HandleNext} HandlePrev={HandlePrev}></WatchContent>
+        <CourseSideBar data={Course.subtitles} SetCloseSideBar={SetCloseSideBar} CloseSideBar={CloseSideBar}></CourseSideBar>
+        {CloseSideBar && <div onClick={() => { SetCloseSideBar(false) }} className='absolute bg-red-800 w-11  top-20  right-0'>Arrow</div>}
+      </div>
+    )
+  }
 }
 
 export default UserCourse

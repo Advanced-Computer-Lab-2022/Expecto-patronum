@@ -113,13 +113,22 @@ const UserSchema = new mongoose.Schema({
       type: Number,
       default: 0
     },
-    watchedVideos:[String],
-    notes:[{
-      contentID:String,
-      timestamp:String,
-      note:String
+    lastWatched: {
+      type: String,
+      default: "Null"
+    },
+    watchedVideos: [String],
+    notes: [{
+      subtitleName: String,
+      contentName: String,
+      subtitleIndex: Number,
+      contentIndex: Number,
+      contentID: String,
+      subtitleID: String,
+      timestamp: String,
+      note: String
     }]
-}],
+  }],
 
   biography: {
     type: String
@@ -130,9 +139,10 @@ const UserSchema = new mongoose.Schema({
   },
   paymentMethods: [{
     last4: Number,
-    expiration: Date,
+    expiration: String,
     name: String,
-    customerId: String
+    customerId: String,
+    cardType: String
   }]
 
 });
