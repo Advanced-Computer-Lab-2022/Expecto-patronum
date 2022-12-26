@@ -30,7 +30,7 @@ export interface InterfaceFilter {
 const defualtFilter = {
   Filter: { Subject: [], Rating: [], Price: [], Page: 1, Keyword: [] },
   SetFilter: () => { },
-  Rate: { rate: 1, curr: "USD", Country: "US" },
+  Rate: { rate: 1, curr: "$", Country: "US" },
   SetRate: () => { },
   Profile: "AccountInfo" as "AccountInfo" | "Wallet" | "Tickets",
   SetProfile: () => { },

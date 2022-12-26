@@ -88,6 +88,6 @@ const index = (props: Props) => {
 }
 
 const profileIconImg = classNames('rounded-full opacity-100 border-2 relative top-4 border-canadian-red h-28 w-28');
-const submitButton = classNames('mt-16 text-lg hover:bg-input hover:text-white hover:rounded-md h-10 py-2 px-4 ml-3 font-medium text-input bg-transparent');
+const submitButton = classNames('mt-16 text-lg hover:bg-[#0B80F3] hover:text-white hover:rounded-md h-10 py-2 px-4 ml-3 font-medium text-[#0B80F3] bg-transparent');
 
 export default index;

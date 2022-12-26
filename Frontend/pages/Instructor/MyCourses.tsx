@@ -13,12 +13,14 @@ import { MdModeEditOutline } from 'react-icons/md';
 import { TbDiscount2 } from 'react-icons/tb';
 import InstructorCourseCard from '../../components/Instructor/InstructorCourseCard/InstructorCourseCard';
 import DataContext from '../../context/DataContext';
+import InstructorCourseCardSkeleton from '../../components/Instructor/InstructorCourseCard/InstructorCourseCardSkeleton';
 
 type Props = {}
 
 const MyCourses = (props: Props) => {
 
-  const [courses, setCourses] = useState();
+  const [courses, setCourses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(Math.ceil(totalCount/10));
   const [search, setSearch] = useState('');
@@ -56,6 +58,7 @@ const MyCourses = (props: Props) => {
         console.log( 'Get',res.data.Courses);
         setCourses(res.data.Courses);
         setTotalCount(res.data.TotalCount);
+        setIsLoading(false);
       });
 
       setPage(!isSearch ? pageIndex: 0);
@@ -147,6 +150,7 @@ const MyCourses = (props: Props) => {
           </div>
 
           <div className={(!isViewList ? 'grid grid-flow-row grid-cols-1 md:grid-cols-2 3lg:grid-cols-3 gap-x-20': '') + ' sb-max:ml-8 sb-max:mr-22 mx-8'}>
+            {courses.length == 0 ? isLoading && <InstructorCourseCardSkeleton count={10} isViewList={isViewList}  /> : undefined}
             {(courses ? courses: courseData).map((course: any, index: number) => {
               return (
                 <InstructorCourseCard key={index} course={course} color={levelColor(course.level)} isViewList={isViewList} />

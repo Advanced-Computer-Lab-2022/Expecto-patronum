@@ -5,6 +5,7 @@ import { AiOutlineClear } from 'react-icons/ai';
 import countryList from 'react-select-country-list';
 import DataContext from '../../../../context/DataContext';
 import axios from "axios";
+import Currency from 'iso-country-currency';
 
 
 type Props = {}
@@ -14,12 +15,12 @@ const SelectCountry = (props: Props) => {
     const selectRef = useRef<any>();
     const selectCountryRef = useRef<any>();
     const inputCountryRef = useRef<any>();
-    const [countries, setCountries] = useState(countryList().getData());
+    const [countries, setCountries] = useState(Currency.getAllISOCodes());
     const { Rate, SetRate } = useContext(DataContext);
 
     const filterSearch = () => {
-        const includedCountries = countryList().getData().filter((country) => (
-            country.label.toLowerCase().includes(inputCountryRef.current.value.toLowerCase())
+        const includedCountries = Currency.getAllISOCodes().filter((country) => (
+            country.countryName.toLowerCase().includes(inputCountryRef.current.value.toLowerCase())
         ));
         setCountries(includedCountries);
     }
@@ -40,7 +41,7 @@ const SelectCountry = (props: Props) => {
         let  response = await axios
           .get("http://localhost:5000/User/countryRate", {
             params: {
-              country: country.value,
+              country: country.iso,
             },
           })
           .then((res: { data: any }) => {
@@ -68,6 +69,9 @@ const SelectCountry = (props: Props) => {
         }
       }, []);
 
+      // useEffect(() => {
+      //   console.log(Currency.getAllISOCodes());
+      // }, [])
 
     useEffect(() => {
         document.onmouseup = ((e) => {
@@ -122,7 +126,7 @@ const SelectCountry = (props: Props) => {
             <div className={allCountries}>
                 <form>
                 {countries.map((country) => (
-                    <button key={country.value} className={countryStyle} onClick={(e) => selectCountry(e, country)}>{country.label}</button>
+                    <button key={country.iso} className={countryStyle} onClick={(e) => selectCountry(e, country)}>{country.countryName}</button>
                 ))}
                 </form>
             </div>

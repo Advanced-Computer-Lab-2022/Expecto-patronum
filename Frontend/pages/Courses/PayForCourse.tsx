@@ -1,10 +1,11 @@
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import CreditCard from '../../components/shared/CreditCard/CreditCard';
 import OneStar from '../../components/shared/rating/OneStar';
 import { useRouter } from 'next/router';
+import DataContext from '../../context/DataContext';
 
 type Props = {
 
@@ -16,6 +17,8 @@ const PayForCourse = (props: Props) => {
     const paymentRef = useRef<HTMLDivElement>(null);
     const paymentTabRef = useRef<HTMLDivElement>(null);
     const summaryTabRef = useRef<HTMLDivElement>(null);
+
+    const { Rate } = useContext(DataContext);
 
     let router = useRouter();
 
@@ -80,11 +83,11 @@ const PayForCourse = (props: Props) => {
 
   return (
     <div ref={paymentRef} className='h-full relative nv:flex items-start'>
-        {<div className='w-[calc(100%-24rem)] nv-max:w-full pt-3 pl-4 nv:h-screen flex flex-col justify-between'>
+        {<div className='w-[calc(100%-24rem)] nv-max:w-full pt-3 nv:pl-4 nv:h-screen flex flex-col justify-between'>
             <div>
                 <h1 className='text-3xl nv-max:text-center'>Payment Summary</h1>
                 
-                <div className='bg-white shadow-md rounded-md ml-6 mt-3 mr-8 py-4 px-2 mb-3 nv:mb-5 relative'>
+                <div className='bg-white shadow-md rounded-md nv:ml-6 mt-3 nv:mr-8 nv-max:mx-6 py-4 px-2 mb-3 nv:mb-5 relative'>
                     <OneStar rating={4.2} className='bg-white rounded-bl-xl rounded-tr-md absolute top-0 right-0 py-2 px-3 shadow-md hover:shadow-sm transition-all duration-200' />
                     <div className='flex items-center h-22 mt-3'>
                         <Image width={100} height={100} src='/images/Course Icons/python.png' className={`rounded-md mr-4 nv-max:h-18 nv-max:w-18 w-22 h-22 p-2`} alt='' />
@@ -92,8 +95,8 @@ const PayForCourse = (props: Props) => {
                             <h1 className='text-2xl nv-max:text-lg font-bold nv:leading-tight line-clamp-2'>Learn Python: The Complete Python Programming Course</h1>
                             <div className='flex items-center space-x-4'>
                                 <label className={`bg-black px-1 text-white`}>-20%</label>
-                                <label className={`text-lg nv-max:text-base`}>$59.49</label>
-                                <label className={`line-through text-[#7580A0]`}>$69.99</label>
+                                <label className={`text-lg nv-max:text-base`}>{Rate.curr} {(Rate.rate * 59.49).toFixed(2)}</label>
+                                <label className={`line-through text-[#7580A0]`}>{Rate.curr} {(Rate.rate * 69.99).toFixed(2)}</label>
                             </div>
                         </div>
                     </div>
@@ -108,27 +111,27 @@ const PayForCourse = (props: Props) => {
                 <p className='text-xs mb-3'>By selecting [Confirm Purchase], you agree to complete the purchase on accordance with the <Link className='text-blue-600 hover:text-blue-800' href=''>Terms of Service</Link> before using this course.</p>
                 <div className='flex justify-between mx-1'>
                     <p>Subtotal:</p>
-                    <p>$69.99</p>
+                    <p>{Rate.curr} {(Rate.rate * 69.99).toFixed(2)}</p>
                 </div>
                 <div className='flex justify-between mx-1'>
                     <p>Tax:</p>
-                    <p>$0.00</p>
+                    <p>{Rate.curr} {(Rate.rate * 0.00).toFixed(2)}</p>
                 </div>
                 <div className='flex justify-between mx-1 text-blue-700'>
                     <p>Discount:</p>
-                    <p>$10.50</p>
+                    <p>{Rate.curr} {(Rate.rate * 10.50).toFixed(2)}</p>
                 </div>
                 <div className='flex justify-between mx-1 font-bold'>
                     <p>Total Amount:</p>
-                    <p>$59.49</p>
+                    <p>{Rate.curr} {(Rate.rate * 59.49).toFixed(2)}</p>
                 </div>
             </div>
         </div>}
         <CreditCard className='nv-max:hidden nv-max:w-full nv-max:shadow-none' />
         <div className='nv:hidden space-y-5 relative'>
-            <div className='flex items-center justify-center space-x-2 ml-10'>
-                <div ref={summaryTabRef} className='h-[0.15rem] w-10 bg-[#0B80F3] transition-all duration-200'></div>
-                <div ref={paymentTabRef} className='h-[0.15rem] w-4 bg-gray-400 transition-all duration-200'></div>
+            <div className='flex items-center justify-center space-x-2'>
+                <div ref={summaryTabRef} className='h-[0.18rem] w-10 bg-[#0B80F3] transition-all duration-200'></div>
+                <div ref={paymentTabRef} className='h-[0.18rem] w-4 bg-gray-400 transition-all duration-200'></div>
             </div>
             <div className='flex items-center justify-between space-x-4 mb-4 mx-10'>
                 <button onClick={goBack} className='border-[#0B80F3] border-2 hover:bg-[#096BCB] text-[#0B80F3] hover:border-[#096BCB] hover:text-white px-3 py-1.5 rounded-md transition-all duration-200'>Back</button>

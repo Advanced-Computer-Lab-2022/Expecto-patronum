@@ -1,18 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import type { NextPage } from "next";
-import UserHome from "./User";
-import UserProfile from "../components/userProfile/UserProfile";
-import Modal from "../components/shared/Modal/Modal";
 import classNames from "classnames";
 import { HiArrowNarrowRight } from "react-icons/hi";
 import Image from "next/image";
-import { Diversity1 } from "@mui/icons-material";
-import BigRating from "../components/shared/rating/BigRating";
-import DataContext from "../context/DataContext";
-import { MdOutlineFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
 import axios from "axios";
-import Link from "next/link";
 import SmallCourseCard from "../components/shared/SmallCourseCard/SmallCourseCard";
+import SmallCourseCardSkeleton from "../components/shared/SmallCourseCard/SmallCourseCardSkeleton";
 
 const Home: NextPage = () => {
 
@@ -20,6 +13,7 @@ const Home: NextPage = () => {
   const homePageImageRef = useRef<any>();
   const homePageImageBackgroundRef = useRef<any>();
   const [popularCourses, setPopularCourses] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(()=> {
     Array.from(homePageImageRef.current.children).map((image: any) => {
@@ -37,6 +31,7 @@ const Home: NextPage = () => {
       axios.defaults.withCredentials = true;
       await axios.get("http://localhost:5000/Courses/popularCourses").then((res: { data: any }) => {
           setPopularCourses(res.data);
+          setIsLoading(false);
       });
     }
 
@@ -77,12 +72,12 @@ const Home: NextPage = () => {
             <div className="w-[22rem] h-[22rem] nv-max:w-[16.5rem] nv-max:h-[16.5rem] bg-calm-red rounded-full"></div>
           </div>
           <div ref={homePageImageRef}>
-            <Image as='image' width={'640'} height={'120'} className={`${homePageImage} delay-75`} src="/images/Home Page/Part 1.png" alt={""} />
-            <Image as='image' width={'640'} height={'120'} className={`${homePageImage}`} src="/images/Home Page/Part 2.png" alt={""} />
-            <Image as='image' width={'640'} height={'120'} className={`${homePageImage}`} src="/images/Home Page/Part 3.png" alt={""} />
-            <Image as='image' width={'640'} height={'120'} className={`${homePageImage} delay-150`} src="/images/Home Page/Part 4.png" alt={""} />
-            <Image as='image' width={'640'} height={'120'} className={`${homePageImage} delay-150`} src="/images/Home Page/Part 5.png" alt={""} />
-            <Image as='image' width={'640'} height={'120'} className={`${homePageImage} delay-75`} src="/images/Home Page/Part 6.png" alt={""} />
+            <Image as='image' width={60} height={60} className={`${homePageImage} delay-75`} src="/images/Home Page/Part 1.png" alt={""} />
+            <Image as='image' width={60} height={60} className={`${homePageImage}`} src="/images/Home Page/Part 2.png" alt={""} />
+            <Image as='image' width={60} height={60} className={`${homePageImage}`} src="/images/Home Page/Part 3.png" alt={""} />
+            <Image as='image' width={60} height={60} className={`${homePageImage} delay-150`} src="/images/Home Page/Part 4.png" alt={""} />
+            <Image as='image' width={60} height={60} className={`${homePageImage} delay-150`} src="/images/Home Page/Part 5.png" alt={""} />
+            <Image as='image' width={60} height={60} className={`${homePageImage} delay-75`} src="/images/Home Page/Part 6.png" alt={""} />
           </div>
         </div>
       </section>
@@ -100,6 +95,7 @@ const Home: NextPage = () => {
           </a>
         </div>
         <div className="overflow-x-auto flex items-center my-1 p-3">
+          {isLoading && <SmallCourseCardSkeleton count={10} />}
           {
             (popularCourses.length !== 0 ? popularCourses: courseData).map((course: any, index: number) => (
               <SmallCourseCard addToWishlist={addToWishlist} course={course} courseColor={levelColor} key={index} index={index} />
@@ -117,6 +113,7 @@ const Home: NextPage = () => {
           </a>
         </div>
         <div className="overflow-x-auto flex items-center my-1 p-3">
+        {isLoading && <SmallCourseCardSkeleton count={10} />}
         {
             (popularCourses.length !== 0 ? popularCourses: courseData).map((course: any, index: number) => (
               <SmallCourseCard addToWishlist={addToWishlist} course={course} courseColor={levelColor} key={index} index={index} />
@@ -128,7 +125,7 @@ const Home: NextPage = () => {
   );
 };
 
-var homePageImage = classNames('absolute scale-[1.65] -right-[40rem] top-19 nv-max:scale-135 nv-max:top-9 transition-all duration-1000 pointer-events-none');
+var homePageImage = classNames('absolute scale-[1.65] -right-[40rem] min-w-[40rem] min-h-[7.5rem] top-19 nv-max:scale-135 nv-max:top-9 transition-all duration-1000 pointer-events-none');
 
 export default Home;
 

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Layout from "./Layout";
 import { IoIosNotificationsOutline } from 'react-icons/io';
@@ -8,6 +8,8 @@ import SmallCourseCard from '../../components/shared/SmallCourseCard/SmallCourse
 import { QuestionMarkSharp } from '@mui/icons-material';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import ReviewsAndQuestions from '../../components/shared/Review/ReviewsAndQuestions';
+import axios from 'axios';
+import SmallCourseCardSkeleton from '../../components/shared/SmallCourseCard/SmallCourseCardSkeleton';
 
 type Props = {}
 
@@ -53,6 +55,21 @@ const Instructor = (props: Props) => {
     'css-3.png', 'cyber-security.png',
   ];
 
+  const [topRated, setTopRated] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState<any>([]);
+
+  useEffect(() => {
+    async function getPopularCourses() {
+      axios.defaults.withCredentials = true;
+      await axios.get("http://localhost:5000/Courses/popularCourses").then((res: { data: any }) => {
+        setTopRated(res.data);
+        setIsLoading(false);
+      });
+    }
+
+    getPopularCourses();
+  }, [])
+
   function levelColor(level: string) {
     switch(level) {
         case 'Beginner': return 'from-[#2f8608] to-[#52EB0E]';
@@ -80,8 +97,9 @@ const Instructor = (props: Props) => {
             <div id="most-rated" className="text-left mt-3 ml-2">
               <h1 className="text-xl font-bold">Your Students' Favorite</h1>
               <div className="overflow-x-auto overflow-y-hidden flex items-center h-68 4lg:h-fit 4lg:p-3">
+                {isLoading && <SmallCourseCardSkeleton count={8} className='scale-[0.85] 4lg:mr-10 4lg:scale-100 4lg:hover:scale-[1.01] hover:scale-[0.86]' />}
                 {
-                  courseData.map((course: any, index: number) => (
+                  topRated.map((course: any, index: number) => (
                     <SmallCourseCard className={`${index === 0 ? '': '-ml-4'} scale-[0.85] 4lg:mr-10 4lg:scale-100 4lg:hover:scale-[1.01] hover:scale-[0.86]`} course={course} courseColor={levelColor} key={index} index={index} />
                   ))
                 }
@@ -146,7 +164,7 @@ const MonthlyCard = (props: MonthlyCardProps) => {
         <div className='h-13 rounded-full relative min-w-[0.125rem] bg-gray-300' />
         <div className='flex flex-col'>
           <h1 className='opacity-60 relative bottom-2 text-sm'>Amount</h1>
-          <h1>{((props.money.money * Rate.rate) - 0.01).toFixed(2)} {Rate.curr}</h1>
+          <h1>{Rate.curr}{((props.money.money * Rate.rate) - 0.01).toFixed(2)}</h1>
         </div>
       </div>
     </div>

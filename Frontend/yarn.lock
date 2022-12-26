@@ -1476,6 +1476,11 @@ cosmiconfig@^7.0.0, cosmiconfig@>=7:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+country-currency-list@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/country-currency-list/-/country-currency-list-1.0.0.tgz"
+  integrity sha512-GCkd3Dz+ldai0XKynIw8OgTZx7i5D3uvJN6RQeKYXXvNXR/3box03L7OduvrlxeI7ydU0PcUKPjzeplqFGQQVw==
+
 create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.npmjs.org/create-require/-/create-require-1.1.1.tgz"
@@ -1518,6 +1523,11 @@ csstype@^3.0.2, csstype@^3.1.1:
   version "3.1.1"
   resolved "https://registry.npmjs.org/csstype/-/csstype-3.1.1.tgz"
   integrity sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==
+
+currency-list@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.npmjs.org/currency-list/-/currency-list-1.0.8.tgz"
+  integrity sha512-KBUtf8AzoP2WYeAKUYFhhNdHRx8Xw2UoOUnBNVir43RxL96T+iSHMtThtT1DFNtYbbVVyD08ETe3aamn+JX7RA==
 
 cz-conventional-changelog@3.3.0:
   version "3.3.0"
@@ -2665,6 +2675,11 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
+
+iso-country-currency@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.npmjs.org/iso-country-currency/-/iso-country-currency-0.6.0.tgz"
+  integrity sha512-OPocsi53/vS0VblF4HV4k/jnz9xXoCTWxKqOgdcdfFgIBcgS3qNP0n9p5AJAqaz3aQNf4xndereV1LhDggeKUA==
 
 jest-worker@^27.4.5:
   version "27.5.1"

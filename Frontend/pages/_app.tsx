@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
+import 'react-loading-skeleton/dist/skeleton.css';
 import Head from "next/head";
 import Navbar from "../components/shared/Navbar/Navbar";
 import Footer from "../components/shared/Footer/Footer";

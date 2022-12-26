@@ -51,7 +51,7 @@ const SmallCourseCard = (props: Props) => {
             </div>
           </div>
         </Link>
-        <p className="italic text-right absolute bottom-2 right-4 text-[#00A15D]">{Math.floor(props.course.price * Rate.rate)} {Rate.curr}</p>
+        <p className="italic text-right absolute bottom-2 right-4 text-[#00A15D]">{Rate.curr} {Math.floor(props.course.price * Rate.rate)}</p>
         <button onClick={props.addToWishlist} title="Add to Wishlist" className={`${props.addToWishlist ? '': 'hidden'} absolute shadow-md right-2 top-2 z-50 rounded-full bg-white h-7 w-7 p-2 hover:scale-110 hover:shadow-lg transition-all duration-200`}>
           <MdOutlineFavoriteBorder className="scale-125 absolute right-1.5 top-1.5 transition-all duration-200" />
           <MdOutlineFavorite className="scale-125 absolute text-calm-red right-1.5 top-1.5 opacity-0 transition-all duration-200" />
