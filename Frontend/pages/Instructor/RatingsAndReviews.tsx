@@ -1,11 +1,10 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import Pagination from '../../components/shared/pagination/Pagination'
-import ProgressBar from '../../components/shared/progress/ProgressBar'
-import ProgressBar2 from '../../components/shared/progress/ProgressBar2'
-import BigRating from '../../components/shared/rating/BigRating'
-import Review from '../../components/shared/Review/Review'
-import Layout from './Layout'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import Pagination from '../../components/shared/pagination/Pagination';
+import ProgressBar2 from '../../components/shared/progress/ProgressBar2';
+import BigRating from '../../components/shared/rating/BigRating';
+import ReviewsAndQuestions from '../../components/shared/Review/ReviewsAndQuestions';
+import Layout from './Layout';
 
 type Props = {}
 
@@ -49,8 +48,9 @@ const RatingsAndReviews = (props: Props) => {
 
   return (
     <Layout>
-      {ratings && reviews && totalRatings && <div className='sb-max:min-w-[fit] text-center'>
+      {ratings && reviews && totalRatings && <div className='sb-max:min-w-without-instructor-sidebar-closed text-center'>
         <div className='mt-10 space-y-2'>
+          <h1 className='text-3xl'>Personal Ratings & Reviews</h1>
           <h1 className='text-5xl'>{ratings.avg.toFixed(1)}</h1>
           <p>{totalRatings.toLocaleString()} Ratings &#128900; {reviews.length} Reviews</p>
           <BigRating Rate={ratings.avg.toFixed(1)} RateAction={false} />
@@ -82,9 +82,12 @@ const RatingsAndReviews = (props: Props) => {
 
         <hr className='my-4' />
 
-        <div className='px-8'>
+        <div className='px-4'>
           {reviews.slice(10*page, 10*(page+1)).map((review: any, index: number) => (
-            <Review key={index} reviewer={review} />
+            <div key={index}>
+              <ReviewsAndQuestions user={review} isReview />
+              {(index < reviews.slice(10*page, 10*(page+1)).length-1) && <hr className='my-4 border-2 rounded-full' />}
+            </div>
           ))}
         </div>
         <Pagination page={page} setPage={setPage} pageCount={numberOfPages} />

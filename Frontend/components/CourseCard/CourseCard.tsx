@@ -80,8 +80,7 @@ const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
           </p>
           <p className="text-sm text-black/90  ">{Math.round(courseHours)} hours</p>
           <p className="text-sm text-black font-bold  ">
-            {Math.floor(price * Rate.rate)}
-            {Rate.curr}
+            {Rate.curr} {Math.floor(price * Rate.rate)}
           </p>
           <div className="absolute bottom-0 right-10">
             <div className="w-32 ">

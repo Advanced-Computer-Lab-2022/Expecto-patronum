@@ -13,6 +13,7 @@ const { Passport } = require("passport");
 const ExerciseTable = require('../models/ExcerciseSchema');
 const requestTable = require('../models/RequestSchema');
 const transactionTable = require('../models/transactionSchema');
+const Currency = require('iso-country-currency');
 
 async function register(req, res) {
   const saltHash = genPassword(req.body.password);
@@ -86,16 +87,16 @@ async function ViewAll(req, res) {
 
 async function getRate(req, res, next) {
   const country = req.query.country;
-  console.log("country " + country);
-  const curr = countryToCurrency[country];
-  let currencyConverter = new CC({ from: "USD", to: curr, amount: 1 });
+  console.log("country " + country, Currency.getAllInfoByISO(country).symbol);
+  const iso = countryToCurrency[country];
+  let currencyConverter = new CC({ from: "USD", to: iso, amount: 1 });
   var rate = 1;
   await currencyConverter.rates().then((response) => {
     rate = response;
   });
-  console.log("rate " + rate);
+  console.log("rate: " + rate + ',iso: ' + iso);
   try {
-    res.send({ rate: rate, curr: curr });
+    res.send({ rate: rate, curr: Currency.getAllInfoByISO(country).symbol });
   } catch (error) {
     console.log(error);
   }
