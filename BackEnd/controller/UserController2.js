@@ -507,4 +507,4 @@ async function lastWatched(req, res, next) {
 
 
   module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,
-    followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes,createTransaction,lastWatched,payWithWallet}
+    followUpOnProblem,watchVideo,addNote,viewNotes,EditNote,DeleteNote,filterNotes,createTransaction,lastWatched,payWithWallet}

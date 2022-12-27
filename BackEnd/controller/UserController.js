@@ -38,6 +38,7 @@ async function register(req, res) {
       username: req.body.username,
       hash: hash,
       salt: salt,
+      gender:req.body.gender,
       email: req.body.email,
       firstname: req.body.firstname,
       lastname: req.body.lastname,

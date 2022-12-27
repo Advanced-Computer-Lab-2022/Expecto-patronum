@@ -34,9 +34,7 @@ async function viewCourses(req, res, next) {
 
     const unique = await CourseTable.distinct("subject", queryCond);
     var TotalCount = await CourseTable.countDocuments(queryCond);
-    //var searchResults = Courses.slice((CurrentPage - 1) * 5, CurrentPage * 5);
     res.send({ Courses: Courses, TotalCount: TotalCount, subject: unique });
-
   }
   catch (err) {
     res.status(400).json({error:err.message})
@@ -391,11 +389,13 @@ async function updateBio(req,res){
           instructorRating: 1,
           biography: 1,
           _id: 1,
+          gender:1,
           firstname: 1,
           lastname: 1,
           instructorReview: { "$slice": 3 }
 
         });
+
         res.status(200).send(instructor);
       }
       catch(error){
