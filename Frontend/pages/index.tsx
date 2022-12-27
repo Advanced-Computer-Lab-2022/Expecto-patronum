@@ -72,12 +72,12 @@ const Home: NextPage = () => {
             <div className="w-[22rem] h-[22rem] nv-max:w-[16.5rem] nv-max:h-[16.5rem] bg-calm-red rounded-full"></div>
           </div>
           <div ref={homePageImageRef}>
-            <Image as='image' width={60} height={60} className={`${homePageImage} delay-75`} src="/images/Home Page/Part 1.png" alt={""} />
-            <Image as='image' width={60} height={60} className={`${homePageImage}`} src="/images/Home Page/Part 2.png" alt={""} />
-            <Image as='image' width={60} height={60} className={`${homePageImage}`} src="/images/Home Page/Part 3.png" alt={""} />
-            <Image as='image' width={60} height={60} className={`${homePageImage} delay-150`} src="/images/Home Page/Part 4.png" alt={""} />
-            <Image as='image' width={60} height={60} className={`${homePageImage} delay-150`} src="/images/Home Page/Part 5.png" alt={""} />
-            <Image as='image' width={60} height={60} className={`${homePageImage} delay-75`} src="/images/Home Page/Part 6.png" alt={""} />
+            <Image as='image' width={600} height={600} className={`${homePageImage} delay-75`} src="/images/Home Page/Part 1.png" alt={""} />
+            <Image as='image' width={600} height={600} className={`${homePageImage}`} src="/images/Home Page/Part 2.png" alt={""} />
+            <Image as='image' width={600} height={600} className={`${homePageImage}`} src="/images/Home Page/Part 3.png" alt={""} />
+            <Image as='image' width={600} height={600} className={`${homePageImage} delay-150`} src="/images/Home Page/Part 4.png" alt={""} />
+            <Image as='image' width={600} height={600} className={`${homePageImage} delay-150`} src="/images/Home Page/Part 5.png" alt={""} />
+            <Image as='image' width={600} height={600} className={`${homePageImage} delay-75`} src="/images/Home Page/Part 6.png" alt={""} />
           </div>
         </div>
       </section>
@@ -125,7 +125,7 @@ const Home: NextPage = () => {
   );
 };
 
-var homePageImage = classNames('absolute scale-[1.65] -right-[40rem] min-w-[40rem] min-h-[7.5rem] top-19 nv-max:scale-135 nv-max:top-9 transition-all duration-1000 pointer-events-none');
+var homePageImage = classNames('absolute scale-[1.65] -right-[40rem] min-w-[24rem] min-h-[7.5rem] top-19 nv-max:scale-135 nv-max:top-9 transition-all duration-1000 pointer-events-none');
 
 export default Home;
 

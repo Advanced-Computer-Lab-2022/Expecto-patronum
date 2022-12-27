@@ -1,11 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import { FaFacebookF, FaLinkedinIn, FaGoogle, FaTwitter, FaCanadianMapleLeaf } from "react-icons/fa";
-
-// const navLogoDiv = classNames(
-//   "nv-max:absolute z-behind sb-max:overflow-hidden sb-max:w-[3.75rem] transition-all duration-300"
-// );
-// const navLogo = classNames("h-20 w-fit min-w-fit");
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
+import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
 
 const colIcons = classNames(`text-sm p-1.25 flex items-center justify-center m-2 mx-3 z-0 scale-125 rounded-full border-1.5 before:content-[""] before:inline-block before:absolute before:z-behind before:bottom-1 before:right-2.75 before:w-6 before:h-6  before:rounded-full hover:scale-135 transition-all duration-300`);
 
@@ -13,6 +10,8 @@ const Login = () => {
 
   const leftSideRef = useRef<any>();
   const rightSideRef = useRef<any>();
+
+  const [isLogin, setIsLogin] = useState<boolean>(true);
 
   useEffect(() => {
     leftSideRef.current.classList.remove('opacity-0');
@@ -67,63 +66,134 @@ const Login = () => {
           </div>
         </div>
 
-
-        <div className="bg-white mx-auto w-10/12 min-w-[60%] z-10 relative text-center sb:pt-20 sb:px-4 sb-max:px-0 pt-8 pb-8">
-          <div className="w-fit mx-auto text-left whitespace-nowrap">
-            <h1 className="text-3xl">Sign in to your account</h1>
-            <p className="text-sm">Or <a className="text-blue-600 hover:text-blue-800">Don't have an account? Sign up</a></p>
+        <div style={{perspective: '1000px'}} className="bg-white mx-auto w-10/12 min-w-[60%] z-10 relative text-center sb:pt-20 sb:px-4 sb-max:px-0 pt-8 pb-8">
+          <div style={{transformStyle: 'preserve-3d'}} className={`${isLogin ? '': 'rotate-y-180'} relative w-full h-full transition-all duration-700`}>
+            <LoginForm setIsLogin={setIsLogin} />
+            <SignUpForm setIsLogin={setIsLogin} />
           </div>
-
-          <form action="#" method="POST" id="sign-in" className="mt-6 space-y-4">
-            <div className="flex flex-col text-left">
-              <label className="text-lg mb-1">E-mail Address</label>
-              <input className="border-b-2 bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your email" type='email' required />
-            </div>
-
-            <div className="flex flex-col text-left">
-              <label className="text-lg mb-1">Password</label>
-              <input className="border-b-2 bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your password" type='password' />
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center justify-center">
-                <input className="mr-2 relative bottom-[0.06125rem]" type='checkbox' />
-                <p>Remember me</p>
-              </div>
-              <a className="text-blue-600 hover:text-blue-800">Forgot your password?</a>
-            </div>
-
-            <div className="flex justify-end items-center">
-              <input className="mr-2 relative sb:bottom-[0.06125rem]" type='checkbox' />
-              <p className="text-xs text-left">By signing, You agree with the <a className="text-blue-600 hover:text-blue-800">Terms & Policy</a> of our company.</p>
-            </div>
-
-            <button type="submit" form="sign-in" className="mx-auto my-4 bg-canadian-red text-white rounded-md px-14 py-2 hover:bg-calm-red hover:scale-[1.01] transition-all duration-200">Sign In</button>
-
-            <div className="relative">
-              <hr className="bg-slate-200 border-px" />
-              <label className="relative bottom-3 bg-white px-3">Or continue with</label>
-            </div>
-
-            <div className="flex items-center justify-center">
-              <button className={`${colIcons} border-[#3B5998] bg-[#3B5998] text-white hover:bg-white hover:text-[#3B5998]`}><FaFacebookF /></button>
-              <button className={`${colIcons} border-[#1DA1F2] bg-[#1DA1F2] text-white hover:bg-white hover:text-[#1DA1F2]`}><FaTwitter /></button>
-              <button className={`${colIcons} border-[#EA4335] bg-[#EA4335] text-white hover:bg-white hover:text-[#EA4335]`}><FaGoogle /></button>
-              <button className={`${colIcons} border-[#0077B5] bg-[#0077B5] text-white hover:bg-white hover:text-[#0077B5]`}><FaLinkedinIn /></button>
-            </div>
-          </form>
         </div>
+
       </div>
     </div>
   );
 };
 export default Login;
 
-type CircleProps = {
-  className: string,
+const LoginForm = (props: {setIsLogin: any}) => {
+
+  function viewSignUp() {
+    props.setIsLogin(false);
+  } 
+
+  return (
+    <div className="flip-card-front bg-white z-30  pt-10">
+      <div className="w-fit mx-auto text-left whitespace-nowrap">
+        <h1 className="text-3xl">Sign in to your account</h1>
+        <p className="text-sm">Or <a className="text-blue-600 hover:text-blue-800" onClick={viewSignUp}>Don't have an account? Sign up</a></p>
+      </div>
+
+      <form action="#" method="POST" id="sign-in" className="mt-6 space-y-4 -mx-px bg-white">
+        <div className="flex flex-col text-left">
+          <label className="text-lg">E-mail Address</label>
+          <input className="border-b-2 bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your email" type='email' required />
+        </div>
+
+        <div className="flex flex-col text-left">
+          <label className="text-lg">Password</label>
+          <input className="border-b-2 bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your password" type='password' />
+        </div>
+
+        <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center justify-center">
+            <input className="mr-2 relative bottom-[0.06125rem]" type='checkbox' />
+            <p>Remember me</p>
+          </div>
+          <a className="text-blue-600 hover:text-blue-800">Forgot your password?</a>
+        </div>
+
+        <div className="flex justify-end items-center">
+          <input className="mr-2 relative sb:bottom-[0.06125rem]" type='checkbox' />
+          <p className="text-xs text-left">By signing, You agree with the <a className="text-blue-600 hover:text-blue-800">Terms & Policy</a> of our company.</p>
+        </div>
+
+        <button type="submit" form="sign-in" className="mx-auto my-4 bg-canadian-red text-white rounded-md px-14 py-2 hover:bg-calm-red hover:scale-[1.01] transition-all duration-200">Sign In</button>
+
+        <div className="relative">
+          <hr className="bg-slate-200 border-px" />
+          <label className="relative bottom-3 bg-white px-3">Or continue with</label>
+        </div>
+
+        <div className="flex items-center justify-center">
+          <button className={`${colIcons} border-[#3B5998] bg-[#3B5998] text-white hover:bg-white hover:text-[#3B5998]`}><FaFacebookF /></button>
+          <button className={`${colIcons} border-[#1DA1F2] bg-[#1DA1F2] text-white hover:bg-white hover:text-[#1DA1F2]`}><FaTwitter /></button>
+          <button className={`${colIcons} border-[#EA4335] bg-[#EA4335] text-white hover:bg-white hover:text-[#EA4335]`}><FaGoogle /></button>
+          <button className={`${colIcons} border-[#0077B5] bg-[#0077B5] text-white hover:bg-white hover:text-[#0077B5]`}><FaLinkedinIn /></button>
+        </div>
+      </form>
+    </div>
+  );
 }
 
-const Circle = (props: CircleProps) => {
+const SignUpForm = (props: {setIsLogin: any}) => {
+
+  function hideSignUp() {
+    props.setIsLogin(true);
+  } 
+
+  return (
+    <div className="-scale-x-100 bg-white relative nv:-mt-10">
+      <div className="w-fit mx-auto text-left whitespace-nowrap">
+        <h1 className="text-3xl">Sign up</h1>
+        <button className="absolute nv-max:text-sm nv:left-2 nv-max:top-3 left-0 top-2 flex items-center text-blue-600 hover:text-blue-800" onClick={hideSignUp}><MdOutlineKeyboardBackspace className="mr-2 scale-120 mb-px" />Go Back</button>
+      </div>
+
+      <form action="#" method="POST" id="sign-up" className="mt-6 space-y-5">
+        <div className="flex items-center justify-between space-x-16">
+          <div className="flex flex-col text-left w-1/2 pr-6">
+            <label className="text-lg">Firstname</label>
+            <input className="border-b-2 bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your firstname" required />
+          </div>
+          <div className="flex flex-col text-left w-1/2">
+            <label className="text-lg">Lastname</label>
+            <input className="border-b-2 bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your lastname" required />
+          </div>
+        </div>
+
+        <div className="flex flex-col text-left">
+          <label className="text-lg">Username</label>
+          <input className="border-b-2 bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your username" required />
+        </div>
+
+        <div className="flex flex-col text-left">
+          <label className="text-lg">E-mail Address</label>
+          <input className="border-b-2 bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your email" type='email' required />
+        </div>
+
+        <div className="flex flex-col text-left">
+          <label className="text-lg">Password</label>
+          <input className="border-b-2 bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your password" type='password' />
+        </div>
+
+        <div className="flex justify-around items-center text-center">
+          <label className="text-lg ">Choose Gender</label>
+          <div>
+            <button className="mx-3 my-1 p-2.5 bg-blue-500 text-white rounded-full hover:scale-105 hover:bg-blue-700 transition-all duration-300"><BsGenderMale className="scale-135" /></button>
+            <button className="mx-3 my-1 p-2.5 bg-pink-500 text-white rounded-full hover:scale-105 hover:bg-pink-700 transition-all duration-300"><BsGenderFemale className="scale-135" /></button>
+          </div>
+        </div>
+
+        <div className="flex justify-end items-center">
+          <input className="mr-2 relative sb:bottom-[0.06125rem]" type='checkbox' />
+          <p className="text-xs text-left">By signing up, You agree with the <a className="text-blue-600 hover:text-blue-800">Terms & Policy</a> of our company.</p>
+        </div>
+
+        <button type="submit" form="sign-up" className="mx-auto my-4 bg-canadian-red text-white rounded-md px-14 py-2 hover:bg-calm-red hover:scale-[1.01] transition-all duration-200">Sign Up</button>
+      </form>
+    </div>
+  );
+}
+
+const Circle = (props: {className: string}) => {
   return (
     <div className={`rounded-[100%] absolute ${props.className}`} />
   );
