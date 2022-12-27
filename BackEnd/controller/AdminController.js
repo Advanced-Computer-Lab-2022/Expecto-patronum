@@ -103,12 +103,16 @@ async function viewCourseRequests(req, res, next) {
   };
   
   async function viewReportedFunctions(req,res,next){
+    var CurrentPage = req.query.page ? req.query.page : 1;
     try{
-      var problems=await problemTable.find();
-      res.send(problems);
+      var problems=await problemTable.find().skip((CurrentPage - 1) * 10).limit(10);
+
+      var TotalCount = await problemTable.countDocuments();
+      res.send({ problems: problems, TotalCount: TotalCount});
     }
     catch(error){
       console.log(error);
+      res.status(400).send({error:error.message});
     }
   }
 
