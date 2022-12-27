@@ -3,7 +3,7 @@ import classNames from "classnames";
 import Image from "next/image";
 import React, { useEffect, useRef } from "react";
 import ReactPlayer from "react-player/youtube";
-import { CourseHeroData } from "../../Interface/CourseHeroData";
+import { CourseHeroData } from "../../Interface/NotPurchasedCourse/CourseHeroData";
 import OneStar from "../shared/rating/OneStar";
 import VideoPlayer from "../shared/Video/VideoPlayer";
 
@@ -18,7 +18,6 @@ type Props = {
 
 
 const CourseContentHero = (props: Props) => {
-  console.log(props.courseContentData);
   const listInnerRef = useRef(null);
   const [VideoPictureApear, SetVideoPictureApear] = React.useState(false);
   const [VideoOpen, SetVideoOpen] = React.useState(false);

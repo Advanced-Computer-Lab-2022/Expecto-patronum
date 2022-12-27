@@ -17,6 +17,7 @@ const ExcerciseSchema= new mongoose.Schema({
       type:String,
       required:true
     },
+    averageMark:[Number],
     questions:
         [{
             problem: String,

@@ -4,7 +4,8 @@ const instructorTable = require('../models/InstructorSchema');
 //const { isInstructor } = require('../middleware/RolesMiddleware');
 const CourseTable = require('../models/CourseSchema');
 const { query } = require('express');
-const { viewCourses, filterCourses, addCourse, discount, viewCourseRatings, updateBio, testingAll, viewProfile, viewInstructorRatingsAndReviews, cancelDiscount, filterByRatings } = require('../controller/InstructorController');
+const { viewCourses, filterCourses, addCourse, discount, viewCourseRatings, updateBio, testingAll,
+   viewProfile, viewInstructorRatingsAndReviews, cancelDiscount, filterByRatings,viewAmountOwned } = require('../controller/InstructorController');
 
 
 router.get("/", (req, res, next) => {
@@ -27,7 +28,7 @@ router.get("/viewCourses",viewCourses);
  router.get("/testingAll",testingAll);
  router.put("/filterByRatings",filterByRatings);
 
-
+ router.put("/viewAmountOwned",viewAmountOwned);
 
 router.post('/addCourse',addCourse);
 

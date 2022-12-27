@@ -13,20 +13,18 @@ interface Video {
 }
 const VideoPlayer: React.FC<Video> = ({ videoData, VideoOpen, SetVideoOpen, SetVideoPictureApear }) => {
 
+  let ref = React.useRef(null);
+
+
+
 
 
   return (
-    <Modal SetOpen={SetVideoOpen} SetVideoPictureApear={SetVideoPictureApear}>
+    <Modal SetOpen={SetVideoOpen} CloseBtn={true} CloseBtnColor={"White"} CloseBtnFunc={() => { SetVideoOpen(false); SetVideoPictureApear(true); }} SetVideoPictureApear={SetVideoPictureApear}>
       <div className={VideoPlayerContainer}>
         <div className="flex justify-between">
           <h1 className="pb-10 text-3xl text-white">Introduction</h1>
-          <AiOutlineClose
-            className="cursor-pointer "
-            color="white"
-            onClick={() => { SetVideoOpen(false); SetVideoPictureApear(true); }}
-            width={100}
-            height={100}
-          ></AiOutlineClose>
+
         </div>
 
         <div>
@@ -34,6 +32,8 @@ const VideoPlayer: React.FC<Video> = ({ videoData, VideoOpen, SetVideoOpen, SetV
             url={"https://www.youtube.com/embed/SKF7Ue1BeW8"}
             controls={true}
             playing={true}
+            onEnded={() => { SetVideoOpen(false); SetVideoPictureApear(true); }}
+
           />
         </div>
 

@@ -1,10 +1,12 @@
 const connection = require('../config/database');
 const instructorTable = require('../models/InstructorSchema');
 const User = require('../models/UserSchema');
+const mongoose = require('mongoose');
 //const { isInstructor } = require('../middleware/RolesMiddleware');
 const CourseTable = require('../models/CourseSchema');
 const ExerciseTable = require('../models/ExcerciseSchema');
 const { query, response } = require('express');
+const transactionTable = require('../models/transactionSchema');
 
 
 async function viewCourses(req, res, next) {
@@ -32,9 +34,7 @@ async function viewCourses(req, res, next) {
 
     const unique = await CourseTable.distinct("subject", queryCond);
     var TotalCount = await CourseTable.countDocuments(queryCond);
-    //var searchResults = Courses.slice((CurrentPage - 1) * 5, CurrentPage * 5);
     res.send({ Courses: Courses, TotalCount: TotalCount, subject: unique });
-
   }
   catch (err) {
     res.status(400).json({error:err.message})
@@ -193,42 +193,21 @@ async function filterCourses(req, res, next) {
 
 async function addCourse(req, res, next) {
 
-  var x = await User.find({ "_id": req.body.instructorID }, { firstname: 1, lastname: 1, _id: 0 });
-  var y = Object.values(x)[0];
-  console.log(y);
-  var name = y.firstname + " " + y.lastname;
-  console.log(name);
-  //  const subtitles = req.body.subtitles;
-  //  console.log(subtitles);
 
-  //  var sum = 0;
-  //  var sum1 = [];
-  //  var tempsum = 0;
-  //  const sum2 = [];
-  // for(var i =0;i< subtitles.length;i++){
-  //   var z = Object.values(subtitles)[i] ;
-  //   for(var j =0;j< z.contents.length;j++){
-  //     var w = Object.values(z.contents)[j] ;
-  //     sum1.push(w.duration);
-  //     console.log(w);
-  //   }
-  //   console.log(sum1);
-  //   for(var a = 0 ;a< sum1.length;a++){
-  //     var intvalue = Math.floor(a);
-  //     tempsum = tempsum + Object.values(sum1)[a];
-  //     if(a == sum1.length-1){
-  //       sum2.push(tempsum);
-  //     }
-  //   }
-  //   tempsum=0;
-  //   console.log(sum1);
-  //   sum1= [];
-  //   sum = sum + z.totalMinutes;
-  // }
-  // console.log(sum);
-  // console.log(sum2);
 
-  const newCourse = new CourseTable({
+  try {
+    var exists=await CourseTable.findOne({"title":req.body.title});
+    if(exists){
+      res.status(400).send("Course title already used");
+    }
+    else{
+      var x = await User.find({ "_id": req.body.instructorID }, { firstname: 1, lastname: 1, _id: 0 });
+    var y = Object.values(x)[0];
+    console.log(y);
+    var name = y.firstname + " " + y.lastname;
+    console.log(name);
+
+    const newCourse = new CourseTable({
     instructorID: req.body.instructorID,
     title: req.body.title,
     summary: req.body.summary,
@@ -245,9 +224,7 @@ async function addCourse(req, res, next) {
     discountPrice: req.body.price,
     review:req.body.review,
     courseImage:req.body.courseImage
-  });
-
-  try {
+    });  
     newCourse.save();
    // res.send(newCourse);
     console.log("course added succsessfully");
@@ -284,6 +261,7 @@ async function addCourse(req, res, next) {
      }
     }
     res.send("Course Added");
+  }
 
   } catch (err) {
     res.status(400).json({error:err.message})
@@ -305,9 +283,9 @@ async function discount(req, res, next) {
     discount = 1 - (discount / 100);
     try {
       queryCond.set = true;
-      const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
+      const y = await CourseTable.find({ "_id": courseID }).select({discountPrice:1, price: 1 });
       var z = Object.values(y)[0];
-      var discountPrice = (z.price * discount);
+      var discountPrice = (z.discountPrice * discount);
   
       discountPrice = discountPrice.toFixed(2);
       const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond,discountPrice : discountPrice  }, { new: true });
@@ -321,13 +299,7 @@ async function discount(req, res, next) {
     endDate = new Date(req.body.endDate);
     queryCond.endDate = endDate;
     queryCond.set = false;
-    discount = 1 - (discount / 100);
     try {
-      const y = await CourseTable.find({ "_id": courseID }).select({ price: 1 });
-      var z = Object.values(y)[0];
-      var discountPrice = (z.price * discount);
-  
-      discountPrice = discountPrice.toFixed(2);
       const x = await CourseTable.findByIdAndUpdate({ "_id": courseID }, { discount: queryCond }, { new: true });
       res.status(200).json(x);
   
@@ -374,16 +346,35 @@ async function updateBio(req,res){
     async function cancelDiscount(req,res){
       try{
         var allCourses = await CourseTable.updateOne( {"_id" : req.body.courseId,
-        "discount.startDate": { $exists: true }},
+        "discount.startDate": { $exists: true },"discount.set":true},
         [
-          {"$set":{discountPrice: "$price","discount.discount":0}},
-          { $unset: ["discount.startDate","discount.endDate","discount.set"]}
+          {"$set":
+          {  discountPrice: {
+            $round: [{
+            $divide: ["$discountPrice",
+              { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
+          }, 2]}
+        , "discount.discount": 0 }  },
+
+      { $unset: ["discount.startDate","discount.endDate","discount.set"]}
         ]
         );
-        if(allCourses){
-          res.status(200).send("discount removed");
-        }
-      }
+       
+          var allCourses2 = await CourseTable.updateOne( {"_id" : req.body.courseId,
+          "discount.startDate": { $exists: true },"discount.set":false},
+          [
+            {"$set":
+            { "discount.discount": 0 }  },
+        { $unset: ["discount.startDate","discount.endDate","discount.set"]} ]
+          );
+
+          if(allCourses2.nModified==1 || allCourses.nModified==1  ){
+            res.status(200).send("discount removed");
+          }
+            else{
+              res.status(200).send("no discount"); 
+            }
+    }
       catch(error){
         console.log(error);
       }
@@ -398,11 +389,13 @@ async function updateBio(req,res){
           instructorRating: 1,
           biography: 1,
           _id: 1,
+          gender:1,
           firstname: 1,
           lastname: 1,
           instructorReview: { "$slice": 3 }
 
         });
+
         res.status(200).send(instructor);
       }
       catch(error){
@@ -465,10 +458,36 @@ async function testingAll(req,res){
   }
 }
 
+async function viewAmountOwned(req, res, next) {
+  try {
+
+    //const Courses = await transactionTable.find({"instructorID":req.body.userID}).sort({transactionDate:1});
+    let idToSearch = mongoose.Types.ObjectId(req.body.userID);
+    const Courses = await transactionTable.aggregate(
+    [
+      { "$match":{ "instructorID": idToSearch}},
+      { 
+        $group:
+          {
+            _id: { month: { $month: "$transactionDate"}, year: { $year: "$transactionDate" } },
+            totalAmount: { $sum: { $multiply: [ "$transactionAmount", 1 ] } },
+            count: { $sum: 1 }
+          }
+      }
+    ]);
+  
+    res.send({ Courses: Courses});
+
+  }
+  catch (err) {
+    res.status(400).json({error:err.message})
+  }
+};
+
 
 
 module.exports = { 
   viewCourses, filterCourses, addCourse, discount, viewCourseRatings, 
   updateBio, testingAll, viewProfile, cancelDiscount, viewInstructorRatingsAndReviews,
-  filterByRatings, 
+  filterByRatings,viewAmountOwned 
 };

@@ -4,11 +4,13 @@ import UserHome from "./User";
 import UserProfile from "../components/userProfile/UserProfile";
 import Modal from "../components/shared/Modal/Modal";
 import FormLogic from "../components/shared/Form/FormLogic";
+import Tickets from "../components/userProfile/Tickets";
 
 const Home: NextPage = () => {
   return (
     <div>
-      <FormLogic FormType='Login'></FormLogic>
+      {/* <FormLogic FormType='Login'></FormLogic> */}
+      <Tickets></Tickets>
     </div>
     // <div className="text-center w-fullscreen p-4">
     //   <div className="flex justify-center py-20">
@@ -25,3 +27,4 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+

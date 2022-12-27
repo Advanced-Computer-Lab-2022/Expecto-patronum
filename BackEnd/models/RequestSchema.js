@@ -4,7 +4,7 @@ const connection = require('../config/database');
 const RequestSchema = new mongoose.Schema({
     type: {
         type: String,
-        enum: ['refund', 'requestCourse'],
+        enum: ['Refund', 'RequestCourse'],
     },
     userID:{
         type: mongoose.Types.ObjectId,
@@ -15,8 +15,8 @@ const RequestSchema = new mongoose.Schema({
     },
     status:{
         type:String,
-        enum:['accepted','pending','rejected'],
-        default:'pending'
+        enum:['Accepted','Pending','Rejected'],
+        default:'Pending'
     },
     body:{
         type:String

@@ -1,5 +1,5 @@
 import React from "react";
-import { CourseLearnData } from "../../../Interface/CourseLearnData";
+import { CourseLearnData } from "../../../Interface/NotPurchasedCourse/CourseLearnData";
 import CourseSubtitle from "./CourseSubtitle";
 
 type Props = {

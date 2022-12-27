@@ -2,72 +2,44 @@ const Course = require('../models/CourseSchema');
 const schedule = require('node-schedule');
 const User = require('../models/UserSchema');
 
-// var start1 = schedule.scheduleJob('* * * * *', async function () {
-//   const dateNow = new Date();
-//   try {
-//     var allCourses = await Course.updateMany({
-//       $and: [
-//         { "discount.endDate": { $exists: true } }, { "discount.endDate": { $lte: dateNow } }
-//       ]
-//     }, [
-//       { "$set": { discountPrice: "$price", "discount.discount": 0 } },
-//       { $unset: ["discount.startDate", "discount.endDate", "discount.duration"] }
-//     ]
-//     );
 
-//     console.log("I ran schedule EndDate");
-//     start1.cancel();
-//   } catch (error) {
-//     res.status(400).send({ error: error.message });
-//   }
-// });
-
-
-// var start2 = schedule.scheduleJob('* * * * *', async function () {
-//   const dateNow = new Date();
-//   try {
-//     var allCourses = await Course.updateMany({
-//       $and: [
-//         { "discount.startDate": { $exists: true } }, { "discount.startDate": { $lte: dateNow } },
-//         { "discount.set": { $exists: true } }, { "discount.set": false }
-//       ]
-//     }, [
-//       {
-//         "$set": {
-//           discountPrice: {
-//             $round: [{
-//               $multiply: ["$price",
-//                 { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
-//             }, 2]
-//           },
-//           "discount.set": true
-//         }
-//       },
-//     ]);
-
-//     console.log("I ran schedule startDate");
-//     start2.cancel();
-//   } catch (error) {
-//     res.status(400).send({ error: error.message });
-//   }
-// });
-
-
-schedule.scheduleJob('*/15 * * * *', discountEndDate);
-schedule.scheduleJob('*/15 * * * *', discountStartDate);
+//schedule.scheduleJob('* * * * *', discountEndDate);
+//schedule.scheduleJob('* * * * *', discountStartDate);
 
 async function discountEndDate() {
   const dateNow = new Date();
   try {
     var allCourses = await Course.updateMany({
       $and: [
-        { "discount.endDate": { $exists: true } }, { "discount.endDate": { $lte: dateNow } }
+        { "discount.endDate": { $exists: true } }, { "discount.endDate": { $lte: dateNow } },
       ]
     }, [
-      { "$set": { discountPrice: "$price", "discount.discount": 0 } },
-      { $unset: ["discount.startDate", "discount.endDate", "discount.duration"] }
+      { "$set": {  discountPrice: {
+          $round: [{
+          $divide: ["$discountPrice",
+            { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
+        }, 2]}
+      , "discount.discount": 0 } },
+      { $unset: ["discount.startDate", "discount.endDate", "discount.set"] }
     ]
     );
+
+    var allCourses2 = await Course.updateMany({
+      $and: [
+        { "promotion.endDate": { $exists: true } }, { "promotion.endDate": { $lte: dateNow } }
+      ]
+    }, [
+      { "$set": {  discountPrice: {
+          $round: [{
+          $divide: ["$discountPrice",
+            { $subtract: [1, { $divide: ["$promotion.promotion", 100] }] }]
+        }, 2]}
+      , "promotion.promotion": 0 } },
+      { $unset: ["promotion.startDate", "promotion.endDate", "promotion.set"] }
+    ]
+    );
+
+
 
     console.log("I ran schedule EndDate");
   }
@@ -90,11 +62,30 @@ async function discountStartDate() {
         "$set": {
           discountPrice: {
             $round: [{
-              $multiply: ["$price",
+              $multiply: ["$discountPrice",
                 { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
             }, 2]
           },
           "discount.set": true
+        }
+      },
+    ]);
+
+    var allCourses = await Course.updateMany({
+      $and: [
+        { "promotion.startDate": { $exists: true } }, { "promotion.startDate": { $lte: dateNow } },
+        { "promotion.set": { $exists: true } }, { "promotion.set": false }
+      ]
+    }, [
+      {
+        "$set": {
+          discountPrice: {
+            $round: [{
+              $multiply: ["$discountPrice",
+                { $subtract: [1, { $divide: ["$promotion.promotion", 100] }] }]
+            }, 2]
+          },
+          "promotion.set": true
         }
       },
     ]);
@@ -493,10 +484,9 @@ async function viewPopularCourses(req, res, next) {
       discount: 1,
       discountPrice: 1,
       purchases:1
-    }).sort({purchases:-1}).skip((CurrentPage - 1) * coursesPerPage).limit(coursesPerPage);
+    }).sort({purchases:-1}).skip(0).limit(20);
 
-    var TotalCount = await Course.countDocuments({});
-    res.status(200).send({ Courses: Courses, TotalCount: TotalCount });
+    res.status(200).send({ Courses: Courses});
 
   }
   catch (err) {

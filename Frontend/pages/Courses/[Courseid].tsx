@@ -9,10 +9,10 @@ import CourseContentReviews from "../../components/CourseContent/review/CourseCo
 import Navbar from "../../components/shared/Navbar/Navbar";
 import { useRouter } from "next/router";
 import { ApiUrl } from "../../constants/constants";
-import { CourseHeroData } from "../../Interface/CourseHeroData";
-import { CourseLearnData } from "../../Interface/CourseLearnData";
+import { CourseHeroData } from "../../Interface/NotPurchasedCourse/CourseHeroData";
+import { CourseLearnData } from "../../Interface//NotPurchasedCourse/CourseLearnData";
 import axios from "axios";
-import { UserCourseDataInterface } from "../../Interface/UserCourseDataInterface";
+import { UserCourseDataInterface } from "../../Interface/NotPurchasedCourse/UserCourseDataInterface";
 import CourseReviewModal from "../../components/CourseContent/review/CourseReviewModal";
 
 
