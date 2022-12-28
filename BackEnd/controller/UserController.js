@@ -13,6 +13,7 @@ const { Passport } = require("passport");
 const ExerciseTable = require('../models/ExcerciseSchema');
 const requestTable = require('../models/RequestSchema');
 const transactionTable = require('../models/transactionSchema');
+const Currency = require('iso-country-currency');
 
 async function register(req, res) {
   console.log("req.body.password");
@@ -20,7 +21,6 @@ async function register(req, res) {
 
   const salt = saltHash.salt;
   const hash = saltHash.hash;
-
   var exists1 = await User.findOne({ "email": req.body.email });
 
   var exists2 = await User.findOne({ "username": req.body.username });
@@ -40,6 +40,7 @@ async function register(req, res) {
       username: req.body.username,
       hash: hash,
       salt: salt,
+      gender:req.body.gender,
       email: req.body.email,
       firstname: req.body.firstname,
       lastname: req.body.lastname,
@@ -87,16 +88,16 @@ async function ViewAll(req, res) {
 
 async function getRate(req, res, next) {
   const country = req.query.country;
-  console.log("country " + country);
-  const curr = countryToCurrency[country];
-  let currencyConverter = new CC({ from: "USD", to: curr, amount: 1 });
+  console.log("country " + country, Currency.getAllInfoByISO(country).symbol);
+  const iso = countryToCurrency[country];
+  let currencyConverter = new CC({ from: "USD", to: iso, amount: 1 });
   var rate = 1;
   await currencyConverter.rates().then((response) => {
     rate = response;
   });
-  console.log("rate " + rate);
+  console.log("rate: " + rate + ',iso: ' + iso);
   try {
-    res.send({ rate: rate, curr: curr });
+    res.send({ rate: rate, curr: Currency.getAllInfoByISO(country).symbol });
   } catch (error) {
     console.log(error);
   }
@@ -439,6 +440,7 @@ async function giveCourseRating(req, res, next) {
 
 
 async function giveInstructorRating(req, res, next) {
+  console.log("hi")
   newRating = req.body.rating;
   oldRating = req.body.oldRating;
   userId = req.body.userId;
@@ -513,7 +515,7 @@ async function giveCourseReview(req, res, next) {
       );
 
       const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
-        { "$set": { "purchasedCourses.$.courseReview": review } }
+        { "$set": { "purchasedCourses.$.courseReview": review, "purchasedCourses.$.courseRating": rating } }
       );
 
       res.sendStatus(200);
@@ -524,7 +526,7 @@ async function giveCourseReview(req, res, next) {
       );
 
       const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
-        { "$set": { "purchasedCourses.$.courseReview": review } }
+        { "$set": { "purchasedCourses.$.courseReview": review, "purchasedCourses.$.courseRating": rating } }
       );
       res.sendStatus(200);
     }
@@ -550,7 +552,7 @@ async function giveInstructorReview(req, res, next) {
       );
 
       const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
-        { "$set": { "purchasedCourses.$.instructorReview": review } }
+        { "$set": { "purchasedCourses.$.instructorReview": review, 'purchasedCourses.$.instructorRating': rating } }
       );
 
       res.sendStatus(200);
@@ -561,7 +563,7 @@ async function giveInstructorReview(req, res, next) {
       );
       console.log(re);
       const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
-        { "$set": { "purchasedCourses.$.instructorReview": review } }
+        { "$set": { "purchasedCourses.$.instructorReview": review, 'purchasedCourses.$.instructorRating': rating } }
       );
       res.sendStatus(200);
     }
@@ -637,6 +639,7 @@ async function selectCourse(req, res, next) {
               }
               info.notes = z.notes;
               info.progress = z.progress;
+              info.SolvedExercises = z.excercises;
               info.purchased = "yes";
               info.watchedVideos = z.watchedVideos;
               x = await CourseTable.findOne({ "_id": req.body.courseId },

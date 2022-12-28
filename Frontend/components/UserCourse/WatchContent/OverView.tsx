@@ -11,19 +11,20 @@ type Props = {
 const OverView = (props: Props) => {
   const [RateModalOpenCourse, SetRateModalOpenCourse] = React.useState(false)
   const [RateModalOpenInstructor, SetRateModalOpenInstructor] = React.useState(false)
-  const { CourseChoosen, SetCourseChoosen } = React.useContext(DataContext);
-  const [CurrentRateCourse, SetCurrentRateCourse] = React.useState(0)
-  const [CurrentRateInstructor, SetCurrentRateInstructor] = React.useState(0)
+  const { CourseChoosen, SetCourseChoosen, CurrentRatings } = React.useContext(DataContext);
+  const [CurrentRateCourse, SetCurrentRateCourse] = React.useState(CurrentRatings.yourCourseRating || 0)
+  const [CurrentRateInstructor, SetCurrentRateInstructor] = React.useState(CurrentRatings.yourInstructorRating || 0)
   const [RatedBefore, SetRatedBefore] = React.useState(false)
 
+
   useEffect(() => {
-    if (CurrentRateCourse !== 0) {
+    if (CurrentRateCourse !== 0 && CurrentRateCourse !== CurrentRatings.yourCourseRating) {
       SetRateModalOpenCourse(true)
     }
   }, [CurrentRateCourse])
 
   useEffect(() => {
-    if (CurrentRateInstructor !== 0) {
+    if (CurrentRateInstructor !== 0 && CurrentRateInstructor !== CurrentRatings.yourInstructorRating) {
 
       SetRateModalOpenInstructor(true)
     }

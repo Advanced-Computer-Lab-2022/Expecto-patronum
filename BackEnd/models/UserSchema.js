@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  gender:{
+    type: String,
+    enum: ['Male', 'Female'],
+  },
   salt: {
     type: String,
     required: true,

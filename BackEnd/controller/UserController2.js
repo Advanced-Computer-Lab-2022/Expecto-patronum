@@ -146,10 +146,14 @@ async function requestCourse(req, res, next) {
 
 async function reportProblem(req, res, next) {
   try {
+    var x = await User.findOne({ "_id": req.body.userID }, { _id: 1, username: 1 });
+    var y = await CourseTable.findOne({ "_id": req.body.courseID }, { _id: 1, title: 1 });
     const result = await problemTable.create({
       type: req.body.type,
       userID: req.body.userID,
       //status: req.body.status,
+      username:x.username,
+      courseTitle:y.title,
       body: req.body.body,
       courseID: req.body.courseID,
       startDate: Date.now(),
@@ -462,7 +466,49 @@ async function lastWatched(req, res, next) {
 
 
 
-module.exports = {
-  SelectExercise, viewAnswer, requestCourse, reportProblem, viewPreviousReports,
-  followUpOnProblem, watchVideo, addNote, viewNotes, DeleteNote, EditNote, filterNotes, createTransaction, lastWatched
-}
+
+    async function payWithWallet(req,res,next){
+      try {
+        var userID=req.body.userID;
+        var course=await CourseTable.findById(req.body.courseID);
+        const exists = await User.findOne({ "_id": req.body.userID,"purchasedCourses.courseID":req.body.courseID });
+        if(exists){
+          res.status(400).send("Course already bought");
+          return;
+        }
+        
+        var wallet=await User.findById(userID).select({"wallet":1,"username":1});
+        if(wallet.wallet>=course.price){
+          //res.status(400).send("funds are sufficent");
+        }
+        //res.status(400).send(String(course.price));
+          const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
+          { $push: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
+  
+          const courses =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
+          { $inc: { "purchases": 1 } }, { new: true });
+          const newWallet=await User.findByIdAndUpdate({"_id":userID},{"wallet":wallet.wallet-course.price});
+          res.status(400).send(String(courses));
+  
+          const result = await transactionTable.create({
+            userID: user._id,
+            instructorID: course.instructorID,
+            courseID: course._id,
+            transactionDate: Date.now(),
+            transactionAmount : req.body.amount,
+          });
+          result.save();
+  
+          next();
+  
+    } catch (error) {
+      console.log(error);
+      res.status(400).send({error:error.message});
+    }
+  };
+
+  
+
+
+  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,
+    followUpOnProblem,watchVideo,addNote,viewNotes,EditNote,DeleteNote,filterNotes,createTransaction,lastWatched,payWithWallet}

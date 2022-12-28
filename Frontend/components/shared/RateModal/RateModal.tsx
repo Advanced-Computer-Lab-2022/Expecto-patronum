@@ -18,31 +18,44 @@ type Props = {
 const RateModal = (props: Props) => {
   const [RateChange, setRateChange] = React.useState(0);
   const ReviewRef = React.useRef<HTMLTextAreaElement>(null)
-  const { CourseChoosen, SetCourseChoosen } = React.useContext(DataContext);
+  const { CourseChoosen, SetCourseChoosen, CurrentRatings, SetCurrentRatings } = React.useContext(DataContext);
   const [Loading, SetLoading] = React.useState(false)
   const [EditReview, SetEditReview] = React.useState(false)
-  const OldReview = null;
-  const OldRate = null;
+
+
 
 
   async function RateOnly() {
     if (props.CurrentRate === 0) return;
-    if (props.CurrentRate === OldRate) return;
     if (props.Type === "instructor") {
+      if (props.CurrentRate === CurrentRatings.yourInstructorRating) return
+      console.log(props.CurrentRate);
+      console.log(CurrentRatings.yourInstructorRating);
+      console.log(CourseChoosen._id);
+      console.log(CourseChoosen.instructorID);
+      console.log("63a59b15f928fa951091f381");
       await axios.put("http://localhost:5000/user/giveInstructorRating", {
         rating: props.CurrentRate,
-        oldRating: OldRate ? OldRate : null,
+        oldRating: CurrentRatings.yourInstructorRating,
         courseId: CourseChoosen._id,
         instructorId: CourseChoosen.instructorID,
-        userID: "63a59b15f928fa951091f381"
+        userId: "63a59b15f928fa951091f381"
+      })
+      SetCurrentRatings({
+        ...CurrentRatings,
+        yourInstructorRating: props.CurrentRate
       })
     } else {
-
+      if (props.CurrentRate === CurrentRatings.yourCourseRating) return
       let res = await axios.put("http://localhost:5000/user/giveCourseRating", {
         rating: props.CurrentRate,
-        oldRating: OldRate ? OldRate : null,
+        oldRating: CurrentRatings.yourCourseRating,
         courseId: CourseChoosen._id,
-        userID: "63a59b15f928fa951091f381"
+        userId: "63a59b15f928fa951091f381"
+      })
+      SetCurrentRatings({
+        ...CurrentRatings,
+        yourCourseRating: props.CurrentRate
       })
 
     }
@@ -51,26 +64,41 @@ const RateModal = (props: Props) => {
 
   async function RateAndReview() {
     if (ReviewRef.current === null) return
-    if (ReviewRef.current.value === OldReview && props.CurrentRate == OldRate) return
     if (props.Type === "instructor") {
+      console.log("///")
+      console.log(props.CurrentRate);
+      console.log("///")
+      if (props.CurrentRate === CurrentRatings.yourInstructorRating && ReviewRef.current.value === CurrentRatings.yourinstructorReview) return
       await axios.put("http://localhost:5000/user/giveInstructorReview", {
-        rating: RateChange,
-        oldReview: OldReview ? OldReview : null,
+        rating: props.CurrentRate,
+        oldReview: CurrentRatings.yourinstructorReview,
         courseId: CourseChoosen._id,
-        userID: "63a59b15f928fa951091f381",
+        userId: "63a59b15f928fa951091f381",
         review: ReviewRef.current.value,
         username: "mostafa",
         instructorId: CourseChoosen.instructorID
       })
+      SetCurrentRatings({
+        ...CurrentRatings,
+        yourInstructorRating: props.CurrentRate,
+        yourinstructorReview: ReviewRef.current.value
+      })
+
     } else {
 
+      if (props.CurrentRate === CurrentRatings.yourCourseRating && ReviewRef.current.value === CurrentRatings.yourCourseReview) return
       await axios.put("http://localhost:5000/user/giveCourseReview", {
         rating: props.CurrentRate,
-        oldReview: OldReview ? OldReview : null,
+        oldReview: CurrentRatings.yourCourseReview,
         courseId: CourseChoosen._id,
-        userID: "63a59b15f928fa951091f381",
+        userId: "63a59b15f928fa951091f381",
         review: ReviewRef.current.value,
         username: "mostafa",
+      })
+      SetCurrentRatings({
+        ...CurrentRatings,
+        yourCourseRating: props.CurrentRate,
+        yourCourseReview: ReviewRef.current.value
       })
     }
   }
@@ -150,9 +178,9 @@ const RateModal = (props: Props) => {
           </div>
         </div> : <div className='flex flex-col items-start'>
           <h1 className='text-2xl font-bold mb-2 mt-2'>Your Review</h1>
-          <BigRating Rate={2} size={20} RateAction={false} ></BigRating>
+          <BigRating Rate={props.Type === 'instructor' ? CurrentRatings.yourInstructorRating || 0 : CurrentRatings.yourCourseRating || 0} size={20} RateAction={false} ></BigRating>
           <div className='w-full'>
-            <TextBox HideLabel={true} ShowOnly={true} />
+            <TextBox HideLabel={true} Text={props.Type === 'instructor' ? CurrentRatings.yourinstructorReview || "" : CurrentRatings.yourCourseReview || ""} ShowOnly={true} />
           </div>
           <div onClick={HandleEdit} className={ButtonCont}>
             <p>Edit Review</p>

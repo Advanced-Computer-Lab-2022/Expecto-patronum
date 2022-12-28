@@ -34,9 +34,7 @@ async function viewCourses(req, res, next) {
 
     const unique = await CourseTable.distinct("subject", queryCond);
     var TotalCount = await CourseTable.countDocuments(queryCond);
-    //var searchResults = Courses.slice((CurrentPage - 1) * 5, CurrentPage * 5);
     res.send({ Courses: Courses, TotalCount: TotalCount, subject: unique });
-
   }
   catch (err) {
     res.status(400).json({error:err.message})
@@ -48,11 +46,11 @@ async function filterCourses(req, res, next) {
   var CurrentPage = req.query.page ? req.query.page : 1;
   var coursesPerPage = parseInt(req.query.coursesPerPage) ? parseInt(req.query.coursesPerPage): 5;
   if (req.query.price) {
-    queryCond.price = req.query.price;
-    let queryStr = JSON.stringify(queryCond.price);
+    queryCond.discountPrice = req.query.price;
+    let queryStr = JSON.stringify(queryCond.discountPrice);
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|eq|ne)\b/g, match => `$${match}`);
     var Price = JSON.parse(queryStr);
-    queryCond.price = Price;
+    queryCond.discountPrice = Price;
   }
   if (req.query.keyword) {
     try {
@@ -60,7 +58,7 @@ async function filterCourses(req, res, next) {
         if (req.query.subject && req.query.price) {
 
           var y = await CourseTable.find(
-            { "price": Price, "subject":{ "$regex": req.query.subject, "$options": "i" }, "instructorID": req.query.instructorID, $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, { "subject": { "$regex": req.query.keyword, "$options": "i" } }] })
+            { "discountPrice": Price, "subject":{ "$regex": req.query.subject, "$options": "i" }, "instructorID": req.query.instructorID, $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, { "subject": { "$regex": req.query.keyword, "$options": "i" } }] })
             .select({
               _id: 1,
               title: 1,
@@ -75,7 +73,7 @@ async function filterCourses(req, res, next) {
               discount: 1,
               discountPrice: 1
             }).skip((CurrentPage - 1) * coursesPerPage).limit(coursesPerPage);
-          var TotalCount =  await CourseTable.countDocuments({ "price": Price, "subject": { "$regex": req.query.subject, "$options": "i" },
+          var TotalCount =  await CourseTable.countDocuments({ "discountPrice": Price, "subject": { "$regex": req.query.subject, "$options": "i" },
            "instructorID": req.query.instructorID,
             $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, 
             { "subject": { "$regex": req.query.keyword, "$options": "i" } }] });
@@ -84,7 +82,7 @@ async function filterCourses(req, res, next) {
         }
         else if (req.query.price) {
           var y = await CourseTable.find(
-            { "price": Price, "instructorID": req.query.instructorID, $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, { "subject": { "$regex": req.query.keyword, "$options": "i" } }] })
+            { "discountPrice": Price, "instructorID": req.query.instructorID, $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, { "subject": { "$regex": req.query.keyword, "$options": "i" } }] })
             .select({
               _id: 1,
               title: 1,
@@ -99,7 +97,7 @@ async function filterCourses(req, res, next) {
               discount: 1,
               discountPrice: 1
             }).skip((CurrentPage - 1) * coursesPerPage).limit(coursesPerPage);
-          var TotalCount = await CourseTable.countDocuments( { "price": Price, "instructorID": req.query.instructorID, 
+          var TotalCount = await CourseTable.countDocuments( { "discountPrice": Price, "instructorID": req.query.instructorID, 
           $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } },
            { "subject": { "$regex": req.query.keyword, "$options": "i" } }] });
 
@@ -391,11 +389,13 @@ async function updateBio(req,res){
           instructorRating: 1,
           biography: 1,
           _id: 1,
+          gender:1,
           firstname: 1,
           lastname: 1,
           instructorReview: { "$slice": 3 }
 
         });
+
         res.status(200).send(instructor);
       }
       catch(error){
@@ -484,10 +484,14 @@ async function viewAmountOwned(req, res, next) {
   }
 };
 
+async function searchCourses(req, res) {
+  res.send(await CourseTable.find({ instructorID: req.query.instructorID }).select({ title: 1 }));
+}
+
 
 
 module.exports = { 
   viewCourses, filterCourses, addCourse, discount, viewCourseRatings, 
   updateBio, testingAll, viewProfile, cancelDiscount, viewInstructorRatingsAndReviews,
-  filterByRatings,viewAmountOwned 
+  filterByRatings, searchCourses,
 };

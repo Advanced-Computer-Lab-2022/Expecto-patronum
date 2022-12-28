@@ -2,6 +2,14 @@
 /** @type {import('tailwindcss').Config} */
 const plugin = require('tailwindcss/plugin')
 
+const rotateY = plugin(function ({ addUtilities }) {
+  addUtilities({
+    '.rotate-y-180': {
+      transform: 'rotateY(180deg)',
+    },
+  })
+})
+
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
@@ -41,6 +49,7 @@ module.exports = {
         'mob': { 'max': '574px' },
         'not-mob': '575px',
         '3lg': '1275px',
+        '4lg': '1500px',
         'lg': '1024px',
         '3xl': '1665px',
         '2xl-max': { 'max': '1535px' },
@@ -52,7 +61,9 @@ module.exports = {
         'sb-max': { 'max': '856px' },
         'sb': '857px',
         'nv-max-mob': { 'min': '451px', 'max': '935px' },
+        'from-mob-to-sb': { 'min': '575px', 'max': '856px' },
         '1030': { 'max': '1030px' },
+        '1031': '1031px',
       },
       zIndex: {
         'behind': '-1',
@@ -77,25 +88,29 @@ module.exports = {
         'fullscreen': 'calc(100vw - 16.667px)',
         'beside-sidebar': 'calc(100% - 3.5rem)',
         'without-instructor-sidebar': 'calc(100% - 208px)',
-        'without-instructor-sidebar-closed': 'calc(100% - 56px)',
+        'without-instructor-sidebar-closed': 'calc(100vw - 56px)',
       },
       borderWidth: {
         'px': '1px',
         '1.5': '1.5px',
       },
       minWidth: {
-        'without-instructor-sidebar-closed': 'calc(100% - 56px)',
+        'without-instructor-sidebar-closed': 'calc(100vw - 56px)',
       },
       backgroundImage: theme => ({
         'All': "linear-gradient(#2B32B2, #1488CC)",
         'Beg': "linear-gradient(#2f8608, #52EB0E)",
         'Int': "linear-gradient(#C29904, #FDE143)",
         'Adv': "linear-gradient(#B20000, #FF4542)",
-
       }),
-
+      textShadow: {
+        'engraved': 'rgba(255, 255, 255, 0.15) 0.5px 1px 0.5px',
+      }
     },
   },
-  plugins: [require('@tailwindcss/line-clamp'),
+  plugins: [
+    require('@tailwindcss/line-clamp'),
+    require('tailwindcss-textshadow'),
+    rotateY,
   ],
 }
