@@ -63,18 +63,20 @@ function getRole(selectedRadio: any) {
       isReset = false;
       return;
   }
-    e.preventDefault();
-    axios.defaults.withCredentials = true;
-    response = await axios.post("http://localhost:5000/Auth/register", {
-      username: username.current.value,
-      password: password.current.value,
-      email: email.current.value,
-      firstname: firstname.current.value,
-      lastname: lastname.current.value,
+
+    response = await axios.post("http://localhost:5000/User/register", {
+      username: username.current.children[1].value,
+      password: password.current.children[1].value,
+      email: email.current.children[1].value,
+      firstname: firstname.current.children[1].value,
+      lastname: lastname.current.children[1].value,
       role: selectedRadio,
     }).then((res: { data: any; }) => { return res.data });
 
     console.log(response);
+  }
+  const setUserName=(e:any)=>{
+    console.log(e.target.value)
   }
   return (
     <aside>

@@ -15,7 +15,9 @@ const requestTable = require('../models/RequestSchema');
 const transactionTable = require('../models/transactionSchema');
 
 async function register(req, res) {
+  console.log("req.body.password");
   const saltHash = genPassword(req.body.password);
+
   const salt = saltHash.salt;
   const hash = saltHash.hash;
 
