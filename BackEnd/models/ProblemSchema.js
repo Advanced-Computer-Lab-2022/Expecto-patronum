@@ -10,6 +10,9 @@ const ProblemSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref:'UserSchema'
     },
+    username:{
+        type:String
+    },
     status:{
         type:String,
         enum:['unseen','resolved','pending'],
@@ -21,6 +24,9 @@ const ProblemSchema = new mongoose.Schema({
     courseID:{
             type: mongoose.Types.ObjectId,
             ref:'CourseSchema'
+    },
+    courseTitle:{
+        type:String
     },
     startDate:{
         type:Date

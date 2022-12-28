@@ -146,10 +146,14 @@ async function requestCourse(req, res, next) {
 
 async function reportProblem(req, res, next) {
   try {
+    var x = await User.findOne({ "_id": req.body.userID }, { _id: 1, username: 1 });
+    var y = await CourseTable.findOne({ "_id": req.body.courseID }, { _id: 1, title: 1 });
     const result = await problemTable.create({
       type: req.body.type,
       userID: req.body.userID,
       //status: req.body.status,
+      username:x.username,
+      courseTitle:y.title,
       body: req.body.body,
       courseID: req.body.courseID,
       startDate: Date.now(),
