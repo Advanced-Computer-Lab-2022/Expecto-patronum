@@ -371,6 +371,11 @@ async function GenerateCourses(req, res) {
    for(var i = 0; i < courses.length; i++) {
     var subtitles = courses[i].subtitles;
     var courseHours = 0;
+  // await Course.updateMany({}, [{ $set: { purchases: Math.floor(Math.random() + 100000) + 10000 }}]);
+
+  // for(var i = 0; i < courses.length; i++) {
+  //   var subtitles = courses[i].subtitles;
+  //   var courseHours = 0;
 
     subtitles.map((subtitle) => {
         subtitle.totalMinutes = 0;
@@ -411,10 +416,14 @@ async function GenerateCourses(req, res) {
      });
    }
 
-   res.send("success: " + courses.length);
-  
+  // res.send('success');
 
   //res.send("uncomment first an comment this line");
+}
+
+async function MostRated(req, res) {
+  res.send(await Course.find({}).sort({ "rating.avg": -1 }).limit(5));
+  
 }
 
 async function userfilterByRatings(req,res){
@@ -494,7 +503,4 @@ async function viewPopularCourses(req, res, next) {
   }
 };
 
-
-
-
-module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses,userViewCourseRatings,userfilterByRatings,viewPopularCourses };
+module.exports = { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses, MostRated, userfilterByRatings, userViewCourseRatings, viewPopularCourses };

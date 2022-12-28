@@ -55,14 +55,19 @@ const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
   let ref4 = useRef<HTMLDivElement>(null);
   let ref5 = useRef<HTMLDivElement>(null);
 
+
+
   return (
 
     <div>
-      {NavApear && (
+      {/* {NavApear && (
         <CourseContentNav
           refs={[ref1, ref2, ref3, ref4, ref5]}
         ></CourseContentNav>
-      )}
+
+      )} */}
+
+
 
       <div ref={ref1}>
         <CourseContentHero courseContentData={CourseHeroData} SetNavApear={SetNavApear}></CourseContentHero>
@@ -80,7 +85,6 @@ const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
             <CourseContentReviews SetReviewModalOpen={SetReviewModalOpen} review={props.data.course.review}></CourseContentReviews>
           </div>
         }
-
       </div>
       {ReviewModalOpen && (<CourseReviewModal SetOpen={SetReviewModalOpen} />)}
     </div >

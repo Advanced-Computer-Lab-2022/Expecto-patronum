@@ -22,14 +22,15 @@ const BigRating = (props: Props) => {
     <Rate
       className={props.className}
       disabled={!props.RateAction}
+      style={{ fontSize: props.size ? props.size : 30 }}
       value={props.Rate}
-
+      defaultValue={props.Rate}
       onHoverChange={props.Hover ? props.Hover : undefined}
       onChange={props.Setter ? OnChange : undefined}
-      style={{ fontSize: props.size ? props.size : 30 }}
       allowHalf
       allowClear={false}
     />
+    
     // <ul className="flex ">
     //   {stars.map((star, index) => {
     //     return (

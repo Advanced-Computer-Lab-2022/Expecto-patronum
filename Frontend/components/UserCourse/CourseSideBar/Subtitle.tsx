@@ -2,6 +2,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 import classNames from 'classnames'
 import React, { useEffect } from 'react'
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'
+
 import { AiFillPlayCircle } from 'react-icons/ai'
 import CourseSubtitleData from '../../CourseContent/CourseSubtitleData'
 import DataContext from '../../../context/DataContext'
@@ -21,9 +22,10 @@ const Subtitle = (props: Props) => {
   let x = [1, 2, 3, 4, 5];
   // console.log(props.subtitle);
   // const [animationParent] = useAutoAnimate<HTMLDivElement>();
-  const { ContentChoosen, SetContentChoosen, WatchedVideos } = React.useContext(DataContext);
+  const { ContentChoosen, SetContentChoosen, WatchedVideos, SolvedExercises } = React.useContext(DataContext);
 
   const [ShowSubtitle, SetShowSubtitle] = React.useState(props.subtitle._id === ContentChoosen?.SubtitleID);
+
 
   // let Hours = Math.floor(props.subtitle.totalMinutes / 60);
   //I have subtitle index (props.index)
@@ -105,7 +107,7 @@ const Subtitle = (props: Props) => {
                 (
                   (props.subtitle._id === ContentChoosen?.SubtitleID) && (props.subtitle.exercise[0]!.exerciseID === ContentChoosen.ContentID))
                 && SelectedContent)}>
-            <input type="checkbox" className={CheckBox} />
+            <input type="checkbox" checked={SolvedExercises.findIndex((Ex) => { Ex.excerciseID == props.subtitle.exercise[0]?.exerciseID }) !== -1} className={CheckBox} />
             <div className={ContentDataContainer} >
               <h1 className={ContentHeader}>{props.subtitle.contents.length + 1}.{props.subtitle.exercise[0]!.exerciseName}</h1>
               <div className={ContetnSubheaderContainer}>

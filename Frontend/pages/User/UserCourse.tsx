@@ -4,6 +4,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import Spinner from '../../components/shared/spinner/Spinner'
 import CourseSideBar from '../../components/UserCourse/CourseSideBar/CourseSideBar'
 import WatchContent from '../../components/UserCourse/WatchContent/WatchContent'
+import {
+  ImArrowLeft2
+} from 'react-icons/im'
 import UserCourseCard from '../../components/UserHome/UserCourseCard'
 import DataContext from '../../context/DataContext'
 import { AllCourseDataInterface } from '../../Interface/PurchasedCourse/AllCourseDataInterface'
@@ -12,13 +15,14 @@ type Props = {}
 
 const UserCourse = (props: Props) => {
   const [Course, setCourse] = useState<AllCourseDataInterface>();
-  const { ContentChoosen, SetContentChoosen, SetNotes, SetProgress, WatchedVideos, SetWatchedVideos } = useContext(DataContext);
+  const { ContentChoosen, SetContentChoosen, SetNotes, SetProgress, WatchedVideos, SetWatchedVideos, SetSolvedExercises, SetCurrentRatings } = useContext(DataContext);
   const [Next, SetNext] = useState(false);
   const [Prev, SetPrev] = useState(false);
   const [CloseSideBar, SetCloseSideBar] = useState(false);
   const { SetCourseChoosen } = useContext(DataContext);
   const [Loading, SetLoading] = useState(true);
   const [Error, SetError] = useState({ Message: "", hasError: false });
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -32,11 +36,24 @@ const UserCourse = (props: Props) => {
         let instructorData = res.data.instructor
         let progress = res.data.progress
         let WatchedVideos = res.data.watchedVideos
+        let SolvedExercises = res.data.SolvedExercises
+        let yourCourseRating = res.data.yourCourseRating
+        let yourCourseReview = res.data.yourCourseReview
+        let yourInstructorRating = res.data.yourInstructorRating
+        let yourinstructorReview = res.data.yourinstructorReview
+
         setCourse(Coursedata);
         SetCourseChoosen(Coursedata);
         SetNotes(Notes);
         SetProgress(progress);
         SetWatchedVideos(WatchedVideos);
+        SetSolvedExercises(SolvedExercises);
+        SetCurrentRatings({
+          yourCourseRating: yourCourseRating,
+          yourCourseReview: yourCourseReview,
+          yourInstructorRating: yourInstructorRating,
+          yourinstructorReview: yourinstructorReview
+        })
         SetContentChoosen({
           SubtitleID: Coursedata.subtitles[0]._id,
           subttitleName: Coursedata.subtitles[0].header,
@@ -233,7 +250,8 @@ const UserCourse = (props: Props) => {
       <div className={UserCourseContainer + " " + (CloseSideBar && "overflow-x-hidden")}>
         <WatchContent Next={Next} Prev={Prev} HandleNext={HandleNext} HandlePrev={HandlePrev}></WatchContent>
         <CourseSideBar data={Course.subtitles} SetCloseSideBar={SetCloseSideBar} CloseSideBar={CloseSideBar}></CourseSideBar>
-        {CloseSideBar && <div onClick={() => { SetCloseSideBar(false) }} className='absolute bg-red-800 w-11  top-20  right-0'>Arrow</div>}
+        {CloseSideBar && <div onClick={() => { SetCloseSideBar(false) }} className='absolute bg-navbar border-2 cursor-pointer border-white w-10 h-12 border-r-0  flex items-center justify-center top-20  right-0'>
+          <ImArrowLeft2 color='white' size={20}></ImArrowLeft2></div>}
       </div>
     )
   }

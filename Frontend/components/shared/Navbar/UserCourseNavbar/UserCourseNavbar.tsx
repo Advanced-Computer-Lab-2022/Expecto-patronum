@@ -14,7 +14,6 @@ const UserCourseNavbar = (props: Props) => {
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [ShowProgress, SetShowProgress] = React.useState(false);
   const { Progress } = React.useContext(DataContext);
-  console.log(Progress)
 
   useEffect(() => {
     if (Progress != 0) {
@@ -43,15 +42,21 @@ const UserCourseNavbar = (props: Props) => {
       </div>
 
       <div className={UtilContainer}>
-        <div onMouseEnter={() => { SetShowProgress(true) }} onMouseLeave={() => { SetShowProgress(false) }} className='flex items-center gap-1  cursor-pointer'>
-          <div className='relative' style={{ width: 45, height: 45 }}>
-            <CircularProgressbar styles={buildStyles({ pathColor: "#D80621" })} value={Progress} />
-            <SlTrophy size={22} className={'absolute top-3 left-3  transition-opacity' + ' ' + (ShowProgress ? "opacity-0" : "opacity-1")} color='gray' />
-            <p className={'absolute  top-3 left-0 right-0 bottom-0 text-center  transition-opacity  text-sm' + ' ' + (ShowProgress ? 'opacity-1' : 'opacity-0')}>{Progress}%</p>
-            {/* {ShowProgress && <div className='w-30 h-20 bg-red-300 absolute top-10 z-10'><p>8/100</p> </div>} */}
-          </div>
-          <p>Your progress</p>
-        </div>
+        {Progress >= 100 ?
+          <button type='submit' className={submitButton} id='submit-btn'>
+            <span /><span /><span /><span />
+            Final Exam
+          </button>
+          : <div onMouseEnter={() => { SetShowProgress(true) }} onMouseLeave={() => { SetShowProgress(false) }} className='flex items-center gap-1  cursor-pointer'>
+            <div className='relative' style={{ width: 45, height: 45 }}>
+              <CircularProgressbar styles={buildStyles({ pathColor: "#D80621" })} value={Progress} />
+              <SlTrophy size={22} className={'absolute top-3 left-3  transition-opacity' + ' ' + (ShowProgress ? "opacity-0" : "opacity-1")} color='gray' />
+              <p className={'absolute  top-3 left-0 right-0 bottom-0 text-center  transition-opacity  text-sm' + ' ' + (ShowProgress ? 'opacity-1' : 'opacity-0')}>{Progress}%</p>
+              {/* {ShowProgress && <div className='w-30 h-20 bg-red-300 absolute top-10 z-10'><p>8/100</p> </div>} */}
+            </div>
+            <p>Your progress</p>
+          </div>}
+
 
 
         {/* <div className={ProgressContainer}>
@@ -68,17 +73,20 @@ const UserCourseNavbar = (props: Props) => {
                   <p className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Report</p>
                 </li>
               </Link>
-              <Link href={'/User/Request?Type=Refund'}>
-                <li>
-                  <p className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 ">Refund</p>
-                </li>
-              </Link>
+              {Progress < 50 &&
+                <Link href={'/User/Request?Type=Refund'}>
+
+                  <li>
+                    <p className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 ">Refund</p>
+                  </li>
+                </Link>
+              }
 
             </ul>
-            <div className=" border-t-4  flex items-start gap-4 pb-4 pt-2 pl-4  text-gray-500">
+            {Progress >= 50 && <div className=" border-t-4  flex items-start gap-4 pb-4 pt-2 pl-4  text-gray-500">
               <MdOutlineErrorOutline fontSize={30} />
-              <p className='text-xs'>This course was purchased outside the 30-day refund policy and cannot be refunded.</p>
-            </div>
+              <p className='text-xs'>Your proress in this course exceeds 50% so it cannot be refunded.</p>
+            </div>}
           </div>
         </div>
 
@@ -99,3 +107,4 @@ const DropdownContainer = classNames("inline-flex items-center p-2 text-sm font-
 const DropDownList = classNames("absolute top-12 right-0 z-10 w-56 transition ease-out duration-300 bg-white rounded divide-gray-100 shadow");
 const DropDownHide = classNames("opacity-0 hidden")
 const DropDownShow = classNames("opacity-1 visible")
+const submitButton = classNames(' text-lg hover:bg-calm-red hover:text-white hover:rounded-md items-center py-1 px-4  font-medium text-calm-red bg-transparent');

@@ -4,11 +4,11 @@ const connection = require('../config/database');
 const ProblemSchema = new mongoose.Schema({
     type: {
         type: String,
-        enum: ['technical', 'financial','other'],
+        enum: ['Technical', 'Financial', 'Other'],
     },
-    userID:{
+    userID: {
         type: mongoose.Types.ObjectId,
-        ref:'UserSchema'
+        ref: 'UserSchema'
     },
     username:{
         type:String
@@ -18,12 +18,12 @@ const ProblemSchema = new mongoose.Schema({
         enum:['unseen','resolved','pending'],
         default:'unseen'
     },
-    body:{
-        type:String
+    body: {
+        type: String
     },
-    courseID:{
-            type: mongoose.Types.ObjectId,
-            ref:'CourseSchema'
+    courseID: {
+        type: mongoose.Types.ObjectId,
+        ref: 'CourseSchema'
     },
     courseTitle:{
         type:String
@@ -31,11 +31,13 @@ const ProblemSchema = new mongoose.Schema({
     startDate:{
         type:Date
     },
-
-    comment:[{
-        type:String
+    courseTitle: {
+        type: String
+    },
+    comment: [{
+        type: String
     }],
-      
+
 })
 
 const Problem = connection.model('Problem', ProblemSchema);

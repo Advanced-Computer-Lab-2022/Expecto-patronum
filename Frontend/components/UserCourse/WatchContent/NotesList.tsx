@@ -22,9 +22,12 @@ const NotesList = (props: Props) => {
         return Data.reverse();
       })
     } else {
-      SetNoteFiltered(Notes.reverse())
+      if (Notes.length !== NoteFiltered.length) {
+        SetNoteFiltered(Notes.reverse());
+      }
+
     }
-  }, [NotesType, ContentChoosen, Notes])
+  }, [NotesType, ContentChoosen, Notes]);
 
 
   const DownloadAllNotes = () => {
