@@ -1,16 +1,18 @@
 import classNames from 'classnames'
 import Link from 'next/link'
 import React from 'react'
+import SectionTitle from './SectionTitle'
 
 type Props = {}
 
 const AccountInfo = (props: Props) => {
   return (
     <div >
-      <div className={TitleSection}>
+      {/* <div className={TitleSection}>
         <h2 className={Title}>Account</h2>
         <p className={SubTitle}>Edit your account settings and change your password here</p>
-      </div>
+      </div> */}
+      <SectionTitle Title={"Account"} SubTitle={"Edit your account settings and change your password here"}></SectionTitle>
       <div className={Container}>
         <div className={ProfileDataContainer}>
           <div className={ProfileNameInputContainer}>

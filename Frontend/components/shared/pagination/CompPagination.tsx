@@ -5,7 +5,7 @@ import { Router, useRouter } from "next/router";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 
-const CompPagination: React.FC<{ totalCount: number,Setter:Function,FromLink:boolean}> = ({ totalCount,Setter,FromLink }) => {
+const CompPagination: React.FC<{ totalCount: number, Setter: Function, FromLink: boolean }> = ({ totalCount, Setter, FromLink }) => {
 
 
 
@@ -14,13 +14,13 @@ const CompPagination: React.FC<{ totalCount: number,Setter:Function,FromLink:boo
   const route = useRouter();
 
 
-if(FromLink){
-  useEffect(() => {
-    if (route.isReady) {
-      SetCurrentPage(Filter.Page);
-    }
-  }, [route.isReady, Filter]);
-}
+  if (FromLink) {
+    useEffect(() => {
+      if (route.isReady) {
+        SetCurrentPage(Filter.Page);
+      }
+    }, [route.isReady, Filter]);
+  }
 
 
   const PaginationChange = (page: any, pageSize: any) => {

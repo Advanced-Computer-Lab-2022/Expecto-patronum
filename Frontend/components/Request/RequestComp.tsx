@@ -1,9 +1,11 @@
 import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react'
+import React, { useEffect } from 'react'
 import TextBox from '../shared/textbox/TextBox';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import MainButton from '../shared/button/MainButton';
+import axios from 'axios';
 
 type Props = {
   Type: "Report" | "Refund",
@@ -15,24 +17,49 @@ const RequestComp = (props: Props) => {
   const [ReportType, setReportType] = React.useState("Technical");
   const [Description, setDescription] = React.useState("");
   const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const [Loading, SetLoading] = React.useState(false);
   const [ShowFollowUp, setShowFollowUp] = React.useState(false);
+
+  let DescriptionRef = React.useRef<HTMLTextAreaElement>(null);
 
   function handleReportTypeChange(e: React.ChangeEvent<HTMLSelectElement>) {
     setReportType(e.target.value)
   }
   //when submit we check if the type report then we call the report api sending the type of problem and the description
   //if the type is refund we call the refund api sending the description
-  function handleSubmit() {
+  async function handleSubmit() {
+
+    SetLoading(true)
     if (props.Type == 'Report') {
-      console.log(ReportType, Description)
+      // console.log(ReportType, Description)
+      await axios.post("http://localhost:5000/user/reportProblem", {
+        userID: "63a59b15f928fa951091f381",
+        courseID: "63a59c15e3b96b22a1dc828a",
+        type: ReportType,
+        body: DescriptionRef.current?.value || ""
+      })
+
       //call report api
     } else {
       //call refund api
-      console.log(Description)
+      await axios.post('http://localhost:5000/user/requestCourse', {
+        userID: "63a59b15f928fa951091f381",
+        courseID: "63a59c15e3b96b22a1dc828a",
+        request: "Refund",
+        body: DescriptionRef.current?.value || ""
+      })
+
     }
     setIsSubmitted(true)
+    SetLoading(false)
   }
 
+
+  useEffect(() => {
+    setIsSubmitted(false)
+
+
+  }, [props.Type])
 
 
   return (
@@ -55,30 +82,28 @@ const RequestComp = (props: Props) => {
         </Link>
 
 
-      </div> : <div>
-        <h1 className={title}>{props.Type == 'Report' ? !props.ShowOnly ? "Report a problem" : 'Your Report' : "Refund"}</h1>
-        {props.Type == 'Report' &&
-          <div className={OptionsCont}>
-            <p className={OptionLabel}>Type of problem </p>
-            <select disabled={props.ShowOnly} value={ReportType} onChange={handleReportTypeChange} className={SelectorContainer}>
-              <option className={Options} value="Technical" selected>Technical</option>
-              <option className={Options} value="Financial">Financial</option>
-              <option className={Options} value="other">other</option>
-            </select>
-          </div>
-        }
+      </div> :
+        <div >
+          <h1 className={title}>{props.Type == 'Report' ? !props.ShowOnly ? "Report a problem" : 'Your Report' : "Refund"}</h1>
+          {props.Type == 'Report' &&
+            <div className={OptionsCont}>
+              <p className={OptionLabel}>Type of problem </p>
+              <select disabled={props.ShowOnly} value={ReportType} onChange={handleReportTypeChange} className={SelectorContainer}>
+                <option className={Options} value="Technical" selected>Technical</option>
+                <option className={Options} value="Financial">Financial</option>
+                <option className={Options} value="other">other</option>
+              </select>
+            </div>
+          }
 
-        <TextBox ShowOnly={props.ShowOnly} placeHolder={props.Type == "Refund" ? "Reason of Refund.." : "Report your problem.."} ></TextBox>
+          <TextBox ShowOnly={props.ShowOnly} Ref={DescriptionRef} placeHolder={props.Type == "Refund" ? "Reason of Refund.." : "Report your problem.."} ></TextBox>
 
-        {!props?.ShowOnly ?
-          <button onClick={handleSubmit} className={FormButton}>Submit</button> :
-          <div onClick={() => { setShowFollowUp(true) }} className={CreateNote}>
-            <p className={CreateNoteText}>Follow up</p>
-            <AiFillPlusCircle fontSize={20} ></AiFillPlusCircle>
-          </div>}
-        {ShowFollowUp && <TextBox Text='Follow up...' ></TextBox>
-        }
-      </div>}
+          <MainButton Size='full' HandleClick={handleSubmit} Loading={Loading} btnText={"Submit"}></MainButton>
+
+          {ShowFollowUp && <TextBox Text='Follow up...' ></TextBox>
+          }
+        </div>
+      }
     </div>
 
 
@@ -86,9 +111,9 @@ const RequestComp = (props: Props) => {
 }
 
 export default RequestComp
-const Container = classNames("bg-white max-w-md  pb-24 px-5  pt-10   md:rounded-lg md:my-18 mx-auto")
+const Container = classNames(" max-w-md  pb-24 px-5  pt-10  bg-white mb-[20rem] mt-[4rem]  md:rounded-lg  mx-auto")
 const title = classNames('font-bold text-center');
-const OptionsCont = classNames("md:flex md:space-x-6 text-sm items-center text-gray-700 mt-4")
+const OptionsCont = classNames("md:flex md:space-x-6 text-sm items-center mb-10 text-gray-700 mt-4")
 const OptionLabel = classNames("w-1/2 mb-2 md:mb-0")
 const Options = classNames("hover:bg-canadian-red")
 const SelectorContainer = classNames("w-full rounded-lg border border-gray-200 p-2 focus:outline-none focus:border-gray-500")

@@ -9,11 +9,27 @@ import TicketCard from "./TicketCard";
 import Modal from "../shared/Modal/Modal";
 import RequestComp from "../Request/RequestComp";
 import TextBox from "../shared/textbox/TextBox";
+import { AiFillPlusCircle } from 'react-icons/ai';
+import SectionTitle from "./SectionTitle";
+import MainButton from "../shared/button/MainButton";
+import Spinner from "../shared/spinner/Spinner";
+import TicketDetails from "./TicketDetails";
+
+
 
 
 
 type Props = {};
 
+export interface ReqRepInterface {
+  status: "Unseen" | "Pending" | "Resolved",
+  _id: string,
+  type: string,
+  body: string,
+  courseTitle: string,
+  startDate: string
+  comment: string[];
+}
 
 // const reports = [
 //   //api
@@ -31,52 +47,66 @@ type Props = {};
 
 const Tickets = (props: Props) => {
 
-  const [reports, setReports] = useState<any>();
-  const [Openmodal, setOpenModal] = useState(false);
-  const [FollowUp, setFollowUp] = useState(false);
+  const [Data, setData] = useState<[ReqRepInterface]>();
+  const [Requests, setRequests] = useState<[ReqRepInterface]>();
+  const [Choosen, setChoosen] = useState<ReqRepInterface>({ status: "Unseen", _id: "", comment: [""], type: "", body: "", courseTitle: "", startDate: "" });
+  const [showDetails, setShowDetails] = useState(false);
+  const [Type, setType] = useState<"Reports" | "Requests">("Reports");
+  const [Loading, setLoading] = useState(false);
   useEffect(() => {
-    const test = [
-      {
-        name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Unseen', date: '23-12-2022', type: "Technical",
-        userID: "1", courseID: "2", body: "Trash instructor", comment: ["Trash Course", "Trash Website", "Rodin 3azeem", "ez"]
-      },
-      {
-        name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Resolved', date: '23-12-2022', type: "Technical",
-        userID: "1", courseID: "2", body: "Trash instructor", comment: ["Trash Course", "Trash Website", "Rodin 3azeem"]
-      },
-      {
-        name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022', type: "Technical",
-        userID: "1", courseID: "2", body: "Trash instructor", comment: ["Trash Course", "Trash Website", "Rodin 3azeem"]
-      },
-      {
-        name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022', type: "Other",
-        userID: "1", courseID: "2", body: "Trash instructor", comment: ["Trash Course", "Trash Website", "Rodin 3azeem"]
-      },
-      {
-        name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Unseen', date: '23-12-2022', type: "Financial",
-        userID: "1", courseID: "2", body: "Trash instructor", comment: ["Trash Course", "Trash Website", "Rodin 3azeem"]
-      },
-    ];
-    setReports(test);
-  }, []);
+    setLoading(true);
 
-  console.log(reports);
+    if (Type == "Reports") {
+      axios.post("http://localhost:5000/user/viewPreviousReports", { userID: "63a59b15f928fa951091f381" }).then((res) => {
+        setData(res.data);
+        setLoading(false);
 
-  function go() { }
+      });
+    }
+    else {
+      axios.post("http://localhost:5000/user/viewPreviousRequests", { userID: "63a59b15f928fa951091f381" }).then((res) => {
+        setData(res.data);
+        setLoading(false);
 
-  function handleChange(e: any) {
-    setFollowUp(e.target.value);
+      });
+    }
+
+
+
+  }, [Type]);
+
+
+  function handleBack() {
+    setShowDetails(false);
+  }
+
+
+  if (showDetails) {
+    return (
+      <div>
+        <SectionTitle Title="Your Reports" SubTitle="View your report and follow up if the report is not resolved within 4 to 5 working days"></SectionTitle>
+
+        <TicketDetails data={Choosen} SetBack={handleBack}></TicketDetails>
+      </div>
+    )
   }
 
   return (
-    <div>
-      <RequestComp ShowOnly={true} Type={'Report'}></RequestComp>
 
+    <>
 
+      <SectionTitle Title="Your Tickets" SubTitle="View your ticket details"></SectionTitle>
+      {Loading ? <Spinner></Spinner> : <div>
+        <div className={TabsContainer}>
+          <div onClick={() => { setType("Reports") }} className={Tab + " " + " border-r-2 border-b-0 border-gray-500 " + " " + (Type === 'Reports' && TabClicked)}>
+            <p className={Tabitem}>Reports</p>
+          </div>
+          <div onClick={() => { setType("Requests") }} className={Tab + " " + (Type === 'Requests' && TabClicked)}>
+            <p className={Tabitem}>Requests</p>
+          </div>
 
-      {/* <>
+        </div>
 
-        <h6 className={TicketsHeader}>Tickets</h6>
         <div className={TableContainer}>
           <table className={Table}>
             <thead className={TableHead}>
@@ -108,20 +138,19 @@ const Tickets = (props: Props) => {
               </tr>
             </thead>
             <tbody className={TableBody}>
-              {reports?.map((report: any, index: number) => (
-                <TicketCard report={report} index={index} ></TicketCard>
+              {Data?.map((Data: ReqRepInterface, index: number) => (
+                <TicketCard setChoosen={setChoosen} setShowDetails={setShowDetails} data={Data} Type={Type} index={index} ></TicketCard>
 
               ))}
             </tbody>
           </table>
         </div>
-        <CompPagination
-          totalCount={20 * 5}
-          Setter={go}
-          FromLink={false}
-        />
-      </> */}
-    </div>
+
+      </div>}
+
+
+
+    </>
 
 
   );
@@ -129,9 +158,12 @@ const Tickets = (props: Props) => {
 
 export default Tickets;
 
-const TicketsHeader = classNames('text-center text-2xl pt-10  text-navbar')
-const TableContainer = classNames('py-2 my-2 inline-block w-full px-8')
+const TableContainer = classNames('   py-2 my-2 inline-block w-full px-8 ')
 const Table = classNames('w-full divide-gray-200 shadow rounded-xl overflow-hidden border-b border-gray-200')
 const TableHead = classNames('bg-gray-50')
 const TableHeadItem = classNames('px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider')
-const TableBody = classNames('bg-white divide-y divide-gray-200')
+const TableBody = classNames(' divide-y bg-white divide-gray-200')
+const TabsContainer = classNames("flex w-[100%]  justify-between h-[7vh]   mb-10 rounded-b-lg");
+const Tab = classNames("flex items-center border-b-4  w-1/2 justify-center  shadow-lg   border-transparent cursor-pointer transition-all   hover:bg-gray-200  ")
+const Tabitem = classNames("text-black text-lg font-bold ")
+const TabClicked = classNames("bg-gray-300 shadow-sm ")

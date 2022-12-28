@@ -1,50 +1,59 @@
 import classNames from 'classnames'
 import React from 'react'
+import { ReqRepInterface } from './Tickets'
 
 type Props = {
-  report: {
-    title: string
-    date: string
-    type: string
-    status: string
-    body: string
-  }
+  data: ReqRepInterface
   index: number
+  Type: "Reports" | "Requests"
+  setShowDetails: (value: boolean) => void
+  setChoosen: (value: ReqRepInterface) => void
 
 }
 
+
 const TicketCard = (props: Props) => {
+  function handleClick() {
+    if (props.Type == "Reports") {
+      props.setShowDetails(true);
+      props.setChoosen(props.data);
+    }
+
+
+  }
   return (
-    <tr className={TableRowContainer} >
+    <tr onClick={handleClick} className={TableRowContainer} >
       <td className={TableDataItem}>
-        {props.report.title}
+        {props.data.courseTitle}
       </td>
       <td className={TableDataItem}>
-        {props.report.date}
+        {props.data.startDate.split("T")[0]}
       </td>
       <td className={TableDataItem}>
-        {props.report.type}
+        {props.data.type}
       </td>
       <td
         className={TableDataItem}
 
       >
         <span
-          className={props.report.status == "Pending" ? Pending : props.report.status == "Resolved" ? Resolved : Unseen}
+          className={props.data.status == "Pending" ? Pending : props.data.status == "Resolved" ? Resolved : Unseen}
         >
-          {props.report.status}
+          {props.data.status}
         </span>
       </td>
-      <td className={TableDataItem}>
-        {props.report.status === 'Resolved' ? "" : <button className={Button}>Follow Up</button>}
+      {props.Type == "Reports" ? <td className={TableDataItem}>
+        {props.data.status === 'Resolved' ? "" : <button className={Button}>Follow Up</button>}
+      </td> : <td><div className='bg-white'></div></td>
 
-      </td>
+      }
+
     </tr>
   )
 }
 
 export default TicketCard
-const TableRowContainer = classNames('cursor-pointer hover:bg-red-100 transform transition duration-300 ease-in-out')
+const TableRowContainer = classNames('cursor-pointer w-full hover:bg-red-100 transform transition duration-300 ease-in-out')
 const TableDataItem = classNames("px-6 py-4 whitespace-nowrap text-sm text-gray-500 ")
 const Pending = classNames("px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800")
 const Resolved = classNames("px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800")

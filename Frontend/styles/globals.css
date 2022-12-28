@@ -57,6 +57,9 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
 }
+.FontCertif{
+  font-family: 'Dancing Script', cursive;
+}
 
 input[type="number"] {
   appearance: textfield;

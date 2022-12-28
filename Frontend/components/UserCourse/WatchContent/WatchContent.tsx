@@ -34,6 +34,7 @@ const WatchContent = (props: Props) => {
   }, [ContentChoosen])
 
   async function HandleEnd() {
+    // console.log(videoRef.current?.getDuration())
     let res = await axios.put("http://localhost:5000/user/watchVideo", {
       userID: "63a59b15f928fa951091f381",
       courseID: "63a59c15e3b96b22a1dc828a",
@@ -41,13 +42,11 @@ const WatchContent = (props: Props) => {
       videoURL: ContentChoosen.data.url,
       //@ts-ignore
       //in minutes
-      videotime: videoRef.current?.getCurrentTime() / 60 || 1,
+      videotime: videoRef.current?.getDuration() / 60 || 1,
     })
     SetProgress(res.data.progress)
     SetWatchedVideos(res.data.watchedVideos)
-    console.log("///WATCHED VIDEOS/////")
-    console.log(res.data)
-    console.log("///WATCHED VIDEOS/////")
+
 
   }
 

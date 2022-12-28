@@ -34,7 +34,7 @@ const CourseSchema = new mongoose.Schema({
       default: 0,
     },
     startDate: Date,
-    set:Boolean,
+    set: Boolean,
     endDate: Date,
     //expiration: moment().add(, "days").valueOf()
   },
@@ -131,14 +131,14 @@ const CourseSchema = new mongoose.Schema({
       default: 0,
     },
     startDate: Date,
-    set:Boolean,
+    set: Boolean,
     endDate: Date,
     //expiration: moment().add(, "days").valueOf()
   },
 
-  purchases:{
-    type:Number,
-    default:0,
+  purchases: {
+    type: Number,
+    default: 0,
   }
 
 });

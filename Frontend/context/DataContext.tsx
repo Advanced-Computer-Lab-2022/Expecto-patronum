@@ -21,6 +21,12 @@ export interface InterfaceDataContext {
   WatchedVideos: string[],
   SetWatchedVideos: React.Dispatch<React.SetStateAction<string[]>>
 
+  SolvedExercises: SolvedExerciseInterface[] | [],
+  SetSolvedExercises: React.Dispatch<React.SetStateAction<SolvedExerciseInterface[] | []>>
+
+  CurrentRatings: CurrentRatingsInterface,
+  SetCurrentRatings: React.Dispatch<React.SetStateAction<CurrentRatingsInterface>>
+
 
 }
 interface InterfaceRate {
@@ -40,6 +46,24 @@ interface ContentChoosen {
 
 }
 
+export interface SolvedExerciseInterface {
+  excerciseID: string,
+  grade: Number,
+  exercisesAnswers: {
+    exerciseTitle: String,
+    answer: String[],
+  },
+
+
+}
+
+export interface CurrentRatingsInterface {
+  yourCourseRating: number | null,
+  yourCourseReview: string | null,
+  yourInstructorRating: number | null,
+  yourinstructorReview: string | null,
+
+}
 
 
 export interface NotesInterface {
@@ -82,8 +106,13 @@ const defualts = {
   SetProgress: () => { },
 
   WatchedVideos: [] as string[],
-  SetWatchedVideos: () => { }
+  SetWatchedVideos: () => { },
 
+  SolvedExercises: [] as SolvedExerciseInterface[] | [],
+  SetSolvedExercises: () => { },
+
+  CurrentRatings: {} as CurrentRatingsInterface,
+  SetCurrentRatings: () => { }
 
 }
 
@@ -106,9 +135,11 @@ export const DataProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [Notes, SetNotes] = useState<NotesInterface[]>(defualts.Notes);
   const [Progress, SetProgress] = useState<number>(defualts.Progress);
   const [WatchedVideos, SetWatchedVideos] = useState<string[]>(defualts.WatchedVideos);
+  const [SolvedExercises, SetSolvedExercises] = useState<SolvedExerciseInterface[] | []>(defualts.SolvedExercises);
+  const [CurrentRatings, SetCurrentRatings] = useState<CurrentRatingsInterface>(defualts.CurrentRatings);
 
   return (
-    <DataContext.Provider value={{ Filter, WatchedVideos, SetWatchedVideos, Progress, SetProgress, CourseChoosen, Notes, SetNotes, SetCourseChoosen, SetFilter, Rate, SetRate, Profile, SetProfile, ContentChoosen, SetContentChoosen }}>
+    <DataContext.Provider value={{ Filter, SolvedExercises, CurrentRatings, SetCurrentRatings, SetSolvedExercises, WatchedVideos, SetWatchedVideos, Progress, SetProgress, CourseChoosen, Notes, SetNotes, SetCourseChoosen, SetFilter, Rate, SetRate, Profile, SetProfile, ContentChoosen, SetContentChoosen }}>
       {children}
     </DataContext.Provider >
   );

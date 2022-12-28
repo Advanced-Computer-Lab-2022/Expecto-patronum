@@ -6,33 +6,33 @@ const RequestSchema = new mongoose.Schema({
         type: String,
         enum: ['Refund', 'RequestCourse'],
     },
-    userID:{
+    userID: {
         type: mongoose.Types.ObjectId,
-        ref:'UserSchema'
+        ref: 'UserSchema'
     },
-    username:{
-        type:String
+    username: {
+        type: String
     },
-    status:{
-        type:String,
-        enum:['Accepted','Pending','Rejected'],
-        default:'Pending'
+    status: {
+        type: String,
+        enum: ['Accepted', 'Pending', 'Rejected'],
+        default: 'Pending'
     },
-    body:{
-        type:String
+    body: {
+        type: String
     },
     courseID: {
         type: mongoose.Types.ObjectId,
-        ref:'CourseSchema'
+        ref: 'CourseSchema'
     },
-    courseTitle:{
-        type:String
+    courseTitle: {
+        type: String
     },
-    startDate:{
-        type:Date
+    startDate: {
+        type: Date
     },
-    progress:{
-        type:Number
+    progress: {
+        type: Number
     }
 
 })

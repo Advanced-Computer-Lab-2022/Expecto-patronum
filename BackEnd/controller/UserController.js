@@ -19,7 +19,6 @@ async function register(req, res) {
   const saltHash = genPassword(req.body.password);
   const salt = saltHash.salt;
   const hash = saltHash.hash;
-
   var exists1 = await User.findOne({ "email": req.body.email });
 
   var exists2 = await User.findOne({ "username": req.body.username });
@@ -439,6 +438,7 @@ async function giveCourseRating(req, res, next) {
 
 
 async function giveInstructorRating(req, res, next) {
+  console.log("hi")
   newRating = req.body.rating;
   oldRating = req.body.oldRating;
   userId = req.body.userId;
@@ -513,7 +513,7 @@ async function giveCourseReview(req, res, next) {
       );
 
       const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
-        { "$set": { "purchasedCourses.$.courseReview": review } }
+        { "$set": { "purchasedCourses.$.courseReview": review, "purchasedCourses.$.courseRating": rating } }
       );
 
       res.sendStatus(200);
@@ -524,7 +524,7 @@ async function giveCourseReview(req, res, next) {
       );
 
       const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
-        { "$set": { "purchasedCourses.$.courseReview": review } }
+        { "$set": { "purchasedCourses.$.courseReview": review, "purchasedCourses.$.courseRating": rating } }
       );
       res.sendStatus(200);
     }
@@ -550,7 +550,7 @@ async function giveInstructorReview(req, res, next) {
       );
 
       const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
-        { "$set": { "purchasedCourses.$.instructorReview": review } }
+        { "$set": { "purchasedCourses.$.instructorReview": review, 'purchasedCourses.$.instructorRating': rating } }
       );
 
       res.sendStatus(200);
@@ -561,7 +561,7 @@ async function giveInstructorReview(req, res, next) {
       );
       console.log(re);
       const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
-        { "$set": { "purchasedCourses.$.instructorReview": review } }
+        { "$set": { "purchasedCourses.$.instructorReview": review, 'purchasedCourses.$.instructorRating': rating } }
       );
       res.sendStatus(200);
     }
@@ -637,6 +637,7 @@ async function selectCourse(req, res, next) {
               }
               info.notes = z.notes;
               info.progress = z.progress;
+              info.SolvedExercises = z.excercises;
               info.purchased = "yes";
               info.watchedVideos = z.watchedVideos;
               x = await CourseTable.findOne({ "_id": req.body.courseId },
