@@ -144,7 +144,21 @@ async function requestCourse(req, res, next) {
   }
 };
 
+async function viewPreviousRequests(req, res, next) {
+  try {
+    var userID = req.body.userID;
+    var request = await requestTable.find({ "userID": userID }).select({ "type": 1, "body": 1, "startDate": 1, "status": 1, "courseTitle": 1 });
+    res.send(request);
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+
 async function reportProblem(req, res, next) {
+  var y = await CourseTable.findOne({ "_id": req.body.courseID }, { title: 1 });
+
   try {
     const result = await problemTable.create({
       type: req.body.type,
@@ -152,6 +166,7 @@ async function reportProblem(req, res, next) {
       //status: req.body.status,
       body: req.body.body,
       courseID: req.body.courseID,
+      courseTitle: y.title,
       startDate: Date.now(),
       //comment: req.body.comment,
     });
@@ -162,6 +177,35 @@ async function reportProblem(req, res, next) {
     console.log(error);
   }
 }
+
+async function viewPreviousReports(req, res, next) {
+  try {
+    var userID = req.body.userID;
+    var problems = await problemTable.find({ "userID": userID }).select({ "type": 1, "body": 1, "startDate": 1, "status": 1, "courseTitle": 1, comment: 1 });
+    res.send(problems);
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+async function followUpOnProblem(req, res, next) {
+  try {
+    // var userID = req.body.userID;
+    var problemID = req.body.problemID;
+    var followUp = req.body.followUp
+    var problem = await problemTable.findOne({ "_id": problemID });
+    problem.comment.push(followUp);
+    problem.save();
+    res.send(problem);
+  }
+  catch (error) {
+    console.log(error);
+  }
+
+
+}
+
 
 async function createTransaction(req, res, next) {
   try {
@@ -244,33 +288,7 @@ async function watchVideo(req, res) {
 
 
 
-async function viewPreviousReports(req, res, next) {
-  try {
-    var userID = req.body.userID;
-    var problems = await problemTable.find({ "userID": userID }).select({ "type": 1, "body": 1, "startDate": 1, "status": 1 });
-    res.send(problems);
-  }
-  catch (error) {
-    console.log(error);
-  }
-}
 
-async function followUpOnProblem(req, res, next) {
-  try {
-    var userID = req.body.userID;
-    var problemID = req.body.problemID;
-    var followUp = req.body.followUp
-    var problem = await problemTable.findOne({ "_id": problemID });
-    problem.comment.push(followUp);
-    problem.save;
-    res.send(problem);
-  }
-  catch (error) {
-    console.log(error);
-  }
-
-
-}
 
 async function addNote(req, res, next) {
   var courseID = req.body.courseID;
@@ -463,6 +481,6 @@ async function lastWatched(req, res, next) {
 
 
 module.exports = {
-  SelectExercise, viewAnswer, requestCourse, reportProblem, viewPreviousReports,
+  SelectExercise, viewAnswer, requestCourse, reportProblem, viewPreviousReports, viewPreviousRequests,
   followUpOnProblem, watchVideo, addNote, viewNotes, DeleteNote, EditNote, filterNotes, createTransaction, lastWatched
 }

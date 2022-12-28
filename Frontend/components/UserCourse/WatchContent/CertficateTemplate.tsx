@@ -1,41 +1,43 @@
+import Image from 'next/image';
 import React from 'react';
-
+import MainButton from '../../shared/button/MainButton';
+import { jsPDF } from "jspdf";
+import html2canvas from 'html2canvas';
 
 const CertficateTemplate = () => {
+
+  const handleDownload = () => {
+    //@ts-ignore
+    html2canvas(document.querySelector('#certificate-template')).then(canvas => {
+      const doc = new jsPDF();
+      doc.addImage(canvas.toDataURL(), 'PNG', 15, 15, 170, 0);
+      doc.save('certificate.pdf');
+    });
+  };
+
+
   return (
-    <div className="max-w-md mx-auto p-6 bg-red-300  rounded-lg shadow-xl">
-      <div className="bg-center bg-cover h-64" style={{ backgroundImage: 'url(/images/certificate-bg.jpg)' }}>
-        <div className="px-6 py-4">
-          <h1 className="text-4xl font-bold text-white mb-2">Certificate of Completion</h1>
-          <p className="text-xl font-semibold text-white mb-4">This certifies that</p>
-          <p className="text-3xl font-bold text-white mb-6">John Doe</p>
-          <p className="text-lg text-white mb-4">has successfully completed the course</p>
-          <p className="text-2xl font-semibold text-white mb-4">Introduction to Next.js</p>
-          <p className="text-lg text-white">on</p>
-          <p className="text-2xl font-semibold text-white">December 20, 2021</p>
+    <div className='w-[80vw] h-[100vh] ml-auto mr-auto'  >
+      <div id='certificate-template' className='w-[700px] h-[500px] mt-10 mb-10 relative ml-auto mr-auto  ' >
+        <Image alt='certificate' className='relative object-contain' fill src={'/images/CertficateTemplate.png'}></Image>
+        {/* <img className=' object-contain' src='/images/CertficateTemplate.png'></img> */}
+        <div className='absolute  text-center w-[60%] top-[14.2rem] left-[9rem]'>
+
+          <p className='mb-4 text-6xl FontCertif'>Mohamed Salem</p>
+
+          <p className='text-md text-gray-500' >For successfully completing the Applied Department of Linguistic,
+            on 3rd December 2022. </p>
         </div>
+        <p className='absolute top-[24.5rem] left-[9rem] FontCertif'>Radwan</p>
+
+        <p className='absolute top-[24.5rem] left-[30rem] FontCertif'>David</p>
+
+      </div >
+      <div className='flex justify-center'>
+        <MainButton Size='md' btnText='Download' HandleClick={handleDownload} ></MainButton>
       </div>
-      <div className="px-6 py-4">
-        <div className="flex items-center mb-4">
-          <div className="w-1/3">
-            <img src="/images/signature.png" alt="Signature" className="h-12" />
-          </div>
-          <div className="w-2/3">
-            <p className="text-lg font-bold mb-0">John Smith</p>
-            <p className="text-sm font-semibold text-gray-700">Course Instructor</p>
-          </div>
-        </div>
-        <div className="flex items-center mb-4">
-          <div className="w-1/3">
-            <img src="/images/seal.png" alt="Seal" className="h-12" />
-          </div>
-          <div className="w-2/3">
-            <p className="text-lg font-bold mb-0">Acme Learning Institute</p>
-            <p className="text-sm font-semibold text-gray-700">Accredited Education Institution</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    </div >
+
   );
 };
 

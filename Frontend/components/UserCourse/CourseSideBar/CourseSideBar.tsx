@@ -19,14 +19,10 @@ type Props = {
 
 const CourseSideBar = (props: Props) => {
   const { ContentChoosen, SetContentChoosen } = React.useContext(DataContext);
-  console.log("///////////////////////")
-  console.log(ContentChoosen)
-  console.log("///////////////////////")
+
 
   useEffect(() => {
-    console.log("///////////////////////")
-    console.log(ContentChoosen)
-    console.log("///////////////////////")
+
 
     //when we press on a note that is written we get it from the database with the content id and the subtitle id 
     //so we set both of these but we dont have the data so here we check if we have a ContentChoosen with no data we set its data

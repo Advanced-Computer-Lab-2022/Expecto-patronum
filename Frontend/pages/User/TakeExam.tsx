@@ -37,10 +37,9 @@ const Exam = () => {
         answer: "",
         isVisible: false,
     }]
-    ); 
+    );
 
     useEffect(() => {
-
         // const questionsDummyData = [
         //     { question: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
         //     { question: "testDiffNumber?", choices: ["easy", "what"], answer: "what", isVisible: false },
@@ -66,9 +65,9 @@ const Exam = () => {
     const getQuestions = async () => { //need to be callled on loading page
         await axios.get('http://localhost:5000/User/takeExam', {
             params: {
-                examID:"6383e073de30152bc8991dd5" ,
+                examID: "6383e073de30152bc8991dd5",
             },
-          }).then(
+        }).then(
             (res) => {
                 console.log(res.data[0]);
                 const q = res.data[0].questions;
@@ -191,39 +190,39 @@ const Exam = () => {
         e.preventDefault();
         // const AnswerLabel = document.getElementsByClassName("answer") as HTMLCollectionOf<HTMLLabelElement>;
         var empty = new Array(questions.length);
-        for(var i=0;i<empty.length;i++){
+        for (var i = 0; i < empty.length; i++) {
             empty[i] = '';
         }
-        
+
         // if (AnswerLabel != undefined) {
         //     for (var i = 0; i < AnswerLabel.length; i++) {
         //         AnswerLabel[i].style.display = "";
         //     }
         // }
-            var correctAnswers = 0;
-            for (var i = 0; i < questions.length; i++) {
-                const QuestionChoices = document.getElementsByClassName("Q" + i) as any;
-                var chosenAnswerIndex = 100; // out of bounds
-                for (var j = 0; j < QuestionChoices.length; j++) {
-                    if (QuestionChoices[j].nextElementSibling != null) {
-                        // QuestionChoices[j].nextElementSibling.className = notChosen;
-                        if (QuestionChoices[j].checked) {
-                            chosenAnswerIndex = j;
-                            var selected=questions[i].choices[chosenAnswerIndex];
-                            console.log(selected);
-                            empty[i]=selected;
-                            console.log(empty);
-                        }
+        var correctAnswers = 0;
+        for (var i = 0; i < questions.length; i++) {
+            const QuestionChoices = document.getElementsByClassName("Q" + i) as any;
+            var chosenAnswerIndex = 100; // out of bounds
+            for (var j = 0; j < QuestionChoices.length; j++) {
+                if (QuestionChoices[j].nextElementSibling != null) {
+                    // QuestionChoices[j].nextElementSibling.className = notChosen;
+                    if (QuestionChoices[j].checked) {
+                        chosenAnswerIndex = j;
+                        var selected = questions[i].choices[chosenAnswerIndex];
+                        console.log(selected);
+                        empty[i] = selected;
+                        console.log(empty);
                     }
                 }
-                response = await axios.put("http://localhost:5000/User/submitAnswer", {
-                    userID:"6383d9da6670d09304d2b016", 
-                    courseID:"6383e073de30152bc8991dc9",
-                    excerciseID:"6383e073de30152bc8991dd5",
-                    answers:empty,
-                }).then((res: { data: any; }) => { return res.data });
+            }
+            response = await axios.put("http://localhost:5000/User/submitAnswer", {
+                userID: "6383d9da6670d09304d2b016",
+                courseID: "6383e073de30152bc8991dc9",
+                excerciseID: "6383e073de30152bc8991dd5",
+                answers: empty,
+            }).then((res: { data: any; }) => { return res.data });
+        }
     }
-}
 
     return (
         <form
@@ -321,14 +320,14 @@ const Exam = () => {
                         type={type}
                         className="hidden text-lg hover:bg-red-600 hover:text-white hover:rounded-md h-10 mb-4 items-center py-2 px-4 ml-3 font-medium text-red-600 bg-transparent"
                     >
-                     
+
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span>
                         Submit
                     </button>
-                       {/* </Link> */}
+                    {/* </Link> */}
                 </div>
             </div>
 

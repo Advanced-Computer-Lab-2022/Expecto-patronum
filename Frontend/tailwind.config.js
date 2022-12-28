@@ -91,6 +91,7 @@ module.exports = {
         'Beg': "linear-gradient(#2f8608, #52EB0E)",
         'Int': "linear-gradient(#C29904, #FDE143)",
         'Adv': "linear-gradient(#B20000, #FF4542)",
+        'Gray': "linear-gradient(#202126, #202126)",
 
       }),
 

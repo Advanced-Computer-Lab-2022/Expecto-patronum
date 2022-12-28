@@ -13,7 +13,7 @@ const { giveCourseRating, buyCourse, unbuyCourse, ViewMyCourses, GenerateUsers, 
 const UserTable = require('../models/UserSchema');
 
 const { SelectExercise, viewAnswer, requestCourse, reportProblem, viewPreviousReports, followUpOnProblem, watchVideo, addNote,
-  viewNotes, filterNotes, createTransaction, lastWatched, EditNote, DeleteNote } = require('../controller/UserController2');
+  viewNotes, filterNotes, createTransaction, lastWatched, EditNote, DeleteNote, viewPreviousRequests } = require('../controller/UserController2');
 
 router.get("/", (req, res) => {
   res.send("Hello, User");
@@ -84,7 +84,9 @@ router.get("/takeExam", takeExam);
 router.get("/viewAnswers", viewAnswer);
 
 router.get("/viewMyCourses", ViewMyCourses);
-router.get("/viewPreviousReports", viewPreviousReports);
+router.post("/viewPreviousReports", viewPreviousReports);
+router.post("/viewPreviousRequests", viewPreviousRequests);
+
 router.put("/filterNotes", filterNotes);
 
 

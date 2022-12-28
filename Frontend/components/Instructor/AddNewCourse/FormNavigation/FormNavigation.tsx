@@ -18,14 +18,14 @@ const FormNavigation = (props: Props) => {
 
     useEffect(() => {
         global.window.scrollTo(0, 79);
-    },[]);
+    }, []);
 
     const prev = () => {
-        if(currentStep === 0)
+        if (currentStep === 0)
             return;
 
         global.window.scrollTo(0, 79);
-        if(currentStep === addNewCourseSteps.length - 1) {
+        if (currentStep === addNewCourseSteps.length - 1) {
             nextStepRef.current.classList.remove('hidden');
             submitNewCourseRef.current.classList.add('hidden');
         }
@@ -35,25 +35,25 @@ const FormNavigation = (props: Props) => {
     }
 
     const next = () => {
-        if(currentStep === addNewCourseSteps.length - 1)
+        if (currentStep === addNewCourseSteps.length - 1)
             return;
-        
+
         global.window.scrollTo(0, 79);
-        if(currentStep === 0) {
-            if(!checkRequiredCourseInfo()) {
+        if (currentStep === 0) {
+            if (!checkRequiredCourseInfo()) {
                 viewPopupMessage(false, 'Please fill in the required fields.');
                 // return;
             }
         }
 
-        if(currentStep == 1) {
-            if(!checkSubtitleInf()) {
+        if (currentStep == 1) {
+            if (!checkSubtitleInf()) {
                 viewPopupMessage(false, 'Please fill in the required subtitles with their content data.');
                 // return;
             }
         }
 
-        if(currentStep === addNewCourseSteps.length - 2) {
+        if (currentStep === addNewCourseSteps.length - 2) {
             nextStepRef.current.classList.add('hidden');
             submitNewCourseRef.current.classList.remove('hidden');
         }
@@ -65,10 +65,10 @@ const FormNavigation = (props: Props) => {
 
     function checkRequiredCourseInfo() {
         var moveForward = true;
-        for(var key in newCourseInfo) {
-            if(newCourseInfo[key] === '') {
+        for (var key in newCourseInfo) {
+            if (newCourseInfo[key] === '') {
                 moveForward = false;
-                switch(key) {
+                switch (key) {
                     case 'title': titleRef.current.children[0].style.color = 'rgb(185, 28, 28)'; break;
                     case 'subject': subjectRef.current.children[0].style.color = 'rgb(185, 28, 28)'; break;
                     case 'price': priceRef.current.children[0].style.color = 'rgb(185, 28, 28)'; break;
@@ -83,38 +83,38 @@ const FormNavigation = (props: Props) => {
 
     function checkSubtitleInf() {
         var moveForward = true;
-        for(var i = 0; i < subtitles.length; i++) {
+        for (var i = 0; i < subtitles.length; i++) {
             var subtitle = document.getElementById('subtitle-' + i + '-data') as any;
-            if(subtitle != undefined) {
-                if(subtitles[i].header === '') {
+            if (subtitle != undefined) {
+                if (subtitles[i].header === '') {
                     subtitle.children[0].children[0].style.color = 'rgb(185, 28, 28)';
                     moveForward = false;
                 }
-    
-                if(subtitles[i].courseSummary === '') {
+
+                if (subtitles[i].courseSummary === '') {
                     subtitle.children[1].children[0].style.color = 'rgb(185, 28, 28)';
                     moveForward = false;
                 }
-    
+
                 var contents = subtitles[i].contents;
-                for(var j = 0; j < contents.length; j++) {
-                    var contentData = subtitle.children[j+2].children[1] as any;
-                    if(contents[j].contentTitle === '') {
+                for (var j = 0; j < contents.length; j++) {
+                    var contentData = subtitle.children[j + 2].children[1] as any;
+                    if (contents[j].contentTitle === '') {
                         contentData.children[0].children[0].children[0].style.color = 'rgb(185, 28, 28)';
                         moveForward = false;
                     }
-    
-                    if(contents[j].video === '') {
+
+                    if (contents[j].video === '') {
                         contentData.children[2].children[0].style.color = 'rgb(185, 28, 28)';
                         moveForward = false;
                     }
-    
-                    if(contents[j].duration === 0) {
+
+                    if (contents[j].duration === 0) {
                         contentData.children[0].children[1].children[0].style.color = 'rgb(185, 28, 28)';
                         moveForward = false;
                     }
-    
-                    if(contents[j].description === '') {
+
+                    if (contents[j].description === '') {
                         contentData.children[3].children[0].style.color = 'rgb(185, 28, 28)';
                         moveForward = false;
                     }
@@ -125,26 +125,26 @@ const FormNavigation = (props: Props) => {
         return moveForward;
     }
 
-  return (
-    <div className={formNavigation}>
-        <p ref={errorMessageRef} className='text-red-700 h-auto mb-4 text-center'></p>
-        <hr className='w-full pb-4' />
-        <div className='flex items-center'>
-            <button ref={prevStepRef} type="button" className={previousButton} onClick={prev}>
-                <BsArrowLeft className={`${buttonIcon} right-2`} />
-                Previous
-            </button>
-            <button ref={nextStepRef} type="button" className={nextButton} onClick={next}>
-                Next
-                <BsArrowRight className={`${buttonIcon} left-2`} />
-            </button>
-            <button ref={submitNewCourseRef} type='submit' form='add-new-course-form' onClick={(e) => props.submit(e)} className={submitButton} id='submit-btn'>
-                <span /><span /><span /><span />
-                Submit
-            </button>
+    return (
+        <div className={formNavigation}>
+            <p ref={errorMessageRef} className='text-red-700 h-auto mb-4 text-center'></p>
+            <hr className='w-full pb-4' />
+            <div className='flex items-center'>
+                <button ref={prevStepRef} type="button" className={previousButton} onClick={prev}>
+                    <BsArrowLeft className={`${buttonIcon} right-2`} />
+                    Previous
+                </button>
+                <button ref={nextStepRef} type="button" className={nextButton} onClick={next}>
+                    Next
+                    <BsArrowRight className={`${buttonIcon} left-2`} />
+                </button>
+                <button ref={submitNewCourseRef} type='submit' form='add-new-course-form' onClick={(e) => props.submit(e)} className={submitButton} id='submit-btn'>
+                    <span /><span /><span /><span />
+                    Submit
+                </button>
+            </div>
         </div>
-    </div>
-  )
+    )
 }
 
 const formNavigation = classNames('text-center mx-auto min-w-max flex flex-col items-center justify-center');
