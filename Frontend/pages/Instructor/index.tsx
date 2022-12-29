@@ -62,12 +62,22 @@ const Instructor = (props: Props) => {
     async function getPopularCourses() {
       axios.defaults.withCredentials = true;
       await axios.get("http://localhost:5000/Courses/popularCourses").then((res: { data: any }) => {
-        setTopRated(res.data);
+        setTopRated(res.data.Courses);
         setIsLoading(false);
       });
     }
 
     getPopularCourses();
+
+    async function getMoneyOwed() {
+      axios.defaults.withCredentials = true;
+      await axios.put("http://localhost:5000/Instructor/viewAmountOwned").then((res: { data: any }) => {
+        // setTopRated(res.data);
+        console.log(res.data.Courses);
+      });
+    }
+
+    getMoneyOwed();
   }, [])
 
   function levelColor(level: string) {

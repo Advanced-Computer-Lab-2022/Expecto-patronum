@@ -18,22 +18,22 @@ router.get("/", (req, res, next) => {
 
 router.get("/viewCourses",viewCourses);
 
- router.get("/filterCourses",filterCourses);
+router.get("/filterCourses",filterCourses);
 
- router.get("/searchCourses", searchCourses);
- router.get("/viewCourseRatings",viewCourseRatings)
- router.get("/viewInstructorRatingsAndReviews", viewInstructorRatingsAndReviews);
+router.get("/searchCourses", searchCourses);
+router.get("/viewCourseRatings",viewCourseRatings)
+router.get("/viewInstructorRatingsAndReviews", viewInstructorRatingsAndReviews);
 
- router.get("/updateBio",updateBio);
+router.get("/updateBio",updateBio);
 
  
- router.get("/viewProfile",viewProfile);
+router.get("/viewProfile",viewProfile);
 
 
- router.get("/testingAll",testingAll);
- router.put("/filterByRatings",filterByRatings);
+router.get("/testingAll",testingAll);
+router.put("/filterByRatings",filterByRatings);
 
- router.put("/viewAmountOwned",viewAmountOwned);
+router.put("/viewAmountOwned", viewAmountOwned);
 
 router.post('/addCourse',addCourse);
 
