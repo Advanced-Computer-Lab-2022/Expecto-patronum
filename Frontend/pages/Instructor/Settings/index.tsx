@@ -2,6 +2,7 @@ import axios from 'axios';
 import classNames from 'classnames';
 import React, { useContext, useEffect, useState } from 'react';
 import { MdModeEditOutline } from 'react-icons/md';
+import { date } from 'yup';
 import Input from '../../../components/shared/Input/Input';
 import PopUpMessage from '../../../components/shared/PopupMessage/PopupMessage';
 import { PopupMessageContext } from '../../_app';
@@ -20,11 +21,11 @@ const index = (props: Props) => {
 
   useEffect(() => {
     const getInfo = async () => {
-      await axios.get("http://localhost:5000/User/getInstructorInfo", {
+      await axios.get("http://localhost:5000/Instructor/viewProfile", {
         params: {
-          id: '63877fb65c8dac5284aaa3c2',
+          userID: '63877fb65c8dac5284aaa3c2',
         }
-      }).then(res => {return setInfo(res.data)});
+      }).then(res => { return setInfo(res.data[0])});
     }
     getInfo();
 

@@ -5,6 +5,7 @@ import CourseIcon from '../../components/Instructor/AddNewCourse/CourseIcon/Cour
 import CourseInfo from '../../components/Instructor/AddNewCourse/CourseInfo/CourseInfo';
 import CourseSubtitles from '../../components/Instructor/AddNewCourse/CourseSubtitles/CourseSubtitles';
 import FormNavigation from '../../components/Instructor/AddNewCourse/FormNavigation/FormNavigation';
+import CourseFinalExam from '../../components/Instructor/CourseFinalExam/CourseFinalExam';
 
 interface ContextState {
   addNewCourseSteps: any,
@@ -17,6 +18,8 @@ interface ContextState {
   setCourseIcon: any,
   titleRef: any,
   subjectRef: any,
+  finalExam: any, 
+  setFinalExam: any,
   priceRef: any,
   summaryRef: any,
   levelRef: any,
@@ -33,6 +36,7 @@ const AddNewCourse = (props: Props) => {
 
   const courseInfoRef  = useRef<any>();
   const courseSubtitlesRef = useRef<any>();
+  const courseFinalExamRef = useRef<any>();
   const courseIconRef = useRef<any>();
 
   const titleRef = useRef<any>();
@@ -43,7 +47,7 @@ const AddNewCourse = (props: Props) => {
   const courseVideoRef = useRef<any>(null);
   const errorMessageRef = useRef<any>();
 
-  const addNewCourseSteps = [courseInfoRef, courseSubtitlesRef, courseIconRef];
+  const addNewCourseSteps = [courseInfoRef, courseSubtitlesRef, courseFinalExamRef, courseIconRef];
   const [currentStep, setCurrentStep] = useState<number>(0);
 
   const [newCourseInfo, setNewCourseInfo] = useState<any>(
@@ -57,6 +61,22 @@ const AddNewCourse = (props: Props) => {
     }
   );
   const [subtitles, setSubtitles] = useState<any>([new Subtitle(), new Subtitle(), new Subtitle()]);
+  const [finalExam, setFinalExam] = useState<any>(
+    {
+      courseID: '',
+      subtitleName: '',
+      exerciseDuration: 0,  
+      exerciseTitle: '',
+      questions: 
+      [{
+        problem: '',
+        choices: [''],
+        answer: '',
+      }],
+        
+      totalGrade: 0
+    }
+  );
   const [courseIcon, setCourseIcon] = useState<any>('/images/Trophy.png');
 
   async function submitNewCourse(e: any) {
@@ -86,10 +106,11 @@ const AddNewCourse = (props: Props) => {
 
   return (
     <Layout>
-        <AddNewCourseContext.Provider value={{addNewCourseSteps, currentStep, setCurrentStep, newCourseInfo, setNewCourseInfo, subtitles, setSubtitles, setCourseIcon, titleRef, subjectRef, priceRef, summaryRef, levelRef, courseVideoRef, errorMessageRef}}>
+        <AddNewCourseContext.Provider value={{addNewCourseSteps, currentStep, setCurrentStep, newCourseInfo, setNewCourseInfo, subtitles, setSubtitles, setCourseIcon, finalExam, setFinalExam, titleRef, subjectRef, priceRef, summaryRef, levelRef, courseVideoRef, errorMessageRef}}>
           <form className='sb-max:min-w-fit' onChange={() => errorMessageRef.current.innerHTML = ''}>
             <CourseInfo ref={courseInfoRef} />
             <CourseSubtitles ref={courseSubtitlesRef} />
+            <CourseFinalExam ref={courseFinalExamRef} />
             <CourseIcon ref={courseIconRef} />
             <FormNavigation submit={submitNewCourse} />
           </form>

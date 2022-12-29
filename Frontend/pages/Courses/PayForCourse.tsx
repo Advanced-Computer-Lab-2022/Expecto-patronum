@@ -40,16 +40,6 @@ const PayForCourse = (props: Props) => {
         global.window.scrollTo(0, 80);
     }, [])
 
-    function levelColor(level: string) {
-        switch(level) {
-            case 'Beginner': return 'from-[#2f8608] to-[#52EB0E]';
-            case 'Intermediate': return 'from-[#C29904] to-[#FDE143]';
-            case 'Advanced': return 'from-[#B20000] to-[#FF4542]';
-            case 'AllLevels': return 'from-[#2B32B2] to-[#1488CC]';
-            default: return 'from-[#1D948E] to-[#3FE0D0]';
-        }
-    }
-
     const goBack = (e: any) => {
         if(!paymentRef.current?.children[0].classList.contains('nv-max:hidden')) {
             return router.back();

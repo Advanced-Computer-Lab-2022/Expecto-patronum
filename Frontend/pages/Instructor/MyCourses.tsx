@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import OneStar from '../../components/shared/rating/OneStar';
 import Layout from './Layout';
 import { BiSearchAlt2 } from 'react-icons/bi';
 import { BsGridFill } from 'react-icons/bs';
@@ -9,8 +8,6 @@ import classNames from 'classnames';
 import Pagination from '../../components/shared/pagination/Pagination';
 import FilterDropdown from '../../components/shared/FilterDropdown/FilterDropdown';
 import { AiOutlineClear } from 'react-icons/ai';
-import { MdModeEditOutline } from 'react-icons/md';
-import { TbDiscount2 } from 'react-icons/tb';
 import InstructorCourseCard from '../../components/Instructor/InstructorCourseCard/InstructorCourseCard';
 import DataContext from '../../context/DataContext';
 import InstructorCourseCardSkeleton from '../../components/Instructor/InstructorCourseCard/InstructorCourseCardSkeleton';
@@ -148,6 +145,8 @@ const MyCourses = (props: Props) => {
               </div>
             </div>
           </div>
+
+          <Pagination pageCount={numberOfPages} page={page} setPage={setPage} onClick={courseSearch} getCourses={getCourses} />
 
           <div className={(!isViewList ? 'grid grid-flow-row grid-cols-1 md:grid-cols-2 3lg:grid-cols-3 gap-x-20': '') + ' sb-max:ml-8 sb-max:mr-22 mx-8'}>
             {courses.length == 0 ? isLoading && <InstructorCourseCardSkeleton count={10} isViewList={isViewList}  /> : undefined}

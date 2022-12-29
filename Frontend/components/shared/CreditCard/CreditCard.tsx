@@ -93,7 +93,7 @@ const CreditCard = (props: Props) => {
   }
 
   return (
-    <div className={`${props.className} relative flex items-center space-y-4 px-3 pt-3 pb-4 flex-col justify-around bg-main w-[24rem] nv-max:h-[37.5rem] shadow-md`}>
+    <div className={`${props.className} relative flex items-center h-screen space-y-4 px-3 pt-3 pb-4 flex-col justify-around bg-main w-[24rem] nv-max:h-[37.5rem] shadow-md`}>
       <div>
         <h1 className='text-center text-3xl'>Payment Details</h1>
         <div className='flip-card relative z-20 mt-3'>
@@ -104,7 +104,7 @@ const CreditCard = (props: Props) => {
         </div>
       </div>
 
-      <form className='w-full relative'>
+      <form className='w-full relative 4lg:h-full'>
         <div className='nv:-space-y-2'>
           <div className='absolute -top-10 nv-max:-top-14 mob:left-2 not-mob:-left-7 z-10'>
             <Input type='radio' onChange={setCardType} inputDivStyle='flex items-center not-mob:mx-2 w-full ' style='mr-1 scale-[0.6]' enum={['Visa', 'Mastercard']} />
