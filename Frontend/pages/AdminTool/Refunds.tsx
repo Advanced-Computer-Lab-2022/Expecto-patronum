@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import Input from '../../components/shared/Input/Input';
 import SideBar from '../../components/AdminTool/SideBar';
 import AdminHeader from '../../components/AdminTool/AdminHeader';
 import classNames from "classnames";
 import CompPagination from "../../components/shared/pagination/CompPagination";
-import ProgressBar2 from '../../components/shared/progress/ProgressBar2';
+import { PopupMessageContext } from '../_app';
+
 
 const pending = classNames(
   "px-1 py-1 rounded-md whitespace-nowrap text-sm bg-yellow-200 text-yellow-700"
@@ -31,35 +31,57 @@ const pendingBar = classNames(
 
 type Props = {}
 var response = null;
-const refunds = [
-  //api
-  { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"requestCourse",
-     userID:"1",courseID:"2",body:"",progress:50},
-  { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"requestCourse",
-     userID:"1",courseID:"2",body:"",progress:25},
-  { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Accepted', date: '23-12-2022' , type:"requestCourse",
-     userID:"1",courseID:"2",body:"",progress:15},
-  { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Rejected', date: '23-12-2022' , type:"requestCourse",
-     userID:"1",courseID:"2",body:"",progress:100},
-  { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"requestCourse",
-     userID:"1",courseID:"2",body:"",progress:45},
-]
+// const refunds = [
+//   //api
+//   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"requestCourse",
+//      userID:"1",courseID:"2",body:"",progress:50},
+//   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"requestCourse",
+//      userID:"1",courseID:"2",body:"",progress:25},
+//   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Accepted', date: '23-12-2022' , type:"requestCourse",
+//      userID:"1",courseID:"2",body:"",progress:15},
+//   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Rejected', date: '23-12-2022' , type:"requestCourse",
+//      userID:"1",courseID:"2",body:"",progress:100},
+//   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"requestCourse",
+//      userID:"1",courseID:"2",body:"",progress:45},
+// ]
 const Refunds = (props: Props) => {
-  const [characterLeft, setCharacterLeft] = useState(250);
-  const [selectedRadio, setSelectedRadio] = useState<string>("");
-  const [type, setType] = useState<"button" | "submit" | "reset" | undefined>("button");
-  const radioRef = useRef<any>();
-
-  const username = useRef<any>();
-  const email = useRef<any>();
-  const password = useRef<any>();
-  const firstname = useRef<any>();
-  const lastname = useRef<any>();
-
-
-function go() {
-}
-function AcceptRefund(index: number) {
+  const [refunds, setRefunds] = useState<any>();
+  const [totalCount, setTotalCount] = useState<any>();
+  useEffect(() => {
+    getRefunds();
+    }, []);
+  
+    const getRefunds = async () => { //need to be callled on loading page
+      await axios.get('http://localhost:5000/Admin/viewRefunds').then(
+          (res) => {
+              console.log(res.data);
+              const q = res.data.refunds;
+              console.log(q);
+              setRefunds(q);
+              setTotalCount(res.data.TotalCount);
+              
+          });
+  
+  }
+  async function goToPage(Page: any) {
+    await axios
+      .get('http://localhost:5000/Admin/viewRefunds', {
+        params: {
+          page: Page,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        const q = res.data.courses;
+        console.log(q);
+        setRefunds(q);
+      });
+  }
+  async function AcceptRefund(index: number) {
+  response = await axios.put("http://localhost:5000/Admin/refund", {
+    requestID:refunds[index]._id,
+    refund:"Accept"
+}).then((res: { data: any; }) => { return res.data });
   const status = document.getElementsByClassName("Status"+index);
   const Bar=document.getElementById("ProgressBar"+index) as HTMLElement;
   const AcceptButton=document.getElementById("AcceptButton"+index);
@@ -77,7 +99,11 @@ function AcceptRefund(index: number) {
   }
   //api
 }
-function RejectRefund(index: number) {
+  async function RejectRefund(index: number) {
+  response = await axios.put("http://localhost:5000/Admin/refund", {
+    requestID:refunds[index]._id,
+    refund:"Reject"
+}).then((res: { data: any; }) => { return res.data });
   const status = document.getElementsByClassName("Status"+index);
   const Bar=document.getElementById("ProgressBar"+index) as HTMLElement;
   const AcceptButton=document.getElementById("AcceptButton"+index);
@@ -95,53 +121,7 @@ function RejectRefund(index: number) {
   }
   //api
 }
-  async function createUser(e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    const error = document.getElementById("error-message");
-
-    if(error != undefined)
-        error.innerHTML = "";
-    const inputFields = document.getElementsByClassName("create-course-input") as HTMLCollectionOf<HTMLElement>;
-    var missing = false;
-    for(let i = 0; i < inputFields.length; i++) {
-      const field = inputFields[i] as HTMLTextAreaElement | any;
-      if(field.nodeName === "DIV") {
-          var selected = false;
-          for(let j = 1; j < field.children.length; j++) {
-            if(field.children[j].children[0].checked) {
-                selected = true;
-                break;
-            }
-        }
-          if(!selected) {
-              field.children[0].style.color = "#B91C1C";
-              missing = true;
-          }
-      } else {
-          if(field.value === "") {
-              const label = document.getElementsByClassName("create-course-input-label")[i] as HTMLLabelElement;
-              label.style.color = "#B91C1C";
-              missing = true;
-          }
-      }
-  }
-  if(missing) {
-      if(error != undefined)
-          error.innerHTML = "Please fill in the required fields marked with a '*'.";
-      return;
-  }
-    e.preventDefault();
-    axios.defaults.withCredentials = true;
-    response = await axios.post("http://localhost:5000/Auth/register", {
-      username: username.current.value,
-      password: password.current.value,
-      email: email.current.value,
-      firstname: firstname.current.value,
-      lastname: lastname.current.value,
-      role: selectedRadio,
-    }).then((res: { data: any; }) => { return res.data });
-
-    console.log(response);
-  }
+  
   return (
     <aside>
     <AdminHeader/>
@@ -193,24 +173,18 @@ function RejectRefund(index: number) {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {refunds.map((refund,index) => (
-                  <tr key={refund.date}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{refund.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{refund.title}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{refund.date}</td>
+                {refunds?.map((refund:any, index:number) => (
+                  <tr key={refund.startDate}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{refund.username}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{refund.courseTitle}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{refund.startDate.split('T')[0]}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">  
-                    {/* <div className ="w-full bg-gray-200 rounded-full dark:bg-gray-200">
-                    <div id={"ProgressBar"+index}
-                      className={refund.status=="Pending" ? pendingBar : refund.status=="Accepted" ? acceptedBar : rejectedBar + " pr-6"} style={{width: `${refund.progress}%` }}> {refund.progress}%</div>
-
-                    </div> */}
                         <div className='relative flex items-center justify-between'>
         <div className='mr-2'>{refund.progress.toString() + '%'}</div>
         <div className="w-72 h-3 sb-max:w-52 bg-black bg-opacity-[0.04] shadow-sm hover:shadow-md hover:opacity-95 transition-all duration-200 rounded-full flex overflow-hidden relative">
             <div id={"ProgressBar"+index} className={refund.status=="Pending" ? pendingBar : refund.status=="Accepted" ? acceptedBar : rejectedBar} style={{width: refund.progress.toString() + '%'}} aria-valuenow={0} aria-valuemin={0} aria-valuemax={100}></div>
         </div>
     </div>
-                    {/* <ProgressBar2 id={"ProgressBar"+index} percentage={refund.progress/100} barColor={refund.status} text={refund.progress.toString() + '%'}/> */}
                     </td>
                     <td className={"Status"+index+" "+"px-6 py-4 whitespace-nowrap text-sm text-gray-500"}><span className={refund.status=="Pending" ? pending : refund.status=="Accepted" ? accepted : rejected }>{refund.status}</span></td>
                    <td
@@ -243,7 +217,11 @@ function RejectRefund(index: number) {
         </div>
       </div>
     </div>
-    <div id="pagination"><CompPagination totalCount={20 * 5} Setter={go} FromLink={false} /></div>
+    <div id="pagination"><CompPagination
+              totalCount={totalCount}
+              Setter={goToPage}
+              FromLink={false}
+            /></div>
         </div>
         
       </form>

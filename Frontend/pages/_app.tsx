@@ -59,7 +59,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <DataProvider>
           {/* <Navbar></Navbar> */}
 
-          <UserCourseNavbar></UserCourseNavbar>
+          {/* <UserCourseNavbar></UserCourseNavbar> */}
           <PopupMessage ref={popupMessageRef} ticker={ticker} icon={popupIcon} setIsPopupOpen={setIsPopupOpen} />
           <Component {...pageProps} />
           <Footer></Footer>

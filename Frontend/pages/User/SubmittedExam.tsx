@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-
-import CompPagination from "../../components/shared/pagination/CompPagination";
 import SubmittedExamCards from "../../components/exam/SubmittedExamCards";
 import ExamHeader from "../../components/exam/ExamHeader";
 import classNames from "classnames";
-// import { Pagination } from "flowbite-react"
-// import Input from "../components/shared/Input/Input";
+
 const wrongAnswer = classNames(
     "inline-flex justify-between items-center p-5 w-full text-red-500 bg-white rounded-lg border-2 border-red-500"
 );
@@ -95,15 +92,12 @@ const SubmittedExam = () => {
         }
     }, [questions])
 
-    async function submitExam(e: React.FormEvent<HTMLFormElement>) {
-
-    }
 
     return (
         <form
             id="Exam-form"
             className="row mx-4  h-full"
-            onSubmit={(e) => submitExam(e)}
+    
         >
             <ExamHeader></ExamHeader>
             {questions.map((question, index) => (

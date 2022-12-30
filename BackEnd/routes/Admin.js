@@ -2,13 +2,14 @@ const router = require('express').Router();
 const connection = require('../config/database');
 
 const Admin = require('../models/AdminSchema');
-const {viewCourseRequests,grantOrRejectAccess,viewReportedFunctions,markReportedProblem,
+const {viewAllCourses,viewCourseRequests,grantOrRejectAccess,viewReportedFunctions,markReportedProblem,
   AcceptOrRejectRefund,promotion,cancelPromotion,viewRefundRequests}= require('../controller/AdminController')
 
 
 router.get("/", (req, res) => {
   res.send("Hello, Admin");
 })
+router.get("/AllCourses",viewAllCourses);
 
 router.get("/viewCourseRequests",viewCourseRequests);
 

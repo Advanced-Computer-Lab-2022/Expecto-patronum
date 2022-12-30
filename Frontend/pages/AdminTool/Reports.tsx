@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import Input from "../../components/shared/Input/Input";
 import SideBar from "../../components/AdminTool/SideBar";
 import AdminHeader from "../../components/AdminTool/AdminHeader";
 import classNames from "classnames";
@@ -20,25 +19,9 @@ const unseen = classNames(
 type Props = {};
 var response = null;
 
-
-
-// const reports = [
-//   //api
-//   { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Unseen', date: '23-12-2022' , type:"Technical",
-//   userID:"1",courseID:"2",body:"Trash instructor",comment:["Trash Course","Trash Website","Rodin 3azeem","Trash Admin"]},
-// { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Resolved', date: '23-12-2022' , type:"Technical",
-//   userID:"1",courseID:"2",body:"Trash instructor",comment:["Trash Course","Trash Website","Rodin 3azeem"]},
-// { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"Technical",
-//   userID:"1",courseID:"2",body:"Trash instructor",comment:["Trash Course","Trash Website","Rodin 3azeem"]},
-// { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Pending', date: '23-12-2022' , type:"Other",
-//   userID:"1",courseID:"2",body:"Trash instructor",comment:["Trash Course","Trash Website","Rodin 3azeem"]},
-// { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Unseen', date: '23-12-2022' , type:"Financial",
-//   userID:"1",courseID:"2",body:"Trash instructor",comment:["Trash Course","Trash Website","Rodin 3azeem"]},
-// ];
-
 const Reports = (props: Props) => {
-
   const [reports, setReports] = useState<any>();
+  const [totalCount, setTotalCount] = useState<any>();
   useEffect(() => {
   //   const test = [
   //     { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Unseen', date: '23-12-2022' , type:"Technical",
@@ -60,26 +43,43 @@ const Reports = (props: Props) => {
     await axios.get('http://localhost:5000/Admin/viewReportedFunctions').then(
         (res) => {
             console.log(res.data);
-            const q = res.data;
-            console.log(q);
+            const q = res.data.problems;
             setReports(q);
+            setTotalCount(res.data.TotalCount)
 
         });
 
 }
-  function go() { }
+async function goToPage(Page: any) {
+  await axios
+    .get("http://localhost:5000/Admin/viewReportedFunctions", {
+      params: {
+        page: Page,
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+      const q = res.data.courses;
+      console.log(q);
+      setReports(q);
+    });
+}
   function closeReport(index: number) {
     const reportView=document.getElementById("staticModal" + index);
     if(reportView != undefined) {
       reportView.style.display="none";
     }
   }
-  function ResolveReport(index: number) {
+  async function ResolveReport(index: number) {
+    response = await axios.put("http://localhost:5000/Admin/markReportedProblem", {
+      problemID:reports[index]._id,
+      status:"resolved"
+  }).then((res: { data: any; }) => { return res.data });
     const status = document.getElementsByClassName("Status" + index);
     const ViewButton = document.getElementById("ViewButton" + index);
     if (status[0].children != undefined) {
       status[0].children[0].className = resolved;
-      status[0].children[0].innerHTML = "Resolved";
+      status[0].children[0].innerHTML = "resolved";
     }
     if (ViewButton != undefined) {
       ViewButton.style.display = "none";
@@ -90,11 +90,15 @@ const Reports = (props: Props) => {
     }
     //api
   }
-  function viewReport(index: number) {
+  async function viewReport(index: number) {
+    response = await axios.put("http://localhost:5000/Admin/markReportedProblem", {
+        problemID:reports[index]._id,
+        status:"pending"
+    }).then((res: { data: any; }) => { return res.data });
     const status = document.getElementsByClassName("Status" + index);
     if (status[0].children != undefined) {
       status[0].children[0].className = pending;
-      status[0].children[0].innerHTML = "Pending";
+      status[0].children[0].innerHTML = "pending";
     }
     const reportView=document.getElementById("staticModal" + index);
     if(reportView != undefined) {
@@ -157,15 +161,15 @@ const Reports = (props: Props) => {
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                         {reports?.map((report:any, index:number) => (
-                          <tr key={report.date}>
+                          <tr key={report.startDate}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              {report.name}
+                              {report.username}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {report.title}
+                              {report.courseTitle}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {report.startDate}
+                              {report.startDate.split('T')[0]}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               {report.type}
@@ -180,9 +184,9 @@ const Reports = (props: Props) => {
                             >
                               <span
                                 className={
-                                  report.status == "Pending"
+                                  report.status == "pending"
                                     ? pending
-                                    : report.status == "Resolved"
+                                    : report.status == "resolved"
                                       ? resolved
                                       : unseen
                                 }
@@ -196,7 +200,7 @@ const Reports = (props: Props) => {
                                 type="button"
                                 onClick={() => viewReport(index)}
                                 style={
-                                  report.status == "Resolved"
+                                  report.status == "resolved"
                                     ? { display: "none" }
                                     : {}
                                 }
@@ -213,7 +217,7 @@ const Reports = (props: Props) => {
                                   <div className="relative bg-white rounded-lg shadow">
                                     <div className="flex items-start justify-between p-4 border-b rounded-t">
                                       <h3 className="text-xl font-semibold text-gray-900">
-                                        {report.name +
+                                        {report.username +
                                           "'s Report" +
                                           " ( " +
                                           report.type +
@@ -258,7 +262,7 @@ const Reports = (props: Props) => {
                                         id={"Resolve" + index}
                                         onClick={() => ResolveReport(index)}
                                         type="button"
-                                        className="flex justify-center text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        className="flex justify-center text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                                       >
                                         Resolve
                                       </button>
@@ -276,10 +280,10 @@ const Reports = (props: Props) => {
               </div>
             </div>
             <CompPagination
-                        totalCount={20 * 5}
-                        Setter={go}
-                        FromLink={false}
-                      />
+              totalCount={totalCount}
+              Setter={goToPage}
+              FromLink={false}
+            />
           </div>
         </form>
       </div>

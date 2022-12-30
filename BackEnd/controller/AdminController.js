@@ -8,10 +8,22 @@ const requestTable = require('../models/RequestSchema');
 const problemTable=require('../models/ProblemSchema');
 const transactionTable = require('../models/transactionSchema');
 
+async function viewAllCourses(req, res, next) {
+  var CurrentPage = req.query.page ? req.query.page : 1;
+  try {
+    const course = await CourseTable.find().skip((CurrentPage - 1) * 5).limit(5);
+    var TotalCount = await CourseTable.countDocuments();
+    res.send({ courses: course, TotalCount: TotalCount});
+  }
+  catch (err) {
+    res.status(400).json({error:err.message})
+  }
+};
+
 async function viewCourseRequests(req, res, next) {
     var CurrentPage = req.query.page ? req.query.page : 1;
     try {
-      const request = await requestTable.find( {type :"RequestCourse"}).skip((CurrentPage - 1) * 10).limit(10);
+      const request = await requestTable.find( {type :"RequestCourse"}).skip((CurrentPage - 1) * 5).limit(5);
       var TotalCount = await requestTable.countDocuments({type :"requestCourse"});
       res.send({ requests: request, TotalCount: TotalCount});
     }
@@ -23,7 +35,7 @@ async function viewCourseRequests(req, res, next) {
   async function viewRefundRequests(req, res, next) {
     var CurrentPage = req.query.page ? req.query.page : 1;
     try {
-      const request = await requestTable.find( {type :"Refund"}).skip((CurrentPage - 1) * 10).limit(10);
+      const request = await requestTable.find( {type :"Refund"}).skip((CurrentPage - 1) * 5).limit(5);
       var TotalCount = await requestTable.countDocuments({type :"Refund"});
       res.send({ refunds: request, TotalCount: TotalCount});
     }
@@ -36,7 +48,7 @@ async function viewCourseRequests(req, res, next) {
     try {
         if(req.body.granted=="true"){
           const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
-          { $set: { "status": "accepted" } }, { new: true });
+          { $set: { "status": "Accepted" } }, { new: true });
     
         const user = await User.findByIdAndUpdate({ "_id": request.userID },
         { $push: { "purchasedCourses":{courseID:request.courseID }} }, { new: true });
@@ -49,7 +61,7 @@ async function viewCourseRequests(req, res, next) {
 
         else{
             const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
-            { $set: { "status": "rejected" } }, { new: true });
+            { $set: { "status": "Rejected" } }, { new: true });
             res.status(200).send("access denied");
         }
       }
@@ -65,7 +77,7 @@ async function viewCourseRequests(req, res, next) {
         if(req.body.refund=="Accept"){
 
         const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
-        { $set: { "status": "accepted" } }, { new: true });
+        { $set: { "status": "Accepted" } }, { new: true });
 
         const trans =  await transactionTable.findOne({ "userID":request.userID,"courseID" : request.courseID});
 
@@ -91,7 +103,7 @@ async function viewCourseRequests(req, res, next) {
         }
         else{
             const request =  await requestTable.findByIdAndUpdate({ "_id": req.body.requestID },
-            { $set: { "status": "rejected" } }, { new: true });
+            { $set: { "status": "Rejected" } }, { new: true });
             res.status(200).send("refund rejected");
         }
       }
@@ -105,7 +117,7 @@ async function viewCourseRequests(req, res, next) {
   async function viewReportedFunctions(req,res,next){
     var CurrentPage = req.query.page ? req.query.page : 1;
     try{
-      var problems=await problemTable.find().skip((CurrentPage - 1) * 10).limit(10);
+      var problems=await problemTable.find().skip((CurrentPage - 1) * 5).limit(5);
 
       var TotalCount = await problemTable.countDocuments();
       res.send({ problems: problems, TotalCount: TotalCount});
@@ -287,5 +299,5 @@ async function viewCourseRequests(req, res, next) {
     }
   }
 
-  module.exports = {viewCourseRequests,grantOrRejectAccess,viewReportedFunctions,markReportedProblem,
+  module.exports = {viewAllCourses,viewCourseRequests,grantOrRejectAccess,viewReportedFunctions,markReportedProblem,
     AcceptOrRejectRefund,promotion,cancelPromotion,viewRefundRequests}

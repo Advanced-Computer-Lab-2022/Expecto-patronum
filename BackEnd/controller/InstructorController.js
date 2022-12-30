@@ -493,5 +493,5 @@ async function searchCourses(req, res) {
 module.exports = { 
   viewCourses, filterCourses, addCourse, discount, viewCourseRatings, 
   updateBio, testingAll, viewProfile, cancelDiscount, viewInstructorRatingsAndReviews,
-  filterByRatings, searchCourses,
+  filterByRatings, searchCourses,viewAmountOwned
 };

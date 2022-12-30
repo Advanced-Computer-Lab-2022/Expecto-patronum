@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import axios from 'axios';
 import Input from '../../components/shared/Input/Input';
 import SideBar from '../../components/AdminTool/SideBar';
 import AdminHeader from '../../components/AdminTool/AdminHeader';
+import { PopupMessageContext } from '../_app';
 type Props = {}
 
 var isReset = false;
@@ -10,11 +11,9 @@ var response = null;
 var radio: null=null;
 
 const AddUser = (props: Props) => {
-  const [characterLeft, setCharacterLeft] = useState(250);
   const [selectedRadio, setSelectedRadio] = useState<string>("");
-  const [type, setType] = useState<"button" | "submit" | "reset" | undefined>("button");
   const radioRef = useRef<any>();
-
+  const { viewPopupMessage } = useContext(PopupMessageContext);
   const username = useRef<any>();
   const email = useRef<any>();
   const password = useRef<any>();
@@ -27,12 +26,9 @@ function getRole(selectedRadio: any) {
 
   async function createUser(e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const error = document.getElementById("error-message");
-
     if(error != undefined)
         error.innerHTML = "";
-
     isReset = true;
-
     const inputFields = document.getElementsByClassName("create-course-input") as HTMLCollectionOf<HTMLElement>;
     var missing = false;
     for(let i = 0; i < inputFields.length; i++) {
@@ -63,7 +59,10 @@ function getRole(selectedRadio: any) {
       isReset = false;
       return;
   }
-
+  function isValidEmail(email :any) {
+    return /\S+@\S+\.\S+/.test(email);
+  }
+  if (isValidEmail(email.current.children[1].value)==true) {
     response = await axios.post("http://localhost:5000/User/register", {
       username: username.current.children[1].value,
       password: password.current.children[1].value,
@@ -72,12 +71,14 @@ function getRole(selectedRadio: any) {
       lastname: lastname.current.children[1].value,
       role: selectedRadio,
     }).then((res: { data: any; }) => { return res.data });
-
+    viewPopupMessage(true, "User Added Successfully, Waiting for him verfying his Email");
     console.log(response);
+} else {
+  viewPopupMessage(false, "Invalid Email");
+}
+    
   }
-  const setUserName=(e:any)=>{
-    console.log(e.target.value)
-  }
+
   return (
     <aside>
     <AdminHeader/>
