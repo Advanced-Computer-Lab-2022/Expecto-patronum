@@ -46,7 +46,7 @@ const CourseInfo = React.forwardRef((props: Props, ref) => {
   }
 
   return (
-    <div ref={ref as any} className='w-[50%] mx-auto mb-4 sb-max:w-full sb-max:px-7'>
+    <div ref={ref as any} className='w-[50%] mx-auto sb-max:w-full sb-max:px-7'>
       <h1 className='text-center text-3xl py-4 text-black'>Fill Course Information</h1>
       <hr />
       <div>

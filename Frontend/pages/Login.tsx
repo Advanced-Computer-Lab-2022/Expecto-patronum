@@ -25,7 +25,7 @@ const Login = () => {
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-b from-[#B80621] to-calm-red">
-      <div ref={leftSideRef} className="bg-gradient-to-b from-[#B80621] to-calm-red opacity-0 text-center sb:inline-block sb:align-top h-screen sb:w-1/2 w-full sb:pt-20 sb-max:mb-4 px-4 pt-10 text-white transition-[height,_opacity] duration-1000">
+      <div ref={leftSideRef} className="bg-gradient-to-b from-[#B80621] to-calm-red opacity-0 text-center sb:inline-block sb:align-top h-screen sb:w-1/2 w-full sb:pt-20 sb-max:pb-[24.5rem] px-4 pt-10 text-white transition-[height,_opacity] duration-1000">
         <h1 className="text-4xl">Welcome To </h1>
         <div className="p-2 rounded-full bg-white mx-auto sb:mt-20 mt-10 w-fit scale-[3]"><FaCanadianMapleLeaf className="text-canadian-red scale-120" /></div>
         <p className="mt-9 text-xl">CanCham Learning System</p>
@@ -66,7 +66,7 @@ const Login = () => {
           </div>
         </div>
 
-        <div style={{perspective: '1000px'}} className="bg-white mx-auto w-10/12 min-w-[60%] z-10 relative text-center sb:pt-20 sb:px-4 sb-max:px-0 pt-8 pb-8">
+        <div style={{perspective: '1000px'}} className="bg-white mx-auto z-10 relative text-center sb:pt-20 px-4 sb-max:px-0 py-8">
           <div style={{transformStyle: 'preserve-3d'}} className={`${isLogin ? '': 'rotate-y-180'} relative w-full h-full transition-all duration-700`}>
             <LoginForm setIsLogin={setIsLogin} />
             <SignUpForm setIsLogin={setIsLogin} />
@@ -86,10 +86,10 @@ const LoginForm = (props: {setIsLogin: any}) => {
   } 
 
   return (
-    <div className="flip-card-front bg-white z-30  pt-10">
-      <div className="w-fit mx-auto text-left whitespace-nowrap">
+    <div className="flip-card-front bg-white z-30 nv:pt-10">
+      <div className="w-full whitespace-nowrap">
         <h1 className="text-3xl">Sign in to your account</h1>
-        <p className="text-sm">Or <a className="text-blue-600 hover:text-blue-800" onClick={viewSignUp}>Don't have an account? Sign up</a></p>
+        <p className="text-sm text-left">Or <a className="text-blue-600 hover:text-blue-800" onClick={viewSignUp}>Don't have an account? Sign up</a></p>
       </div>
 
       <form action="#" method="POST" id="sign-in" className="mt-6 space-y-4 -mx-px bg-white">
@@ -141,14 +141,14 @@ const SignUpForm = (props: {setIsLogin: any}) => {
   } 
 
   return (
-    <div className="-scale-x-100 bg-white relative nv:-mt-10">
-      <div className="w-fit mx-auto text-left whitespace-nowrap">
+    <div className="-scale-x-100 bg-white relative nv:-mt-10 mx-px">
+      <div className="w-fit text-center mx-auto">
         <h1 className="text-3xl">Sign up</h1>
         <button className="absolute nv-max:text-sm nv:left-2 nv-max:top-3 left-0 top-2 flex items-center text-blue-600 hover:text-blue-800" onClick={hideSignUp}><MdOutlineKeyboardBackspace className="mr-2 scale-120 mb-px" />Go Back</button>
       </div>
 
       <form action="#" method="POST" id="sign-up" className="mt-6 space-y-5">
-        <div className="flex items-center justify-between space-x-16">
+        <div className="flex items-center justify-between nv:space-x-16">
           <div className="flex flex-col text-left w-1/2 pr-6">
             <label className="text-lg">Firstname</label>
             <input className="border-b-2 bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your firstname" required />

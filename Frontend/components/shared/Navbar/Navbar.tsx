@@ -40,7 +40,7 @@ function Navbar() {
               Inspire Learners
             </a>
             <hr className="nv:hidden" />
-            <Link className={navWideButton} href="Auth/Signup">
+            <Link className={navWideButton} href="/Login">
               Sign Up
             </Link>
           </div>
