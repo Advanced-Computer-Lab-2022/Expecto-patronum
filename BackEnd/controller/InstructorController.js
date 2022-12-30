@@ -392,8 +392,8 @@ async function updateBio(req,res){
           gender:1,
           firstname: 1,
           lastname: 1,
-          instructorReview: { "$slice": 3 }
-
+          instructorReview: { "$slice": 3 },
+          email: 1,
         });
 
         res.status(200).send(instructor);
