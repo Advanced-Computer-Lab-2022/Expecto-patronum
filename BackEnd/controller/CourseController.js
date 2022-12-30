@@ -3,8 +3,8 @@ const schedule = require('node-schedule');
 const User = require('../models/UserSchema');
 
 
-//schedule.scheduleJob('* * * * *', discountEndDate);
-//schedule.scheduleJob('* * * * *', discountStartDate);
+schedule.scheduleJob('* * * * *', discountEndDate);
+schedule.scheduleJob('* * * * *', discountStartDate);
 
 async function discountEndDate() {
   const dateNow = new Date();
@@ -44,7 +44,9 @@ async function discountEndDate() {
     console.log("I ran schedule EndDate");
   }
   catch (error) {
-    res.status(400).send({ error: error.message });
+    // console.log(error);
+
+    // res.status(400).send({ error: error.message });
   }
 };
 
@@ -93,7 +95,7 @@ async function discountStartDate() {
     console.log("I ran schedule startDate");
   }
   catch (error) {
-    res.status(400).send({ error: error.message });
+    // res.status(400).send({ error: error.message });
   }
 };
 

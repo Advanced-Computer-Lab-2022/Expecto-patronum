@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import Input from "../../components/shared/Input/Input";
 import SideBar from "../../components/AdminTool/SideBar";
 import AdminHeader from "../../components/AdminTool/AdminHeader";
 import CompPagination from "../../components/shared/pagination/CompPagination";
 import Datepicker from "../../components/AdminTool/DatePicker";
+import { PopupMessageContext } from '../_app';
 
 type Props = {};
 var response = null;
@@ -18,6 +19,7 @@ const Promotions = (props: Props) => {
   const [totalCount, setTotalCount] = useState<any>();
   const promotionSome = useRef<any>();
   const promotionAll = useRef<any>();
+  const { viewPopupMessage } = useContext(PopupMessageContext);
 
   const handleOnChange = (position: any) => {
     const updatedCheckedState = checkedState.map((item, index) =>
@@ -138,7 +140,8 @@ const Promotions = (props: Props) => {
       modal.style.display = "";
     }
   }
-  async function addSome() {
+
+  async function addSome(e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const modal = document.getElementById("selectedCourses");
     var temp = [];
     for (let i = 0; i < courses.length; i++) {
@@ -147,15 +150,24 @@ const Promotions = (props: Props) => {
       }
     }
     console.log(temp);
+
     if(temp.length > 0){
-      response = await axios.put("http://localhost:5000/Admin/givePromotion", {
-      courseID:temp,
-      promotion:promotionSome.current.children[1].value,
-      startDate:dateRange.startDate,
-      endDate:dateRange.endDate
-      }).then((res: { data: any; }) => { return res.data });
+      if(promotionSome.current.children[1].value!=""){
+        var percentage=parseInt(promotionSome.current.children[1].value);
+        response = await axios.put("http://localhost:5000/Admin/givePromotion", {
+          courseID:temp,
+          promotion:percentage,
+          startDate:dateRange.startDate,
+          endDate:dateRange.endDate
+          }).then((res: { data: any; }) => { return res.data });
+      }else{
+        e.preventDefault();
+        viewPopupMessage(false, "No amount given");
+      }
+
     }else{
-      
+          e.preventDefault();
+          viewPopupMessage(false, "No Courses selected");
     }
 
     if (modal != undefined) {
@@ -303,7 +315,7 @@ const Promotions = (props: Props) => {
                     <div className="flex justify-center p-6 space-x-2 rounded-b">
                       <button
                         type="submit"
-                        onClick={addSome}
+                        onClick={(e) => addSome(e)}
                         className="flex justify-center text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                       >
                         Add Discount

@@ -176,7 +176,7 @@ async function viewCourseRequests(req, res, next) {
     var promotion = req.body.promotion;
     queryCond.promotion = req.body.promotion;
     startDate = new Date(req.body.startDate);
-    queryCond.startDate = req.body.startDate;
+    queryCond.startDate = startDate;
     const dateNow = new Date();
 
     if(startDate<= dateNow){
