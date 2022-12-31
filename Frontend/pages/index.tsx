@@ -92,10 +92,10 @@ const Home: NextPage = () => {
       <section id="most-viewed" className="text-left px-20 nv-max:px-0 mb-5">
         <div className="flex justify-between items-center mx-6">
           <h1 className="text-xl font-bold">Popular Among Learners</h1>
-          <a className="flex items-center space-x-3 text-blue-700 hover:text-blue-800 hover:scale-[1.01] relative">
+          <Link href='' className="flex items-center space-x-3 text-blue-700 hover:text-blue-800 hover:scale-[1.01] relative">
             <span>View All</span>
             <HiArrowNarrowRight className='scale-[1.4] nv-max:hidden' />
-          </a>
+          </Link>
         </div>
         <div className="overflow-x-auto flex items-center my-1 p-3">
           {isLoading && <SmallCourseCardSkeleton count={10} />}
@@ -110,10 +110,10 @@ const Home: NextPage = () => {
       <section id="most-rated" className="text-left px-20 nv-max:px-0 mt-5">
         <div className="flex justify-between items-center mx-6">
           <h1 className="text-xl font-bold">Students' Favorite</h1>
-          <a className="flex items-center space-x-3 text-blue-700 hover:text-blue-800 hover:scale-[1.01] relative">
+          <Link href='' className="flex items-center space-x-3 text-blue-700 hover:text-blue-800 hover:scale-[1.01] relative">
             <span>View All</span>
             <HiArrowNarrowRight className='scale-[1.4] nv-max:hidden' />
-          </a>
+          </Link>
         </div>
         <div className="overflow-x-auto flex items-center my-1 p-3">
         {isLoading && <SmallCourseCardSkeleton count={10} />}

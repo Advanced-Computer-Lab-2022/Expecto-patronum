@@ -467,45 +467,45 @@ async function lastWatched(req, res, next) {
 
 
 
-    async function payWithWallet(req,res,next){
-      try {
-        var userID=req.body.userID;
-        var course=await CourseTable.findById(req.body.courseID);
-        const exists = await User.findOne({ "_id": req.body.userID,"purchasedCourses.courseID":req.body.courseID });
-        if(exists){
-          res.status(400).send("Course already bought");
-          return;
-        }
-        
-        var wallet=await User.findById(userID).select({"wallet":1,"username":1});
-        if(wallet.wallet>=course.price){
-          //res.status(400).send("funds are sufficent");
-        }
-        //res.status(400).send(String(course.price));
-          const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
-          { $push: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
-  
-          const courses =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
-          { $inc: { "purchases": 1 } }, { new: true });
-          const newWallet=await User.findByIdAndUpdate({"_id":userID},{"wallet":wallet.wallet-course.price});
-          res.status(400).send(String(courses));
-  
-          const result = await transactionTable.create({
-            userID: user._id,
-            instructorID: course.instructorID,
-            courseID: course._id,
-            transactionDate: Date.now(),
-            transactionAmount : req.body.amount,
-          });
-          result.save();
-  
-          next();
-  
-    } catch (error) {
-      console.log(error);
-      res.status(400).send({error:error.message});
-    }
-  };
+async function payWithWallet(req,res,next){
+    try {
+      var userID=req.body.userID;
+      var course=await CourseTable.findById(req.body.courseID);
+      const exists = await User.findOne({ "_id": req.body.userID,"purchasedCourses.courseID":req.body.courseID });
+      if(exists){
+        res.status(400).send("Course already bought");
+        return;
+      }
+      
+      var wallet=await User.findById(userID).select({"wallet":1,"username":1});
+      if(wallet.wallet>=course.price){
+        //res.status(400).send("funds are sufficent");
+      }
+      //res.status(400).send(String(course.price));
+        const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
+        { $push: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
+
+        const courses =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
+        { $inc: { "purchases": 1 } }, { new: true });
+        const newWallet=await User.findByIdAndUpdate({"_id":userID},{"wallet":wallet.wallet-course.price});
+        res.status(400).send(String(courses));
+
+        const result = await transactionTable.create({
+          userID: user._id,
+          instructorID: course.instructorID,
+          courseID: course._id,
+          transactionDate: Date.now(),
+          transactionAmount : req.body.amount,
+        });
+        result.save();
+
+        next();
+
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({error:error.message});
+  }
+};
 
   
 

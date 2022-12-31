@@ -6,6 +6,7 @@ import CreditCard from '../../components/shared/CreditCard/CreditCard';
 import OneStar from '../../components/shared/rating/OneStar';
 import { useRouter } from 'next/router';
 import DataContext from '../../context/DataContext';
+import { PopupMessageContext } from '../_app';
 
 type Props = {
 
@@ -14,11 +15,24 @@ type Props = {
 const PayForCourse = (props: Props) => {
 
     const [course, setCourse] = useState<any>();
+    const [cardDetails, setCardDetails] = useState(
+        {
+          type: 'Visa',
+          cardNumber: '',
+          expiryDate: '',
+          securityCode: '',
+          cardholderName: '',
+        }
+    );
+    const [paymentMethod, setPaymentMethod] = useState<'credit' | 'wallet'>('credit');
+    const [isCredit, setIsCredit] = useState<boolean>(true);
     const paymentRef = useRef<HTMLDivElement>(null);
     const paymentTabRef = useRef<HTMLDivElement>(null);
     const summaryTabRef = useRef<HTMLDivElement>(null);
+    const confirmPurchaseRef = useRef<HTMLButtonElement>(null);
 
     const { Rate } = useContext(DataContext);
+    const { viewPopupMessage } = useContext(PopupMessageContext);
 
     let router = useRouter();
 
@@ -55,6 +69,7 @@ const PayForCourse = (props: Props) => {
         paymentTabRef.current?.classList.add('w-4','bg-gray-400');
 
         e.target.parentNode.children[1].classList.remove('hidden');
+        confirmPurchaseRef.current?.classList.add('nv-max:hidden');
     }
 
     const proceed = (e: any) => {
@@ -68,12 +83,40 @@ const PayForCourse = (props: Props) => {
         paymentTabRef.current?.classList.remove('w-4','bg-gray-400');
 
         e.target.classList.add('hidden');
+        confirmPurchaseRef.current?.classList.remove('nv-max:hidden');
+    }
 
+    const confirmPurchase = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+
+        if(paymentMethod === 'credit') {
+            axios.post('http://localhost:5000/User/buyCourse', {
+                userId: '',
+                creditCardNumber: cardDetails.cardNumber,
+                ccv: cardDetails.securityCode,
+                cardHolderName: cardDetails.cardholderName,
+                expiration: cardDetails.expiryDate,
+            }).then((res) => {
+
+            })
+        } else {
+            if(true) { // Check on user's balance
+                viewPopupMessage(false, "Your wallet balance is insufficient.")
+            } else {
+                axios.post('http://localhost:5000/User/payWithWallet', {
+                    userID: '',
+                    courseID: '',
+                    amount: 69.99,
+                }).then((res) => {
+                    
+                })
+            }
+        }
     }
 
   return (
     <div ref={paymentRef} className='h-full relative nv:flex items-start'>
-        {<div className='w-[calc(100%-24rem)] nv-max:w-full pt-3 nv:pl-4 nv:h-screen flex flex-col justify-between'>
+        {<div className='w-[calc(100%-24rem)] nv-max:w-full pt-3 nv:pl-4 nv:h-screen flex flex-col justify-between nv:border-r-1.5'>
             <div>
                 <h1 className='text-3xl nv-max:text-center'>Payment Summary</h1>
                 
@@ -117,7 +160,24 @@ const PayForCourse = (props: Props) => {
                 </div>
             </div>
         </div>}
-        <CreditCard className='nv-max:hidden nv-max:w-full nv-max:shadow-none' />
+        <form className={`nv-max:hidden relative pb-3`}>
+            <h1 className='text-center text-3xl mt-4'>Payment Methods</h1>
+            <TogglePaymentMethod isCredit={isCredit} setIsCredit={setIsCredit} setPaymentMethod={setPaymentMethod} />
+            <div className={`${isCredit ? '' : 'h-40'} flex items-start overflow-hidden relative`}>
+                <CreditCard cardDetails={cardDetails} setCardDetails={setCardDetails} className={`${isCredit ? 'right-0' : 'right-96'} relative nv-max:shadow-none transition-all duration-300 nv-max:duration-100`} />
+                <div className={`${!isCredit ? 'left-0' : 'left-96'} absolute w-full text-center transition-all duration-300 nv-max:duration-100`}>
+                    <div className='shadow-md rounded-lg h-[8rem] w-[19rem] pt-3 text-center mx-auto bg-gradient-to-br from-white to-gray-300'>
+                        <h1 className='text-xl tracking-wider mb-2'>Cash:</h1>
+                        <label className='text-3xl font-bold space-x-4'>
+                            <span>{Rate.curr}</span> 
+                            <span>60.00 <span className='text-calm-red text-sm'>-{Rate.curr} 59.49</span></span>
+                        </label>
+                        <p className='text-right text-xs mr-3 mt-3 italic'>Remaining after purchase: <span className='ml-2 font-bold not-italic'>{Rate.curr} 0.41</span></p>
+                    </div>
+                </div>
+            </div>
+            <button onClick={confirmPurchase} ref={confirmPurchaseRef} type='submit' className={`rounded-md nv-max:hidden text-white bg-[#0B80F3] px-8 py-2 nv:mt-2 z-10 nv-max:absolute nv-max:-bottom-[3.93rem] block nv-max:right-10 mx-auto hover:bg-[#096BCB] transition-all duration-200`}>Confirm Purchase</button>
+        </form>
         <div className='nv:hidden space-y-5 relative'>
             <div className='flex items-center justify-center space-x-2'>
                 <div ref={summaryTabRef} className='h-[0.18rem] w-10 bg-[#0B80F3] transition-all duration-200'></div>
@@ -130,6 +190,56 @@ const PayForCourse = (props: Props) => {
         </div>
     </div>
   )
+}
+
+type toggleProps = {
+    isCredit: boolean,
+    setIsCredit: React.Dispatch<React.SetStateAction<boolean>>,
+    setPaymentMethod: React.Dispatch<React.SetStateAction<'credit' | 'wallet'>>,
+}
+const TogglePaymentMethod = (props: toggleProps) => {
+
+    const creditRef = useRef<HTMLButtonElement>(null);
+    const walletRef = useRef<HTMLButtonElement>(null);
+    const trackerRef = useRef<HTMLDivElement>(null);
+
+    function chooseCredit() {
+        props.setIsCredit(true);
+        props.setPaymentMethod('credit');
+        creditRef.current?.classList.add('font-bold', 'tracking-wide');
+        creditRef.current?.classList.remove('text-[#433A3E]');
+        walletRef.current?.classList.remove('font-bold', 'tracking-wide');
+        walletRef.current?.classList.add('text-[#433A3E]');
+
+        if(trackerRef.current != undefined) {
+            trackerRef.current.style.width = creditRef.current?.clientWidth + 'px';
+            trackerRef.current.style.left = `calc(${creditRef.current?.offsetLeft}px - 11px)`;
+            trackerRef.current.style.top = creditRef.current?.offsetTop + 'px';
+        }
+    }
+
+    function chooseWallet() {
+        props.setIsCredit(false);
+        props.setPaymentMethod('wallet');
+        walletRef.current?.classList.add('font-bold', 'tracking-wide');
+        walletRef.current?.classList.remove('text-[#433A3E]');
+        creditRef.current?.classList.remove('font-bold', 'tracking-wide');
+        creditRef.current?.classList.add('text-[#433A3E]');
+
+        if(trackerRef.current != undefined) {
+            trackerRef.current.style.width = walletRef.current?.clientWidth + 'px';
+            trackerRef.current.style.left = `calc(${walletRef.current?.offsetLeft}px - 13px)`;
+            trackerRef.current.style.top = walletRef.current?.offsetTop + 'px';
+        }
+    }
+
+    return (
+        <div className='text-center relative shadow-sm mx-auto mt-1.5 mb-3 w-fit space-x-3 p-0.5 bg-[#E2DFE3] rounded-full'>
+            <button type='button' onClick={chooseCredit} ref={creditRef} className='rounded-full px-2 relative z-10 font-bold tracking-wide transition-all duration-300'>Credit</button>
+            <button type='button' onClick={chooseWallet} ref={walletRef} className='rounded-full px-2 relative z-10 text-[#433A3E] transition-all duration-300'>Wallet</button>
+            <div ref={trackerRef} className='bg-white absolute h-6 -left-[10px] top-0.5 rounded-full transition-all duration-300 w-[4.057rem]'></div>
+        </div>
+    );
 }
 
 export default PayForCourse;

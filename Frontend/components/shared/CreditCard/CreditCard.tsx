@@ -6,20 +6,12 @@ import CreditCardBack from './CreditCardBack';
 import CreditCardFront from './CreditCardFront';
 
 type Props = {
-  className?: string
+  className?: string,
+  cardDetails: any,
+  setCardDetails: any,
 }
 
 const CreditCard = (props: Props) => {
-
-  const [cardDetails, setCardDetails] = useState(
-    {
-      type: 'Visa',
-      cardNumber: '',
-      expiryDate: '',
-      securityCode: '',
-      cardholderName: '',
-    }
-  );
 
   const [secretCardNumber, setSecretCardNumber] = useState<string>('');
 
@@ -30,7 +22,7 @@ const CreditCard = (props: Props) => {
   const [focusCardName, setFocusCardName] = useState<boolean>(false);
 
   const setCardNumber = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const data = {...cardDetails};
+    const data = {...props.cardDetails};
     const isAdding = e.key.charCodeAt(0) >= 48 && e.key.charCodeAt(0) <= 57;
 
     if(e.key === 'Backspace' && data.cardNumber.length !== 0) {
@@ -41,7 +33,7 @@ const CreditCard = (props: Props) => {
       return;
     }
 
-    setCardDetails(data);
+    props.setCardDetails(data);
   }
 
   const secureCardNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +48,7 @@ const CreditCard = (props: Props) => {
   }
 
   const setExpiryDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const details = {...cardDetails};
+    const details = {...props.cardDetails};
     e.target.value = e.target.value.replace(
         /[^0-9]/g, '' // To allow only numbers
     ).replace(
@@ -70,41 +62,45 @@ const CreditCard = (props: Props) => {
     );
 
     details.expiryDate = e.target.value;
-    setCardDetails(details);
+    props.setCardDetails(details);
   }
 
   const setSecurityCode = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const details = {...cardDetails};
+    const details = {...props.cardDetails};
     details.securityCode = e.target.value;
-    setCardDetails(details);
+    props.setCardDetails(details);
   }
 
   const setCardholderName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const details = {...cardDetails};
+    const details = {...props.cardDetails};
     details.cardholderName = e.target.value;
     e.target.value = e.target.value.toLocaleUpperCase();
-    setCardDetails(details);
+    props.setCardDetails(details);
   }
 
   const setCardType = (selectedRadio: any) => {
-    const details = {...cardDetails};
+    const details = {...props.cardDetails};
     details.type = selectedRadio;
-    setCardDetails(details);
+    props.setCardDetails(details);
+  }
+
+  function confirmPurchase(e: any) {
+    e.preventDefault();
+    console.log(props.cardDetails);
   }
 
   return (
-    <div className={`${props.className} relative flex items-center h-screen space-y-4 px-3 pt-3 pb-4 flex-col justify-around bg-main w-[24rem] nv-max:h-[37.5rem] shadow-md`}>
-      <div>
-        <h1 className='text-center text-3xl'>Payment Details</h1>
-        <div className='flip-card relative z-20 mt-3'>
+    <div className={`${props.className} relative flex items-center space-y-4 px-3 flex-col bg-main w-[24rem]`}>
+      <div className='nv-max:pb-4'>
+        <div className='flip-card relative z-20'>
           <div className={`${focusSecurityCode ? 'rotate-y-180': ''} flip-card-inner`} onMouseDown={() => setViewCardNumber(true)} onMouseUp={() => setViewCardNumber(false)}>
-            <CreditCardFront cardDetails={cardDetails} setCardDetails={setCardDetails} secretCardNumber={secretCardNumber} setSecretCardNumber={setSecretCardNumber} />
-            <CreditCardBack viewCardNumber={viewCardNumber} cardDetails={cardDetails} setCardDetails={setCardDetails} secretCardNumber={secretCardNumber} setSecretCardNumber={setSecretCardNumber} />
+            <CreditCardFront cardDetails={props.cardDetails} setCardDetails={props.setCardDetails} secretCardNumber={secretCardNumber} setSecretCardNumber={setSecretCardNumber} />
+            <CreditCardBack viewCardNumber={viewCardNumber} cardDetails={props.cardDetails} setCardDetails={props.setCardDetails} secretCardNumber={secretCardNumber} setSecretCardNumber={setSecretCardNumber} />
           </div>
         </div>
       </div>
 
-      <form className='w-full relative 4lg:h-full'>
+      <div className='w-full relative 4lg:h-full'>
         <div className='nv:-space-y-2'>
           <div className='absolute -top-10 nv-max:-top-14 mob:left-2 not-mob:-left-7 z-10'>
             <Input type='radio' onChange={setCardType} inputDivStyle='flex items-center not-mob:mx-2 w-full ' style='mr-1 scale-[0.6]' enum={['Visa', 'Mastercard']} />
@@ -128,8 +124,7 @@ const CreditCard = (props: Props) => {
             </div>
           </div>
         </div>
-        <button type='submit' className='rounded-md text-white bg-[#0B80F3] px-8 py-2 nv:mt-2 z-10 nv-max:absolute nv-max:-bottom-[6.23rem] nv-max:right-6 block mx-auto hover:bg-[#096BCB] transition-all duration-200'>Confirm Purchase</button>
-      </form>
+      </div>
     </div>
   )
 }

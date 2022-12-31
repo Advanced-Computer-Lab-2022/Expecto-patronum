@@ -8,7 +8,7 @@ const {
         viewCourses, filterCourses, addCourse, discount, 
         viewCourseRatings, updateBio, testingAll, viewProfile, 
         viewInstructorRatingsAndReviews, cancelDiscount, 
-        filterByRatings, searchCourses, viewAmountOwned, 
+        filterByRatings, searchCourses, viewAmountOwned, generateAmountOwed,
       } = require('../controller/InstructorController');
 
 
@@ -34,6 +34,7 @@ router.get("/testingAll",testingAll);
 router.put("/filterByRatings",filterByRatings);
 
 router.put("/viewAmountOwned", viewAmountOwned);
+router.post("/generateAmountOwed", generateAmountOwed);
 
 router.post('/addCourse',addCourse);
 

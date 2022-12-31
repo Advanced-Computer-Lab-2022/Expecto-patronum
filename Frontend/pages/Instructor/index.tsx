@@ -10,30 +10,31 @@ import { HiOutlineDotsVertical } from 'react-icons/hi';
 import ReviewsAndQuestions from '../../components/shared/Review/ReviewsAndQuestions';
 import axios from 'axios';
 import SmallCourseCardSkeleton from '../../components/shared/SmallCourseCard/SmallCourseCardSkeleton';
+import Skeleton from 'react-loading-skeleton';
 
 type Props = {}
 
 const Instructor = (props: Props) => {
 
-  const money = [
+  const Amount = [
     {
-      money: 69.99,
+      Amount: 69.99,
       month: "Jan '22",
     },
     {
-      money: 99.96,
+      Amount: 99.96,
       month: "Feb '22",
     },
     {
-      money: 119.94,
+      Amount: 119.94,
       month: "Mar '22",
     },
     {
-      money: 259.99,
+      Amount: 259.99,
       month: "Apr '22",
     },
     {
-      money: 6.98,
+      Amount: 6.98,
       month: "May '22",
     },
   ];
@@ -56,13 +57,18 @@ const Instructor = (props: Props) => {
   ];
 
   const [topRated, setTopRated] = useState<any>([]);
-  const [isLoading, setIsLoading] = useState<any>([]);
+  const [isTopRatedLoading, setIsTopRatedLoading] = useState<boolean>(true);
+  const [amountOwed, setAmountOwed] = useState<any>([]);
+  const [isAmountLoading, setIsAmountLoading] = useState<boolean>(true);
+
   
-  async function getMoneyOwed() {
+  async function getAmountOwed() {
     axios.defaults.withCredentials = true;
-    await axios.put("http://localhost:5000/Instructor/viewAmountOwned").then((res: { data: any }) => {
-      // setTopRated(res.data);
-      console.log(res.data.Courses);
+    await axios.put("http://localhost:5000/Instructor/viewAmountOwned", {
+        userID: '63877fb65c8dac5284aaa3c2',
+    }).then((res: { data: any }) => {
+      setAmountOwed(res.data.amount);
+      setIsAmountLoading(false);
     });
   }
 
@@ -70,13 +76,13 @@ const Instructor = (props: Props) => {
     axios.defaults.withCredentials = true;
     await axios.get("http://localhost:5000/Courses/popularCourses").then((res: { data: any }) => {
       setTopRated(res.data.Courses);
-      setIsLoading(false);
+      setIsTopRatedLoading(false);
     });
   }
 
   useEffect(() => {
     getPopularCourses();
-    getMoneyOwed();
+    getAmountOwed();
   }, [])
 
   function levelColor(level: string) {
@@ -106,7 +112,7 @@ const Instructor = (props: Props) => {
             <div id="most-rated" className="text-left mt-3 ml-2">
               <h1 className="text-xl font-bold">Your Students' Favorite</h1>
               <div className="overflow-x-auto overflow-y-hidden flex items-center h-68 4lg:h-fit 4lg:p-3">
-                {isLoading && <SmallCourseCardSkeleton count={8} className='scale-[0.85] 4lg:mr-10 4lg:scale-100 4lg:hover:scale-[1.01] hover:scale-[0.86]' />}
+                {isTopRatedLoading && <SmallCourseCardSkeleton count={8} className='scale-[0.85] 4lg:mr-10 4lg:scale-100 4lg:hover:scale-[1.01] hover:scale-[0.86]' />}
                 {
                   topRated.map((course: any, index: number) => (
                     <SmallCourseCard className={`${index === 0 ? '': '-ml-4'} scale-[0.85] 4lg:mr-10 4lg:scale-100 4lg:hover:scale-[1.01] hover:scale-[0.86]`} course={course} courseColor={levelColor} key={index} index={index} />
@@ -134,11 +140,12 @@ const Instructor = (props: Props) => {
           </div>
 
           <div className='sb:max-w-[30%] sb:w-[30%] min-h-fit max-h-[27rem] rounded-lg border-2 shadow-lg'>
-            <h1 className='my-2 text-center'>We owe you more than money.<br />Here is your Money Owed per month:</h1>
+            <h1 className='my-2 text-center'>We owe you more than Amount.<br />Here is your Amount Owed per month:</h1>
             <div className='overflow-x-hidden overflow-y-auto border-t-1.5 sb-max:h-40 h-80'>
+              {isAmountLoading && <MonthlyCardSkeleton count={4} />}
               {
-                money.map((money, index) => (
-                  <MonthlyCard key={index} money={money} />
+                amountOwed?.map((amount: any, index: number) => (
+                  <MonthlyCard key={index} amount={amount} />
                 ))
               }
             </div>
@@ -154,9 +161,8 @@ const userBar = classNames('flex justify-between items-center mx-2 mb-3');
 const notifications = classNames("navbar-link rounded-full border-1.5 border-black hover:text-white hover:bg-black hover:scale-110 mx-2 h-8 w-8 whitespace-nowrap z-10 relative transition-all duration-300 flex items-center justify-center");
 
 type MonthlyCardProps = {
-  money: any,
+  amount: any,
 }
-
 const MonthlyCard = (props: MonthlyCardProps) => {
 
   const { Rate } = useContext(DataContext);
@@ -167,15 +173,40 @@ const MonthlyCard = (props: MonthlyCardProps) => {
       {/* <div className='absolute left-2 h-22 top-0 bottom-12 w-[0.125rem] bg-green-600 after:content-[""] after:absolute after:-right-[0.45rem] after:-bottom-4 after:min-h-[1rem] after:min-w-[1rem] after:rounded-full after:border-2 after:border-green-600'/> */}
       <div className='my-6 mr-3 ml-6 text-center bg-white h-20 shadow-md rounded-md flex items-center justify-evenly'>
         <div className='flex flex-col'>
-          <h1 className='opacity-60 relative bottom-2 text-sm'>Month</h1>
-          <h1>{props.money.month}</h1>
+          <h1 className='opacity-60 relative bottom-2 text-sm'>Date</h1>
+          <h1>{new Date(props.amount._id.year, props.amount._id.month - 1).toLocaleDateString('en-US', { month: 'short' })} '{props.amount._id.year.toString().substring(2,4)}</h1>
         </div>
         <div className='h-13 rounded-full relative min-w-[0.125rem] bg-gray-300' />
         <div className='flex flex-col'>
           <h1 className='opacity-60 relative bottom-2 text-sm'>Amount</h1>
-          <h1>{Rate.curr}{((props.money.money * Rate.rate) - 0.01).toFixed(2)}</h1>
+          <h1>{Rate.curr}{((props.amount.totalAmount * Rate.rate) - 0.01).toFixed(2)}</h1>
         </div>
       </div>
+    </div>
+  );
+}
+const MonthlyCardSkeleton = (props: {count: number}) => {
+
+  return (
+    <div>
+      {
+        Array(props.count).fill(0).map((_, index) => (
+          <div key={index} className='relative ml-2'>
+            <div className='absolute left-2 h-22 bottom-12 w-[0.125rem] bg-bright-gray after:content-[""] after:absolute after:-right-[0.45rem] after:-bottom-4 after:min-h-[1rem] after:min-w-[1rem] after:rounded-full after:border-2 after:border-bright-gray'/>
+            <div className='my-6 mr-3 ml-6 text-center bg-white h-20 shadow-md rounded-md flex items-center justify-evenly'>
+              <div className='flex flex-col pt-2.5 mr-8'>
+                <h1 className='opacity-60 relative bottom-2 text-sm'><Skeleton width={60} height={10} /></h1>
+                <h1><Skeleton width={60} height={10} /></h1>
+              </div>
+              {/* <div className='h-13 rounded-full relative min-w-[0.125rem] bg-gray-300' /> */}
+              <div className='flex flex-col pt-2.5'>
+                <h1 className='opacity-60 relative bottom-2 text-sm'><Skeleton width={60} height={10} /></h1>
+                <h1><Skeleton width={60} height={10} /></h1>
+              </div>
+            </div>
+          </div>
+        ))
+      }
     </div>
   );
 }

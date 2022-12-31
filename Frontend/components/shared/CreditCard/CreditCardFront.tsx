@@ -33,7 +33,7 @@ const CreditCardFront = (props: Props) => {
           <SiContactlesspayment className='text-white relative bottom-[0.285rem] right-[0.16rem]' />
         </div>
         <Image className={`${props.cardDetails.type !== 'Visa' ? 'opacity-0': 'opacity-100'} w-18 absolute bottom-4 right-[0.78rem] transition-all duration-100`} priority height='50' width='50' src='/images/Visa.png' alt='' />
-        <Image className={`${props.cardDetails.type !== 'Mastercard' ? 'opacity-0': 'opacity-100'} w-18 absolute -bottom-1 right-[0.6rem] transition-all duration-100`} priority height='50' width='50' src='/images/Mastercard.png' alt='' />
+        <Image className={`${props.cardDetails.type !== 'Mastercard' ? 'opacity-0': 'opacity-100'} w-18 absolute bottom-2 right-[0.6rem] transition-all duration-100`} priority height='50' width='50' src='/images/Mastercard.png' alt='' />
         <Image className='w-12 absolute top-14' height='50' width='50' src='/images/Credit Card Chip.png' alt='' />
         <h1 className='metallic text-[1rem] w-[17rem] absolute bottom-16 ml-1 tracking-widest'>{props.secretCardNumber === '' ? '3140 5926 5358 9793': props.secretCardNumber}</h1>
         <div className='flex justify-center text-xs absolute left-24 ml-1 bottom-8 scale-75'>
