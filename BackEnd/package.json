@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "canvas": "^2.11.0",
     "connect-mongo": "^3.1.2",
     "cors": "^2.8.5",
     "country-currency-list": "^1.0.0",
@@ -19,8 +20,10 @@
     "dotenv": "^8.2.0",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "image-to-pdf": "^2.0.0",
     "iso-country-currency": "^0.6.0",
     "jsonwebtoken": "^8.5.1",
+    "jspdf": "^2.5.1",
     "mongoose": "^5.7.12",
     "node-schedule": "^2.1.0",
     "nodemailer": "^6.8.0",

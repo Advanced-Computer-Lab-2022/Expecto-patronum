@@ -17,6 +17,10 @@ const Promotions = (props: Props) => {
   const [dateRange, setDateRange] = useState<any>();
   const [dateRangeAll, setDateRangeAll] = useState<any>();
   const [totalCount, setTotalCount] = useState<any>();
+  
+  const[currentPage,setCurrentPage] = useState<any>(1);
+  const[reload,setReload] = useState<any>();
+
   const promotionSome = useRef<any>();
   const promotionAll = useRef<any>();
   const { viewPopupMessage } = useContext(PopupMessageContext);
@@ -102,6 +106,7 @@ const Promotions = (props: Props) => {
     setDateRangeAll(newValue);
   };
   async function goToPage(Page: any) {
+    setCurrentPage(Page);
     await axios
       .get("http://localhost:5000/Admin/AllCourses", {
         params: {
@@ -153,13 +158,27 @@ const Promotions = (props: Props) => {
 
     if(temp.length > 0){
       if(promotionSome.current.children[1].value!=""){
-        var percentage=parseInt(promotionSome.current.children[1].value);
-        response = await axios.put("http://localhost:5000/Admin/givePromotion", {
-          courseID:temp,
-          promotion:percentage,
-          startDate:dateRange.startDate,
-          endDate:dateRange.endDate
-          }).then((res: { data: any; }) => { return res.data });
+        if(dateRange!=null){
+          var percentage=parseInt(promotionSome.current.children[1].value);
+          if(percentage<=100){
+            response = await axios.put("http://localhost:5000/Admin/givePromotion", {
+              courseID:temp,
+              promotion:percentage,
+              startDate:dateRange.startDate,
+              endDate:dateRange.endDate
+              }).then((res: { data: any; }) => { return res.data });
+              setReload(true);
+          }        
+          else{
+            e.preventDefault();
+            viewPopupMessage(false, "Can't Give more than 100% promotion");
+          }
+         
+        }
+        else{
+          e.preventDefault();
+          viewPopupMessage(false, "No date selected");
+        }
       }else{
         e.preventDefault();
         viewPopupMessage(false, "No amount given");
@@ -174,8 +193,34 @@ const Promotions = (props: Props) => {
       modal.style.display = "none";
     }
   }
-  function addAll() {
+  async function addAll(e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const modal = document.getElementById("allCourses");
+    if(promotionAll.current.children[1].value!=""){
+      if(dateRangeAll!=null){
+        var percentage=parseInt(promotionAll.current.children[1].value);
+        if(percentage<=100){
+        response = await axios.put("http://localhost:5000/Admin/givePromotion", {
+          promotion:percentage,
+          startDate:dateRangeAll.startDate,
+          endDate:dateRangeAll.endDate
+          }).then((res: { data: any; }) => { return res.data });
+          console.log(response);
+          setReload(true);
+         } else{
+            e.preventDefault();
+            viewPopupMessage(false, "Can't Give more than 100% promotion");
+          }
+      }
+
+      else{
+        e.preventDefault();
+        viewPopupMessage(false, "No date selected");
+      }
+    }else{
+      e.preventDefault();
+      viewPopupMessage(false, "No amount given");
+    }
+
     if (modal != undefined) {
       modal.style.display = "none";
     }
@@ -363,6 +408,7 @@ const Promotions = (props: Props) => {
                       />
                     </div>
                     <Input
+                      type="number"
                       ref={promotionAll}
                       required={true}
                       placeholder={"Discount Percentage *"}
@@ -370,7 +416,7 @@ const Promotions = (props: Props) => {
                     <div className="flex justify-center p-6 space-x-2 rounded-b">
                       <button
                         type="submit"
-                        onClick={addAll}
+                        onClick={(e) => addAll(e)}
                         className="flex justify-center text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                       >
                         Add Discount

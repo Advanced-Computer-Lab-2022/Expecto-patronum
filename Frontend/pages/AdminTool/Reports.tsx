@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import SideBar from "../../components/AdminTool/SideBar";
 import AdminHeader from "../../components/AdminTool/AdminHeader";
 import classNames from "classnames";
 import CompPagination from "../../components/shared/pagination/CompPagination";
+import { PopupMessageContext } from '../_app';
 
 
 const pending = classNames(
@@ -22,6 +23,7 @@ var response = null;
 const Reports = (props: Props) => {
   const [reports, setReports] = useState<any>();
   const [totalCount, setTotalCount] = useState<any>();
+  const { viewPopupMessage } = useContext(PopupMessageContext);
   useEffect(() => {
   //   const test = [
   //     { name: 'Jane Cooper', title: 'Regional Paradigm Technician', status: 'Unseen', date: '23-12-2022' , type:"Technical",
@@ -75,6 +77,7 @@ async function goToPage(Page: any) {
       problemID:reports[index]._id,
       status:"resolved"
   }).then((res: { data: any; }) => { return res.data });
+    viewPopupMessage(true, "Report Resolved");
     const status = document.getElementsByClassName("Status" + index);
     const ViewButton = document.getElementById("ViewButton" + index);
     if (status[0].children != undefined) {

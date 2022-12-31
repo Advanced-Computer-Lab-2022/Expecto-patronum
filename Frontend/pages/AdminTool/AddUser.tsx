@@ -70,9 +70,11 @@ function getRole(selectedRadio: any) {
       firstname: firstname.current.children[1].value,
       lastname: lastname.current.children[1].value,
       role: selectedRadio,
-    }).then((res: { data: any; }) => { return res.data });
+    }).then((res: any) => { return res }).catch((error) => viewPopupMessage(false,error.response.data));
+   if(response!=undefined && response.status==200){
     viewPopupMessage(true, "User Added Successfully, Waiting for him verfying his Email");
-    console.log(response);
+    console.log(response.data);
+   }
 } else {
   viewPopupMessage(false, "Invalid Email");
 }

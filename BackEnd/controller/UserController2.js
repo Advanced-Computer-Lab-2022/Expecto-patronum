@@ -13,6 +13,7 @@ const CourseTable = require('../models/CourseSchema');
 const requestTable = require('../models/RequestSchema');
 const problemTable = require('../models/ProblemSchema');
 const transactionTable = require('../models/transactionSchema');
+const { ReceiveCertificate } = require("../lib/ReceiveCertificate");
 
 async function SelectExercise(req, res, next) {
   try {
@@ -507,8 +508,29 @@ async function lastWatched(req, res, next) {
     }
   };
 
-  
 
+
+ 
+
+  const { jsPDF } = require("jspdf")
+  async function RecieveMail(req, res, next) {
+    userId=req.body.userId;
+    // var fs = require('fs');
+    var string =req.body.dataUrl;
+    // var email=await User.findById(userId).select({"email":1});
+    // var regex = /^data:.+\/(.+);base64,(.*)$/;
+    // var matches = string.match(regex);
+    // var ext = matches[1];
+    // var data = matches[2];
+    // var buffer = Buffer.from(data, 'base64');
+    // fs.writeFileSync('Certificate.jpeg', buffer);
+    const doc = new jsPDF();
+    doc.addImage(string, 'JPEG', 15, 15, 170, 0);
+    doc.save("Course_Completion_Certificate.pdf");
+
+  
+    ReceiveCertificate("CandianChamber123@outlook.com")
+  }
 
   module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,
-    followUpOnProblem,watchVideo,addNote,viewNotes,EditNote,DeleteNote,filterNotes,createTransaction,lastWatched,payWithWallet}
+    followUpOnProblem,watchVideo,addNote,viewNotes,EditNote,DeleteNote,filterNotes,createTransaction,lastWatched,payWithWallet,RecieveMail}

@@ -3,19 +3,26 @@ import React from 'react';
 import MainButton from '../../shared/button/MainButton';
 import { jsPDF } from "jspdf";
 import html2canvas from 'html2canvas';
+import axios from 'axios';
 
 const CertficateTemplate = () => {
 
   const handleDownload = () => {
     //@ts-ignore
-    html2canvas(document.querySelector('#certificate-template')).then(canvas => {
+    html2canvas(document.querySelector('#certificate-template')).then(async canvas => {
       const doc = new jsPDF();
       doc.addImage(canvas.toDataURL(), 'PNG', 15, 15, 170, 0);
       doc.save('certificate.pdf');
+      console.log(canvas.toDataURL('image/jpeg', 0.5));
+      Response = await axios.post("http://localhost:5000/User/RecieveMail", {
+      // userId:canvas.id,
+      dataUrl: canvas.toDataURL('image/jpeg', 0.5),
+    })
+   
     });
   };
 
-
+ 
   return (
     <div className='w-[80vw] h-[100vh] ml-auto mr-auto'  >
       <div id='certificate-template' className='w-[700px] h-[500px] mt-10 mb-10 relative ml-auto mr-auto  ' >

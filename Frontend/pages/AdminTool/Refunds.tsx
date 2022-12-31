@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import axios from 'axios';
 import SideBar from '../../components/AdminTool/SideBar';
 import AdminHeader from '../../components/AdminTool/AdminHeader';
@@ -47,6 +47,8 @@ var response = null;
 const Refunds = (props: Props) => {
   const [refunds, setRefunds] = useState<any>();
   const [totalCount, setTotalCount] = useState<any>();
+  const { viewPopupMessage } = useContext(PopupMessageContext);
+
   useEffect(() => {
     getRefunds();
     }, []);
@@ -82,6 +84,7 @@ const Refunds = (props: Props) => {
     requestID:refunds[index]._id,
     refund:"Accept"
 }).then((res: { data: any; }) => { return res.data });
+viewPopupMessage(true, "Refund Accepted");
   const status = document.getElementsByClassName("Status"+index);
   const Bar=document.getElementById("ProgressBar"+index) as HTMLElement;
   const AcceptButton=document.getElementById("AcceptButton"+index);
@@ -104,6 +107,7 @@ const Refunds = (props: Props) => {
     requestID:refunds[index]._id,
     refund:"Reject"
 }).then((res: { data: any; }) => { return res.data });
+viewPopupMessage(true, "Refund Rejected");
   const status = document.getElementsByClassName("Status"+index);
   const Bar=document.getElementById("ProgressBar"+index) as HTMLElement;
   const AcceptButton=document.getElementById("AcceptButton"+index);

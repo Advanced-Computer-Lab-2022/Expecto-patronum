@@ -79,8 +79,12 @@ app.listen(5000, () => {
 /**
  * -------------- ROUTES ----------------
  */
-
-
+app.use(express.json()); 
+const bodyParser = require('body-parser'); 
+app.use(bodyParser.json({limit: '5mb'}));
+app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
+// app.use(express.json({limit: '50mb'}));
+// app.use(express.urlencoded({limit: '50mb'}));
 app.use('/Courses', CoursesRoute);
 app.use('/Admin', AdminRoute);
 app.use('/Instructor', InstructorRoute);

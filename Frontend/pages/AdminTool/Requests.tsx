@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import axios from 'axios';
 import SideBar from '../../components/AdminTool/SideBar';
 import AdminHeader from '../../components/AdminTool/AdminHeader';
 import classNames from "classnames";
 import CompPagination from "../../components/shared/pagination/CompPagination";
+import { PopupMessageContext } from '../_app';
 
 const pending = classNames(
   "px-1 py-1 rounded-md whitespace-nowrap text-sm bg-yellow-200 text-yellow-700"
@@ -33,6 +34,7 @@ var response = null;
 const Requests = (props: Props) => {
   const [requests, setRequests] = useState<any>();
   const [totalCount, setTotalCount] = useState<any>();
+  const { viewPopupMessage } = useContext(PopupMessageContext);
   useEffect(() => {
     getRefunds();
   }, []);
@@ -72,6 +74,7 @@ const Requests = (props: Props) => {
       .then((res: { data: any }) => {
         return res.data;
       });
+      viewPopupMessage(true, "Request Accepted");
     const status = document.getElementsByClassName("Status" + index);
     const AcceptButton = document.getElementById("AcceptButton" + index);
     const RejectButton = document.getElementById("RejectButton" + index);
@@ -93,6 +96,7 @@ const Requests = (props: Props) => {
       .then((res: { data: any }) => {
         return res.data;
       });
+    viewPopupMessage(true, "Request Rejected");
     const status = document.getElementsByClassName("Status" + index);
     const AcceptButton = document.getElementById("AcceptButton" + index);
     const RejectButton = document.getElementById("RejectButton" + index);
