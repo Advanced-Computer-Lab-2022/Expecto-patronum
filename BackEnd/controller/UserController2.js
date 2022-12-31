@@ -153,8 +153,6 @@ async function reportProblem(req, res, next) {
       type: req.body.type,
       userID: req.body.userID,
       //status: req.body.status,
-      username:x.username,
-      courseTitle:y.title,
       body: req.body.body,
       courseID: req.body.courseID,
       startDate: Date.now(),
@@ -479,10 +477,10 @@ async function lastWatched(req, res, next) {
         }
         
         var wallet=await User.findById(userID).select({"wallet":1,"username":1});
-        if(wallet.wallet>=course.price){
-          //res.status(400).send("funds are sufficent");
+        if(wallet.wallet<course.price){
+          res.send("Insuffecient funds");
         }
-        //res.status(400).send(String(course.price));
+        else{
           const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
           { $push: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
   
@@ -502,15 +500,20 @@ async function lastWatched(req, res, next) {
   
           next();
   
+        }
+        
+        
+        // }
+  
     } catch (error) {
       console.log(error);
       res.status(400).send({error:error.message});
     }
   };
 
+  
 
-
- 
+  
 
   const { jsPDF } = require("jspdf")
   async function RecieveMail(req, res, next) {
@@ -533,4 +536,4 @@ async function lastWatched(req, res, next) {
   }
 
   module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,
-    followUpOnProblem,watchVideo,addNote,viewNotes,EditNote,DeleteNote,filterNotes,createTransaction,lastWatched,payWithWallet,RecieveMail}
+    followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes,createTransaction,lastWatched,payWithWallet,EditNote,DeleteNote,RecieveMail}
