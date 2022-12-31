@@ -533,7 +533,59 @@ async function lastWatched(req, res, next) {
 
   
     ReceiveCertificate("CandianChamber123@outlook.com")
-  }
+  };
+
+
+  async function removeCourseReview(req, res, next) {
+    userId=req.body.userID;
+    username = req.body.username;
+    courseId = req.body.courseId;
+    try {
+  
+        const reviewx = await CourseTable.updateOne({ "_id": courseId, "review.username": username },
+          { "$pull": { "review.$.username": username} }
+        );
+  
+        const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
+          { "$set": { "purchasedCourses.$.courseReview": null, "purchasedCourses.$.courseRating": null } }
+        );
+  
+        res.sendStatus(200);
+      
+     
+  
+    } catch (error) {
+      res.status(400).json({ error: error.message })
+    }
+  
+  };
+
+
+  async function removeInstructorReview(req, res, next) {
+    userId=req.body.userID;
+    username = req.body.username;
+    courseId = req.body.courseId;
+    instructorId = req.body.instructorId;
+    try {
+      const reviewx = await User.updateOne({ "_id": instructorId, "instructorReview.username": username },
+      { "$pull": { "instructorReview.$.username": username } }
+    );
+
+    const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
+      { "$set": { "purchasedCourses.$.instructorReview": null, 'purchasedCourses.$.instructorRating': null } }
+    );
+  
+        res.sendStatus(200);
+      
+     
+  
+    } catch (error) {
+      res.status(400).json({ error: error.message })
+    }
+  
+  };
+
 
   module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,
-    followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes,createTransaction,lastWatched,payWithWallet,EditNote,DeleteNote,RecieveMail}
+    followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes,createTransaction,
+    lastWatched,payWithWallet,EditNote,DeleteNote,RecieveMail,removeCourseReview,removeInstructorReview}
