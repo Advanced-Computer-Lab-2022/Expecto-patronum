@@ -11,6 +11,8 @@ import Router from "next/router";
 import PopupMessage from '../components/shared/PopupMessage/PopupMessage';
 import { FiAlertTriangle, FiCheckCircle } from "react-icons/fi";
 import UserCourseNavbar from "../components/shared/Navbar/UserCourseNavbar/UserCourseNavbar";
+import { GetServerSidePropsContext } from "next/types";
+
 
 interface ContextState {
   viewPopupMessage: any,
@@ -19,11 +21,20 @@ interface ContextState {
 const PopupMessageContext = createContext({} as ContextState);
 
 function MyApp({ Component, pageProps }: AppProps) {
+  console.log("Hi")
+
+
 
   const { Rate, SetRate } = useContext(DataContext);
   // useEffect(() => {
   //   console.log(Rate);
   // }, [Rate]);
+
+
+  // useEffect(() => {
+
+  // }, [])
+
 
   const popupMessageRef = useRef<any>();
   var ticker = useRef<any>();
@@ -58,16 +69,29 @@ function MyApp({ Component, pageProps }: AppProps) {
       <PopupMessageContext.Provider value={{ viewPopupMessage }} >
         <DataProvider>
           {/* <Navbar></Navbar> */}
-
           <UserCourseNavbar></UserCourseNavbar>
           <PopupMessage ref={popupMessageRef} ticker={ticker} icon={popupIcon} setIsPopupOpen={setIsPopupOpen} />
           <Component {...pageProps} />
           <Footer></Footer>
         </DataProvider>
       </PopupMessageContext.Provider>
+
     </div>
   );
 }
 
 export default MyApp;
 export { PopupMessageContext };
+
+// export async function getServerSideProps(context: GetServerSidePropsContext) {
+//   let Auth = context.req.headers.cookie?.includes('connect.sid')
+//   console.log(Auth)
+//   return {
+//     props: {
+//       Auth: Auth,
+//     },
+//   }
+
+
+
+// }

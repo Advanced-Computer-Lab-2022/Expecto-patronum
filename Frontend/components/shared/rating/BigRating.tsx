@@ -27,10 +27,9 @@ const BigRating = (props: Props) => {
       defaultValue={props.Rate}
       onHoverChange={props.Hover ? props.Hover : undefined}
       onChange={props.Setter ? OnChange : undefined}
-      allowHalf
       allowClear={false}
     />
-    
+
     // <ul className="flex ">
     //   {stars.map((star, index) => {
     //     return (

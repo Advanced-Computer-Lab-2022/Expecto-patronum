@@ -4,22 +4,32 @@ import BigRating from "../../shared/rating/BigRating";
 import OneStar from "../../shared/rating/OneStar";
 import RateBar from "./RateBar";
 
-type Props = {};
+type Props = {
+  RatingData: { one: number, two: number, three: number, four: number, five: number, avg: number }
+  SetCurrentRate: (index: number) => void;
+  CurrentRate: number
+};
 
 const RateSection = (props: Props) => {
   let [ClickedRate, setClickedRate] = React.useState(0);
   let precentage = ["80", "20", "0", "0", "0"];
   let arrayTemp = [5, 4, 3, 2, 1];
   let Rate = {
-    1: 20,
-    2: 20,
-    3: 20,
-    4: 10,
-    5: 30,
-    avg: 4.9,
-
+    1: props.RatingData.one,
+    2: props.RatingData.two,
+    3: props.RatingData.three,
+    4: props.RatingData.four,
+    5: props.RatingData.five,
+    avg: props.RatingData.avg,
   }
 
+
+  useEffect(() => {
+    if (ClickedRate != 0) {
+
+    }
+
+  }, [ClickedRate])
 
 
   return (
@@ -35,7 +45,7 @@ const RateSection = (props: Props) => {
       {
         arrayTemp.map((item, index) => {
           return (
-            <RateBar index={index + 1} Rate={Rate} Clicked={ClickedRate} SetClicked={setClickedRate}></RateBar>
+            <RateBar index={index + 1} Rate={Rate} Clicked={props.CurrentRate} SetClicked={props.SetCurrentRate}></RateBar>
           );
         })
       }
@@ -45,7 +55,7 @@ const RateSection = (props: Props) => {
 
 export default RateSection;
 
-const Container = classNames(" w-1/4 ");
+const Container = classNames(" w-1/4  ");
 
 
 

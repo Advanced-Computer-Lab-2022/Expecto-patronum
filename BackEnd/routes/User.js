@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const connection = require('../config/database');
 const { getRate, forgetPassword, ValidateUser, ChangeEmail, UseChangeEmailToken, ChangePassword, ChangeForgottenPassword,
-  giveInstructorRating, selectCourse, giveCourseReview, giveInstructorReview, submitAnswer, takeExam, test } = require('../controller/UserController');
+  giveInstructorRating, selectCourse, giveCourseReview, giveInstructorReview, submitAnswer, takeExam, test, ResendEmail } = require('../controller/UserController');
 const { genPassword } = require('../lib/passwordUtils');
 const { VerifyTokenMiddleware } = require('../middleware/VerifyTokenMiddleware');
 const { Charge, addPaymentMethod, getPaymentMethods, deletePaymentMethod } = require('../middleware/StripePayments');
@@ -13,19 +13,20 @@ const { giveCourseRating, buyCourse, unbuyCourse, ViewMyCourses, GenerateUsers, 
 const UserTable = require('../models/UserSchema');
 
 const { SelectExercise, viewAnswer, requestCourse, reportProblem, viewPreviousReports, followUpOnProblem, watchVideo, addNote,
-  viewNotes, filterNotes, createTransaction, lastWatched, EditNote, DeleteNote,payWithWallet } = require('../controller/UserController2');
+  viewNotes, filterNotes, createTransaction, lastWatched, EditNote, DeleteNote, payWithWallet, viewPreviousRequests } = require('../controller/UserController2');
 
 router.get("/", (req, res) => {
   res.send("Hello, User");
 });
 
-router.get("/login", (req, res) => {
-  res.send("Login");
-});
+
 
 
 
 router.get('/MailVerify/:token', VerifyTokenMiddleware, ValidateUser);
+
+router.post('/ResendValidationEmail', ResendEmail);
+
 
 
 router.get('/test', test)
@@ -36,9 +37,18 @@ router.post("/ChangeForgottenPassword/:token", VerifyTokenMiddleware, ChangeForg
 router.post("/ChangePassword", isAuth, ChangePassword);
 router.post("/ChangeEmail", isAuth, ChangeEmail);
 
-
+router.get('/CheckAuth', isAuth, (req, res) => {
+  res.status(200).send({ Error: false, Message: 'You are authorized' });
+})
 router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.send("Logged in")
+  res.cookie('user', req.user.firstname + ' ' + req.user.lastname + ' ' + req.user.role, { maxAge: 900000, httpOnly: true });
+  const DetailsToSend = {
+    firstname: req.user.firstname,
+    lastname: req.user.lastname,
+    role: req.user.role,
+  }
+  res.status(200).send(DetailsToSend);
+  // res.send("Logged in")
 });
 
 
@@ -58,7 +68,6 @@ router.get("/resetEmail/:token", VerifyTokenMiddleware, isAuth, UseChangeEmailTo
 router.get("/countryRate", getRate);
 router.get("/takeExam", takeExam);
 router.get("/viewAnswers", viewAnswer);
-router.get("/viewMyCourses", ViewMyCourses);
 router.get('/logout', Logout);
 
 
@@ -72,7 +81,7 @@ router.put('/submitAnswer', submitAnswer);
 
 router.put("/buyCourse", buyCourse, Charge, unbuyCourse);
 
-router.put("/payWithWallet",payWithWallet);
+router.put("/payWithWallet", payWithWallet);
 
 router.put("/getPaymentMethods", getPaymentMethods);
 
@@ -86,7 +95,8 @@ router.get("/takeExam", takeExam);
 router.get("/viewAnswers", viewAnswer);
 
 router.get("/viewMyCourses", ViewMyCourses);
-router.get("/viewPreviousReports", viewPreviousReports);
+router.put("/viewPreviousReports", viewPreviousReports);
+router.put('/viewPreviousRequests', viewPreviousRequests)
 router.put("/filterNotes", filterNotes);
 
 

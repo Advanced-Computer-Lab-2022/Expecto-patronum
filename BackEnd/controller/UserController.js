@@ -19,7 +19,8 @@ async function register(req, res) {
   const saltHash = genPassword(req.body.password);
   const salt = saltHash.salt;
   const hash = saltHash.hash;
-  var exists1 = await User.findOne({ "email": req.body.email });
+  let EmailLowerCase = req.body.email.toLowerCase();
+  var exists1 = await User.findOne({ "email": EmailLowerCase });
 
   var exists2 = await User.findOne({ "username": req.body.username });
   if (exists1 || exists2) {
@@ -38,8 +39,8 @@ async function register(req, res) {
       username: req.body.username,
       hash: hash,
       salt: salt,
-      gender:req.body.gender,
-      email: req.body.email,
+      gender: req.body.gender,
+      email: EmailLowerCase,
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       role: req.body.role
@@ -49,12 +50,12 @@ async function register(req, res) {
     newUser.save((err, newUser) => {
       if (err) {
         console.log(err);
-
+        res.status(400).send("Error registering new user please try again.");
       }
       else {
         let token = CreateToken({ id: newUser._id, email: newUser.email });
-        MailValidate(newUser.email, "http://localhost:5000/user/MailVerify", token);
-        res.send("Please verify your email");
+        MailValidate(newUser.email, "http://localhost:3000/Auth/FeedBack/EmailConfirmed", token);
+        res.status(200).send("Verify your email");
       }
 
     })
@@ -62,9 +63,64 @@ async function register(req, res) {
 
 };
 
+async function ResendEmail(req, res) {
+  //Find the user by the email sent in the body and change his email to the new one sent in the body
+  //then send to the new email a new token
+  let OldEmail = req.body.OldEmail;
+  let NewEmail = req.body.NewEmail;
+  User.findOne(
+    { email: OldEmail.toLowerCase() },
+    function (err, user) {
+      if (err) {
+        res.status(400).send("Error");
+      }
+      if (err) {
+        res.status(400).send("Error");
+      }
+      else {
+        User.findOne(
+          { email: NewEmail.toLowerCase() },
+          function (err, userWithNewEmail) {
+            if (err) {
+              res.status(400).send("Error");
+              return;
+            }
+            if (userWithNewEmail) {
+              if (userWithNewEmail._id + "" !== user._id + "") {
+                console.log("HEREE")
+                res.status(400).send("Email already used");
+                return;
+              }
+            }
+            user.email = NewEmail;
+            user.save((err, user) => {
+              if (err) {
+                console.log(err);
+                res.status(400).send("Error registering new user please try again.");
+              }
+              else {
+                let token = CreateToken({ id: user._id, email: user.email });
+                MailValidate(user.email, "http://localhost:3000/Auth/FeedBack/EmailConfirmed", token);
+                res.status(200).send("Verify your email");
+              }
+            });
+
+          }
+        )
+
+
+      }
+    }
+  )
+
+  let token = CreateToken({ id: req.user._id, email: req.user.email });
+  MailValidate(req.user.email, "http://localhost:3000/Auth/FeedBack/EmailConfirmed", token);
+  res.status(200).send("Verify your email");
+}
 
 function Logout(req, res) {
   req.logout((err) => { if (err) console.log(`the Error is ${err}`) });
+  res.clearCookie('user');
   res.send("Logged out");
 
 
@@ -102,7 +158,7 @@ async function getRate(req, res, next) {
 };
 
 function forgetPassword(req, res, next) {
-  let userMail = req.body.email;
+  let userMail = req.body.email.toLowerCase();
   User.findOne({ email: { $regex: userMail, $options: 'i' } },
     (err, user) => {
       if (err) {
@@ -241,6 +297,7 @@ function ChangePassword(req, res, next) {
                     console.log(err);
                   }
                 });
+                res.clearCookie('user');
                 console.log("Password Changed");
               }
             })
@@ -270,32 +327,65 @@ function ChangePassword(req, res, next) {
 
 }
 
+// function ValidateUser(req, res) {
+//   if (req.userid) {
+//     User.findById(req.userid, (err, user) => {
+//       if (err) {
+//         res.status(400).send("Invalid Token" + err);
+//       } else
+//         if (user) {
+//           if (!VerifyTokenDate(user.emailTimeStamp, req.iat)) {
+//             res.status(400).send("Token expired" + err);
+//           }
+//           else {
+//             user.valid = true;
+//             user.emailTimeStamp = new Date();
+//             user.save((err, user) => {
+//               if (err) {
+//                 res.status(400).send(err);
+//               }
+//               else {
+//                 res.status(200).send("Validated");
+//               }
+//             })
+//           }
+
+//         }
+//         else {
+//           res.send("user not found");
+//         }
+//     })
+
+
+//   }
+// }
+
 function ValidateUser(req, res) {
+  console.log("i am validating")
   if (req.userid) {
     User.findById(req.userid, (err, user) => {
       if (err) {
-        res.send("Invalid Token " + err);
+        res.status(400).send("Invalid Token" + err);
       } else
         if (user) {
-
           if (!VerifyTokenDate(user.emailTimeStamp, req.iat)) {
-            res.send("Token expired");
+            res.status(400).send("Token expired" + err);
           }
           else {
 
             user.valid = true;
             user.emailTimeStamp = new Date();
+
             user.save((err, user) => {
               if (err) {
-                console.log(err);
+                res.status(400).send(err);
               }
               else {
-                res.redirect("/user/login");
-
+                console.log("i am validating")
+                res.status(200).send("Validated");
               }
             })
           }
-
 
         }
         else {
@@ -520,12 +610,13 @@ async function giveCourseReview(req, res, next) {
     }
     else {
       await CourseTable.updateOne({ "_id": courseId },
-        { "$push": { "review": { "reviewBody": review, "rating": rating, "username": username } } }
+        { "$push": { "review": { "reviewBody": review, "rating": rating, "username": username } }, "$inc": { "reviewCount": 1 } }
       );
 
       const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
         { "$set": { "purchasedCourses.$.courseReview": review, "purchasedCourses.$.courseRating": rating } }
       );
+
       res.sendStatus(200);
     }
 
@@ -727,7 +818,7 @@ async function selectCourse(req, res, next) {
         "subtitles.exercises.exerciseTitle": 1,
         courseImage: 1,
         instructorID: 1,
-        review: { "$slice": 3 }
+        review: { "$slice": 3 },
       });
       var instructor = await User.findOne({ "_id": (x.instructorID) }).select({
         instructorRating: 1,
@@ -915,7 +1006,7 @@ async function test(req, res) {
 module.exports = {
   register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
   buyCourse, unbuyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
-  ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview, giveInstructorReview, submitAnswer, test, takeExam
+  ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview, giveInstructorReview, submitAnswer, test, takeExam, ResendEmail
 }
 
 

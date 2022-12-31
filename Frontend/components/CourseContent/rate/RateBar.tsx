@@ -16,17 +16,20 @@ const RateBar = (props: Props) => {
   function ArrayPrecentage() {
     let array = [props.Rate[1], props.Rate[2], props.Rate[3], props.Rate[4], props.Rate[5]];
     let sum = array.reduce((a, b) => a + b, 0);
-    let precentage = array.map(item => (item / sum) * 100);
+    let precentage = array.map(item => Math.round((item / sum) * 100));
     return precentage;
   }
   let precentage = ArrayPrecentage()
 
   function onclick() {
-    if (props.Clicked == props.index) {
-      props.SetClicked(0);
-    }
-    else {
-      props.SetClicked(props.index);
+    if (precentage[6 - props.index - 1] !== 0) {
+
+      if (props.Clicked == props.index) {
+        props.SetClicked(0);
+      }
+      else {
+        props.SetClicked(props.index);
+      }
     }
   }
   return (

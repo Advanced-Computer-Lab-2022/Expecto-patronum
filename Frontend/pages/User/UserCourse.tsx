@@ -10,6 +10,7 @@ import {
 import UserCourseCard from '../../components/UserHome/UserCourseCard'
 import DataContext from '../../context/DataContext'
 import { AllCourseDataInterface } from '../../Interface/PurchasedCourse/AllCourseDataInterface'
+import ErrorComp from '../../components/shared/Error/ErrorComp'
 
 type Props = {}
 
@@ -28,8 +29,8 @@ const UserCourse = (props: Props) => {
       try {
         SetLoading(true);
         const res = await axios.put("http://localhost:5000/user/selectCourse", {
-          userId: "63a59b15f928fa951091f381",
-          courseId: "63a59c15e3b96b22a1dc828a"
+          userId: "63af0d5ff8575d5598e11614",
+          courseId: "63a59c23e3b96b22a1dc829f"
         })
         let Coursedata: AllCourseDataInterface = res.data.course
         let Notes = res.data.notes;
@@ -237,11 +238,8 @@ const UserCourse = (props: Props) => {
   }
   if (Error.hasError) {
     return (
-      <div className="overflow-x-hidden">
-        <div className='flex w-[100vw] h-[100vh] justify-center items-center  bg-navbar'>
-          <p className=' text-4xl font-bold text-white'>{Error.Message}</p>
-        </div>
-      </div>
+      <ErrorComp ErrorMessage={Error.Message}></ErrorComp>
+
     )
   }
 

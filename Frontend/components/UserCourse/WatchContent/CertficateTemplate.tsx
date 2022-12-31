@@ -9,6 +9,8 @@ const CertficateTemplate = () => {
   const handleDownload = () => {
     //@ts-ignore
     html2canvas(document.querySelector('#certificate-template')).then(canvas => {
+      console.log(canvas)
+
       const doc = new jsPDF();
       doc.addImage(canvas.toDataURL(), 'PNG', 15, 15, 170, 0);
       doc.save('certificate.pdf');

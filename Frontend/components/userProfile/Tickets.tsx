@@ -22,7 +22,7 @@ import TicketDetails from "./TicketDetails";
 type Props = {};
 
 export interface ReqRepInterface {
-  status: "Unseen" | "Pending" | "Resolved",
+  status: "unseen" | "pending" | "resolved" | "Accepted" | "Rejected" | "Unseen" | "Pending" | "Resolved",
   _id: string,
   type: string,
   body: string,
@@ -49,22 +49,23 @@ const Tickets = (props: Props) => {
 
   const [Data, setData] = useState<[ReqRepInterface]>();
   const [Requests, setRequests] = useState<[ReqRepInterface]>();
-  const [Choosen, setChoosen] = useState<ReqRepInterface>({ status: "Unseen", _id: "", comment: [""], type: "", body: "", courseTitle: "", startDate: "" });
+  const [Choosen, setChoosen] = useState<ReqRepInterface>({ status: "unseen", _id: "", comment: [""], type: "", body: "", courseTitle: "", startDate: "" });
   const [showDetails, setShowDetails] = useState(false);
+  const [FollowupPressed, setFollowupPressed] = useState(false);
   const [Type, setType] = useState<"Reports" | "Requests">("Reports");
   const [Loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
 
     if (Type == "Reports") {
-      axios.post("http://localhost:5000/user/viewPreviousReports", { userID: "63a59b15f928fa951091f381" }).then((res) => {
+      axios.put("http://localhost:5000/user/viewPreviousReports", { userID: "63a59b15f928fa951091f381" }).then((res) => {
         setData(res.data);
         setLoading(false);
 
       });
     }
     else {
-      axios.post("http://localhost:5000/user/viewPreviousRequests", { userID: "63a59b15f928fa951091f381" }).then((res) => {
+      axios.put("http://localhost:5000/user/viewPreviousRequests", { userID: "63a59b15f928fa951091f381" }).then((res) => {
         setData(res.data);
         setLoading(false);
 
@@ -86,7 +87,7 @@ const Tickets = (props: Props) => {
       <div>
         <SectionTitle Title="Your Reports" SubTitle="View your report and follow up if the report is not resolved within 4 to 5 working days"></SectionTitle>
 
-        <TicketDetails data={Choosen} SetBack={handleBack}></TicketDetails>
+        <TicketDetails SetFollowupPressed={setFollowupPressed} FollowupPressed={FollowupPressed} data={Choosen} SetBack={handleBack}></TicketDetails>
       </div>
     )
   }
@@ -139,8 +140,7 @@ const Tickets = (props: Props) => {
             </thead>
             <tbody className={TableBody}>
               {Data?.map((Data: ReqRepInterface, index: number) => (
-                <TicketCard setChoosen={setChoosen} setShowDetails={setShowDetails} data={Data} Type={Type} index={index} ></TicketCard>
-
+                <TicketCard setFollowupPressed={setFollowupPressed} setChoosen={setChoosen} setShowDetails={setShowDetails} data={Data} Type={Type} index={index} ></TicketCard>
               ))}
             </tbody>
           </table>
