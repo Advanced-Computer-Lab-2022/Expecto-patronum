@@ -25,12 +25,12 @@ async function SelectExercise(req, res, next) {
     });
     let q = {};
     const course = await CourseTable.findOne({ _id: req.body.courseID }, { _id: 1, instructorID: 1 });
-    if (course.instructorID == req.body.userID) {
+    if (course.instructorID == req.user._id) {
       res.status(200).send(x);
       return;
     }
     else {
-      var y = await User.findOne({ "_id": req.body.userID, "purchasedCourses.excercises.excerciseID": req.body.exerciseID },
+      var y = await User.findOne({ "_id": req.user._id, "purchasedCourses.excercises.excerciseID": req.body.exerciseID },
         { purchasedCourses: { $elemMatch: { courseID: req.body.courseID } } }
       );
       if (y) {
@@ -94,14 +94,14 @@ async function viewAnswer(req, res, next) {
 };
 
 async function requestCourse(req, res, next) {
-  var x = await User.findOne({ "_id": req.body.userID }, { purchasedCourses: { $elemMatch: { courseID: req.body.courseID } }, role: 1, _id: 1, username: 1 });
+  var x = await User.findOne({ "_id": req.user._id }, { purchasedCourses: { $elemMatch: { courseID: req.body.courseID } }, role: 1, _id: 1, username: 1 });
   var y = await CourseTable.findOne({ "_id": req.body.courseID }, { _id: 1, title: 1 });
   if (req.body.request == "RequestCourse") {
     if (x.role == "CorporateTrainee") {
       const date = new Date();
       const newRequest = new requestTable({
         type: 'RequestCourse',
-        userID: req.body.userID,
+        userID: req.user._id,
         username: x.username,
         courseID: req.body.courseID,
         courseTitle: y.title,
@@ -118,13 +118,13 @@ async function requestCourse(req, res, next) {
 
   }
   else {
-    var xx = await User.findOne({ "_id": req.body.userID }, { purchasedCourses: { $elemMatch: { courseID: req.body.courseID } }, role: 1, _id: 1, username: 1 });
+    var xx = await User.findOne({ "_id": req.user._id }, { purchasedCourses: { $elemMatch: { courseID: req.body.courseID } }, role: 1, _id: 1, username: 1 });
     var prog = xx.purchasedCourses[0].progress;
     if (prog <= 49) {
       const date = new Date();
       const newRequest = new requestTable({
         type: 'Refund',
-        userID: req.body.userID,
+        userID: req.user._id,
         username: x.username,
         courseID: req.body.courseID,
         courseTitle: y.title,
@@ -147,11 +147,11 @@ async function requestCourse(req, res, next) {
 
 async function reportProblem(req, res, next) {
   try {
-    var x = await User.findOne({ "_id": req.body.userID }, { _id: 1, username: 1 });
+    var x = await User.findOne({ "_id": req.user._id }, { _id: 1, username: 1 });
     var y = await CourseTable.findOne({ "_id": req.body.courseID }, { _id: 1, title: 1 });
     const result = await problemTable.create({
       type: req.body.type,
-      userID: req.body.userID,
+      userID: req.user._id,
       //status: req.body.status,
       body: req.body.body,
       courseID: req.body.courseID,
@@ -159,6 +159,7 @@ async function reportProblem(req, res, next) {
       //comment: req.body.comment,
     });
     result.save();
+    
     res.status(200).send(result);
   }
   catch (error) {
@@ -170,7 +171,7 @@ async function createTransaction(req, res, next) {
   try {
     const x = await CourseTable.findOne({ _id: req.body.courseID });
     const result = await transactionTable.create({
-      userID: req.body.userID,
+      userID: req.user._id,
       instructorID: x.instructorID,
       courseID: req.body.courseID,
       transactionDate: req.body.transactionDate,
@@ -187,7 +188,7 @@ async function createTransaction(req, res, next) {
 
 async function watchVideo(req, res) {
   try {
-    var user_id = req.body.userID;
+    var user_id = req.user._id;
     var course_id = req.body.courseID;
     var course = await CourseTable.findById(course_id, { _id: 1, courseHours: 1 });
     console.log(course);
@@ -249,7 +250,7 @@ async function watchVideo(req, res) {
 
 async function viewPreviousReports(req, res, next) {
   try {
-    var userID = req.body.userID;
+    var userID = req.user._id;
     var problems = await problemTable.find({ "userID": userID }).select({ "type": 1, "body": 1, "startDate": 1, "status": 1 });
     res.send(problems);
   }
@@ -260,7 +261,7 @@ async function viewPreviousReports(req, res, next) {
 
 async function followUpOnProblem(req, res, next) {
   try {
-    var userID = req.body.userID;
+    var userID = req.user._id;
     var problemID = req.body.problemID;
     var followUp = req.body.followUp
     var problem = await problemTable.findOne({ "_id": problemID });
@@ -277,7 +278,7 @@ async function followUpOnProblem(req, res, next) {
 
 async function addNote(req, res, next) {
   var courseID = req.body.courseID;
-  var userID = req.body.userID;
+  var userID = req.user._id;
   var content = req.body.contentID;
   var subtitle = req.body.subTitleID;
   var timestamp = req.body.timestamp;
@@ -321,7 +322,7 @@ async function addNote(req, res, next) {
 async function viewNotes(req, res, next) {
   try {
     var courseID = req.body.courseID;
-    var userID = req.body.userID;
+    var userID = req.user._id;
     var y = await User.findOne({ "_id": userID },
       { _id: 1, purchasedCourses: { $elemMatch: { courseID: courseID } } }
     );
@@ -334,7 +335,7 @@ async function viewNotes(req, res, next) {
 }
 async function DeleteNote(req, res, next) {
   try {
-    const userID = req.body.userID;
+    const userID = req.user._id;
     const courseID = req.body.courseID;
     const noteID = req.body.noteID;
     // Find the user in the database
@@ -385,7 +386,7 @@ async function DeleteNote(req, res, next) {
 
 async function EditNote(req, res, next) {
   try {
-    const userID = req.body.userID;
+    const userID = req.user._id;
     const courseID = req.body.courseID;
     const noteID = req.body.noteID;
     const newText = req.body.text;
@@ -433,7 +434,7 @@ async function filterNotes(req, res, next) {
   try {
     var contentID = req.body.contentID;
     var courseID = req.body.courseID;
-    var userID = req.body.userID;
+    var userID = req.user._id;
     var result = [];
     var y = await User.findOne({ "_id": userID },
       { _id: 1, purchasedCourses: { $elemMatch: { courseID: courseID } } }
@@ -453,7 +454,7 @@ async function filterNotes(req, res, next) {
 
 async function lastWatched(req, res, next) {
   try {
-    const exists = await User.updateOne({ "_id": req.body.userID, "purchasedCourses.courseID": req.body.courseID },
+    const exists = await User.updateOne({ "_id": req.user._id, "purchasedCourses.courseID": req.body.courseID },
       { $set: { "purchasedCourses.$.lastWatched": req.body.contentID } });
     res.status(200).send("changed");
   } catch (error) {
@@ -468,9 +469,9 @@ async function lastWatched(req, res, next) {
 
     async function payWithWallet(req,res,next){
       try {
-        var userID=req.body.userID;
+        var userID=req.user._id;
         var course=await CourseTable.findById(req.body.courseID);
-        const exists = await User.findOne({ "_id": req.body.userID,"purchasedCourses.courseID":req.body.courseID });
+        const exists = await User.findOne({ "_id":req.user._id,"purchasedCourses.courseID":req.body.courseID });
         if(exists){
           res.status(400).send("Course already bought");
           return;
@@ -481,7 +482,7 @@ async function lastWatched(req, res, next) {
           res.status(400).send("Insuffecient funds");
         }
         else{
-          const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
+          const user = await User.findByIdAndUpdate({ "_id": req.user._id },
           { $push: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
   
           const courses =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
@@ -517,7 +518,7 @@ async function lastWatched(req, res, next) {
 
   const { jsPDF } = require("jspdf")
   async function RecieveMail(req, res, next) {
-    userId=req.body.userId;
+    userId=req.user._id;
     // var fs = require('fs');
     var string =req.body.dataUrl;
     // var email=await User.findById(userId).select({"email":1});
@@ -537,8 +538,8 @@ async function lastWatched(req, res, next) {
 
 
   async function removeCourseReview(req, res, next) {
-    userId=req.body.userID;
-    username = req.body.username;
+    userId=req.user._id;
+    username = req.user.username;
     courseId = req.body.courseId;
     try {
   
@@ -562,8 +563,8 @@ async function lastWatched(req, res, next) {
 
 
   async function removeInstructorReview(req, res, next) {
-    userId=req.body.userID;
-    username = req.body.username;
+    userId=req.user._id;
+    username = req.user.username;
     courseId = req.body.courseId;
     instructorId = req.body.instructorId;
     try {
@@ -585,7 +586,30 @@ async function lastWatched(req, res, next) {
   
   };
 
+  async function viewProfileUser(req,res,next){
+    try{
+      var user1=await User.findOne({"_id":req.user._id},{
+        username:1,
+        _id: 1,
+        gender:1,
+        firstname: 1,
+        lastname: 1,
+        email: 1,
+        role:1,
+        wallet:1,
+        paymentMethods:1
+      });
+     
+
+      res.status(200).send(user1);
+    }
+    catch(error){
+      console.log(error);
+      res.status(400).send({error:error.message});
+    }
+  }
+
 
   module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,
-    followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes,createTransaction,
+    followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes,createTransaction,viewProfileUser,
     lastWatched,payWithWallet,EditNote,DeleteNote,RecieveMail,removeCourseReview,removeInstructorReview}

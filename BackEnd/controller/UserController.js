@@ -380,7 +380,7 @@ async function viewRatings(req, res) {
 async function giveCourseRating(req, res, next) {
   newRating = req.body.rating;
   oldRating = req.body.oldRating;
-  userId = req.body.userId;
+  userId = req.user._id;
   courseId = req.body.courseId;
   let query = {};
   query.rating = newRating;
@@ -443,7 +443,7 @@ async function giveInstructorRating(req, res, next) {
   console.log("hi")
   newRating = req.body.rating;
   oldRating = req.body.oldRating;
-  userId = req.body.userId;
+  userId = req.user._id;
   courseId = req.body.courseId;
   instructorId = req.body.instructorId;
   let query = {};
@@ -504,8 +504,8 @@ async function giveInstructorRating(req, res, next) {
 async function giveCourseReview(req, res, next) {
   rating = req.body.rating;
   review = req.body.review;
-  userId = req.body.userId;
-  username = req.body.username;
+  userId = req.user._id;
+  username = req.user.username;
   courseId = req.body.courseId;
   try {
     if (req.body.oldReview) {
@@ -540,8 +540,8 @@ async function giveCourseReview(req, res, next) {
 async function giveInstructorReview(req, res, next) {
   rating = req.body.rating;
   review = req.body.review;
-  userId = req.body.userId;
-  username = req.body.username;
+  userId = req.user._id;
+  username = req.user.username;
   courseId = req.body.courseId;
   instructorId = req.body.instructorId
   try {
@@ -579,8 +579,8 @@ async function selectCourse(req, res, next) {
     let info = {};
     let exercise = {};
     if (req.body.courseId) {
-      if (req.body.userId) {
-        var instructor = await CourseTable.findOne({ "instructorID": req.body.userId }, { instructorID: 1 });
+      if (req.user._id) {
+        var instructor = await CourseTable.findOne({ "instructorID": req.user._id }, { instructorID: 1 });
         if (instructor) {
           ////////////////instructor/////////////////////
           info.Owner = "yes";
@@ -602,7 +602,7 @@ async function selectCourse(req, res, next) {
 
         }
         ////////////////indivTrainee/Corp/////////////////////
-        var x = await User.findOne({ "_id": req.body.userId }).select({ role: 1, purchasedCourses: { $elemMatch: { courseID: req.body.courseId } }, _id: 1 });
+        var x = await User.findOne({ "_id": req.user._id }).select({ role: 1, purchasedCourses: { $elemMatch: { courseID: req.body.courseId } }, _id: 1 });
         if (x.purchasedCourses) {
           for (var i = 0; i < x.purchasedCourses.length; i++) {
             var z = Object.values(x.purchasedCourses)[i];
@@ -662,7 +662,7 @@ async function selectCourse(req, res, next) {
           }
           //////////CorporateTraineeRequest///////////////////////////////////
           if (x.role == "CorporateTrainee") {
-            var exists = await requestTable.findOne({ "userID": req.body.userId, "courseID": req.body.courseId, "type": "RequestCourse", "status": "Pending" });
+            var exists = await requestTable.findOne({ "userID": req.user._id, "courseID": req.body.courseId, "type": "RequestCourse", "status": "Pending" });
             if (exists) {
               var x = await CourseTable.findOne({ "_id": req.body.courseId }).select({
                 _id: 1,
@@ -801,12 +801,12 @@ async function takeExam(req, res, next) {
 async function buyCourse(req, res, next) {
   //endpoints userID ,courseID
   try {
-    const exists = await User.findOne({ "_id": req.body.userID, "purchasedCourses.courseID": req.body.courseID });
+    const exists = await User.findOne({ "_id": req.user._id, "purchasedCourses.courseID": req.body.courseID });
     if (exists) {
       res.status(200).send({error:true,message:"Course already bought"});
       return;
     }
-    const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
+    const user = await User.findByIdAndUpdate({ "_id": req.user._id },
       { $push: { "purchasedCourses": { courseID: req.body.courseID } } }, { new: true });
 
     const course = await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
@@ -832,7 +832,7 @@ async function buyCourse(req, res, next) {
 async function unbuyCourse(req, res, next) {
   //endpoints userID ,courseID
   try {
-    const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
+    const user = await User.findByIdAndUpdate({ "_id": req.user.id },
       { $pull: { "purchasedCourses": { courseID: req.body.courseID } } }, { new: true });
 
     const course = await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
@@ -850,7 +850,7 @@ async function unbuyCourse(req, res, next) {
 async function submitAnswer(req, res) {
   try {
     var grade = req.body.grade;
-    var user_id = req.body.userID;
+    var user_id = req.user._id;
     var counter = 0;
     var course_id = req.body.courseID;
     var course = await CourseTable.findById(course_id);

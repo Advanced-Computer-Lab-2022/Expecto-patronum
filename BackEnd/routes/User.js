@@ -12,7 +12,7 @@ const { register } = require('../controller/UserController');
 const { giveCourseRating, buyCourse, unbuyCourse, ViewMyCourses, GenerateUsers, ConnectInstructorsWithCourses, getInstructorInfo, updateInstructorInfo } = require('../controller/UserController');
 const UserTable = require('../models/UserSchema');
 
-const { SelectExercise, viewAnswer, requestCourse, reportProblem, viewPreviousReports, followUpOnProblem, watchVideo, addNote,
+const { SelectExercise, viewAnswer, requestCourse, reportProblem, viewPreviousReports, followUpOnProblem, watchVideo, addNote,viewProfileUser,
   viewNotes, filterNotes, createTransaction, lastWatched, EditNote, DeleteNote,payWithWallet,RecieveMail,removeCourseReview,removeInstructorReview } = require('../controller/UserController2');
 
 router.get("/", (req, res) => {
@@ -61,7 +61,7 @@ router.get("/viewAnswers", viewAnswer);
 router.get("/viewMyCourses", ViewMyCourses);
 router.get('/logout', Logout);
 
-
+router.get("/viewProfile",viewProfileUser);
 router.put("/giveCourseRating", giveCourseRating);
 
 
