@@ -113,7 +113,7 @@ async function goToPage(Page: any) {
   }
   return (
     <aside>
-      <AdminHeader />
+      {/* <AdminHeader /> */}
       <div className="flex">
         <SideBar></SideBar>
         <form id="course-form" className='w-full mx-4'>
