@@ -172,8 +172,8 @@ function forgetPassword(req, res, next) {
 
 
 function ChangeForgottenPassword(req, res) {
-  if (req.userid) {
-    User.findById(req.userid, (err, user) => {
+  if (req.user._id) {
+    User.findById(req.user._id, (err, user) => {
       if (err) {
         res.send({ Error: true, Message: "Invalid request" });
         console.log(err);
@@ -579,7 +579,7 @@ async function selectCourse(req, res, next) {
     let info = {};
     let exercise = {};
     if (req.body.courseId) {
-      if (req.user._id) {
+      if (req.user) {
         var instructor = await CourseTable.findOne({ "instructorID": req.user._id }, { instructorID: 1 });
         if (instructor) {
           ////////////////instructor/////////////////////
@@ -700,7 +700,7 @@ async function selectCourse(req, res, next) {
               q.course = x;
               q.instructor = instructor;
               res.send(q);
-
+              return;
             }
           }
 
