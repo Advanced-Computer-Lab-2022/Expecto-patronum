@@ -39,6 +39,7 @@ const PayForCourse = (props: Props) => {
     useEffect(() => {
 
         const getCourse = async () => {
+            axios.defaults.withCredentials = true;
             axios.get('http://localhost:5000/Courses/GetCourse', {
                 params: {
                     id: '638773fabbdc935c90789419',
@@ -86,27 +87,39 @@ const PayForCourse = (props: Props) => {
         confirmPurchaseRef.current?.classList.remove('nv-max:hidden');
     }
 
-    const confirmPurchase = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const confirmPurchase = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
 
         if(paymentMethod === 'credit') {
-            axios.post('http://localhost:5000/User/buyCourse', {
-                userId: '',
-                creditCardNumber: cardDetails.cardNumber,
-                ccv: cardDetails.securityCode,
-                cardHolderName: cardDetails.cardholderName,
-                expiration: cardDetails.expiryDate,
-            }).then((res) => {
-
-            })
+            if(cardDetails.cardNumber === '' || cardDetails.securityCode === '' || cardDetails.cardholderName === '' || cardDetails.expiryDate === '') {
+                viewPopupMessage(false, 'Please fill in the required fields.');
+                return;
+            } else {
+                await axios.put('http://localhost:5000/User/buyCourse', {
+                    userID: '63a59b15f928fa951091f381', // User ID
+                    courseID: '63b05af10df08615ec9108ea', // Course ID
+                    creditCardNumber: cardDetails.cardNumber,
+                    ccv: cardDetails.securityCode,
+                    cardHolderName: cardDetails.cardholderName,
+                    expiration: cardDetails.expiryDate,
+                    amount: 69,
+                }).then((res) => {
+                    if(res.data.error) {
+                        viewPopupMessage(false, res.data.message);
+                    } else {
+                        viewPopupMessage(true, 'Course Bought Successfully.');
+                    }
+                    router.push(`/Courses/${'63b05af10df08615ec9108ea'}`);
+                })
+            }
         } else {
             if(true) { // Check on user's balance
                 viewPopupMessage(false, "Your wallet balance is insufficient.")
             } else {
+                axios.defaults.withCredentials = true;
                 axios.post('http://localhost:5000/User/payWithWallet', {
                     userID: '',
                     courseID: '',
-                    amount: 69.99,
                 }).then((res) => {
                     
                 })

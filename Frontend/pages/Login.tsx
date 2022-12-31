@@ -3,15 +3,23 @@ import classNames from "classnames";
 import { FaFacebookF, FaLinkedinIn, FaGoogle, FaTwitter, FaCanadianMapleLeaf } from "react-icons/fa";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
+import { useRouter } from "next/router";
+import TermsAndConditions from "../components/TermsAndConditions/TermsAndConditions";
+import { AiFillHome } from "react-icons/ai";
+import Link from "next/link";
 
 const colIcons = classNames(`text-sm p-1.25 flex items-center justify-center m-2 mx-3 z-0 scale-125 rounded-full border-1.5 before:content-[""] before:inline-block before:absolute before:z-behind before:bottom-1 before:right-2.75 before:w-6 before:h-6  before:rounded-full hover:scale-135 transition-all duration-300`);
 
 const Login = () => {
 
+  const signUp = useRouter();
+
   const leftSideRef = useRef<any>();
   const rightSideRef = useRef<any>();
 
   const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [isOpened, setIsOpened] = useState<boolean>(false);
+  const [isAccepted, setIsAccepted] = useState<boolean>(false);
 
   useEffect(() => {
     leftSideRef.current.classList.remove('opacity-0');
@@ -21,6 +29,8 @@ const Login = () => {
 
     rightSideRef.current.classList.remove('sb:left-[50rem]');
     rightSideRef.current.classList.add('sb:left-0');
+
+    setIsLogin(signUp.query.isLogin ? false: true);
   }, [])
 
   return (
@@ -67,13 +77,15 @@ const Login = () => {
         </div>
 
         <div style={{perspective: '1000px'}} className="bg-white mx-auto z-10 relative text-center sb:pt-20 px-4 sb-max:px-0 py-8">
+          <Link href='/' className="absolute flex z-50 right-6 top-0 nv:top-4 text-blue-600 hover:text-blue-700"><AiFillHome className="scale-150 mr-4" /> Home</Link>
           <div style={{transformStyle: 'preserve-3d'}} className={`${isLogin ? '': 'rotate-y-180'} relative w-full h-full transition-all duration-700`}>
             <LoginForm setIsLogin={setIsLogin} />
-            <SignUpForm setIsLogin={setIsLogin} />
+            <SignUpForm setIsOpened={setIsOpened} setIsLogin={setIsLogin} isAccepted={isAccepted} setIsAccepted={setIsAccepted} />
           </div>
         </div>
 
       </div>
+      <TermsAndConditions isOpened={isOpened} setIsOpened={setIsOpened} setIsAccepted={setIsAccepted} />
     </div>
   );
 };
@@ -86,9 +98,9 @@ const LoginForm = (props: {setIsLogin: any}) => {
   } 
 
   return (
-    <div className="flip-card-front bg-white z-30 nv:pt-10">
+    <div className="flip-card-front bg-white z-30 nv:pt-6">
       <div className="w-full whitespace-nowrap">
-        <h1 className="text-3xl">Sign in to your account</h1>
+        <h1 className="text-3xl mb-4">Sign in to your account</h1>
         <p className="text-sm text-left">Or <a className="text-blue-600 hover:text-blue-800" onClick={viewSignUp}>Don't have an account? Sign up</a></p>
       </div>
 
@@ -134,11 +146,19 @@ const LoginForm = (props: {setIsLogin: any}) => {
   );
 }
 
-const SignUpForm = (props: {setIsLogin: any}) => {
+const SignUpForm = (props: {setIsLogin: any, setIsOpened: any, isAccepted: boolean, setIsAccepted: any}) => {
 
   function hideSignUp() {
     props.setIsLogin(true);
   } 
+
+  function viewTerms() {
+    props.setIsOpened(true);
+  }
+
+  function setAccept() {
+    props.setIsAccepted(!props.isAccepted);
+  }
 
   return (
     <div className="-scale-x-100 bg-white relative nv:-mt-10 mx-px">
@@ -183,8 +203,8 @@ const SignUpForm = (props: {setIsLogin: any}) => {
         </div>
 
         <div className="flex justify-end items-center">
-          <input className="mr-2 relative sb:bottom-[0.06125rem]" type='checkbox' />
-          <p className="text-xs text-left">By signing up, You agree with the <a className="text-blue-600 hover:text-blue-800">Terms & Policy</a> of our company.</p>
+          <input className="mr-2 relative sb:bottom-[0.06125rem]" readOnly onClick={setAccept} checked={props.isAccepted} type='checkbox' />
+          <p className="text-xs text-left">By signing up, You agree with the <button type="button" onClick={viewTerms} className="text-blue-600 hover:text-blue-800">Terms & Policy</button> of our company.</p>
         </div>
 
         <button type="submit" form="sign-up" className="mx-auto my-4 bg-canadian-red text-white rounded-md px-14 py-2 hover:bg-calm-red hover:scale-[1.01] transition-all duration-200">Sign Up</button>

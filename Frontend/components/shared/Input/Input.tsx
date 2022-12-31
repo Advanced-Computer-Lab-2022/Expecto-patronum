@@ -11,6 +11,7 @@ interface Props {
     enum?: Array<string>,
     title?: string,
     onChange?: any,
+    onFocus?: any,
     onClick?: any,
     value?: any,
     name?: string,
@@ -44,11 +45,12 @@ const Input = React.forwardRef((props: Props, ref) => {
     const labelRef = useRef<any>();
     const [characterLeft, setCharacterLeft] = useState(250);
 
-    function moveLabel() {
+    const moveLabel = (e: any) => {
         labelRef.current.style.top = "0.55rem";
         labelRef.current.style.color = "#0B80F3";
         labelRef.current.style.fontSize = "0.86rem";
         !props.setFocus || props.setFocus(true);
+        e.target.select();
     }
 
     function returnToInitial(e: React.FocusEvent<HTMLTextAreaElement, Element> | React.FocusEvent<HTMLInputElement, Element>) {

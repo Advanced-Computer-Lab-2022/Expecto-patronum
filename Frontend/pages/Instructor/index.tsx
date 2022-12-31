@@ -68,6 +68,7 @@ const Instructor = (props: Props) => {
         userID: '63877fb65c8dac5284aaa3c2',
     }).then((res: { data: any }) => {
       setAmountOwed(res.data.amount);
+      console.log(res.data.amount);
       setIsAmountLoading(false);
     });
   }
@@ -109,7 +110,7 @@ const Instructor = (props: Props) => {
         <section className='mt-2 flex sb:justify-between sb:space-x-8 sb-max:flex-col-reverse'>
 
           <div className='sb:max-w-[70%] sb:w-[70%] overflow-hidden rounded-lg border-2 shadow-lg relative sb-max:mt-8'>
-            <div id="most-rated" className="text-left mt-3 ml-2">
+            <div id="most-rated" className="text-left mt-3 mx-2">
               <h1 className="text-xl font-bold">Your Students' Favorite</h1>
               <div className="overflow-x-auto overflow-y-hidden flex items-center h-68 4lg:h-fit 4lg:p-3">
                 {isTopRatedLoading && <SmallCourseCardSkeleton count={8} className='scale-[0.85] 4lg:mr-10 4lg:scale-100 4lg:hover:scale-[1.01] hover:scale-[0.86]' />}
@@ -139,12 +140,12 @@ const Instructor = (props: Props) => {
             </div>
           </div>
 
-          <div className='sb:max-w-[30%] sb:w-[30%] min-h-fit max-h-[27rem] rounded-lg border-2 shadow-lg'>
+          <div className='sb:max-w-[30%] sb:w-[30%] h-fit max-h-[27rem] rounded-lg border-2 shadow-lg'>
             <h1 className='my-2 text-center'>We owe you more than Amount.<br />Here is your Amount Owed per month:</h1>
-            <div className='overflow-x-hidden overflow-y-auto border-t-1.5 sb-max:h-40 h-80'>
+            <div className='overflow-x-hidden overflow-y-auto border-t-1.5 mb-3 sb-max:h-40 max-h-[20rem]'>
               {isAmountLoading && <MonthlyCardSkeleton count={4} />}
               {
-                amountOwed?.map((amount: any, index: number) => (
+                amountOwed.length === 0 ? <p className='text-xl mt-3 text-center'>There are no current data to be shown.</p> :amountOwed.map((amount: any, index: number) => (
                   <MonthlyCard key={index} amount={amount} />
                 ))
               }
