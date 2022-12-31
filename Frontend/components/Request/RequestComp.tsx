@@ -89,7 +89,7 @@ const RequestComp = (props: Props) => {
             <div className={OptionsCont}>
               <p className={OptionLabel}>Type of problem </p>
               <select disabled={props.ShowOnly} value={ReportType} onChange={handleReportTypeChange} className={SelectorContainer}>
-                <option className={Options} value="Technical" selected>Technical</option>
+                <option className={Options} value="Technical">Technical</option>
                 <option className={Options} value="Financial">Financial</option>
                 <option className={Options} value="other">other</option>
               </select>
@@ -111,8 +111,8 @@ const RequestComp = (props: Props) => {
 }
 
 export default RequestComp
-const Container = classNames(" max-w-md  pb-24 px-5  pt-10  bg-white mb-[20rem] mt-[4rem]  md:rounded-lg  mx-auto")
-const title = classNames('font-bold text-center');
+const Container = classNames(" max-w-md pb-18 pt-4 px-5 nv:shadow-md nv:border-1.5 my-6 md:rounded-lg mx-auto")
+const title = classNames('font-bold text-center text-2xl');
 const OptionsCont = classNames("md:flex md:space-x-6 text-sm items-center mb-10 text-gray-700 mt-4")
 const OptionLabel = classNames("w-1/2 mb-2 md:mb-0")
 const Options = classNames("hover:bg-canadian-red")

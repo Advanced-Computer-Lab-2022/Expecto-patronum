@@ -458,12 +458,45 @@ async function testingAll(req,res){
   }
 }
 
+const amount = [{"transactionDate":"2022-11-03","transactionAmount":158},
+{"transactionDate":"2022-05-31","transactionAmount":126},
+{"transactionDate":"2022-10-26","transactionAmount":248},
+{"transactionDate":"2022-11-23","transactionAmount":28},
+{"transactionDate":"2022-09-26","transactionAmount":222},
+{"transactionDate":"2022-01-05","transactionAmount":60},
+{"transactionDate":"2022-09-27","transactionAmount":119},
+{"transactionDate":"2022-07-03","transactionAmount":80},
+{"transactionDate":"2022-08-16","transactionAmount":205},
+{"transactionDate":"2022-11-10","transactionAmount":63},
+{"transactionDate":"2022-06-08","transactionAmount":249},
+{"transactionDate":"2022-06-10","transactionAmount":249},
+{"transactionDate":"2022-07-11","transactionAmount":160},
+{"transactionDate":"2022-09-06","transactionAmount":154},
+{"transactionDate":"2022-05-13","transactionAmount":289},
+{"transactionDate":"2022-07-04","transactionAmount":77},
+{"transactionDate":"2022-08-24","transactionAmount":196},
+{"transactionDate":"2022-02-03","transactionAmount":280},
+{"transactionDate":"2022-05-15","transactionAmount":257},
+{"transactionDate":"2022-05-08","transactionAmount":204}]
+
+async function generateAmountOwed(req, res) {
+  for(var i = 0; i < amount.length; i++) {
+    transactionTable.create({
+      instructorID: '63877fb65c8dac5284aaa3c2',
+      transactionDate: amount[i].transactionDate,
+      transactionAmount: amount[i].transactionAmount,
+    });
+  }
+
+  res.send("success");
+}
+
 async function viewAmountOwned(req, res, next) {
   try {
 
     //const Courses = await transactionTable.find({"instructorID":req.body.userID}).sort({transactionDate:1});
     let idToSearch = mongoose.Types.ObjectId(req.body.userID);
-    const Courses = await transactionTable.aggregate(
+    const amount = await transactionTable.aggregate(
     [
       { "$match":{ "instructorID": idToSearch}},
       { 
@@ -477,7 +510,7 @@ async function viewAmountOwned(req, res, next) {
       
     ]).sort({"_id":1});
   
-    res.send({ Courses: Courses});
+    res.send({ amount: amount });
 
   }
   catch (err) {
@@ -494,5 +527,5 @@ async function searchCourses(req, res) {
 module.exports = { 
   viewCourses, filterCourses, addCourse, discount, viewCourseRatings, 
   updateBio, testingAll, viewProfile, cancelDiscount, viewInstructorRatingsAndReviews,
-  filterByRatings, searchCourses,viewAmountOwned
+  filterByRatings, searchCourses, viewAmountOwned, generateAmountOwed
 };

@@ -1,14 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { FiTrash } from 'react-icons/fi';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import { AddNewCourseContext } from '../../../pages/Instructor/AddNewCourse';
+import { PopupMessageContext } from '../../../pages/_app';
 import Input from '../../shared/Input/Input';
-import ExerciseAlt from '../SubtitleAlt/ExerciseAlt/ExerciseAlt';
 
 type Props = {}
 
 const CourseFinalExam = React.forwardRef((props: Props, ref) => {
   
   const { finalExam, setFinalExam } = useContext(AddNewCourseContext);
+  const { viewPopupMessage } = useContext(PopupMessageContext);
 
   function setQuestion(index: number, e: React.ChangeEvent<HTMLInputElement>) {
     const values = {...finalExam};
@@ -34,21 +36,18 @@ const CourseFinalExam = React.forwardRef((props: Props, ref) => {
 
   function removeQuestion(questionIndex: number) {
     const values = {...finalExam};
-
+    if(values.questions.length === 3) {
+      viewPopupMessage(false, "An exam can have at least 3 questions.");
+      return;
+    }
+    values.questions.splice(questionIndex, 1);
     setFinalExam(values);
   }
 
   function addChoice(questionIndex: number) {
     const values = {...finalExam};
     if(values.questions[questionIndex].choices.length === 3) {
-      const message = document.getElementById("question-message-" + questionIndex + "-of-final-exam");
-      if(message != undefined) {
-        message.classList.remove("hidden");
-        message.innerHTML = "A question can have a maximum of 4 choices.";
-        setTimeout(() => {
-          message.classList.add("hidden");
-        }, 3000);
-      }
+      viewPopupMessage(false, "A question can have a maximum of 4 choices.");
       return;
     }
     values.questions[questionIndex].choices.push(
@@ -59,11 +58,17 @@ const CourseFinalExam = React.forwardRef((props: Props, ref) => {
 
   function removeChoice(questionIndex: number, childIndex: number) {
     const values = {...finalExam};
+    if(values.questions[questionIndex].choices.length === 1) {
+      viewPopupMessage(false, "A question cannot have less than 2 choices.");
+      return;
+    }
+    values.questions[questionIndex].choices.splice(childIndex, 1);
     setFinalExam(values);
   }
 
   function setCorrectAnswer(e: React.ChangeEvent<HTMLInputElement>, questionIndex: number) {
     const values = {...finalExam};
+    values.questions[questionIndex].answer = e.target.value;
     setFinalExam(values);
   }
 
@@ -72,9 +77,14 @@ const CourseFinalExam = React.forwardRef((props: Props, ref) => {
     const question = document.getElementById("question-" + questionIndex + "-of-final-exam");
     if(question != undefined) {
       question.classList.toggle("max-h-10");
-      question.classList.toggle("sb-max:max-h-[34rem]");
-      question.classList.toggle("max-h-[15.25rem]");
+      question.classList.toggle("max-h-[34rem]");
     }
+  }
+
+  function setExamDuration(e: any) {
+    const values = {...finalExam};
+    values.exerciseDuration = parseInt(e.target.value);
+    setFinalExam(values);
   }
   
   return (
@@ -83,29 +93,34 @@ const CourseFinalExam = React.forwardRef((props: Props, ref) => {
       <hr />
       <p className='text-gray-700 mx-auto pt-3 pb-6 px-4'>
         In this section you are required to add the final exam which a student has to complete and succeed to receive his/her
-        course certificate.
+        course certificate. You must specify the exam duration (in minutes) in the first input field. For every question's choices, You can add
+        up to 4 choices. The correct answer must be specified in the input field with the green outline. Once you defined it in that 
+        field, no need to define it in any of the other choices' fields as it would be written twice.
       </p>
       <hr className='mb-2'/>
       {
-        <div>
+        <div className='sb:mx-2'>
+          <Input onChange={setExamDuration} type='number' placeholder='Exam Duration (in minutes)' inputDivStyle='sb-max:ml-6' style='w-60' />
           <div>
             {finalExam.questions.map((q: any, questionIndex: number) => (
                 <div id={"question-" + questionIndex + "-of-final-exam"} key={questionIndex} className="relative transition-all duration-200 overflow-hidden px-2 my-2 sb-max:mx-6 max-h-10">
-                  <button type="button" onClick={(e) => toggleQuestion(e, questionIndex)} className={(questionIndex % 2 === 0 ? "bg-gray-300 ": "bg-gray-200 ") + " w-full h-8 relative z-20 text-left flex items-center rounded-md"}>
-                    <span className="rounded-md bg-black text-white ml-2 px-2">
-                      <span className="bg-black h-3 w-3 block absolute bottom-2.5 left-7 rotate-45"></span>
-                      {questionIndex + 1}
-                    </span>
-                    <RiArrowDropDownLine className="pointer-events-none scale-200 transition-all duration-200 ml-3 -rotate-90" />
-                    <span className={(q.problem === "" ? 'opacity-40': '') + ' ml-3 pointer-events-none'}>
-                      {q.problem === "" ? "Question " + (questionIndex + 1): q.problem }
-                    </span>
-                  </button>
+                  <div className='flex items-center'>
+                    <button type="button" onClick={(e) => toggleQuestion(e, questionIndex)} className={(questionIndex % 2 === 0 ? "bg-gray-300 ": "bg-gray-200 ") + " w-full h-8 relative z-20 text-left flex items-center rounded-md"}>
+                      <span className="rounded-md bg-black text-white ml-2 px-2">
+                        <span className="bg-black h-3 w-3 block absolute bottom-2.5 left-7 rotate-45"></span>
+                        {questionIndex + 1}
+                      </span>
+                      <RiArrowDropDownLine className="pointer-events-none scale-200 transition-all duration-200 ml-3 -rotate-90" />
+                      <span className={(q.problem === "" ? 'opacity-40': '') + ' ml-3 pointer-events-none'}>
+                        {q.problem === "" ? "Question " + (questionIndex + 1): q.problem }
+                      </span>
+                    </button>
+                    <button type="button" onClick={() => removeQuestion(questionIndex)} className='bg-calm-red hover:bg-canadian-red rounded-full p-2 text-white text-xs whitespace-nowrap shadow-md ml-4 mr-1 h-min hover:scale-110 transition-all duration-300'><FiTrash className='scale-135 pointer-events-none' /></button>
+                  </div>
                   <div className="relative transition-all duration-1000 px-3">
                     <div>
                       <Input placeholder="Enter Question" value={q.problem} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuestion(questionIndex, e)} inputDivStyle="col-12" />
-                      <button type="button" onClick={() => removeQuestion(questionIndex)} className="text-red-600 hover:text-red-500 text-xs relative bottom-1 left-6 h-0 whitespace-nowrap">Remove Question</button>
-                      <button type="button" onClick={() => addChoice(questionIndex)} className="hover:text-input text-navlink-bg text-xs relative bottom-1 left-12 h-0 whitespace-nowrap">Add Choice</button>
+                      <button type="button" onClick={() => addChoice(questionIndex)} className="hover:text-input text-navlink-bg text-xs relative bottom-1 left-8 h-0 whitespace-nowrap">Add Choice</button>
                     </div>
                     <div className="row pl-4">
                       {

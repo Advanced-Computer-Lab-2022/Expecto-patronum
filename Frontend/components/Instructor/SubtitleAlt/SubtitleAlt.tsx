@@ -167,7 +167,7 @@ const SubtitleAlt = (props: Props) => {
                                                     <Input placeholder="Duration (minutes)" type='number' value={content.duration} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContentDuration(e, subtitleIndex, contentIndex)} inputDivStyle="col-md-6" />
                                                 </div>
                                                 <Input type="checkbox" placeholder='Allow Preview?' checked={content.preview} onChange={(e: any) => setContentPreview(e, subtitleIndex, contentIndex)} />
-                                                <Input value={content.video} placeholder="Video URL" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContentVideo(e, subtitleIndex, contentIndex)} inputDivStyle={content.preview ? "" : "hidden"} />
+                                                <Input value={content.video} placeholder="Video URL" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContentVideo(e, subtitleIndex, contentIndex)} />
                                                 <Input type='textarea' value={content.description} placeholder="Content Description" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContentDescription(e, subtitleIndex, contentIndex)} />
                                             </div>
                                         </div>
