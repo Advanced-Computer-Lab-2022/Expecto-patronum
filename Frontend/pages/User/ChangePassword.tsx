@@ -52,6 +52,7 @@ const ChangePassword = (props: Props) => {
   }
 
   return (
+    //@ts-ignore
     <AuthForm Error={Error} Success={{ ...Success, Cta: "Sign in", CtaLink: "/Login" }} Submit={Submit} FormTitle='Change Password' Inputs={[oldpasswordData, passwordData, reTypepasswordData]} ButtonText={"Change Password"}></AuthForm>
 
   )

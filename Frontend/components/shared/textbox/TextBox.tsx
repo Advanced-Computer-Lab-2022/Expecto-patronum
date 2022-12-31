@@ -26,7 +26,7 @@ const TextBox = (props: Props) => {
     <div className={DescContainer}>
       {!props.HideLabel && <label htmlFor="description" className={DescLabel}>{props.LabelTitle || "Description"}</label>}
       <div className='relative'>
-        <textarea required ref={props.Ref || textAreaRef} disabled={props?.ShowOnly} style={{ 'resize': 'none', 'overflow': 'auto' }} maxLength={1000} value={Description} className={ReportForm} placeholder={props.placeHolder}
+        <textarea autoFocus required ref={props.Ref || textAreaRef} disabled={props?.ShowOnly} style={{ 'resize': 'none', 'overflow': 'auto' }} maxLength={1000} value={Description} className={ReportForm} placeholder={props.placeHolder}
           onChange={(e) => { handleChange(e) }}>
         </textarea>
         {!props.ShowOnly && <p className={WordCount}>{wordCountNumber}</p>}

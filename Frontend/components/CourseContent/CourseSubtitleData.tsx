@@ -9,6 +9,7 @@ type Props = {
 };
 
 const CourseSubtitleData = (props: Props) => {
+  console.log
   return (
     <div className="mt-4 pb-4 border-b-2 ">
       {props.Data.length > 0 && (
