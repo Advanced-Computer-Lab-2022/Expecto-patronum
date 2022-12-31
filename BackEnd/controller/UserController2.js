@@ -478,7 +478,7 @@ async function lastWatched(req, res, next) {
         
         var wallet=await User.findById(userID).select({"wallet":1,"username":1});
         if(wallet.wallet<course.price){
-          res.send("Insuffecient funds");
+          res.status(400).send("Insuffecient funds");
         }
         else{
           const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
