@@ -473,8 +473,9 @@ async function viewAmountOwned(req, res, next) {
             totalAmount: { $sum: { $multiply: [ "$transactionAmount", 1 ] } },
             count: { $sum: 1 }
           }
-      }
-    ]);
+      },
+      
+    ]).sort({"_id":1});
   
     res.send({ Courses: Courses});
 
