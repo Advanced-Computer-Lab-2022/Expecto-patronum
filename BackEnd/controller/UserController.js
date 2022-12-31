@@ -803,7 +803,7 @@ async function buyCourse(req, res, next) {
   try {
     const exists = await User.findOne({ "_id": req.body.userID, "purchasedCourses.courseID": req.body.courseID });
     if (exists) {
-      res.status(400).send("Course already bought");
+      res.status(200).send({error:true,message:"Course already bought"});
       return;
     }
     const user = await User.findByIdAndUpdate({ "_id": req.body.userID },
@@ -840,7 +840,7 @@ async function unbuyCourse(req, res, next) {
 
     const transaction = await transactionTable.deleteOne({ userID: user._id, courseID: course._id });
 
-    res.status(400).send("payment unsucessful");
+    res.status(200).send({error:true,message:"Course already bought"});
 
   } catch (error) {
     res.status(400).send({ error: error.message });
