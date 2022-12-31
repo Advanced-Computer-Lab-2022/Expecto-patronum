@@ -24,7 +24,7 @@ async function viewCourseRequests(req, res, next) {
     var CurrentPage = req.query.page ? req.query.page : 1;
     try {
       const request = await requestTable.find( {type :"RequestCourse"}).skip((CurrentPage - 1) * 5).limit(5);
-      var TotalCount = await requestTable.countDocuments({type :"requestCourse"});
+      var TotalCount = await requestTable.countDocuments({type :"RequestCourse"});
       res.send({ requests: request, TotalCount: TotalCount});
     }
     catch (err) {
