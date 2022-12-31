@@ -85,7 +85,6 @@ router.get("/takeExam", takeExam);
 
 router.get("/viewAnswers", viewAnswer);
 
-router.get("/viewMyCourses", ViewMyCourses);
 router.get("/viewPreviousReports", viewPreviousReports);
 router.put("/filterNotes", filterNotes);
 
