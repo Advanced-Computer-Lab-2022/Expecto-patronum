@@ -9,7 +9,9 @@ import ExamHeader from "../../components/exam/ExamHeader";
 import classNames from "classnames";
 import Link from "next/link";
 import { PopupMessageContext } from '../_app';
-const Exam = () => {
+
+
+const TakeFinalExam = () => {
     const [index, setIndex] = useState<number>(0);
     const [userID, setUserID] = useState<string>("");
     const [exerciseID, setExerciseID] = useState<string>("");
@@ -186,4 +188,4 @@ const Exam = () => {
     );
 };
 
-export default Exam;
+export default TakeFinalExam;

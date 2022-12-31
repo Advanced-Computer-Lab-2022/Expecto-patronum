@@ -4,7 +4,6 @@ import SubmittedExamCards from "../../components/exam/SubmittedExamCards";
 import ExamHeader from "../../components/exam/ExamHeader";
 import classNames from "classnames";
 import { PopupMessageContext } from '../_app';
-import { CatchingPokemonSharp } from "@mui/icons-material";
 
 const wrongAnswer = classNames(
     "inline-flex justify-between items-center p-5 w-full text-red-500 bg-white rounded-lg border-2 border-red-500"
@@ -13,7 +12,7 @@ const rightAnswer = classNames(
     "inline-flex justify-between items-center p-5 w-full text-green-500 bg-white rounded-lg border-2 border-green-500"
 );
 
-const SubmittedExam = () => {
+const SubmittedFinalExam = () => {
     const [totalGrade, settotalGrade] = useState<number>(0);
     const [questions, setQuestions] = useState([{
         problem: "",
@@ -85,31 +84,30 @@ const SubmittedExam = () => {
                 }
         }
         settotalGrade((correctAnswers / questions.length) * 100);
-
-        if((correctAnswers / questions.length) * 100 >= 50) {
-            viewPopupMessage(true, "Congratulations You have Passed The Exerceise keep it up!");
-        }else{
-            viewPopupMessage(false, "You have Failed The Excercise!");
-            console.log("sad");
-        }
-        const timer = document.getElementById("timer");
-        if (timer != undefined) {
-            timer.style.display = "none";
-        }
+        // const timer = document.getElementById("timer");
+        // if (timer != undefined) {
+        //     timer.style.display = "none";
+        // }
         const goback = document.getElementById("go-back");
         if (goback != undefined) {
             goback.style.display = "";
         }
     }, [questions])
 
-
+    useEffect(() => {
+        if(totalGrade >= 50) {
+            viewPopupMessage(true, "Congratulations You have Passed The Exam and Received certificate on Your Mail!");
+        }else{
+            viewPopupMessage(false, "You have Failed The Exam,heads Up you can retake it later!");
+        }
+    }, [totalGrade])
     return (
         <form
             id="Exam-form"
             className="row mx-4  h-full"
     
         >
-            <ExamHeader></ExamHeader>
+            {/* <ExamHeader></ExamHeader> */}
             {questions.map((question, index) => (
                 <SubmittedExamCards key={index} QuestionData={question} Index={index} />
             ))}
@@ -148,4 +146,4 @@ const SubmittedExam = () => {
     );
 };
 
-export default SubmittedExam;
+export default SubmittedFinalExam;
