@@ -45,7 +45,7 @@ const Requests = (props: Props) => {
       .then((res) => {
         console.log(res.data);
         const q = res.data.requests;
-        console.log(q);
+        // console.log(q);
         setRequests(q);
         setTotalCount(res.data.TotalCount);
       });
@@ -60,8 +60,8 @@ const Requests = (props: Props) => {
       })
       .then((res) => {
         console.log(res.data);
-        const q = res.data.courses;
-        console.log(q);
+        const q = res.data.requests;
+        // console.log(q);
         setRequests(q);
       });
   }
@@ -111,7 +111,7 @@ const Requests = (props: Props) => {
   }
   return (
     <aside>
-      <AdminHeader />
+      {/* <AdminHeader /> */}
       <div className="flex">
         <SideBar></SideBar>
         <form id="course-form" className="w-full mx-4">

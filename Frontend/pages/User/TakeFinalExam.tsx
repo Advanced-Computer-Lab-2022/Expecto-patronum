@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { useRouter } from 'next/router';
 
 var response = null;
 
@@ -26,7 +27,7 @@ const TakeFinalExam = () => {
         isVisible: false,
     }]
     );
-
+    let router = useRouter();
     useEffect(() => {
         // const questionsDummyData = [
         //     {problem: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
@@ -39,8 +40,8 @@ const TakeFinalExam = () => {
         //     { problem:"what about ur 6th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true }];
         // setQuestions(questionsDummyData);
         setUserID("6383d9da6670d09304d2b016");
-        setExerciseID("6383e073de30152bc8991dc9");
-        setCourseID("6383e073de30152bc8991dd5");
+        setCourseID("6383e073de30152bc8991dc9");
+        setExerciseID("6383e073de30152bc8991dd5");
         getQuestions();
     }, [])
     useEffect(() => {
@@ -146,6 +147,10 @@ const TakeFinalExam = () => {
                 answers: empty,
             }).then((res: { data: any; }) => { return res.data });
             viewPopupMessage(true, "Answers Submitted successfully");
+            router.push({
+                pathname: 'http://localhost:3000/User/SubmittedFinalExam',
+                query: { courseID : courseID,  exerciseID : exerciseID }
+            });
     }
 
     return (
@@ -153,7 +158,7 @@ const TakeFinalExam = () => {
             id="Exam-form"
             className="row mx-4  h-full"
         >
-            <ExamHeader></ExamHeader>
+            {/* <ExamHeader></ExamHeader> */}
             <div id="info" className="flex justify-center gap-8 ">
                 <p style={{ display: '' }} className="mb-2 text-black h-auto">Skipped Questions Numbers:{skipped.toString()}</p>
             </div>

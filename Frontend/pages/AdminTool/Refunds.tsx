@@ -128,7 +128,7 @@ viewPopupMessage(true, "Refund Rejected");
   
   return (
     <aside>
-    <AdminHeader/>
+    {/* <AdminHeader/> */}
     <div className="flex sb-max:min-h-fit">
       <SideBar></SideBar>
       <form id='course-form' className='w-full mx-4'>

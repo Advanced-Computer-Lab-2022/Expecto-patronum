@@ -36,7 +36,7 @@ const TextBox = (props: Props) => {
 }
 
 export default TextBox
-const DescContainer = classNames("text-sm flex flex-col mt-2 ")
+const DescContainer = classNames("text-sm flex flex-col my-2")
 const DescLabel = classNames("font-bold mb-2")
 const WordCount = classNames("absolute text-xs bottom-2 text-gray-400 z-20 right-5");
 const ReportForm = classNames("appearance-none w-full border rounded-md border-gray-600 p-2 max-h-80 min-h-[6rem] h-22 focus:outline-none focus:border-gray-500");

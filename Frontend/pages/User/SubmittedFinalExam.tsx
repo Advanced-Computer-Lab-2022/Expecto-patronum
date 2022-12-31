@@ -4,6 +4,7 @@ import SubmittedExamCards from "../../components/exam/SubmittedExamCards";
 import ExamHeader from "../../components/exam/ExamHeader";
 import classNames from "classnames";
 import { PopupMessageContext } from '../_app';
+import { useRouter } from "next/router";
 
 const wrongAnswer = classNames(
     "inline-flex justify-between items-center p-5 w-full text-red-500 bg-white rounded-lg border-2 border-red-500"
@@ -21,6 +22,7 @@ const SubmittedFinalExam = () => {
     }]);
     const [myAnswers, setMyAnswers] = useState([""]); 
     const { viewPopupMessage } = useContext(PopupMessageContext);
+    const router = useRouter();
     useEffect(() => {
         // const questionsDummyData = [
         //     { question: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
@@ -38,13 +40,13 @@ const SubmittedFinalExam = () => {
     }, [])
 
     const getQuestionsAnswers = async () => { //need to be callled on loading page
-
-
+        // console.log(router.query.courseID);
+        // console.log(router.query.exerciseID);
         await axios.get('http://localhost:5000/User/viewAnswers', {
             params: {
                 userID:"6383d9da6670d09304d2b016", 
-                courseID:"6383e073de30152bc8991dc9",
-                exerciseID:"6383e073de30152bc8991dd5",
+                courseID:router.query.courseID,
+                exerciseID:router.query.exerciseID,
             },
           }).then(
             (res) => {
