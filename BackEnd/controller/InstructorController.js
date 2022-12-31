@@ -488,10 +488,38 @@ async function searchCourses(req, res) {
   res.send(await CourseTable.find({ instructorID: req.user._id }).select({ title: 1 }));
 }
 
+async function viewInstructorPopularCourses(req, res, next) {
+  var CurrentPage = req.query.page ? req.query.page : 1;
+  var coursesPerPage = req.query.coursesPerPage?req.query.coursesPerPage:10;
+  try {
+    const Courses = await Course.find({instructorID:req.user._id}, {
+      _id: 1,
+      title: 1,
+      courseHours: 1,
+      price: 1,
+      courseImage: 1,
+      rating: 1,
+      instructorName: 1,
+      subject: 1,
+      level: 1,
+      summary: 1,
+      discount: 1,
+      discountPrice: 1,
+      purchases:1
+    }).sort({purchases:-1}).skip(0).limit(15);
+
+    res.status(200).send({ Courses: Courses});
+
+  }
+  catch (err) {
+    res.status(400).json({error:err.message})
+  }
+};
+
 
 
 module.exports = { 
   viewCourses, filterCourses, addCourse, discount, viewCourseRatings, 
   updateBio, testingAll, viewProfile, cancelDiscount, viewInstructorRatingsAndReviews,
-  filterByRatings, searchCourses,viewAmountOwned
+  filterByRatings, searchCourses,viewAmountOwned,viewInstructorPopularCourses
 };
