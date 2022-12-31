@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { FiFacebook, FiTwitter, FiInstagram, FiLinkedin } from 'react-icons/fi';
+import Link from 'next/link';
 
 type Props = {}
 
@@ -12,29 +13,29 @@ const Footer = (props: Props) => {
             <div className={footerCol}>
                 <h4 className={colHeader}><div className={colHeaderText}>Website</div></h4>
                 <ul className={colData}>
-                    <li className={colItems}><a href='#'>About Us</a></li>
-                    <li className={colItems}><a href='#'>Our Services</a></li>
-                    <li className={colItems}><a href='#'>Privacy Policy</a></li>
-                    <li className={colItems}><a href='#'>Affiliate Program</a></li>
+                    <li className={colItems}><Link href=''>About Us</Link></li>
+                    <li className={colItems}><Link href=''>Our Services</Link></li>
+                    <li className={colItems}><Link href=''>Privacy Policy</Link></li>
+                    <li className={colItems}><Link href=''>Affiliate Program</Link></li>
                 </ul>
             </div>
             <div className={footerCol}>
                 <h4 className={colHeader}><div className={colHeaderText}>Get Help</div></h4>
                 <ul className={colData}>
-                    <li className={colItems}><a href='#'>FAQ</a></li>
-                    <li className={colItems}><a href='#'>Shopping</a></li>
-                    <li className={colItems}><a href='#'>Returns</a></li>
-                    <li className={colItems}><a href='#'>Order Status</a></li>
-                    <li className={colItems}><a href='#'>Payment Options</a></li>
+                    <li className={colItems}><Link href=''>FAQ</Link></li>
+                    <li className={colItems}><Link href=''>Shopping</Link></li>
+                    <li className={colItems}><Link href=''>Returns</Link></li>
+                    <li className={colItems}><Link href=''>Order Status</Link></li>
+                    <li className={colItems}><Link href=''>Payment Options</Link></li>
                 </ul>
             </div>
             <div className={footerCol}>
                 <h4 className={colHeader}><div className={colHeaderText}>Online Shop</div></h4>
                 <ul className={colData}>
-                    <li className={colItems}><a href='#'>Web Applications</a></li>
-                    <li className={colItems}><a href='#'>Mobile Applications</a></li>
-                    <li className={colItems}><a href='#'>Desktop Applications</a></li>
-                    <li className={colItems}><a href='#'>Other</a></li>
+                    <li className={colItems}><Link href=''>Web Applications</Link></li>
+                    <li className={colItems}><Link href=''>Mobile Applications</Link></li>
+                    <li className={colItems}><Link href=''>Desktop Applications</Link></li>
+                    <li className={colItems}><Link href=''>Other</Link></li>
                 </ul>
             </div>
             <div className={footerCol}>

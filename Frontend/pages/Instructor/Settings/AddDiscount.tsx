@@ -155,7 +155,7 @@ const DateInput = (props: DateProps) => {
         <input className='pl-2 pr-8 w-full h-12 bg-transparent rounded-lg border-1.5 focus:border-[#0B80F3] border-[#A7AEC2] cursor-pointer' disabled type='text' placeholder={props.placeholder} value={props.date?.toLocaleDateString() || ''} />
         <button className='absolute right-2 hover:text-[#0B80F3] transition-all duration-300 scale-125'><MdCalendarToday /></button>
       </div>
-      <div className='w-full' ref={calendarRef}>
+      <div ref={calendarRef}>
         <Calendar minDate={props.minDate ? props.minDate :new Date()} className='absolute min-w-fit -left-4 rounded-xl top-9 shadow-md scale-0 transition-all duration-200 ease-in-out z-10' value={props.date ? (props.date < props.minDate ? props.minDate: props.date): props.minDate} onChange={props.setDate} />
       </div>
     </div>

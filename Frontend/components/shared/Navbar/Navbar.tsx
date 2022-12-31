@@ -5,6 +5,7 @@ import SearchBar from "./SearchBar/SearchBar";
 import BurgerButton from "./BurgerButton/BurgerButton";
 import SelectCountry from "./SelectCountry/SelectCountry";
 import Link from "next/link";
+import Image from "next/image";
 
 interface ContextState {
   isCurtainOpen: any;
@@ -22,6 +23,10 @@ function Navbar() {
   const [isCurtainOpen, setIsCurtainOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+  const roles = ['Instructor', 'Guest', 'Admin', 'Individual Trainee', 'Corporate Trainee'];
+  const navbarVariations = [<GuestNavbar curtainRef={curtainRef} />];
+  const role = roles[1];
+
   useEffect(() => {
     global.window.location.pathname === '/Login' ? parentRef.current.classList.add('hidden'): parentRef.current.classList.remove('hidden');
   }, [global.window?.location.pathname])
@@ -33,25 +38,7 @@ function Navbar() {
           <img className={navLogo} src="/images/logo.png" />
         </Link>
 
-        <div className="flex">
-          <SearchBar />
-          <div ref={curtainRef} className={navContentDiv}>
-            <a className={navLink} href="/Instructor">
-              Inspire Learners
-            </a>
-            <hr className="nv:hidden" />
-            <Link className={navWideButton} href="Auth/Signup">
-              Sign Up
-            </Link>
-          </div>
-          <div className={navIconsDiv}>
-            <a className={navButton} href="/Login">
-              <AiOutlineUser className={navButtonIcon} />
-            </a>
-            <SelectCountry />
-            <BurgerButton curtainRef={curtainRef} />
-          </div>
-        </div>
+        <UserNavbar curtainRef={curtainRef} />
       </div>
     </curtainSearchSwitching.Provider>
   );
@@ -66,6 +53,48 @@ const navLink = classNames("navbar-link text-sm nv-max:text-lg pt-px nv-max:hove
 const navWideButton = classNames("navbar-link nv-max:text-lg border-1.5 w-fit nv-max:relative nv-max:bottom-8 nv:top-2.5 border-canadian-red nv-max:border-0 nv-max:bg-transparent nv-max:text-canadian-red bg-canadian-red hover:bg-transparent text-white text-sm pt-px rounded-full hover:text-canadian-red nv:mx-2 nv:h-8 nv:px-6 whitespace-nowrap z-10 relative nv-max:block transition-all duration-300 flex items-center justify-center nv-max:after:content-[''] nv-max:after:absolute nv-max:after:-bottom-px nv-max:after:left-0 nv-max:after:w-full nv-max:after:h-0.5 nv-max:after:bg-canadian-red nv-max:after:transition-all nv-max:after:duration-500 nv-max:hover:after:opacity-100 nv-max:after:opacity-100 nv-max:after:scale-0 nv-max:after:origin-center nv-max:hover:after:scale-100  nv-max:items-center ");
 const navButton = classNames("navbar-link rounded-full border-1.5 border-black hover:text-white hover:bg-black hover:scale-110 mx-2 h-8 w-8 whitespace-nowrap z-10 relative transition-all duration-300 flex items-center justify-center");
 const navButtonIcon = classNames("scale-110 pointer-events-none");
+
+const GuestNavbar = (props: {curtainRef: React.MutableRefObject<any>}) => {
+  return (
+    <div className="flex">
+          <SearchBar />
+          <div ref={props.curtainRef} className={navContentDiv}>
+            <a className={navLink} href="/Instructor">
+              Inspire Learners
+            </a>
+            <hr className="nv:hidden" />
+            <Link className={navWideButton} href='/Login?isLogin=false' as='/Login'>
+              Sign Up
+            </Link>
+          </div>
+          <div className={navIconsDiv}>
+            <a className={navButton} href="/Login">
+              <AiOutlineUser className={navButtonIcon} />
+            </a>
+            <SelectCountry />
+            <BurgerButton curtainRef={props.curtainRef} />
+          </div>
+        </div>
+  );
+}
+
+const UserNavbar = (props: {curtainRef: React.MutableRefObject<any>}) => {
+  return (
+    <div className="flex">
+          <SearchBar />
+          <div ref={props.curtainRef} className={navContentDiv}>
+
+          </div>
+          <div className={navIconsDiv}>
+            <SelectCountry />
+            <Link href='/User'>
+              <Image width={50} height={50} src="/images/ProfileIcon.jpg" alt="" className="mx-2 h-8 w-8 border-canadian-red border-1.5 rounded-full hover:scale-110 transition-all duration-300" />
+            </Link>
+            <BurgerButton curtainRef={props.curtainRef} />
+          </div>
+        </div>
+  );
+}
 
 export default Navbar;
 export { curtainSearchSwitching };
