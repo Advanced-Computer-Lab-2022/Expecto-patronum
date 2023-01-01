@@ -4,46 +4,46 @@ const instructorTable = require('../models/InstructorSchema');
 //const { isInstructor } = require('../middleware/RolesMiddleware');
 const CourseTable = require('../models/CourseSchema');
 const { query } = require('express');
-const { 
-        viewCourses, filterCourses, addCourse, discount, 
-        viewCourseRatings, updateBio, testingAll, viewProfile, 
-        viewInstructorRatingsAndReviews, cancelDiscount, 
-        filterByRatings, searchCourses, viewAmountOwned,
-        viewInstructorPopularCourses , generateAmountOwed,
-      } = require('../controller/InstructorController');
+const {
+  viewCourses, filterCourses, addCourse, discount,
+  viewCourseRatings, updateBio, testingAll, viewProfile,
+  viewInstructorRatingsAndReviews, cancelDiscount,
+  filterByRatings, searchCourses, viewAmountOwned,
+  viewInstructorPopularCourses, generateAmountOwed,
+} = require('../controller/InstructorController');
 
 
 router.get("/", (req, res, next) => {
-  res.send("Hello, Instructor");
+  res.send(req.user)
 });
 
-router.get("/viewCourses",viewCourses);
+router.get("/viewCourses", viewCourses);
 
-router.get("/filterCourses",filterCourses);
+router.get("/filterCourses", filterCourses);
 
 router.get("/searchCourses", searchCourses);
-router.get("/viewCourseRatings",viewCourseRatings)
+router.get("/viewCourseRatings", viewCourseRatings)
 router.get("/viewInstructorRatingsAndReviews", viewInstructorRatingsAndReviews);
 
-router.get("/updateBio",updateBio);
-
- 
-router.get("/viewProfile",viewProfile);
+router.get("/updateBio", updateBio);
 
 
-router.get("/testingAll",testingAll);
-router.put("/filterByRatings",filterByRatings);
+router.get("/viewProfile", viewProfile);
+
+
+router.get("/testingAll", testingAll);
+router.put("/filterByRatings", filterByRatings);
 
 router.put("/viewAmountOwned", viewAmountOwned);
 router.post("/generateAmountOwed", generateAmountOwed);
 
-router.post('/addCourse',addCourse);
+router.post('/addCourse', addCourse);
 
-router.post("/discount",discount);
+router.post("/discount", discount);
 
-router.put("/cancelDiscount",cancelDiscount);
+router.put("/cancelDiscount", cancelDiscount);
 
-router.get("/InstructorPopularCourses",viewInstructorPopularCourses);
+router.get("/InstructorPopularCourses", viewInstructorPopularCourses);
 
 
 module.exports = router;
