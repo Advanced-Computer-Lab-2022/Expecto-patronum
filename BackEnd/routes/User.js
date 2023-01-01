@@ -14,10 +14,12 @@ const UserTable = require('../models/UserSchema');
 
 const { SelectExercise, viewAnswer, requestCourse, reportProblem, viewPreviousReports, followUpOnProblem, watchVideo, addNote, viewProfileUser,
   viewNotes, filterNotes, createTransaction, lastWatched, EditNote, DeleteNote, payWithWallet, RecieveMail, viewPreviousRequests, removeCourseReview, removeInstructorReview } = require('../controller/UserController2');
+const { isAdmin, isUser } = require('../middleware/RolesMiddleware');
 
 router.get("/", (req, res) => {
   res.send("Hello, User");
 });
+
 
 
 
@@ -36,6 +38,8 @@ router.post("/forgetPassword", forgetPassword);
 router.post("/ChangeForgottenPassword/:token", VerifyTokenMiddleware, ChangeForgottenPassword);
 router.post("/ChangePassword", isAuth, ChangePassword);
 router.post("/ChangeEmail", isAuth, ChangeEmail);
+
+
 
 router.get('/CheckAuth', isAuth, (req, res) => {
   res.status(200).send({ Error: false, Message: 'You are authorized' });
