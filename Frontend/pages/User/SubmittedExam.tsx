@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import SubmittedExamCards from "../../components/exam/SubmittedExamCards";
-import ExamHeader from "../../components/exam/ExamHeader";
 import classNames from "classnames";
 import { PopupMessageContext } from '../_app';
-import { CatchingPokemonSharp } from "@mui/icons-material";
+import { useRouter } from "next/router";
+
 
 const wrongAnswer = classNames(
     "inline-flex justify-between items-center p-5 w-full text-red-500 bg-white rounded-lg border-2 border-red-500"
@@ -12,7 +12,6 @@ const wrongAnswer = classNames(
 const rightAnswer = classNames(
     "inline-flex justify-between items-center p-5 w-full text-green-500 bg-white rounded-lg border-2 border-green-500"
 );
-
 const SubmittedExam = () => {
     const [totalGrade, settotalGrade] = useState<number>(0);
     const [questions, setQuestions] = useState([{
@@ -22,6 +21,8 @@ const SubmittedExam = () => {
     }]);
     const [myAnswers, setMyAnswers] = useState([""]); 
     const { viewPopupMessage } = useContext(PopupMessageContext);
+    const router = useRouter();
+
     useEffect(() => {
         // const questionsDummyData = [
         //     { question: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
@@ -35,17 +36,17 @@ const SubmittedExam = () => {
         // setQuestions(questionsDummyData);
         // const choicesDummyData = ["it", "what", "about", "it","","it","easy","what"];
         // setMyAnswers(choicesDummyData);
+
         getQuestionsAnswers();
     }, [])
 
     const getQuestionsAnswers = async () => { //need to be callled on loading page
-
-
+        // console.log(router.query.courseID);
+        // console.log(router.query.exerciseID);
         await axios.get('http://localhost:5000/User/viewAnswers', {
             params: {
-                userID:"6383d9da6670d09304d2b016", 
-                courseID:"6383e073de30152bc8991dc9",
-                exerciseID:"6383e073de30152bc8991dd5",
+                courseID:router.query.courseID,
+                exerciseID:router.query.exerciseID,
             },
           }).then(
             (res) => {
@@ -84,10 +85,12 @@ const SubmittedExam = () => {
                     }
                 }
         }
-        settotalGrade((correctAnswers / questions.length) * 100);
+        var Grade=(correctAnswers / questions.length) * 100
+        settotalGrade(Grade);
 
-        if((correctAnswers / questions.length) * 100 >= 50) {
+        if(Grade >= 50) {
             viewPopupMessage(true, "Congratulations You have Passed The Exerceise keep it up!");
+
         }else{
             viewPopupMessage(false, "You have Failed The Excercise!");
             console.log("sad");
@@ -109,7 +112,6 @@ const SubmittedExam = () => {
             className="row mx-4  h-full"
     
         >
-            <ExamHeader></ExamHeader>
             {questions.map((question, index) => (
                 <SubmittedExamCards key={index} QuestionData={question} Index={index} />
             ))}

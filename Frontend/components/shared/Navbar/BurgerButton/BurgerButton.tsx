@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { curtainSearchSwitching } from "../Navbar";
 
 type Props = {
-    curtainRef: any,
+    curtainRef: React.RefObject<HTMLDivElement>,
 }
 
 const BurgerButton = (props: Props) => {
@@ -21,12 +21,14 @@ const BurgerButton = (props: Props) => {
         setIsClicked(!isClicked);
 
         // Toggles curtain when responsive
-        if(!isCurtainOpen) {
-            props.curtainRef.current.style.bottom = "-5rem";
-            props.curtainRef.current.style.opacity = "100%";
-        } else {
-            props.curtainRef.current.style.bottom = "5.5rem";
-            props.curtainRef.current.style.opacity = "0%";
+        if(props.curtainRef.current !== null) {
+            if(!isCurtainOpen) {
+                props.curtainRef.current.style.bottom = "-" + (props.curtainRef.current?.children.length * 2 + 4/props.curtainRef.current?.children.length) + "rem";
+                props.curtainRef.current.style.opacity = "100%";
+            } else {
+                props.curtainRef.current.style.bottom = "5.5rem";
+                props.curtainRef.current.style.opacity = "0%";
+            }
         }
 
         // Transform Burger shape to an X-shape
@@ -45,7 +47,9 @@ const BurgerButton = (props: Props) => {
             ingredients[2].style.width = "50px";
             ingredients[3].style.width = "50px";
         } else {
-            props.curtainRef.current.style.opacity = "100%";
+            if(props.curtainRef.current !== null) {
+                props.curtainRef.current.style.opacity = "100%";
+            }
             
             transformIngredient(0, 0, 0, "top");
             transformIngredient(4, 0, 0, "bottom");

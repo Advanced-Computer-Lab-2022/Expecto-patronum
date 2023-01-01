@@ -4,6 +4,7 @@ import Input from '../../components/shared/Input/Input';
 import SideBar from '../../components/AdminTool/SideBar';
 import AdminHeader from '../../components/AdminTool/AdminHeader';
 import { PopupMessageContext } from '../_app';
+import Layout from './Layout';
 type Props = {}
 
 var isReset = false;
@@ -82,10 +83,7 @@ function getRole(selectedRadio: any) {
   }
 
   return (
-    <aside>
-    <AdminHeader/>
-    <div className="flex">
-      <SideBar></SideBar>
+<Layout>
       <form id='course-form' className='w-full mx-4'>
         <div className='row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl '>
           <h1 className='text-center text-3xl pb-6 text-navbar'>Add User</h1>
@@ -116,9 +114,7 @@ function getRole(selectedRadio: any) {
           </div>
         </div>
       </form>
-
-    </div>
-    </aside>
+      </Layout>
   )
 }
 

@@ -6,7 +6,6 @@ type Props = {}
 const Profile = (props: Props) => {
   return (
     <UserProfile></UserProfile>
-
   )
 }
 

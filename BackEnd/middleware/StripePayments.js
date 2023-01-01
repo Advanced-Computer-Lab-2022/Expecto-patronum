@@ -10,7 +10,7 @@ const Course = require('../models/CourseSchema');
  async function addPaymentMethod(req, res) {
   try {
     // Get user id from session
-    const userId = req.body.userId;
+    const userId = req.user._id;
 
     // Get credit card information from request body
     const { creditCardNumber, ccv, cardHolderName,expiration} = req.body;
@@ -97,7 +97,7 @@ const card = await stripe.customers.retrieveSource(
 
  async function getPaymentMethods(req, res) {
   // Get user id from session
-  const userId = req.body.userId;
+  const userId = req.user._id;
   // Get user collection
   const users = User;
   // Find user by id
@@ -110,7 +110,7 @@ const card = await stripe.customers.retrieveSource(
  async function deletePaymentMethod(req, res) {
   try {
     // Get user id from session
-    const userId = req.body.userId;
+    const userId = req.user._id;
     // Get payment method id from request params
     const { paymentMethodId } = req.body;
     // Get user collection

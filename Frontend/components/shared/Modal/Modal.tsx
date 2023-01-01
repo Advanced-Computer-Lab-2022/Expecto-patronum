@@ -74,4 +74,4 @@ function Modal(props: Modalinterface) {
 }
 
 export default Modal;
-const ModalWrapper = classNames("fixed z-50   top-0  left-0  w-full  h-full   bg-gray-900  bg-opacity-50  flex  justify-center  items-center");
+const ModalWrapper = classNames("fixed z-[2000]   top-0  left-0  w-full  h-full   bg-gray-900  bg-opacity-50  flex  justify-center  items-center");

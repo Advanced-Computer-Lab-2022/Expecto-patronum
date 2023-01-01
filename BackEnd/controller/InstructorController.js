@@ -14,9 +14,7 @@ async function viewCourses(req, res, next) {
   var coursesPerPage = req.query.coursesPerPage ?req.query.coursesPerPage : 10;
   try {
     let queryCond = {};
-    if (req.query.instructorID) {
-      queryCond.instructorID = req.query.instructorID;
-    }
+      queryCond.instructorID = req.user._id;
     const Courses = await CourseTable.find(queryCond, {
       _id: 1,
       title: 1,
@@ -58,7 +56,7 @@ async function filterCourses(req, res, next) {
         if (req.query.subject && req.query.price) {
 
           var y = await CourseTable.find(
-            { "discountPrice": Price, "subject":{ "$regex": req.query.subject, "$options": "i" }, "instructorID": req.query.instructorID, $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, { "subject": { "$regex": req.query.keyword, "$options": "i" } }] })
+            { "discountPrice": Price, "subject":{ "$regex": req.query.subject, "$options": "i" }, "instructorID": req.user._id, $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, { "subject": { "$regex": req.query.keyword, "$options": "i" } }] })
             .select({
               _id: 1,
               title: 1,
@@ -74,7 +72,7 @@ async function filterCourses(req, res, next) {
               discountPrice: 1
             }).skip((CurrentPage - 1) * coursesPerPage).limit(coursesPerPage);
           var TotalCount =  await CourseTable.countDocuments({ "discountPrice": Price, "subject": { "$regex": req.query.subject, "$options": "i" },
-           "instructorID": req.query.instructorID,
+           "instructorID": req.user._id,
             $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, 
             { "subject": { "$regex": req.query.keyword, "$options": "i" } }] });
           res.send({ Courses: y, TotalCount: TotalCount });
@@ -82,7 +80,7 @@ async function filterCourses(req, res, next) {
         }
         else if (req.query.price) {
           var y = await CourseTable.find(
-            { "discountPrice": Price, "instructorID": req.query.instructorID, $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, { "subject": { "$regex": req.query.keyword, "$options": "i" } }] })
+            { "discountPrice": Price, "instructorID": req.user._id, $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, { "subject": { "$regex": req.query.keyword, "$options": "i" } }] })
             .select({
               _id: 1,
               title: 1,
@@ -97,7 +95,7 @@ async function filterCourses(req, res, next) {
               discount: 1,
               discountPrice: 1
             }).skip((CurrentPage - 1) * coursesPerPage).limit(coursesPerPage);
-          var TotalCount = await CourseTable.countDocuments( { "discountPrice": Price, "instructorID": req.query.instructorID, 
+          var TotalCount = await CourseTable.countDocuments( { "discountPrice": Price, "instructorID":req.user._id, 
           $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } },
            { "subject": { "$regex": req.query.keyword, "$options": "i" } }] });
 
@@ -105,7 +103,7 @@ async function filterCourses(req, res, next) {
         }
         else{
           var y = await CourseTable.find(
-            { "subject":{ "$regex": req.query.subject, "$options": "i" }, "instructorID": req.query.instructorID, $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, { "subject": { "$regex": req.query.keyword, "$options": "i" } }] })
+            { "subject":{ "$regex": req.query.subject, "$options": "i" }, "instructorID": req.user._id, $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, { "subject": { "$regex": req.query.keyword, "$options": "i" } }] })
             .select({
               _id: 1,
               title: 1,
@@ -120,17 +118,18 @@ async function filterCourses(req, res, next) {
               discount: 1,
               discountPrice: 1
             }).skip((CurrentPage - 1) * coursesPerPage).limit(coursesPerPage);
-          var TotalCount =await CourseTable.countDocuments( { "subject": { "$regex": req.query.subject, "$options": "i" }, "instructorID": req.query.instructorID,
+          var TotalCount =await CourseTable.countDocuments( { "subject": { "$regex": req.query.subject, "$options": "i" }, "instructorID": req.user._id,
            $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } },
             { "subject": { "$regex": req.query.keyword, "$options": "i" } }] });
           res.send({ Courses: y, TotalCount: TotalCount });
         }
       }
       else {
+        //req.user._id
         console.log("enter");
         console.log(req.query.keyword);
         var y = await CourseTable.find(
-          { "instructorID": req.query.instructorID, $or: [{ title: { "$regex": req.query.keyword, "$options": 'i' } }, { subject: { "$regex": req.query.keyword, "$options": 'i' } }] })
+          { "instructorID": req.user._id, $or: [{ title: { "$regex": req.query.keyword, "$options": 'i' } }, { subject: { "$regex": req.query.keyword, "$options": 'i' } }] })
           .select({
             _id: 1,
             title: 1,
@@ -146,7 +145,7 @@ async function filterCourses(req, res, next) {
             discountPrice: 1
           }).skip((CurrentPage - 1) * coursesPerPage).limit(coursesPerPage);
           console.log(y);
-        var TotalCount = await CourseTable.countDocuments( { "instructorID": req.query.instructorID,
+        var TotalCount = await CourseTable.countDocuments( { "instructorID": req.user._id,
          $or: [{ "title": { "$regex": req.query.keyword, "$options": "i" } }, 
          { "subject": { "$regex": req.query.keyword, "$options": "i" } }] });
 
@@ -160,9 +159,8 @@ async function filterCourses(req, res, next) {
   }
   else {
     try {
-      if (req.query.instructorID) {
-        queryCond.instructorID = req.query.instructorID;
-      }
+        queryCond.instructorID = req.user._id;
+        console.log(req.user._id);
       if (req.query.subject) {
         queryCond.subject ={ "$regex": req.query.subject, "$options": "i" };
       }
@@ -181,7 +179,8 @@ async function filterCourses(req, res, next) {
           discount: 1,
           discountPrice: 1
         }).skip((CurrentPage - 1) * coursesPerPage).limit(coursesPerPage);
-
+        console.log(req.user);
+        console.log(y);
 
       var TotalCount = await CourseTable.countDocuments(queryCond);
       res.send({ Courses: y, TotalCount: TotalCount });
@@ -201,14 +200,14 @@ async function addCourse(req, res, next) {
       res.status(400).send("Course title already used");
     }
     else{
-      var x = await User.find({ "_id": req.body.instructorID }, { firstname: 1, lastname: 1, _id: 0 });
+      var x = await User.find({ "_id": req.user._id }, { firstname: 1, lastname: 1, _id: 0 });
     var y = Object.values(x)[0];
     console.log(y);
     var name = y.firstname + " " + y.lastname;
     console.log(name);
 
     const newCourse = new CourseTable({
-    instructorID: req.body.instructorID,
+    instructorID: req.user._id,
     title: req.body.title,
     summary: req.body.summary,
     subtitles: req.body.subtitles,
@@ -315,7 +314,7 @@ async function discount(req, res, next) {
   async function viewCourseRatings(req,res,next){
     var CurrentPage = req.query.page ? req.query.page : 1;
     try{
-      var currentID=await req.body.userID;
+      var currentID= req.user._id;
       var currentCourseID=await req.body.courseID;
       var ratings=await CourseTable.find({
         "instructorID":currentID, "_id":currentCourseID
@@ -332,7 +331,7 @@ async function discount(req, res, next) {
 }
 
 async function updateBio(req,res){
-      try{var currentId=req.body.userID;
+      try{var currentId= req.user._id;
         var currentBio=req.body.newBio;
         var updatedBio=await User.findByIdAndUpdate(currentId,{"biography":currentBio});
         res.send(updatedBio);
@@ -384,7 +383,7 @@ async function updateBio(req,res){
     
     async function viewProfile(req,res,next){
       try{
-        var instructor=await User.find({"_id":req.query.userID},{
+        var instructor=await User.find({"_id":req.user._id},{
           username:1,
           instructorRating: 1,
           biography: 1,
@@ -407,7 +406,7 @@ async function updateBio(req,res){
     async function filterByRatings(req,res){
       var CurrentPage = req.query.page ? req.query.page : 1;
     try{
-      var currentID=await req.body.userID;
+      var currentID=await req.user._id;
       var stars=req.body.rating;
       var currentCourseID=await req.body.courseID;
       var ratings=await CourseTable.findOne({
@@ -437,7 +436,7 @@ async function updateBio(req,res){
 async function viewInstructorRatingsAndReviews(req, res) {
 
   try {
-    const ratings = await User.findById({ _id: req.query.instructorID }).select({ instructorRating: 1, instructorReview: 1});
+    const ratings = await User.findById({ _id: req.user._id }).select({ instructorRating: 1, instructorReview: 1});
     
     res.send(ratings);
     
@@ -458,12 +457,44 @@ async function testingAll(req,res){
   }
 }
 
+const amount = [{"transactionDate":"2022-11-03","transactionAmount":158},
+{"transactionDate":"2022-05-31","transactionAmount":126},
+{"transactionDate":"2022-10-26","transactionAmount":248},
+{"transactionDate":"2022-11-23","transactionAmount":28},
+{"transactionDate":"2022-09-26","transactionAmount":222},
+{"transactionDate":"2022-01-05","transactionAmount":60},
+{"transactionDate":"2022-09-27","transactionAmount":119},
+{"transactionDate":"2022-07-03","transactionAmount":80},
+{"transactionDate":"2022-08-16","transactionAmount":205},
+{"transactionDate":"2022-11-10","transactionAmount":63},
+{"transactionDate":"2022-06-08","transactionAmount":249},
+{"transactionDate":"2022-06-10","transactionAmount":249},
+{"transactionDate":"2022-07-11","transactionAmount":160},
+{"transactionDate":"2022-09-06","transactionAmount":154},
+{"transactionDate":"2022-05-13","transactionAmount":289},
+{"transactionDate":"2022-07-04","transactionAmount":77},
+{"transactionDate":"2022-08-24","transactionAmount":196},
+{"transactionDate":"2022-02-03","transactionAmount":280},
+{"transactionDate":"2022-05-15","transactionAmount":257},
+{"transactionDate":"2022-05-08","transactionAmount":204}]
+
+async function generateAmountOwed(req, res) {
+  for(var i = 0; i < amount.length; i++) {
+    transactionTable.create({
+      instructorID: '63877fb65c8dac5284aaa3c2',
+      transactionDate: amount[i].transactionDate,
+      transactionAmount: amount[i].transactionAmount,
+    });
+  }
+
+  res.send("success");
+}
+
 async function viewAmountOwned(req, res, next) {
   try {
 
-    //const Courses = await transactionTable.find({"instructorID":req.body.userID}).sort({transactionDate:1});
-    let idToSearch = mongoose.Types.ObjectId(req.body.userID);
-    const Courses = await transactionTable.aggregate(
+    let idToSearch = mongoose.Types.ObjectId(req.user._id);
+    const amount = await transactionTable.aggregate(
     [
       { "$match":{ "instructorID": idToSearch}},
       { 
@@ -477,7 +508,7 @@ async function viewAmountOwned(req, res, next) {
       
     ]).sort({"_id":1});
   
-    res.send({ Courses: Courses});
+    res.send({ amount: amount });
 
   }
   catch (err) {
@@ -486,13 +517,41 @@ async function viewAmountOwned(req, res, next) {
 };
 
 async function searchCourses(req, res) {
-  res.send(await CourseTable.find({ instructorID: req.query.instructorID }).select({ title: 1 }));
+  res.send(await CourseTable.find({ instructorID: req.user._id }).select({ title: 1 }));
 }
+
+async function viewInstructorPopularCourses(req, res, next) {
+  var CurrentPage = req.query.page ? req.query.page : 1;
+  var coursesPerPage = req.query.coursesPerPage?req.query.coursesPerPage:10;
+  try {
+    const Courses = await Course.find({instructorID:req.user._id}, {
+      _id: 1,
+      title: 1,
+      courseHours: 1,
+      price: 1,
+      courseImage: 1,
+      rating: 1,
+      instructorName: 1,
+      subject: 1,
+      level: 1,
+      summary: 1,
+      discount: 1,
+      discountPrice: 1,
+      purchases:1
+    }).sort({purchases:-1}).skip(0).limit(15);
+
+    res.status(200).send({ Courses: Courses});
+
+  }
+  catch (err) {
+    res.status(400).json({error:err.message})
+  }
+};
 
 
 
 module.exports = { 
   viewCourses, filterCourses, addCourse, discount, viewCourseRatings, 
   updateBio, testingAll, viewProfile, cancelDiscount, viewInstructorRatingsAndReviews,
-  filterByRatings, searchCourses,viewAmountOwned
+  filterByRatings, searchCourses,viewAmountOwned,viewInstructorPopularCourses, generateAmountOwed
 };

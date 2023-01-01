@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { useRouter } from 'next/router';
+
 
 var response = null;
 
 import CompPagination from "../../components/shared/pagination/CompPagination";
 import ExamQuestionCard from "../../components/exam/ExamQuestionCard";
-import ExamHeader from "../../components/exam/ExamHeader";
-import classNames from "classnames";
-import Link from "next/link";
 import { PopupMessageContext } from '../_app';
 const Exam = () => {
     const [index, setIndex] = useState<number>(0);
@@ -24,7 +23,7 @@ const Exam = () => {
         isVisible: false,
     }]
     );
-
+    let router = useRouter();
     useEffect(() => {
         // const questionsDummyData = [
         //     {problem: "what about ur first oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
@@ -36,9 +35,9 @@ const Exam = () => {
         //     { problem:"what about ur 5th oscar?", choices: ["easy", "what", "about", "it"], answer: "easy", isVisible: false },
         //     { problem:"what about ur 6th oscar?", choices: ["hard", "what", "about", "it"], answer: "what", isVisible: true }];
         // setQuestions(questionsDummyData);
-        setUserID("6383d9da6670d09304d2b016");
-        setExerciseID("6383e073de30152bc8991dc9");
-        setCourseID("6383e073de30152bc8991dd5");
+        // setUserID("6383d9da6670d09304d2b016");
+        setCourseID("6383e073de30152bc8991dc9");
+        setExerciseID("6383e073de30152bc8991dd5");
         getQuestions();
     }, [])
     useEffect(() => {
@@ -138,12 +137,15 @@ const Exam = () => {
             console.log(empty); 
             e.preventDefault();
             response = await axios.put("http://localhost:5000/User/submitAnswer", {
-                userID: "6383d9da6670d09304d2b016",
                 courseID: "6383e073de30152bc8991dc9",
                 excerciseID: "6383e073de30152bc8991dd5",
                 answers: empty,
             }).then((res: { data: any; }) => { return res.data });
             viewPopupMessage(true, "Answers Submitted successfully");
+            router.push({
+    pathname: 'http://localhost:3000/User/SubmittedExam',
+    query: { courseID : courseID,  exerciseID : exerciseID }
+});
     }
 
     return (
@@ -151,7 +153,6 @@ const Exam = () => {
             id="Exam-form"
             className="row mx-4  h-full"
         >
-            <ExamHeader></ExamHeader>
             <div id="info" className="flex justify-center gap-8 ">
                 <p style={{ display: '' }} className="mb-2 text-black h-auto">Skipped Questions Numbers:{skipped.toString()}</p>
             </div>
@@ -161,10 +162,6 @@ const Exam = () => {
             ))}
             <div className="mx-auto w-700 py-4 rounded-b-2xl">
                 <div className="text-center flex justify-center">
-                    {/* <Link href={/User/SubmittedExam/${user}?id=${CourseData._id}} as={/Courses/${CourseData.title}}>  */}
-                    {/* <Link href={`/blog/${encodeURIComponent(post.slug)}`}>
-            {post.title}
-          </Link> */}
                      <div id="pagination"><CompPagination totalCount={totalQuestions * 5} Setter={goPage} FromLink={false} /></div>
                     <button
                         id="submit-btn"

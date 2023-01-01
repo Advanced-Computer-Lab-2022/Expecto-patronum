@@ -23,7 +23,7 @@ const MyCourses = (props: Props) => {
 
   useEffect(() => {
     SetLoading(true);
-    axios.get('http://localhost:5000/user/ViewMyCourses?userId=637b8d0db9a1824a34fabe74')
+    axios.get('http://localhost:5000/User/ViewMyCourses?userId=637b8d0db9a1824a34fabe74')
       .then(res => {
         SetCourses(res.data);
         SetLoading(false);

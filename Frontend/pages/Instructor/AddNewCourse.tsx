@@ -1,4 +1,4 @@
-import React, { useRef, useState, createContext } from 'react';
+import React, { useRef, useState, createContext, useContext } from 'react';
 import Layout from './Layout';
 import axios from 'axios';
 import CourseIcon from '../../components/Instructor/AddNewCourse/CourseIcon/CourseIcon';
@@ -6,6 +6,7 @@ import CourseInfo from '../../components/Instructor/AddNewCourse/CourseInfo/Cour
 import CourseSubtitles from '../../components/Instructor/AddNewCourse/CourseSubtitles/CourseSubtitles';
 import FormNavigation from '../../components/Instructor/AddNewCourse/FormNavigation/FormNavigation';
 import CourseFinalExam from '../../components/Instructor/CourseFinalExam/CourseFinalExam';
+import { PopupMessageContext } from '../_app';
 
 interface ContextState {
   addNewCourseSteps: any,
@@ -16,6 +17,7 @@ interface ContextState {
   subtitles: any,
   setSubtitles: any,
   setCourseIcon: any,
+  courseIcon: any,
   titleRef: any,
   subjectRef: any,
   finalExam: any, 
@@ -50,6 +52,8 @@ const AddNewCourse = (props: Props) => {
   const addNewCourseSteps = [courseInfoRef, courseSubtitlesRef, courseFinalExamRef, courseIconRef];
   const [currentStep, setCurrentStep] = useState<number>(0);
 
+  const { viewPopupMessage } = useContext(PopupMessageContext);
+
   const [newCourseInfo, setNewCourseInfo] = useState<any>(
     {
       title: '',
@@ -63,16 +67,25 @@ const AddNewCourse = (props: Props) => {
   const [subtitles, setSubtitles] = useState<any>([new Subtitle(), new Subtitle(), new Subtitle()]);
   const [finalExam, setFinalExam] = useState<any>(
     {
-      courseID: '',
-      subtitleName: '',
       exerciseDuration: 0,  
-      exerciseTitle: '',
       questions: 
-      [{
-        problem: '',
-        choices: [''],
-        answer: '',
-      }],
+      [
+        {
+          problem: '',
+          choices: [''],
+          answer: '',
+        },
+        {
+          problem: '',
+          choices: [''],
+          answer: '',
+        },
+        {
+          problem: '',
+          choices: [''],
+          answer: '',
+        }
+      ],
         
       totalGrade: 0
     }
@@ -97,7 +110,11 @@ const AddNewCourse = (props: Props) => {
         courseHours: courseHours,
         subtitles: subtitles,
         courseImage: courseIcon,
-    }).then(res => {return res.data});
+        finalExam: finalExam,
+    }).then(res => {
+      viewPopupMessage(true, "Your course has been uploaded successfully.");
+      return res.data;
+    });
 
     console.log(response);
 
@@ -106,7 +123,7 @@ const AddNewCourse = (props: Props) => {
 
   return (
     <Layout>
-        <AddNewCourseContext.Provider value={{addNewCourseSteps, currentStep, setCurrentStep, newCourseInfo, setNewCourseInfo, subtitles, setSubtitles, setCourseIcon, finalExam, setFinalExam, titleRef, subjectRef, priceRef, summaryRef, levelRef, courseVideoRef, errorMessageRef}}>
+        <AddNewCourseContext.Provider value={{addNewCourseSteps, currentStep, setCurrentStep, newCourseInfo, courseIcon, setNewCourseInfo, subtitles, setSubtitles, setCourseIcon, finalExam, setFinalExam, titleRef, subjectRef, priceRef, summaryRef, levelRef, courseVideoRef, errorMessageRef}}>
           <form className='sb-max:min-w-fit' onChange={() => errorMessageRef.current.innerHTML = ''}>
             <CourseInfo ref={courseInfoRef} />
             <CourseSubtitles ref={courseSubtitlesRef} />

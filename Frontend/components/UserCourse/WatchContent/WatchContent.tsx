@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import ReactPlayer from 'react-player/lazy'
 import DataContext from '../../../context/DataContext'
 import Exercise from './ViewExercise'
@@ -20,6 +20,8 @@ const WatchContent = (props: Props) => {
   let videoRef = React.useRef(null);
   const [pause, setPause] = React.useState(false);
   const { ContentChoosen, SetContentChoosen, SetProgress, SetWatchedVideos, WatchedVideos } = React.useContext(DataContext);
+
+
   //Video  
   //Tabs   //OverView, Notes, Q/A
   useEffect(() => {
@@ -58,14 +60,15 @@ const WatchContent = (props: Props) => {
         <div className={VideoContainer}>
           <ReactPlayer
             //@ts-ignore
-            url={ContentChoosen.data.url || ""}
-            controls={true}
-            playing={!pause}
-            width={'100%'}
-            height={'100%'}
-            onPlay={() => setPause(false)}
-            ref={videoRef}
-            onEnded={HandleEnd} />
+            url={ContentChoosen.data.url || ""}//The url of the video
+            controls={true}//Show the controls of the video which are the native youtube video controls
+            playing={!pause}//set the state of the video to play or pause by default it is set to play
+            width={'100%'} //The width of the video
+            height={'100%'} //The height of the video
+            onPlay={() => setPause(false)} //a function that is called when the video is played
+            ref={videoRef} // a ref to the video which from it we can get more details about the video like duration
+            onEnded={HandleEnd}   //a function that is called when the video is ended
+          />
         </div>
       }
 

@@ -2,26 +2,31 @@ const router = require('express').Router();
 const connection = require('../config/database');
 
 const Admin = require('../models/AdminSchema');
-const {viewAllCourses,viewCourseRequests,grantOrRejectAccess,viewReportedFunctions,markReportedProblem,
-  AcceptOrRejectRefund,promotion,cancelPromotion,viewRefundRequests}= require('../controller/AdminController')
+const { viewAllCourses, viewCourseRequests, grantOrRejectAccess, viewReportedFunctions, markReportedProblem,
+  AcceptOrRejectRefund, promotion, cancelPromotion, viewRefundRequests } = require('../controller/AdminController')
 
+router.get('/', (req, res) => {
+  console.log('///////////////////////////////')
+  console.log(req.user)
+  console.log('///////////////////////////////')
 
-router.get("/", (req, res) => {
-  res.send("Hello, Admin");
+  res.send('Hello Admin');
+
 })
-router.get("/AllCourses",viewAllCourses);
 
-router.get("/viewCourseRequests",viewCourseRequests);
+router.get("/AllCourses", viewAllCourses);
 
-router.get("/viewRefunds",viewRefundRequests);
+router.get("/viewCourseRequests", viewCourseRequests);
 
-router.put("/grantAccess",grantOrRejectAccess);
+router.get("/viewRefunds", viewRefundRequests);
 
-router.put("/refund",AcceptOrRejectRefund);
+router.put("/grantAccess", grantOrRejectAccess);
 
-router.put("/givePromotion",promotion);
+router.put("/refund", AcceptOrRejectRefund);
 
-router.put("/cancelPromotion",cancelPromotion);
+router.put("/givePromotion", promotion);
+
+router.put("/cancelPromotion", cancelPromotion);
 
 router.get("/viewReportedFunctions", viewReportedFunctions);
 router.put("/markReportedProblem", markReportedProblem);

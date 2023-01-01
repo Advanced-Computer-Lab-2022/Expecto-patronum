@@ -67,7 +67,7 @@ const Home: NextPage = () => {
               new opportunities. Learn from Industry Experts and land your Dream
               Job.
             </p>
-            <Link href="/Login" className="rounded-md border-1.5 border-canadian-red bg-calm-red h-10 px-4 py-2.75 ml-4 text-white hover:bg-canadian-red transition-all duration-300">Join Now!</Link>
+            <Link href='/Login?isLogin=false' as='/Login' className="rounded-md border-1.5 border-canadian-red bg-calm-red h-10 px-4 py-2.75 ml-4 text-white hover:bg-canadian-red transition-all duration-300">Join Now!</Link>
         </div>
         
         <div className="relative nv:ml-20 min-w-[24rem] min-h-[24rem] nv-max:min-h-[19rem] pointer-events-none flex justify-center">
@@ -92,10 +92,10 @@ const Home: NextPage = () => {
       <section id="most-viewed" className="text-left px-20 nv-max:px-0 mb-5">
         <div className="flex justify-between items-center mx-6">
           <h1 className="text-xl font-bold">Popular Among Learners</h1>
-          <a className="flex items-center space-x-3 text-blue-700 hover:text-blue-800 hover:scale-[1.01] relative">
+          <Link href='' className="flex items-center space-x-3 text-blue-700 hover:text-blue-800 hover:scale-[1.01] relative">
             <span>View All</span>
             <HiArrowNarrowRight className='scale-[1.4] nv-max:hidden' />
-          </a>
+          </Link>
         </div>
         <div className="overflow-x-auto flex items-center my-1 p-3">
           {isLoading && <SmallCourseCardSkeleton count={10} />}
@@ -110,10 +110,10 @@ const Home: NextPage = () => {
       <section id="most-rated" className="text-left px-20 nv-max:px-0 mt-5">
         <div className="flex justify-between items-center mx-6">
           <h1 className="text-xl font-bold">Students' Favorite</h1>
-          <a className="flex items-center space-x-3 text-blue-700 hover:text-blue-800 hover:scale-[1.01] relative">
+          <Link href='' className="flex items-center space-x-3 text-blue-700 hover:text-blue-800 hover:scale-[1.01] relative">
             <span>View All</span>
             <HiArrowNarrowRight className='scale-[1.4] nv-max:hidden' />
-          </a>
+          </Link>
         </div>
         <div className="overflow-x-auto flex items-center my-1 p-3">
         {isLoading && <SmallCourseCardSkeleton count={10} />}
@@ -125,17 +125,6 @@ const Home: NextPage = () => {
         </div>
       </section>
     </div>
-    // <div className="text-center w-fullscreen p-4">
-    //   <div className="flex justify-center py-20">
-    //     <div className="grid grid-flow-row nv:grid-cols-2 3lg:grid-cols-3 3xl:grid-cols-4 gap-20">
-    //       <div className="rounded-3xl shadow-lg w-[20rem] h-[26rem] bg-gradient-to-br from-[#1D948E] to-[#3FE0D0]"></div>
-    //       <div className="rounded-3xl shadow-lg w-[20rem] h-[26rem] bg-gradient-to-br from-[#2B32B2] to-[#1488CC]"></div>
-    //       <div className="rounded-3xl shadow-lg w-[20rem] h-[26rem] bg-gradient-to-br from-[#2f8608] to-[#52EB0E]"></div>
-    //       <div className="rounded-3xl shadow-lg w-[20rem] h-[26rem] bg-gradient-to-br from-[#C29904] to-[#FDE143]"></div>
-    //       <div className="rounded-3xl shadow-lg w-[20rem] h-[26rem] bg-gradient-to-br from-[#B20000] to-[#FF4542]"></div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 };
 

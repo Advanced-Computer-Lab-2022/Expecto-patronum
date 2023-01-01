@@ -124,7 +124,7 @@ const CourseSchema = new mongoose.Schema({
     reviewBody: String,
     rating: Number
   }],
-
+  reviewsCounter: Number,
   promotion: {
     promotion: {
       type: Number,

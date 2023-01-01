@@ -49,7 +49,7 @@ const CourseContentHero = (props: Props) => {
   const onScroll = () => {
     if (listInnerRef.current) {
       const { offsetHeight, scrollHeight } = listInnerRef.current;
-      if (window.scrollY >= offsetHeight) {
+      if (window.scrollY >= offsetHeight + 300) {
         props.SetNavApear(true);
       } else {
         props.SetNavApear(false);
@@ -101,20 +101,22 @@ const CourseContentHero = (props: Props) => {
               </div>
             </div>
             <div className={RightContainer}>
-              {VideoPictureApear && <ReactPlayer
-                url={"https://www.youtube.com/embed/SKF7Ue1BeW8"}
-                width="80%"
-                light={true}
-                style={{ borderRadius: "10px", overflow: "hidden" }}
-                onClickPreview={(e) => onclick(e)}
-                height={"17rem"}
+              {VideoPictureApear &&
+                <ReactPlayer
+                  url={"https://www.youtube.com/embed/SKF7Ue1BeW8"}
+                  width="80%"
+                  light={true}
+                  style={{ borderRadius: "50px", overflow: "hidden", zIndex: 40, boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)" }}
+                  onClickPreview={(e) => onclick(e)}
+                  height={"17rem"}
 
-              />}
+                />}
+              {VideoPictureApear && <div className={"w-[60rem]  h-[55rem] top-[-18rem]  animate-LeftRightAnim z-10  absolute left-50" + " " + (VideoPictureApear && " ")}>
+                <Image quality={100} fill className="object-contain " src={"/images/Maple2.png"} alt="Image"></Image>
+              </div>}
               {VideoOpen && <VideoPlayer VideoOpen={VideoOpen} SetVideoPictureApear={SetVideoPictureApear}
                 SetVideoOpen={SetVideoOpen} />}
-              {/* <div className="w-20 h-20 top-[-2rem]  animate-spin delay-1000	 absolute left-20 ">
-                <Image fill className="object-contain " src={"/images/Circle.png"} alt="Image"></Image>
-              </div> */}
+
 
             </div>
 
@@ -123,7 +125,7 @@ const CourseContentHero = (props: Props) => {
           </div>
 
         </div>
-        <div className="min-h-[20vh] flex justify-around font-bold text-white text-xl items-center bg-Adv shadow-sm rounded-br-full ">
+        <div className="min-h-[20vh]  flex justify-around font-bold text-white text-xl items-center bg-Adv shadow-sm rounded-br-full ">
           <div className="text-center">
             <p>TotalHours</p>
             {/* <p>{props.courseContentData.courseHours}</p> */}
@@ -143,9 +145,9 @@ const CourseContentHero = (props: Props) => {
 
 export default CourseContentHero;
 
-const Container = classNames("h=[100vh]  relative   bg-navbar text-white ")
+const Container = classNames("h=[100vh]  relative   bg-Dark text-white overflow-hidden ")
 const LeftContainer = classNames("w-1/2  pr-10  pl-5");
-const RightContainer = classNames("w-1/2 flex justify-end  pr-5 relative");
+const RightContainer = classNames("w-1/2    z-50   flex justify-center items-center   rounded-full relative");
 const HeroContainer = classNames("w-100 h-[80vh]  flex gap-5  bg  px-20 justify-between items-center");
 const LevelContainer = classNames("bg-white/60 inline-block text-center px-3 py-1 font-bold uppercase rounded-md mb-6");
 const Title = classNames("text-6xl ml-[-10px] mb-2")

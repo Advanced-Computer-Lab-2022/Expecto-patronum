@@ -5,6 +5,7 @@ import AdminHeader from '../../components/AdminTool/AdminHeader';
 import classNames from "classnames";
 import CompPagination from "../../components/shared/pagination/CompPagination";
 import { PopupMessageContext } from '../_app';
+import Layout from './Layout';
 
 const pending = classNames(
   "px-1 py-1 rounded-md whitespace-nowrap text-sm bg-yellow-200 text-yellow-700"
@@ -45,7 +46,7 @@ const Requests = (props: Props) => {
       .then((res) => {
         console.log(res.data);
         const q = res.data.requests;
-        console.log(q);
+        // console.log(q);
         setRequests(q);
         setTotalCount(res.data.TotalCount);
       });
@@ -60,8 +61,8 @@ const Requests = (props: Props) => {
       })
       .then((res) => {
         console.log(res.data);
-        const q = res.data.courses;
-        console.log(q);
+        const q = res.data.requests;
+        // console.log(q);
         setRequests(q);
       });
   }
@@ -110,11 +111,8 @@ const Requests = (props: Props) => {
     }
   }
   return (
-    <aside>
-      <AdminHeader />
-      <div className="flex">
-        <SideBar></SideBar>
-        <form id="course-form" className="w-full mx-4">
+    <Layout>
+        <form id="course-form" className="w-full mx-4 h-full">
           <div className="row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl ">
             <h6 className="text-center text-2xl text-navbar">
               Corporate Trainees' Course Requests
@@ -234,8 +232,7 @@ const Requests = (props: Props) => {
             </div>
           </div>
         </form>
-      </div>
-    </aside>
+        </Layout>
   );
 };
 
