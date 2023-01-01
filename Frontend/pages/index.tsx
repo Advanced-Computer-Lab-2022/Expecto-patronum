@@ -19,17 +19,17 @@ const Home: NextPage = () => {
   async function getPopularCourses() {
     axios.defaults.withCredentials = true;
     await axios.get("http://localhost:5000/Courses/popularCourses").then((res: { data: any }) => {
-        setPopularCourses(res.data.Courses);
-        setIsLoading(false);
+      setPopularCourses(res.data.Courses);
+      setIsLoading(false);
     });
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     Array.from(homePageImageRef.current.children).map((image: any) => {
       image.classList.remove('-right-[40rem]');
       image.classList.add('right-2');
     });
-    
+
     homePageImageBackgroundRef.current.classList.remove('opacity-0');
     homePageImageBackgroundRef.current.classList.add('opacity-100');
 
@@ -43,12 +43,12 @@ const Home: NextPage = () => {
   }, [])
 
   function levelColor(level: string) {
-    switch(level) {
-        case 'Beginner': return 'from-[#2f8608] to-[#52EB0E]';
-        case 'Intermediate': return 'from-[#C29904] to-[#FDE143]';
-        case 'Advanced': return 'from-[#B20000] to-[#FF4542]';
-        case 'AllLevels': return 'from-[#2B32B2] to-[#1488CC]';
-        default: return 'from-[#1D948E] to-[#3FE0D0]';
+    switch (level) {
+      case 'Beginner': return 'from-[#2f8608] to-[#52EB0E]';
+      case 'Intermediate': return 'from-[#C29904] to-[#FDE143]';
+      case 'Advanced': return 'from-[#B20000] to-[#FF4542]';
+      case 'AllLevels': return 'from-[#2B32B2] to-[#1488CC]';
+      default: return 'from-[#1D948E] to-[#3FE0D0]';
     }
   }
 
@@ -62,14 +62,14 @@ const Home: NextPage = () => {
       <section id="opening-text" className="flex nv-max:flex-col-reverse items-center justify-between py-8 mx-10">
         <div ref={homePageHeaderRef} className="space-y-6 text-left nv-max:text-center opacity-0 transition-all duration-[1500ms]">
           <h1 className="text-5xl nv-max:text-3xl nv-max:-indent-0 nv-max:pl-0 font-bold -indent-32 pl-32 leading-[4.5rem]">Learn a New Skill Everyday, <br /> Anytime, and Anywhere.</h1>
-            <p className="text-xl nv-max:text-lg mb-4">
-              1000+ Courses covering all tech domains for you to learn and explore
-              new opportunities. Learn from Industry Experts and land your Dream
-              Job.
-            </p>
-            <Link href='/Login?isLogin=false' as='/Login' className="rounded-md border-1.5 border-canadian-red bg-calm-red h-10 px-4 py-2.75 ml-4 text-white hover:bg-canadian-red transition-all duration-300">Join Now!</Link>
+          <p className="text-xl nv-max:text-lg mb-4">
+            1000+ Courses covering all tech domains for you to learn and explore
+            new opportunities. Learn from Industry Experts and land your Dream
+            Job.
+          </p>
+          <Link href='/Login?isLogin=false' as='/Login' className="rounded-md border-1.5 border-canadian-red bg-calm-red h-10 px-4 py-2.75 ml-4 text-white hover:bg-canadian-red transition-all duration-300">Join Now!</Link>
         </div>
-        
+
         <div className="relative nv:ml-20 min-w-[24rem] min-h-[24rem] nv-max:min-h-[19rem] pointer-events-none flex justify-center">
           <div ref={homePageImageBackgroundRef} className="flex absolute items-center justify-center min-w-[24rem] nv-max:min-w-[18rem] nv-max:min-h-[18rem] min-h-[24rem] bg-canadian-red rounded-full opacity-0 transition-all duration-[1500ms]">
             <div className="w-[22rem] h-[22rem] nv-max:w-[16.5rem] nv-max:h-[16.5rem] bg-calm-red rounded-full"></div>
@@ -116,8 +116,8 @@ const Home: NextPage = () => {
           </Link>
         </div>
         <div className="overflow-x-auto flex items-center my-1 p-3">
-        {isLoading && <SmallCourseCardSkeleton count={10} />}
-        {
+          {isLoading && <SmallCourseCardSkeleton count={10} />}
+          {
             popularCourses.map((course: any, index: number) => (
               <SmallCourseCard addToWishlist={addToWishlist} course={course} courseColor={levelColor} key={index} index={index} />
             ))

@@ -16,10 +16,11 @@ import Spinner from "../shared/spinner/Spinner";
 import TicketDetails from "./TicketDetails";
 
 
+import { Profile } from './UserProfile'
 
-
-
-type Props = {};
+type Props = {
+  data: Profile | undefined
+}
 
 export interface ReqRepInterface {
   status: "unseen" | "pending" | "resolved" | "Accepted" | "Rejected" | "Unseen" | "Pending" | "Resolved",

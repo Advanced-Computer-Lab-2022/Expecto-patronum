@@ -4,6 +4,12 @@ import SubmittedExamCards from "../../components/exam/SubmittedExamCards";
 import classNames from "classnames";
 import { PopupMessageContext } from '../_app';
 import { useRouter } from "next/router";
+import { AES, enc } from "crypto-js";
+import { GetServerSidePropsContext } from "next/types";
+import Spinner from "../../components/shared/spinner/Spinner";
+import MainButton from "../../components/shared/button/MainButton";
+import html2canvas from 'html2canvas';
+
 
 
 const wrongAnswer = classNames(
@@ -12,16 +18,33 @@ const wrongAnswer = classNames(
 const rightAnswer = classNames(
     "inline-flex justify-between items-center p-5 w-full text-green-500 bg-white rounded-lg border-2 border-green-500"
 );
-const SubmittedExam = () => {
+
+type Props = {
+    isFinal: boolean;
+}
+const SubmittedExam = (props: Props) => {
+
     const [totalGrade, settotalGrade] = useState<number>(0);
-    const [questions, setQuestions] = useState([{
-        problem: "",
-        choices: ["", ""],
-        answer: "",
-    }]);
-    const [myAnswers, setMyAnswers] = useState([""]); 
+    const [questions, setQuestions] = useState(
+        [{
+            problem: "",
+            choices: [],
+            answer: "",
+        }]);
+    const [myAnswers, setMyAnswers] = useState([""]);
     const { viewPopupMessage } = useContext(PopupMessageContext);
+    const [Loading, SetLoading] = useState(true);
+    const [LoadingBack, SetLoadingBack] = useState(false);
     const router = useRouter();
+    const decryptId = (str: string) => {
+        const decodedStr = decodeURIComponent(str);
+        return AES.decrypt(decodedStr, 'secretPassphrase').toString(enc.Utf8);
+    }
+    const encryptId = (str: string | CryptoJS.lib.WordArray) => {
+        const ciphertext = AES.encrypt(str, 'secretPassphrase');
+        return encodeURIComponent(ciphertext.toString());
+    }
+
 
     useEffect(() => {
         // const questionsDummyData = [
@@ -36,81 +59,109 @@ const SubmittedExam = () => {
         // setQuestions(questionsDummyData);
         // const choicesDummyData = ["it", "what", "about", "it","","it","easy","what"];
         // setMyAnswers(choicesDummyData);
+        if (router.isReady) {
+            console.log("HII")
+            getQuestionsAnswers();
+        }
+    }, [router.isReady])
 
-        getQuestionsAnswers();
-    }, [])
+    const getQuestionsAnswers = async () => {
+        console.log("")
+        SetLoading(true);
 
-    const getQuestionsAnswers = async () => { //need to be callled on loading page
-        // console.log(router.query.courseID);
-        // console.log(router.query.exerciseID);
+        let Data = decryptId(typeof router.query.courseID === 'string' ? router.query.courseID : "")
+
         await axios.get('http://localhost:5000/User/viewAnswers', {
             params: {
-                courseID:router.query.courseID,
-                exerciseID:router.query.exerciseID,
+                courseID: decryptId(typeof router.query.courseID === 'string' ? router.query.courseID : ""),
+                exerciseID: decryptId(typeof router.query.exerciseID === 'string' ? router.query.exerciseID : "")
+
             },
-          }).then(
+        }).then(
             (res) => {
-             
-                console.log(res);
+                console.log(res.data);
                 const q = res.data.questions;
                 setQuestions(q);
-                const a=res.data.yourAnswers;
+                const a = res.data.yourAnswers;
                 setMyAnswers(a);
-
+                SetLoading(false);
             });
 
     }
-    function GetChosenAnswerIndex(McQ: string[],Answer: String) {
-        for(var i=0;i<McQ.length;i++){
-            if (McQ[i]==Answer){
+    function GetChosenAnswerIndex(McQ: string[], Answer: String) {
+        for (var i = 0; i < McQ.length; i++) {
+            if (McQ[i] == Answer) {
                 return i;
             }
         }
         return -1;
     }
     useEffect(() => {
-        var correctAnswers = 0;
-        for (var i = 0; i < questions.length; i++) {
-            const QuestionChoices = document.getElementsByClassName("Q" + i) as any;
-               var x=  GetChosenAnswerIndex(questions[i].choices,myAnswers[i]); 
-               console.log(x);
-                if (questions[i].answer === myAnswers[i] && questions[i].answer!="") {
+        if (questions[0].choices.length !== 0) {
+            var correctAnswers = 0;
+            for (var i = 0; i < questions.length; i++) {
+                const QuestionChoices = document.getElementsByClassName("Q" + i) as any;
+                var x = GetChosenAnswerIndex(questions[i].choices, myAnswers[i]);
+                console.log(x);
+                if (questions[i].answer === myAnswers[i] && questions[i].answer != "") {
                     correctAnswers++;
                     if (QuestionChoices[x].nextElementSibling != null) {
                         QuestionChoices[x].nextElementSibling.className = rightAnswer;
                     }
-                } else if(x !=-1 && questions[i].answer!=""){
+                } else if (x != -1 && questions[i].answer != "") {
                     if (QuestionChoices[x].nextElementSibling != null) {
                         QuestionChoices[x].nextElementSibling.className = wrongAnswer;
                     }
                 }
-        }
-        var Grade=(correctAnswers / questions.length) * 100
-        settotalGrade(Grade);
+            }
+            var Grade = (correctAnswers / questions.length) * 100
+            settotalGrade(Grade);
 
-        if(Grade >= 50) {
-            viewPopupMessage(true, "Congratulations You have Passed The Exerceise keep it up!");
+            if (props.isFinal) {
+                //@ts-ignore
+                html2canvas(document.querySelector('#certificate-template')).then(async canvas => {
+                    console.log(canvas.toDataURL('image/jpeg', 0.5));
+                    Response = await axios.post("http://localhost:5000/User/RecieveMail", {
+                        dataUrl: canvas.toDataURL('image/jpeg', 0.5),
+                    })
+                });
+            }
 
-        }else{
-            viewPopupMessage(false, "You have Failed The Excercise!");
-            console.log("sad");
-        }
-        const timer = document.getElementById("timer");
-        if (timer != undefined) {
-            timer.style.display = "none";
-        }
-        const goback = document.getElementById("go-back");
-        if (goback != undefined) {
-            goback.style.display = "";
+            if (Grade >= 50) {
+                viewPopupMessage(true, "Congratulations You have Passed The Exerceise keep it up!");
+            } else {
+                viewPopupMessage(false, "You have Failed The Excercise!");
+                console.log("I AM SO UFCKING SAD");
+            }
+            const timer = document.getElementById("timer");
+            if (timer != undefined) {
+                timer.style.display = "none";
+            }
+            const goback = document.getElementById("go-back");
+            if (goback != undefined) {
+                goback.style.display = "";
+            }
         }
     }, [questions])
 
+
+    if (Loading) {
+        return <Spinner></Spinner>
+    }
+
+
+    async function HandleClick() {
+        SetLoadingBack(true);
+        await router.push("/User/UserCourse/" + (typeof router.query.courseID === 'string' ? router.query.courseID : ""));
+        SetLoadingBack(false);
+
+    }
 
     return (
         <form
             id="Exam-form"
             className="row mx-4  h-full"
-    
+
         >
             {questions.map((question, index) => (
                 <SubmittedExamCards key={index} QuestionData={question} Index={index} />
@@ -122,7 +173,8 @@ const SubmittedExam = () => {
                     className="text-black-700 h-auto mb-2 text-center"
                 >total Grade: {totalGrade}%</p>
                 <div className="text-center flex justify-center ">
-                    <button
+                    <MainButton btnText="Go Back" HandleClick={HandleClick} Loading={LoadingBack} Back Size="lg"></MainButton>
+                    {/* <button
                         style={{ display: 'none' }}
                         id="go-back"
                         type="button"
@@ -142,7 +194,7 @@ const SubmittedExam = () => {
                             ></path>
                         </svg>
                         Go Back
-                    </button>
+                    </button> */}
                 </div>
             </div>
 
@@ -151,3 +203,24 @@ const SubmittedExam = () => {
 };
 
 export default SubmittedExam;
+// export async function getServerSideProps(context: GetServerSidePropsContext) {
+//     let { CourseID, ExerciseID } = context.query;
+
+
+//     const decryptId = (str: string) => {
+//         const decodedStr = decodeURIComponent(str);
+//         return AES.decrypt(decodedStr, 'secretPassphrase').toString(enc.Utf8);
+//     }
+//     const DeccourseID = decryptId(CourseID as string);
+//     const DecexerciseID = decryptId(ExerciseID as string);
+//     console.log(DeccourseID);
+//     console.log(DecexerciseID);
+
+//     return {
+//         props: {
+//             data: { DeccourseID, DecexerciseID }
+//         }
+//     }
+
+
+// }
