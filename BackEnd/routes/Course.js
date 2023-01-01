@@ -88,6 +88,6 @@ router.put("/userViewCourseRatings", userViewCourseRatings);
 
 router.post("/GenerateCourses", GenerateCourses);
 
-router.get("/popularCourses",viewPopularCourses);
+router.get("/popularCourses", viewPopularCourses);
 
 module.exports = router;

@@ -125,7 +125,7 @@ const NotesList = (props: Props) => {
             <p onClick={() => { setNotesType("Current"); SetToggleNote(false) }} className={NoteTypeDropDownItem}>View Current Note</p>
           </div>
         </div>
-        {NoteFiltered.length !== 0 && <div onClick={DownloadAllNotes} className={DownloadButton}>
+        {NoteFiltered && NoteFiltered.length !== 0 && <div onClick={DownloadAllNotes} className={DownloadButton}>
           <p>Download All Notes</p>
           <FiDownload ></FiDownload>
         </div>}
@@ -134,7 +134,7 @@ const NotesList = (props: Props) => {
       </div>
 
       <div className={NotesContainer}>
-        {NoteFiltered.map((item, index) => {
+        {NoteFiltered && NoteFiltered.map((item, index) => {
           return (
             <NoteInput data={item} key={item._id} Time={item.timestamp} Written={true} ></NoteInput>
           )

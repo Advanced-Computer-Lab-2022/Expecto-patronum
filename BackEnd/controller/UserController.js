@@ -666,7 +666,10 @@ async function giveInstructorReview(req, res, next) {
 }
 
 async function selectCourse(req, res, next) {
+  console.log(req.user)
   try {
+    console.log("No Notes")
+
     let info = {};
     let exercise = {};
     if (req.body.courseId) {
@@ -728,11 +731,21 @@ async function selectCourse(req, res, next) {
               else {
                 info.lastWatched = null;
               }
-              info.notes = z.notes;
+              if (z.notes) {
+                info.notes = z.notes;
+              }
+              else {
+                info.notes = [];
+              }
+              if (z.watchedVideos) {
+                info.watchedVideos = z.watchedVideos;
+              }
+              else {
+                info.watchedVideos = [];
+              }
               info.progress = z.progress;
               info.SolvedExercises = z.excercises;
               info.purchased = "yes";
-              info.watchedVideos = z.watchedVideos;
               x = await CourseTable.findOne({ "_id": req.body.courseId },
                 { review: { "$slice": 3 } });
               info.course = x;
@@ -844,25 +857,38 @@ async function selectCourse(req, res, next) {
 async function ViewMyCourses(req, res, next) {
   try {
     var CurrentPage = req.query.page ? req.query.page : 1;
-    var y = await User.findOne({ "_id": req.query.userId }).select({ purchasedCourses: 1, _id: 0 });
+    var y = await User.findOne({ "_id": req.user._id }).select({ purchasedCourses: 1, _id: 0 });
     if (y.purchasedCourses.length) {
       var ids = [y.purchasedCourses.length];
-
+      var Progress = [y.purchasedCourses.length]
       for (var i = 0; i < y.purchasedCourses.length; i++) {
         var z = Object.values(y.purchasedCourses)[i];
         ids[i] = z.courseID;
-        console.log(ids[i]);
+        Progress[i] = z.progress;
+        // console.log(ids[i]);
       }
-      x = await CourseTable.find({ "_id": { $in: ids } }).select({
+      var x = await CourseTable.find({ "_id": { $in: ids } }).select({
         _id: 1,
         title: 1,
-        courseHours: 1,
         courseImage: 1,
         instructorName: 1,
         subject: 1,
         summary: 1
       }).skip((CurrentPage - 1) * 5).limit(5);
-      res.send(x);
+      let w = []
+      for (var i = 0; i < x.length; i++) {
+        for (var j = 0; j < ids.length; j++) {
+          if (x[i]._id == ids[j].toString()) {
+            let Temp = x[i].toObject();
+            Temp.progress = Progress[j];
+            w.push(Temp);
+            // x[i].progress = Progress[j];
+            break;
+          }
+        }
+      }
+
+      res.send(w);
       return;
     }
     res.send(y.purchasedCourses);

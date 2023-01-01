@@ -3,7 +3,11 @@ import Image from 'next/image'
 import React from 'react'
 import SectionTitle from './SectionTitle'
 
-type Props = {}
+import { Profile } from './UserProfile'
+
+type Props = {
+  data: Profile | undefined
+}
 
 const Wallet = (props: Props) => {
   const [Type, setType] = React.useState<"Wallet" | "Card">("Wallet")
@@ -21,16 +25,24 @@ const Wallet = (props: Props) => {
 
       </div>
       {Type === "Wallet" ? <div>
-        <p className='text-3xl mt-10 ml-10'>Wallet:0</p>
-      </div> :
-        <div className='flex items-center  justify-around bg-white w-full rounded-lg shadow-md py-4'>
-          <div className='w-10  h-10 relative' >
-            <Image fill className='object-contain' alt="" src={'/images/Visa.png'}></Image>
+        <p className='text-3xl mt-10 ml-10'>Wallet:{props.data?.wallet}</p>
+      </div> : props.data?.paymentMethods?.map((paymentMethod) => {
+        return (
+          <div className='flex items-center  justify-around bg-white w-full rounded-lg shadow-md py-4'>
+            <div className='w-10  h-10 relative' >
+              <Image fill className='object-contain' alt="" src={'/images/Visa.png'}></Image>
+            </div>
+            <p>**** **** **** {paymentMethod.last4}</p>
+            <p>Expires on {paymentMethod.expiration}</p>
+            <button className='text-canadian-red font-bold'>Remove</button>
           </div>
-          <p>**** **** **** 6213</p>
-          <p>Expires on 03/27</p>
-          <button className='text-canadian-red font-bold'>Remove</button>
-        </div>}
+        )
+
+      })
+      }
+      {props.data?.paymentMethods.length === 0 && Type === "Card" && <div className='flex items-center justify-center w-full h-96'>
+        <p className='text-2xl font-bold'>No Cards Added</p>
+      </div>}
 
 
 
