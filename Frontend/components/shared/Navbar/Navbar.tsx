@@ -6,6 +6,7 @@ import BurgerButton from "./BurgerButton/BurgerButton";
 import SelectCountry from "./SelectCountry/SelectCountry";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 interface ContextState {
   isCurtainOpen: any;
@@ -22,13 +23,19 @@ function Navbar() {
   const parentRef = useRef<any>();
   const [isCurtainOpen, setIsCurtainOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-  const roles = ['Instructor', 'Guest', 'Admin', 'Individual Trainee', 'Corporate Trainee'];
+  const [RoleIndex, SetRoleIndex] = useState(0);
+  const roles = ["guest", "user", "admin", "instructor"];
   const navbarVariations = [<GuestNavbar curtainRef={curtainRef} />, <UserNavbar curtainRef={curtainRef} />, <AdminNavbar curtainRef={curtainRef} />, <InstructorNavbar curtainRef={curtainRef} />];
-  const role = roles[1];
 
   useEffect(() => {
-    global.window.location.pathname === '/Login' ? parentRef.current.classList.add('hidden') : parentRef.current.classList.remove('hidden');
+    let LocalStorage = localStorage.getItem('UserInfo') ? localStorage.getItem('UserInfo') : 'Guest';
+    let CurrentRole = LocalStorage === 'Guest' ? LocalStorage : JSON.parse(LocalStorage as string).role;
+    let RoleIndexData = roles.indexOf(CurrentRole.toLowerCase());
+    SetRoleIndex(RoleIndexData);
+  })
+
+  useEffect(() => {
+    global.window.location.pathname === '/Auth' ? parentRef.current.classList.add('hidden') : parentRef.current.classList.remove('hidden');
   }, [global.window?.location.pathname])
 
   return (
@@ -37,7 +44,7 @@ function Navbar() {
         <Link href="/" className={navLogoDiv}>
           <img className={navLogo} src="/images/logo.png" />
         </Link>
-        {navbarVariations[0]}
+        {navbarVariations[RoleIndex]}
       </div>
     </curtainSearchSwitching.Provider>
   );
@@ -48,7 +55,7 @@ const GuestNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => 
     <div className="flex">
       <SearchBar />
       <div ref={props.curtainRef} className={`h-[${props.curtainRef.current?.children.length ? props.curtainRef.current?.children.length * 2 : ''}rem] ${navContentDiv}`}>
-        <Link className={navWideButton} href='/Login?isLogin=false' as='/Login'>
+        <Link className={navWideButton} href='/Auth?isLogin=false' as='/Auth'>
           Sign Up
         </Link>
         <hr className="nv:hidden" />
@@ -57,7 +64,7 @@ const GuestNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => 
         </a>
       </div>
       <div className={navIconsDiv}>
-        <a className={navButton} href="/Login">
+        <a className={navButton} href="/Auth">
           <AiOutlineUser className={navButtonIcon} />
         </a>
         <SelectCountry />

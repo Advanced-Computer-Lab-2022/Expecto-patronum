@@ -47,7 +47,7 @@ router.get('/CheckAuth', isAuth, (req, res) => {
   res.status(200).send({ Error: false, Message: 'You are authorized' });
 })
 router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.cookie('user', req.user.firstname + ' ' + req.user.lastname + ' ' + req.user.role, { maxAge: 900000, httpOnly: true });
+  res.cookie('user', req.user.firstname + ' ' + req.user.lastname + ' ' + req.user.role, { maxAge: 15 * 24 * 3600000, httpOnly: true });
   const DetailsToSend = {
     firstname: req.user.firstname,
     lastname: req.user.lastname,
@@ -59,7 +59,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 
 
-router.post("/reportProblem",isAuth, reportProblem);
+router.post("/reportProblem", reportProblem);
 
 //router.post("/createTransaction", createTransaction);
 

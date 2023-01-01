@@ -14,7 +14,6 @@ const verifyCallback = (username, password, done) => {
 
   User.findOne({ username: username })
     .then((user) => {
-      console.log(user)
       if (!user) { return done(null, false) }
       if (!user.valid) { return done("Please Verify your email", false) }
       const isValid = validPassword(password, user.hash, user.salt);

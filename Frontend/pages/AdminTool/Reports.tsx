@@ -5,6 +5,7 @@ import AdminHeader from "../../components/AdminTool/AdminHeader";
 import classNames from "classnames";
 import CompPagination from "../../components/shared/pagination/CompPagination";
 import { PopupMessageContext } from '../_app';
+import Layout from "./Layout";
 
 
 const pending = classNames(
@@ -112,11 +113,8 @@ async function goToPage(Page: any) {
     //api
   }
   return (
-    <aside>
-      {/* <AdminHeader /> */}
-      <div className="flex">
-        <SideBar></SideBar>
-        <form id="course-form" className='w-full mx-4'>
+<Layout>
+        <form id="course-form" className='w-full mx-4 h-full'>
           <div className="row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl ">
             <h6 className="text-center text-2xl text-navbar">Reports</h6>
             <div className="flex flex-col">
@@ -288,10 +286,9 @@ async function goToPage(Page: any) {
               FromLink={false}
             />
           </div>
+        
         </form>
-      </div>
-      <script src="https://unpkg.com/flowbite@1.4.5/dist/flowbite.js"></script>
-    </aside>
+        </Layout>
   );
 };
 

@@ -11,10 +11,14 @@ import ReviewsAndQuestions from '../../components/shared/Review/ReviewsAndQuesti
 import axios from 'axios';
 import SmallCourseCardSkeleton from '../../components/shared/SmallCourseCard/SmallCourseCardSkeleton';
 import Skeleton from 'react-loading-skeleton';
+import { ApiUrl } from '../../constants/constants';
 
 type Props = {}
 
 const Instructor = (props: Props) => {
+
+
+
 
   const Amount = [
     {
@@ -40,19 +44,19 @@ const Instructor = (props: Props) => {
   ];
 
   const questions = [
-    {username: 'Antonio Banderas', question: 'Where is my super-suit?'},
-    {username: 'Kanye West', question: 'Who touched my Spaghetti?'},
-    {username: 'Khaled El-Zawahra', question: 'What about you first courses?'},
-    {username: 'Thomas Shelby OBE', question: 'What is the Maximoff Anomaly?'},
-    {username: 'Michel Raouf', question: 'Is Norm a communist?'},
-    {username: 'Ramy Younis', question: 'What is the difference between Real-time And Non-Real-Time Embedded Systems?'},
+    { username: 'Antonio Banderas', question: 'Where is my super-suit?' },
+    { username: 'Kanye West', question: 'Who touched my Spaghetti?' },
+    { username: 'Khaled El-Zawahra', question: 'What about you first courses?' },
+    { username: 'Thomas Shelby OBE', question: 'What is the Maximoff Anomaly?' },
+    { username: 'Michel Raouf', question: 'Is Norm a communist?' },
+    { username: 'Ramy Younis', question: 'What is the difference between Real-time And Non-Real-Time Embedded Systems?' },
   ];
 
   const icons = [
-    'python.png', 'structure.png', 'java.png', 'c-.png', 'c-sharp.png', 'ai.png', 'cisco.png', 'coding.png', 'cpu.png', 
-    'css-3.png', 'cyber-security.png', 'cyber-security (1).png', 'excel.png', 'hacker.png', 'html (1).png', 
-    'js.png', 'motherboard.png', 'neural.png', 'node-js.png', 
-    'programming-language.png', 'programming.png', 'python.png', 'structure.png', 'java.png', 'c-.png', 'c-sharp.png', 'ai.png', 'cisco.png', 'coding.png', 'cpu.png', 
+    'python.png', 'structure.png', 'java.png', 'c-.png', 'c-sharp.png', 'ai.png', 'cisco.png', 'coding.png', 'cpu.png',
+    'css-3.png', 'cyber-security.png', 'cyber-security (1).png', 'excel.png', 'hacker.png', 'html (1).png',
+    'js.png', 'motherboard.png', 'neural.png', 'node-js.png',
+    'programming-language.png', 'programming.png', 'python.png', 'structure.png', 'java.png', 'c-.png', 'c-sharp.png', 'ai.png', 'cisco.png', 'coding.png', 'cpu.png',
     'css-3.png', 'cyber-security.png',
   ];
 
@@ -61,11 +65,11 @@ const Instructor = (props: Props) => {
   const [amountOwed, setAmountOwed] = useState<any>([]);
   const [isAmountLoading, setIsAmountLoading] = useState<boolean>(true);
 
-  
+
   async function getAmountOwed() {
     axios.defaults.withCredentials = true;
     await axios.put("http://localhost:5000/Instructor/viewAmountOwned", {
-        userID: '63877fb65c8dac5284aaa3c2',
+      userID: '63877fb65c8dac5284aaa3c2',
     }).then((res: { data: any }) => {
       setAmountOwed(res.data.amount);
       console.log(res.data.amount);
@@ -87,12 +91,12 @@ const Instructor = (props: Props) => {
   }, [])
 
   function levelColor(level: string) {
-    switch(level) {
-        case 'Beginner': return 'from-[#2f8608] to-[#52EB0E]';
-        case 'Intermediate': return 'from-[#C29904] to-[#FDE143]';
-        case 'Advanced': return 'from-[#B20000] to-[#FF4542]';
-        case 'AllLevels': return 'from-[#2B32B2] to-[#1488CC]';
-        default: return 'from-[#1D948E] to-[#3FE0D0]';
+    switch (level) {
+      case 'Beginner': return 'from-[#2f8608] to-[#52EB0E]';
+      case 'Intermediate': return 'from-[#C29904] to-[#FDE143]';
+      case 'Advanced': return 'from-[#B20000] to-[#FF4542]';
+      case 'AllLevels': return 'from-[#2B32B2] to-[#1488CC]';
+      default: return 'from-[#1D948E] to-[#3FE0D0]';
     }
   }
 
@@ -116,7 +120,7 @@ const Instructor = (props: Props) => {
                 {isTopRatedLoading && <SmallCourseCardSkeleton count={8} className='scale-[0.85] 4lg:mr-10 4lg:scale-100 4lg:hover:scale-[1.01] hover:scale-[0.86]' />}
                 {
                   topRated.map((course: any, index: number) => (
-                    <SmallCourseCard className={`${index === 0 ? '': '-ml-4'} scale-[0.85] 4lg:mr-10 4lg:scale-100 4lg:hover:scale-[1.01] hover:scale-[0.86]`} course={course} courseColor={levelColor} key={index} index={index} />
+                    <SmallCourseCard className={`${index === 0 ? '' : '-ml-4'} scale-[0.85] 4lg:mr-10 4lg:scale-100 4lg:hover:scale-[1.01] hover:scale-[0.86]`} course={course} courseColor={levelColor} key={index} index={index} />
                   ))
                 }
               </div>
@@ -131,7 +135,7 @@ const Instructor = (props: Props) => {
                   questions.map((question: any, index: number) => (
                     <div key={index}>
                       <ReviewsAndQuestions user={question} isReview={false} />
-                      {(index < questions.length-1) && <hr className='my-4 border-2 rounded-full' />}
+                      {(index < questions.length - 1) && <hr className='my-4 border-2 rounded-full' />}
                     </div>
                   ))
                 }
@@ -145,7 +149,7 @@ const Instructor = (props: Props) => {
             <div className='overflow-x-hidden overflow-y-auto border-t-1.5 mb-3 sb-max:h-40 max-h-[20rem]'>
               {isAmountLoading && <MonthlyCardSkeleton count={4} />}
               {
-                amountOwed.length === 0 ? <p className='text-xl mt-3 text-center'>There are no current data to be shown.</p> :amountOwed.map((amount: any, index: number) => (
+                amountOwed.length === 0 ? <p className='text-xl mt-3 text-center'>There are no current data to be shown.</p> : amountOwed.map((amount: any, index: number) => (
                   <MonthlyCard key={index} amount={amount} />
                 ))
               }
@@ -170,12 +174,12 @@ const MonthlyCard = (props: MonthlyCardProps) => {
 
   return (
     <div className='relative ml-2'>
-      <div className='absolute left-2 h-22 bottom-12 w-[0.125rem] bg-bright-gray after:content-[""] after:absolute after:-right-[0.45rem] after:-bottom-4 after:min-h-[1rem] after:min-w-[1rem] after:rounded-full after:border-2 after:border-bright-gray'/>
+      <div className='absolute left-2 h-22 bottom-12 w-[0.125rem] bg-bright-gray after:content-[""] after:absolute after:-right-[0.45rem] after:-bottom-4 after:min-h-[1rem] after:min-w-[1rem] after:rounded-full after:border-2 after:border-bright-gray' />
       {/* <div className='absolute left-2 h-22 top-0 bottom-12 w-[0.125rem] bg-green-600 after:content-[""] after:absolute after:-right-[0.45rem] after:-bottom-4 after:min-h-[1rem] after:min-w-[1rem] after:rounded-full after:border-2 after:border-green-600'/> */}
       <div className='my-6 mr-3 ml-6 text-center bg-white h-20 shadow-md rounded-md flex items-center justify-evenly'>
         <div className='flex flex-col'>
           <h1 className='opacity-60 relative bottom-2 text-sm'>Date</h1>
-          <h1>{new Date(props.amount._id.year, props.amount._id.month - 1).toLocaleDateString('en-US', { month: 'short' })} '{props.amount._id.year.toString().substring(2,4)}</h1>
+          <h1>{new Date(props.amount._id.year, props.amount._id.month - 1).toLocaleDateString('en-US', { month: 'short' })} '{props.amount._id.year.toString().substring(2, 4)}</h1>
         </div>
         <div className='h-13 rounded-full relative min-w-[0.125rem] bg-gray-300' />
         <div className='flex flex-col'>
@@ -186,14 +190,14 @@ const MonthlyCard = (props: MonthlyCardProps) => {
     </div>
   );
 }
-const MonthlyCardSkeleton = (props: {count: number}) => {
+const MonthlyCardSkeleton = (props: { count: number }) => {
 
   return (
     <div>
       {
         Array(props.count).fill(0).map((_, index) => (
           <div key={index} className='relative ml-2'>
-            <div className='absolute left-2 h-22 bottom-12 w-[0.125rem] bg-bright-gray after:content-[""] after:absolute after:-right-[0.45rem] after:-bottom-4 after:min-h-[1rem] after:min-w-[1rem] after:rounded-full after:border-2 after:border-bright-gray'/>
+            <div className='absolute left-2 h-22 bottom-12 w-[0.125rem] bg-bright-gray after:content-[""] after:absolute after:-right-[0.45rem] after:-bottom-4 after:min-h-[1rem] after:min-w-[1rem] after:rounded-full after:border-2 after:border-bright-gray' />
             <div className='my-6 mr-3 ml-6 text-center bg-white h-20 shadow-md rounded-md flex items-center justify-evenly'>
               <div className='flex flex-col pt-2.5 mr-8'>
                 <h1 className='opacity-60 relative bottom-2 text-sm'><Skeleton width={60} height={10} /></h1>

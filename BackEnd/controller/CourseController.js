@@ -156,8 +156,9 @@ async function CourseSearch(req, res) {
       rating: 1,
       instructorName: 1,
       subject: 1,
-      summary: 1
-
+      summary: 1,
+      level: 1,
+      purchases: 1,
     });;
   }
     else if (userSearch === "" && Object.keys(queryCondition).length === 0 && ratingExist==true) {
@@ -194,8 +195,9 @@ async function CourseSearch(req, res) {
         rating: 1,
         instructorName: 1,
         subject: 1,
-        summary: 1
-
+        summary: 1,
+        level: 1,
+        purchases: 1,
       });
     }
     else if (userSearch !== "" && Object.keys(queryCondition).length !== 0 && ratingExist==false  ) {
@@ -248,8 +250,9 @@ async function CourseSearch(req, res) {
           rating: 1,
           instructorName: 1,
           subject: 1,
-          summary: 1
-
+          summary: 1,
+          level: 1,
+          purchases: 1,
         });
       }
       else {
@@ -269,8 +272,9 @@ async function CourseSearch(req, res) {
             rating: 1,
             instructorName: 1,
             subject: 1,
-            summary: 1
-
+            summary: 1,
+            level: 1,
+            purchases: 1,
           });
         }
        else if (userSearch !== "" && Object.keys(queryCondition).length === 0 && ratingExist==true) {
