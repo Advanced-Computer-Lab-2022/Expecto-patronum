@@ -22,6 +22,8 @@ import {GoSignOut} from "react-icons/go"
 import {CgMail} from "react-icons/cg"
 import Link from "next/link";
 import classNames from "classnames";
+import axios from "axios";
+import router from "next/router";
 
 const normalDiv = classNames(
   "flex items-center p-2 text-base font-normal text-gray-600 hover:text-white rounded-lg hover:bg-red-600"
@@ -66,6 +68,13 @@ const SideBar = () => {
     }
     e.target.parentNode.className=selectedDiv;
     setCurr(e.target.innerText.replaceAll(' ', ''));
+  }
+
+  const logout = async (e: any) => {
+    Response = await axios.get("http://localhost:5000/User/logout", {
+      }).then((res: { data: any; }) => { return res.data });
+      router.push({
+        pathname: 'http://localhost:3000/Auth'});
   }
   
   const showHideDropdown = (e: any) => {
@@ -251,13 +260,14 @@ const SideBar = () => {
              </a>
            </li>
            <li className="group">
-             <a
-               href="#"
-               className="flex items-center p-2 text-base font-normal text-gray-600 hover:text-white rounded-lg hover:bg-red-600"
-             >
+            <div className="w-full group-hover:text-white rounded-lg group-hover:bg-red-600">
+            <button type="button" onClick={logout} className=" flex items-left p-2 text-base font-normal text-gray-600 ">
+            
                <GoSignOut className="w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-100"></GoSignOut>
-               <span className="flex-1 ml-3 whitespace-nowrap">Sign Out</span>
-             </a>
+               <span className="flex-1 ml-3 whitespace-nowrap transition duration-75 group-hover:text-gray-100">Sign Out</span>
+         
+             </button>
+             </div>
            </li>
          </ul>
        </div>
