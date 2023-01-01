@@ -160,7 +160,7 @@ const card = await stripe.customers.retrieveSource(
   if(req.body.customerId){
   const charge = await stripe.charges.create({
     amount: amount,
-    currency: 'usd',
+    currency: 'USD',
     customer: customerId,
     description: 'Example charge',
    },(error, charge) => {

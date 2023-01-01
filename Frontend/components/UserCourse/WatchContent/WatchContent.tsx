@@ -12,6 +12,7 @@ type Props = {
   Prev: boolean;
   HandleNext: () => void;
   HandlePrev: () => void;
+  CourseID: string;
 
 
 }
@@ -56,7 +57,7 @@ const WatchContent = (props: Props) => {
   return (
     <div className='w-full'>
       {ContentChoosen.isExercise ?
-        <Exercise></Exercise> :
+        <Exercise CourseID={props.CourseID}></Exercise> :
         <div className={VideoContainer}>
           <ReactPlayer
             //@ts-ignore

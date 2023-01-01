@@ -16,44 +16,48 @@ const transactionTable = require('../models/transactionSchema');
 const { ReceiveCertificate } = require("../lib/ReceiveCertificate");
 
 async function SelectExercise(req, res, next) {
-  try {
-    const x = await ExerciseTable.findOne({ "_id": req.body.exerciseID }, {
-      exerciseTitle: 1,
-      totalGrade: 1,
-      _id: 1,
-      averageGrade: { $avg: "$averageMark" }
-    });
-    let q = {};
-    const course = await CourseTable.findOne({ _id: req.body.courseID }, { _id: 1, instructorID: 1 });
-    if (course.instructorID == req.user._id) {
-      res.status(200).send(x);
-      return;
-    }
-    else {
-      var y = await User.findOne({ "_id": req.user._id, "purchasedCourses.excercises.excerciseID": req.body.exerciseID },
-        { purchasedCourses: { $elemMatch: { courseID: req.body.courseID } } }
-      );
-      if (y) {
-        var exe = y.purchasedCourses[0].excercises;
-        for (var i = 0; i < exe.length; i++) {
-          if (exe[i].excerciseID == req.body.exerciseID) {
-            console.log(exe[i]);
-            if (exe[i].grade || exe[i].grade == 0) {
-              q.yourGrade = exe[i].grade;
-            }
-            break;
-          };
-        }
-      }
-    }
-    q.exerciseTitle = x.exerciseTitle;
-    q.exerciseID = x._id;
-    q.totalGrade = x.totalGrade;
-    res.status(200).send(q);
-  } catch (error) {
-    console.log(error);
-    res.status(400).send(error.message);
-  }
+  // try {
+  //   const x = await ExerciseTable.findOne({ "_id": req.body.exerciseID }, {
+  //     exerciseTitle: 1,
+  //     totalGrade: 1,
+  //     _id: 1,
+  //     averageGrade: { $avg: "$averageMark" }
+  //   });
+  //   let q = {};
+  //   const course = await CourseTable.findOne({ _id: req.body.courseID }, { _id: 1, instructorID: 1 });
+  //   if (course.instructorID == req.user._id) {
+  //     res.status(200).send(x);
+  //     return;
+  //   }
+  //   else {
+  //     var y = await User.findOne({ "_id": req.user._id, "purchasedCourses.excercises.excerciseID": req.body.exerciseID },
+  //       { purchasedCourses: { $elemMatch: { courseID: req.body.courseID } } }
+  //     );
+  //     if (y) {
+  //       var exe = y.purchasedCourses[0].excercises;
+  //       for (var i = 0; i < exe.length; i++) {
+  //         if (exe[i].excerciseID == req.body.exerciseID) {
+  //           console.log(exe[i]);
+  //           if (exe[i].grade || exe[i].grade == 0) {
+  //             q.yourGrade = exe[i].grade;
+  //           }
+  //           break;
+  //         };
+  //       }
+  //     }
+  //   }
+  //   q.exerciseTitle = x.exerciseTitle;
+  //   q.exerciseID = x._id;
+  //   q.totalGrade = x.totalGrade;
+  //   res.status(200).send(q);
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(400).send(error.message);
+  // }
+
+  await User.updateMany({}, [{"$addFields": { "purchasedCourses.completedCourse":false }}]);
+  res.send("ok");
+
 };
 
 async function viewAnswer(req, res, next) {
@@ -64,7 +68,7 @@ async function viewAnswer(req, res, next) {
       _id: 1,
       questions: 1
     });
-    var y = await User.findOne({ "_id": req.query.userID, "purchasedCourses.excercises.excerciseID": req.query.exerciseID },
+    var y = await User.findOne({ "_id": req.user._id, "purchasedCourses.excercises.excerciseID": req.query.exerciseID },
       { purchasedCourses: { $elemMatch: { courseID: req.query.courseID } } }
     );
     console.log(y);
@@ -73,7 +77,7 @@ async function viewAnswer(req, res, next) {
       var exe = y.purchasedCourses[0].excercises;
       for (var i = 0; i < exe.length; i++) {
         if (exe[i].excerciseID == req.query.exerciseID) {
-          if (exe[i].grade) {
+          if (exe[i].grade ||exe[i].grade==0) {
             q.yourGrade = exe[i].grade;
           }
           q.yourAnswers = exe[i].exercisesAnswers.answer;
@@ -84,7 +88,7 @@ async function viewAnswer(req, res, next) {
     }
     q.exerciseTitle = x.exerciseTitle;
     q.exerciseID = x._id;
-    q.totalGrade = x.totalGrade;
+    // q.totalGrade = x.totalGrade;
     q.questions = x.questions;
     res.status(200).send(q);
   } catch (error) {
@@ -151,8 +155,8 @@ async function reportProblem(req, res, next) {
     var y = await CourseTable.findOne({ "_id": req.body.courseID }, { _id: 1, title: 1 });
     const result = await problemTable.create({
       type: req.body.type,
-      username:x.username,
-      courseTitle:y.courseTitle,
+      username: x.username,
+      courseTitle: y.courseTitle,
       userID: req.user._id,
       //status: req.body.status,
       body: req.body.body,
@@ -530,9 +534,14 @@ async function payWithWallet(req, res, next) {
 
 const { jsPDF } = require("jspdf")
 async function RecieveMail(req, res, next) {
+
   var userId = req.user._id;
   var string = req.body.dataUrl;
-  var email=await User.findById(userId).select({"email":1});
+  var email = await User.findById(userId).select({ email: 1 });
+  console.log("////////////////////")
+  console.log(email);
+  console.log("////////////////////")
+
   const doc = new jsPDF();
   doc.addImage(string, 'JPEG', 15, 15, 170, 0);
   doc.save("Course_Completion_Certificate.pdf");
@@ -601,20 +610,30 @@ async function removeInstructorReview(req, res, next) {
 
 async function viewProfileUser(req, res, next) {
   try {
-    var user1 = await User.findOne({ "_id": req.user._id }, {
-      username: 1,
-      _id: 1,
-      gender: 1,
-      firstname: 1,
-      lastname: 1,
-      email: 1,
-      role: 1,
-      wallet: 1,
-      paymentMethods: 1
+    // var user1 = await User.findOne({ "_id": req.user._id }, {
+    //   username: 1,
+    //   _id: 1,
+    //   gender: 1,
+    //   firstname: 1,
+    //   lastname: 1,
+    //   email: 1,
+    //   role: 1,
+    //   wallet: 1,
+    //   paymentMethods: 1
+    // });
+    var User = req.user
+
+    res.status(200).send({
+      username: User.username,
+      _id: User._id,
+      gender: User.gender,
+      firstname: User.firstname,
+      lastname: User.lastname,
+      email: User.email,
+      role: User.role,
+      wallet: User.wallet,
+      paymentMethods: User.paymentMethods
     });
-
-
-    res.status(200).send(user1);
   }
   catch (error) {
     console.log(error);
