@@ -57,7 +57,6 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 
 
-router.post("/forgetPassword", forgetPassword);
 router.post("/reportProblem", reportProblem);
 
 router.post("/createTransaction", createTransaction);

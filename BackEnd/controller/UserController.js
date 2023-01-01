@@ -931,7 +931,7 @@ async function unbuyCourse(req, res, next) {
 
     const transaction = await transactionTable.deleteOne({ userID: user._id, courseID: course._id });
 
-    res.status(200).send({error:true,message:"Course already bought"});
+    res.status(200).send({ error: true, message: "Course already bought" });
 
   } catch (error) {
     res.status(400).send({ error: error.message });

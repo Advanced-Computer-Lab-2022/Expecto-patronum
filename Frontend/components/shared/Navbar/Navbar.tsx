@@ -22,10 +22,29 @@ function Navbar() {
   const parentRef = useRef<any>();
   const [isCurtainOpen, setIsCurtainOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [RoleIndex, SetRoleIndex] = useState(0);
 
-  const roles = ['Instructor', 'Guest', 'Admin', 'Individual Trainee', 'Corporate Trainee'];
+
+  const roles = ["guest", "instructor", "admin", "user"];
   const navbarVariations = [<GuestNavbar curtainRef={curtainRef} />, <UserNavbar curtainRef={curtainRef} />, <AdminNavbar curtainRef={curtainRef} />, <InstructorNavbar curtainRef={curtainRef} />];
-  const role = roles[1];
+
+  useEffect(() => {
+    //Get the Role from localStorage if any if not then set it to Guest
+    // let LocalStorage = localStorage.getItem('Role') ? localStorage.getItem('Role') : 'Guest';
+    // let CurrentRole = JSON.parse(LocalStorage as string);
+    // console.log(CurrentRole)
+    // // let RoleIndex = roles.indexOf();
+
+    // SetRoleIndex(RoleIndex);
+
+
+  }, [])
+
+
+
+
+
+
 
   useEffect(() => {
     global.window.location.pathname === '/Login' ? parentRef.current.classList.add('hidden') : parentRef.current.classList.remove('hidden');
@@ -37,7 +56,7 @@ function Navbar() {
         <Link href="/" className={navLogoDiv}>
           <img className={navLogo} src="/images/logo.png" />
         </Link>
-        {navbarVariations[0]}
+        {navbarVariations[RoleIndex]}
       </div>
     </curtainSearchSwitching.Provider>
   );
