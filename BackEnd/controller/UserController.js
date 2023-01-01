@@ -904,8 +904,10 @@ async function takeExam(req, res, next) {
       "courseID": 1,
       "exerciseTitle": 1,
       "questions": 1,
-      "totalGrade": 1
+      "totalGrade": 1,
+      "subtitleName": 1
     });
+
     res.status(200).json(exam);
   }
   catch (err) {
@@ -986,15 +988,16 @@ async function submitAnswer(req, res) {
     console.log(actualExcercise);
     console.log(exists);
 
-    if(actualExcercise.subtitleName){
+    if (actualExcercise.subtitleName) {
 
     }
-    else{
-      if(grade>=50){
+    else {
+      if (grade >= 50) {
         const re = await User.updateOne({ "_id": user_id, "purchasedCourses.courseID": course_id },
-        {
-          "$set": {
-            "purchasedCourses.$.completedCourse": true }
+          {
+            "$set": {
+              "purchasedCourses.$.completedCourse": true
+            }
           });
       }
     }
