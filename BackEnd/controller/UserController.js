@@ -743,6 +743,7 @@ async function selectCourse(req, res, next) {
               else {
                 info.watchedVideos = [];
               }
+              info.completeCourse = z.completedCourse;
               info.progress = z.progress;
               info.SolvedExercises = z.excercises;
               info.purchased = "yes";
