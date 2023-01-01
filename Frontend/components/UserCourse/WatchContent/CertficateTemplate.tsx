@@ -14,15 +14,16 @@ const CertficateTemplate = () => {
       doc.addImage(canvas.toDataURL(), 'PNG', 15, 15, 170, 0);
       doc.save('certificate.pdf');
       console.log(canvas.toDataURL('image/jpeg', 0.5));
+      ////////////Change place
       Response = await axios.post("http://localhost:5000/User/RecieveMail", {
-      // userId:canvas.id,
-      dataUrl: canvas.toDataURL('image/jpeg', 0.5),
-    })
-   
+        // userId:canvas.id,
+        dataUrl: canvas.toDataURL('image/jpeg', 0.5),
+      })
+
     });
   };
 
- 
+
   return (
     <div className='w-[80vw] h-[100vh] ml-auto mr-auto'  >
       <div id='certificate-template' className='w-[700px] h-[500px] mt-10 mb-10 relative ml-auto mr-auto  ' >

@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import React from 'react'
+import Status from './Status'
 import { ReqRepInterface } from './Tickets'
 
 type Props = {
@@ -8,11 +9,13 @@ type Props = {
   Type: "Reports" | "Requests"
   setShowDetails: (value: boolean) => void
   setChoosen: (value: ReqRepInterface) => void
+  setFollowupPressed: (value: boolean) => void
 
 }
 
 
 const TicketCard = (props: Props) => {
+
   function handleClick() {
     if (props.Type == "Reports") {
       props.setShowDetails(true);
@@ -36,14 +39,10 @@ const TicketCard = (props: Props) => {
         className={TableDataItem}
 
       >
-        <span
-          className={props.data.status == "Pending" ? Pending : props.data.status == "Resolved" ? Resolved : Unseen}
-        >
-          {props.data.status}
-        </span>
+        <Status rounded status={props.data.status.toLocaleLowerCase()}></Status>
       </td>
       {props.Type == "Reports" ? <td className={TableDataItem}>
-        {props.data.status === 'Resolved' ? "" : <button className={Button}>Follow Up</button>}
+        {props.data.status.toLocaleLowerCase() === 'resolved' ? "" : <button onClick={() => { props.setFollowupPressed(true) }} className={Button}>Follow Up</button>}
       </td> : <td><div className='bg-white'></div></td>
 
       }
