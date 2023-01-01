@@ -14,12 +14,17 @@ async function discountEndDate() {
         { "discount.endDate": { $exists: true } }, { "discount.endDate": { $lte: dateNow } },
       ]
     }, [
-      { "$set": {  discountPrice: {
-          $round: [{
-          $divide: ["$discountPrice",
-            { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
-        }, 2]}
-      , "discount.discount": 0 } },
+      {
+        "$set": {
+          discountPrice: {
+            $round: [{
+              $divide: ["$discountPrice",
+                { $subtract: [1, { $divide: ["$discount.discount", 100] }] }]
+            }, 2]
+          }
+          , "discount.discount": 0
+        }
+      },
       { $unset: ["discount.startDate", "discount.endDate", "discount.set"] }
     ]
     );
@@ -29,12 +34,17 @@ async function discountEndDate() {
         { "promotion.endDate": { $exists: true } }, { "promotion.endDate": { $lte: dateNow } }
       ]
     }, [
-      { "$set": {  discountPrice: {
-          $round: [{
-          $divide: ["$discountPrice",
-            { $subtract: [1, { $divide: ["$promotion.promotion", 100] }] }]
-        }, 2]}
-      , "promotion.promotion": 0 } },
+      {
+        "$set": {
+          discountPrice: {
+            $round: [{
+              $divide: ["$discountPrice",
+                { $subtract: [1, { $divide: ["$promotion.promotion", 100] }] }]
+            }, 2]
+          }
+          , "promotion.promotion": 0
+        }
+      },
       { $unset: ["promotion.startDate", "promotion.endDate", "promotion.set"] }
     ]
     );
@@ -370,53 +380,53 @@ async function GetAllCourses(req, res) {
 
 async function GenerateCourses(req, res) {
 
-   for(var i = 0; i < courses.length; i++) {
+  for (var i = 0; i < courses.length; i++) {
     var subtitles = courses[i].subtitles;
     var courseHours = 0;
-  // await Course.updateMany({}, [{ $set: { purchases: Math.floor(Math.random() + 100000) + 10000 }}]);
+    // await Course.updateMany({}, [{ $set: { purchases: Math.floor(Math.random() + 100000) + 10000 }}]);
 
-  // for(var i = 0; i < courses.length; i++) {
-  //   var subtitles = courses[i].subtitles;
-  //   var courseHours = 0;
+    // for(var i = 0; i < courses.length; i++) {
+    //   var subtitles = courses[i].subtitles;
+    //   var courseHours = 0;
 
     subtitles.map((subtitle) => {
-        subtitle.totalMinutes = 0;
-        subtitle.contents.map((content) => {
-             subtitle.totalMinutes += content.duration;
-         })
-        courseHours += subtitle.totalMinutes / 60;
-     });
+      subtitle.totalMinutes = 0;
+      subtitle.contents.map((content) => {
+        subtitle.totalMinutes += content.duration;
+      })
+      courseHours += subtitle.totalMinutes / 60;
+    });
 
     var currency = courses[i].price;
-     var number = Number(currency.replace(/[^0-9.-]+/g,""));
+    var number = Number(currency.replace(/[^0-9.-]+/g, ""));
 
-     await Course.create({
-       title: courses[i].title,
-       subject: courses[i].subject,
-       instructorName: courses[i].instructorName,
+    await Course.create({
+      title: courses[i].title,
+      subject: courses[i].subject,
+      instructorName: courses[i].instructorName,
       courseVideo: courses[i].courseVideo,
-       discount: {
-         discount: courses[i].discount.discount,
-         startDate: courses[i].discount.startDate,
-         endDate: courses[i].discount.endDate,
-       },
-       price: number,
-      level: courses[i].level,
-       courseHours: courseHours,
-       summary: courses[i].summary,
-      subtitles: courses[i].subtitles,
-       rating: {
-         one: courses[i].rating.one,
-         two: courses[i].rating.two,
-         three: courses[i].rating.three,
-         four: courses[i].rating.four,
-         five: courses[i].rating.five,
-         avg: (courses[i].rating.one + courses[i].rating.two*2 + courses[i].rating.three*3 + courses[i].rating.four*4 + courses[i].rating.five*5) / (courses[i].rating.one + courses[i].rating.two + courses[i].rating.three + courses[i].rating.four + courses[i].rating.five),
+      discount: {
+        discount: courses[i].discount.discount,
+        startDate: courses[i].discount.startDate,
+        endDate: courses[i].discount.endDate,
       },
-       review: courses[i].review,
-       courseImage: courses[i].courseImage,
-     });
-   }
+      price: number,
+      level: courses[i].level,
+      courseHours: courseHours,
+      summary: courses[i].summary,
+      subtitles: courses[i].subtitles,
+      rating: {
+        one: courses[i].rating.one,
+        two: courses[i].rating.two,
+        three: courses[i].rating.three,
+        four: courses[i].rating.four,
+        five: courses[i].rating.five,
+        avg: (courses[i].rating.one + courses[i].rating.two * 2 + courses[i].rating.three * 3 + courses[i].rating.four * 4 + courses[i].rating.five * 5) / (courses[i].rating.one + courses[i].rating.two + courses[i].rating.three + courses[i].rating.four + courses[i].rating.five),
+      },
+      review: courses[i].review,
+      courseImage: courses[i].courseImage,
+    });
+  }
 
   // res.send('success');
 
@@ -425,61 +435,62 @@ async function GenerateCourses(req, res) {
 
 async function MostRated(req, res) {
   res.send(await Course.find({}).sort({ "rating.avg": -1 }).limit(5));
-  
+
 }
 
-async function userfilterByRatings(req,res){
+async function userfilterByRatings(req, res) {
   var CurrentPage = req.query.page ? req.query.page : 1;
-try{
-  //var currentID=await req.body.userID;
-  var stars=req.body.rating;
-  var currentCourseID=await req.body.courseID;
-  var ratings=await Course.findOne({
-     "_id":currentCourseID,"review.rating":stars
-
-  }).select({ "_id":0,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
-  var x=ratings.review;
-  var y=[];
-  for(let i=0;i<x.length;i++){
-    if(x[i].rating==stars){
-      y.push(x[i]);
-    }
-  }
-  //const rates=[Object.values(ratings)[4]];
-  //{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+7]}
-  //{$elemMatch : {rating:stars}}
-  //{$slice:[CurrentPage-1,CurrentPage*2]}
-  //res.send(ratings.review);
-  //console.log(stars);
-  res.send(y);
-}
-catch(error){
-  res.status(400).json({error:error.message})
-}
-}
-
-async function userViewCourseRatings(req,res,next){
-  var CurrentPage = req.query.page ? req.query.page : 1;
-  try{
+  try {
     //var currentID=await req.body.userID;
-    var currentCourseID=await req.body.courseID;
-    var ratings=await Course.findOne({
-       "_id":currentCourseID
+    var stars = req.body.rating;
+    var currentCourseID = await req.body.courseID;
+    var ratings = await Course.findOne({
+      "_id": currentCourseID, "review.rating": stars
 
-    }).select({ "_id":0,"review":{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+10]}})
+    }).select({ "_id": 0, "review": { $slice: [(CurrentPage - 1) * 10, (CurrentPage - CurrentPage) + 10] } })
+    console.log(ratings.review)
+    var x = ratings.review;
+    var y = [];
+    for (let i = 0; i < x.length; i++) {
+      if (x[i].rating == stars) {
+        y.push(x[i]);
+      }
+    }
+    //const rates=[Object.values(ratings)[4]];
+    //{$slice:[(CurrentPage-1)*10,(CurrentPage-CurrentPage)+7]}
+    //{$elemMatch : {rating:stars}}
+    //{$slice:[CurrentPage-1,CurrentPage*2]}
+    //res.send(ratings.review);
+    //console.log(stars);
+    res.send(y);
+  }
+  catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+async function userViewCourseRatings(req, res, next) {
+  var CurrentPage = req.query.page ? req.query.page : 1;
+  try {
+    //var currentID=await req.body.userID;
+    var currentCourseID = await req.body.courseID;
+    var ratings = await Course.findOne({
+      "_id": currentCourseID
+
+    }).select({ "_id": 0, "review": { $slice: [(CurrentPage - 1) * 10, (CurrentPage - CurrentPage) + 10] } })
     //const rates=[Object.values(ratings)[4]];
     //{$slice:[CurrentPage-1,CurrentPage*2]}
     res.send(ratings.review);
   }
-  catch(error){
-    res.status(400).json({error:error.message})
+  catch (error) {
+    res.status(400).json({ error: error.message })
   }
-  
+
 }
 
 async function viewPopularCourses(req, res, next) {
   var CurrentPage = req.query.page ? req.query.page : 1;
-  var coursesPerPage = req.query.coursesPerPage?req.query.coursesPerPage:10;
+  var coursesPerPage = req.query.coursesPerPage ? req.query.coursesPerPage : 10;
   try {
     const Courses = await Course.find({}, {
       _id: 1,
@@ -494,14 +505,14 @@ async function viewPopularCourses(req, res, next) {
       summary: 1,
       discount: 1,
       discountPrice: 1,
-      purchases:1
-    }).sort({purchases:-1}).skip(0).limit(20);
+      purchases: 1
+    }).sort({ purchases: -1 }).skip(0).limit(20);
 
-    res.status(200).send({ Courses: Courses});
+    res.status(200).send({ Courses: Courses });
 
   }
   catch (err) {
-    res.status(400).json({error:err.message})
+    res.status(400).json({ error: err.message })
   }
 };
 

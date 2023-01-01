@@ -17,6 +17,56 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        Fly: {
+          '0%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-20px)' },
+          '100%': { transform: 'translateY(0px)' },
+        },
+        FlyOutRightAndDisapear: {
+          '0%': { transform: 'translateX(0%)', opacity: 1 },
+          '50%': { transform: 'translateX(100%)', opacity: 0.5 },
+          '100%': { transform: 'translateX(100%)', opacity: 0 },
+        },
+
+        FlyIn: {
+          //at 0 the element doesnt apear as it is at the right of the screen and it is rotated  73 degree and then it goes to the left and it is rotated -73 degree and then translate up and down 20px
+          //AFter that it goes to the left and it is rotated -10 degree and then it goes to the right and it is rotated 10 degree forever
+          '0%': { transform: 'translateX(100%) rotate(73deg)' },
+          '50%': { transform: 'translateX(-10%) rotate(-10deg)' },
+          '100%': { transform: 'translateX(0%) rotate(0deg)', },
+        },
+        RotateLeftRightAnime: {
+          '0%': { transform: 'rotate(0deg)' },
+          '50%': { transform: 'rotate(2deg)' },
+          '100%': { transform: 'rotate(0deg)' },
+        },
+        FlyInRight: {
+          '0%': { transform: 'translateX(100%) ' },
+          '50%': { transform: 'translateX(-10%) ' },
+          '100%': { transform: 'translateX(0%) ' },
+        },
+        FlyInLeft: {
+          '0%': { transform: 'translateX(-100%) ' },
+          '50%': { transform: 'translateX(10%) ' },
+          '100%': { transform: 'translateX(0%) ' },
+        },
+
+
+      },
+      animation: {
+        // Bounces 5 times 1s equals 5 seconds
+        'spinSlow': 'spin 4s ease-in-out infinite',
+        'bounceSlow': 'bounce 4s ease-in-out 4',
+        'FlyAnim': 'Fly 4s ease-in-out infinite',
+        "FlyInAnim": "FlyIn 4s ease-in-out 1",
+        "LeftRightAnim": "RotateLeftRightAnime 6s ease-in-out infinite",
+        "FlyInRightAnim": "FlyInRight 2s ease-in-out 1",
+        "FlyInLeftAnim": "FlyInLeft 1s ease-in-out 1,",
+
+        //Add FlyinLeft after a delay of 1 second and then add FlyInAnim after a delay of 4 seconds
+
+      },
       colors: {
         "navbar": "#24252A",
         "navlink": "#D7D8DD",
@@ -102,6 +152,7 @@ module.exports = {
         'Beg': "linear-gradient(#2f8608, #52EB0E)",
         'Int': "linear-gradient(#C29904, #FDE143)",
         'Adv': "linear-gradient(#B20000, #FF4542)",
+        "Dark": "linear-gradient(#222222, #202126)",
       }),
       textShadow: {
         'engraved': 'rgba(255, 255, 255, 0.15) 0.5px 1px 0.5px',
@@ -112,5 +163,19 @@ module.exports = {
     require('@tailwindcss/line-clamp'),
     require('tailwindcss-textshadow'),
     rotateY,
+    plugin(({ matchUtilities, theme }) => {
+      matchUtilities(
+        {
+          "animation-delay": (value) => {
+            return {
+              "animation-delay": value,
+            };
+          },
+        },
+        {
+          values: theme("transitionDelay"),
+        }
+      );
+    }),
   ],
 }

@@ -3,17 +3,19 @@ import RateSection from "../rate/RateSection";
 import ReviewSection from "./ReviewSection";
 
 type Props = {
-  review: [{
+  review: {
     username: string,
     reviewBody: string,
     rating: number
-  }]
+  }[]
   SetReviewModalOpen: (value: boolean) => void
 
 };
 
 
 const CourseContentReviews = (props: Props) => {
+  console.log(props.review.length)
+
 
   return (
     <div className=" my-40 ">
@@ -21,7 +23,7 @@ const CourseContentReviews = (props: Props) => {
         {<ReviewSection review={props.review}></ReviewSection>}
       </div>
       <div className="flex justify-start">
-        {props.review.length > 3 && <button onClick={() => { props.SetReviewModalOpen(true) }} className="px-4 py-2 border-2 rounded-md mt-4">
+        {props.review.length == 3 && <button onClick={() => { props.SetReviewModalOpen(true) }} className="px-4 py-2 border-2 rounded-md mt-4">
           Show more
         </button>}
 

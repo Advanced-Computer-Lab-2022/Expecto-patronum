@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TextBox from '../shared/textbox/TextBox'
 import SectionTitle from './SectionTitle'
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -7,10 +7,13 @@ import MainButton from '../shared/button/MainButton';
 import { ReqRepInterface } from './Tickets';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import axios from 'axios';
+import Status from './Status';
 
 type Props = {
   data: ReqRepInterface,
   SetBack: () => void
+  FollowupPressed: boolean,
+  SetFollowupPressed: (value: boolean) => void
 
 }
 
@@ -19,7 +22,25 @@ const TicketDetails = (props: Props) => {
   const [Loading, setLoading] = useState(false);
   const [Error, setError] = useState(false);
 
+
   const FollowUpRef = React.createRef<HTMLTextAreaElement>();
+  const FollowUpButtonRef: React.RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();;
+
+
+
+  useEffect(() => {
+    console.log(props.FollowupPressed)
+    if (props.FollowupPressed && FollowUpButtonRef.current) {
+      console.log("ODASDKAODM AWOMD AOIWND AIO")
+      SetShowFollowUp(true)
+      props.SetFollowupPressed(false)
+      //Scrolll to the buttom of the page
+      // window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+      FollowUpButtonRef.current.scrollIntoView({ behavior: "smooth", block: 'center', inline: "nearest" });
+
+
+    }
+  }, [props.FollowupPressed])
 
   function handleClick() {
     SetShowFollowUp(true)
@@ -61,9 +82,9 @@ const TicketDetails = (props: Props) => {
       <div className={Container}>
 
         <div
-          className={"absolute top-0 right-0 w-18 h-8 shadow-md cursor-pointer ease-in duration-300 hover:shadow-sm flex items-center justify-center rounded-b-lg" + " " + (props.data.status == "Pending" ? Pending : props.data.status == "Resolved" ? Resolved : Unseen)}
+          className={"absolute rounded-b-md top-0 right-0 shadow-md cursor-pointer ease-in duration-300 hover:shadow-sm flex items-center justify-center "}
         >
-          {props.data.status}
+          <Status rounded={false} status={props.data.status.toLocaleLowerCase()}></Status>
         </div>
 
         <div className={OptionsCont}>
@@ -88,15 +109,15 @@ const TicketDetails = (props: Props) => {
         </div>
 
         {
-          !ShowFollowUp &&
-          <div onClick={handleClick} className={CreateFollowUp}>
+          !ShowFollowUp && props.data.status.toLocaleLowerCase() !== 'resolved' &&
+          <div ref={FollowUpButtonRef} onClick={handleClick} className={CreateFollowUp}>
             <p className={CreateNoteText}>Follow up</p>
             <AiFillPlusCircle fontSize={20} ></AiFillPlusCircle>
           </div>
         }
         {
           ShowFollowUp &&
-          <div>
+          <div >
             <div className="mt-4">
               <TextBox Ref={FollowUpRef} LabelTitle="Follow Up" ></TextBox>
             </div>

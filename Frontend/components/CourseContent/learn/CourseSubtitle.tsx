@@ -6,6 +6,8 @@ import { OneSubtitleData } from "../../../Interface//NotPurchasedCourse/OneSubti
 
 type Props = {
   Data: OneSubtitleData
+  OpenFirst: boolean;
+  index: number;
 };
 
 const CourseSubtitle = (props: Props) => {
@@ -13,6 +15,17 @@ const CourseSubtitle = (props: Props) => {
   const [onClick, SetonClick] = React.useState(false);
   const [ShowSubtitle, SetShowSubtitle] = React.useState(false);
   let Hours = Math.floor(props.Data.totalMinutes / 60);
+  console.log("////////////////////////////")
+  console.log(props.Data)
+  console.log("////////////////////////////")
+
+  React.useEffect(() => {
+    if (props.index === 0) {
+      if (props.OpenFirst) {
+        SetShowSubtitle(true);
+      }
+    }
+  }, [props.OpenFirst]);
 
   return (
     <div className="mb-4 ">

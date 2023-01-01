@@ -47,4 +47,4 @@ const VideoPlayer: React.FC<Video> = ({ videoData, VideoOpen, SetVideoOpen, SetV
 };
 
 export default VideoPlayer;
-const VideoPlayerContainer = classNames(" p-6 bg-black");
+const VideoPlayerContainer = classNames(" p-6 bg-black  z-50");

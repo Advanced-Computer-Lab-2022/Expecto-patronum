@@ -9,7 +9,6 @@ let transporter = nodemailer.createTransport({
   },
 });
 module.exports.MailValidate = async (userMail, route, Token) => {
-  console.log(userMail)
   let info = await transporter.sendMail({
     from: 'CandianEG1@outlook.com', // sender address
     to: userMail, // list of receivers

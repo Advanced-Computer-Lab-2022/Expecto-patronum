@@ -20,6 +20,8 @@ const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
   const [NavApear, SetNavApear] = useState(false);
   const [ReviewModalOpen, SetReviewModalOpen] = useState(false);
 
+
+  console.log(props.data.course)
   const CourseHeroData: CourseHeroData = {
     title: props.data.course.title,
     summary: props.data.course.summary,
@@ -47,6 +49,8 @@ const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
     lastname: props.data.instructor.lastname,
 
   }
+  const RatingData: { one: number, two: number, three: number, four: number, five: number, avg: number } = props.data.course.rating
+
 
 
   let ref1 = useRef<HTMLDivElement>(null);
@@ -60,33 +64,35 @@ const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
   return (
 
     <div>
-      {/* {NavApear && (
+      {NavApear && (
         <CourseContentNav
           refs={[ref1, ref2, ref3, ref4, ref5]}
         ></CourseContentNav>
 
-      )} */}
+      )}
 
 
-
-      <div ref={ref1}>
-        <CourseContentHero courseContentData={CourseHeroData} SetNavApear={SetNavApear}></CourseContentHero>
-      </div>
-      <div className="ml-20">
-        <div ref={ref2}>
-          <CourseContentLearn Subtitles={CourseLearnData}></CourseContentLearn>
+      <div className="overflow-hidden">
+        <div ref={ref1}>
+          <CourseContentHero courseContentData={CourseHeroData} SetNavApear={SetNavApear}></CourseContentHero>
         </div>
-        <div ref={ref3}>
-          <CourseContentInstructor instructorData={instructorData} ></CourseContentInstructor>
-        </div>
-        {
-          props.data.course.review && props.data.course.review.length > 0 &&
-          <div ref={ref4}>
-            <CourseContentReviews SetReviewModalOpen={SetReviewModalOpen} review={props.data.course.review}></CourseContentReviews>
+        <div className="ml-20">
+          <div >
+            <CourseContentLearn refdata={ref2} Subtitles={CourseLearnData}></CourseContentLearn>
           </div>
-        }
+          <div >
+            <CourseContentInstructor refdata={ref3} instructorData={instructorData} ></CourseContentInstructor>
+          </div>
+          {
+            props.data.course.review && props.data.course.review.length > 0 &&
+            <div ref={ref4}>
+              <CourseContentReviews SetReviewModalOpen={SetReviewModalOpen} review={props.data.course.review}></CourseContentReviews>
+            </div>
+          }
+        </div>
+        {ReviewModalOpen && (<CourseReviewModal RatingData={RatingData} SetOpen={SetReviewModalOpen} />)}
       </div>
-      {ReviewModalOpen && (<CourseReviewModal SetOpen={SetReviewModalOpen} />)}
+
     </div >
   );
 };

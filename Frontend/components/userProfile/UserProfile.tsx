@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import { useRouter } from 'next/router'
 import React, { useContext } from 'react'
 import DataContext from '../../context/DataContext'
 import AccountInfo from './AccountInfo'
@@ -9,7 +10,9 @@ import Wallet from './Wallet'
 type Props = {}
 
 const UserProfile = (props: Props) => {
+
   const { Profile, SetProfile } = useContext(DataContext);
+
 
   return (
     <div className={Container}>
