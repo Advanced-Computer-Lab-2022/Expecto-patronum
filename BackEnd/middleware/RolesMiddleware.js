@@ -6,7 +6,7 @@ module.exports.isInstructor = (req, res, next) => {
   if (req.user.role === "Instructor") {
     next();
   } else {
-    res.send('<h1>You are not Authorized</h1>');
+    res.status(401).send({ Error: true, Message: "You are not authorized" });
 
   }
 }
@@ -16,18 +16,18 @@ module.exports.isAdmin = (req, res, next) => {
   if (req.user.role === "Admin") {
     next();
   } else {
-    res.send('<h1>You are not Authorized</h1>');
+    res.status(401).send({ Error: true, Message: "You are not authorized" });
 
   }
 
 }
 
 
-module.exports.isCorporateTrainee = (req, res, next) => {
-  if (req.user.role === "CorpTrainee") {
+module.exports.isUser = (req, res, next) => {
+  if (req.user.role === "User") {
     next();
   } else {
-    res.send('<h1>You are not Authorized</h1>');
+    res.status(401).send({ Error: true, Message: "You are not authorized" });
 
   }
 
