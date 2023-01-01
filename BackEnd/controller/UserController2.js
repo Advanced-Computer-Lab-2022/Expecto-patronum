@@ -553,12 +553,15 @@ async function removeCourseReview(req, res, next) {
   courseId = req.body.courseId;
   try {
 
-    const reviewx = await CourseTable.updateOne({ "_id": courseId, "review.username": username },
-      { "$pull": { "review.$.username": username } }
+    // var x=await CourseTable.findById(courseId)
+    // res.send(x.review);
+    console.log(username);
+    const reviewx = await CourseTable.updateOne({ "_id": courseId },
+      { $pull: { "review":{"username":username }}},
     );
 
     const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
-      { "$set": { "purchasedCourses.$.courseReview": null, "purchasedCourses.$.courseRating": null } }
+      { $set: { "purchasedCourses.$.courseReview": null, "purchasedCourses.$.courseRating": 0 } }
     );
 
     res.sendStatus(200);
@@ -579,7 +582,7 @@ async function removeInstructorReview(req, res, next) {
   instructorId = req.body.instructorId;
   try {
     const reviewx = await User.updateOne({ "_id": instructorId, "instructorReview.username": username },
-      { "$pull": { "instructorReview.$.username": username } }
+      { "$pull": { "instructorReview":{"username":username} } }
     );
 
     const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
