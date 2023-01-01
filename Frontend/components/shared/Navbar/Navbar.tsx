@@ -6,6 +6,7 @@ import BurgerButton from "./BurgerButton/BurgerButton";
 import SelectCountry from "./SelectCountry/SelectCountry";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 interface ContextState {
   isCurtainOpen: any;
@@ -33,14 +34,8 @@ function Navbar() {
     SetRoleIndex(RoleIndexData);
   })
 
-
-
-
-
-
-
   useEffect(() => {
-    global.window.location.pathname === '/Login' ? parentRef.current.classList.add('hidden') : parentRef.current.classList.remove('hidden');
+    global.window.location.pathname === '/Auth' ? parentRef.current.classList.add('hidden') : parentRef.current.classList.remove('hidden');
   }, [global.window?.location.pathname])
 
   return (
@@ -60,7 +55,7 @@ const GuestNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => 
     <div className="flex">
       <SearchBar />
       <div ref={props.curtainRef} className={`h-[${props.curtainRef.current?.children.length ? props.curtainRef.current?.children.length * 2 : ''}rem] ${navContentDiv}`}>
-        <Link className={navWideButton} href='/Login?isLogin=false' as='/Login'>
+        <Link className={navWideButton} href='/Auth?isLogin=false' as='/Auth'>
           Sign Up
         </Link>
         <hr className="nv:hidden" />
@@ -69,7 +64,7 @@ const GuestNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => 
         </a>
       </div>
       <div className={navIconsDiv}>
-        <a className={navButton} href="/Login">
+        <a className={navButton} href="/Auth">
           <AiOutlineUser className={navButtonIcon} />
         </a>
         <SelectCountry />
