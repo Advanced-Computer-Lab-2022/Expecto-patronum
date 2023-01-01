@@ -46,6 +46,6 @@ export interface AllCourseDataInterface {
   review: [],
   courseImage: string,
   __v: number,
-  finalExam: number
+  finalExam: string
 }
 

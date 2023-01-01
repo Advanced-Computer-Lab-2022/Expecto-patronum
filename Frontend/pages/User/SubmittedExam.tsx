@@ -25,6 +25,8 @@ type Props = {
 const SubmittedExam = (props: Props) => {
 
     const [totalGrade, settotalGrade] = useState<number>(0);
+
+
     const [questions, setQuestions] = useState(
         [{
             problem: "",
@@ -79,7 +81,10 @@ const SubmittedExam = (props: Props) => {
             },
         }).then(
             (res) => {
-                console.log(res.data);
+                console.log(".///////////////////////////////////")
+                console.log(res.data.yourGrade);
+                console.log(".///////////////////////////////////")
+                settotalGrade(res.data.yourGrade);
                 const q = res.data.questions;
                 setQuestions(q);
                 const a = res.data.yourAnswers;
@@ -114,20 +119,8 @@ const SubmittedExam = (props: Props) => {
                     }
                 }
             }
-            var Grade = (correctAnswers / questions.length) * 100
-            settotalGrade(Grade);
 
-            if (props.isFinal) {
-                //@ts-ignore
-                html2canvas(document.querySelector('#certificate-template')).then(async canvas => {
-                    console.log(canvas.toDataURL('image/jpeg', 0.5));
-                    Response = await axios.post("http://localhost:5000/User/RecieveMail", {
-                        dataUrl: canvas.toDataURL('image/jpeg', 0.5),
-                    })
-                });
-            }
-
-            if (Grade >= 50) {
+            if (totalGrade >= 50) {
                 viewPopupMessage(true, "Congratulations You have Passed The Exerceise keep it up!");
             } else {
                 viewPopupMessage(false, "You have Failed The Excercise!");
@@ -152,7 +145,8 @@ const SubmittedExam = (props: Props) => {
 
     async function HandleClick() {
         SetLoadingBack(true);
-        await router.push("/User/UserCourse/" + (typeof router.query.courseID === 'string' ? router.query.courseID : ""));
+        //@ts-ignore
+        await router.push(`/User/UserCourse/${encryptId(decryptId(router.query.courseID))}`);
         SetLoadingBack(false);
 
     }
@@ -197,6 +191,7 @@ const SubmittedExam = (props: Props) => {
                     </button> */}
                 </div>
             </div>
+
 
         </form>
     );

@@ -20,7 +20,7 @@ const SubmittedFinalExam = () => {
         choices: ["", ""],
         answer: "",
     }]);
-    const [myAnswers, setMyAnswers] = useState([""]); 
+    const [myAnswers, setMyAnswers] = useState([""]);
     const { viewPopupMessage } = useContext(PopupMessageContext);
     const router = useRouter();
     useEffect(() => {
@@ -44,24 +44,24 @@ const SubmittedFinalExam = () => {
         // console.log(router.query.exerciseID);
         await axios.get('http://localhost:5000/User/viewAnswers', {
             params: {
-                courseID:router.query.courseID,
-                exerciseID:router.query.exerciseID,
+                courseID: router.query.courseID,
+                exerciseID: router.query.exerciseID,
             },
-          }).then(
+        }).then(
             (res) => {
-             
+
                 console.log(res);
                 const q = res.data.questions;
                 setQuestions(q);
-                const a=res.data.yourAnswers;
+                const a = res.data.yourAnswers;
                 setMyAnswers(a);
 
             });
 
     }
-    function GetChosenAnswerIndex(McQ: string[],Answer: String) {
-        for(var i=0;i<McQ.length;i++){
-            if (McQ[i]==Answer){
+    function GetChosenAnswerIndex(McQ: string[], Answer: String) {
+        for (var i = 0; i < McQ.length; i++) {
+            if (McQ[i] == Answer) {
                 return i;
             }
         }
@@ -71,18 +71,18 @@ const SubmittedFinalExam = () => {
         var correctAnswers = 0;
         for (var i = 0; i < questions.length; i++) {
             const QuestionChoices = document.getElementsByClassName("Q" + i) as any;
-               var x=  GetChosenAnswerIndex(questions[i].choices,myAnswers[i]); 
-               console.log(x);
-                if (questions[i].answer === myAnswers[i] && questions[i].answer!="") {
-                    correctAnswers++;
-                    if (QuestionChoices[x].nextElementSibling != null) {
-                        QuestionChoices[x].nextElementSibling.className = rightAnswer;
-                    }
-                } else if(x !=-1 && questions[i].answer!=""){
-                    if (QuestionChoices[x].nextElementSibling != null) {
-                        QuestionChoices[x].nextElementSibling.className = wrongAnswer;
-                    }
+            var x = GetChosenAnswerIndex(questions[i].choices, myAnswers[i]);
+            console.log(x);
+            if (questions[i].answer === myAnswers[i] && questions[i].answer != "") {
+                correctAnswers++;
+                if (QuestionChoices[x].nextElementSibling != null) {
+                    QuestionChoices[x].nextElementSibling.className = rightAnswer;
                 }
+            } else if (x != -1 && questions[i].answer != "") {
+                if (QuestionChoices[x].nextElementSibling != null) {
+                    QuestionChoices[x].nextElementSibling.className = wrongAnswer;
+                }
+            }
         }
         settotalGrade((correctAnswers / questions.length) * 100);
         // const timer = document.getElementById("timer");
@@ -96,15 +96,15 @@ const SubmittedFinalExam = () => {
     }, [questions])
 
     useEffect(() => {
-        if(totalGrade >= 50) {
+        if (totalGrade >= 50) {
             viewPopupMessage(true, "Congratulations You have Passed The Exam and Received certificate on Your Mail!");
-             // html2canvas(document.querySelector('#certificate-template')).then(async canvas => {
+            // html2canvas(document.querySelector('#certificate-template')).then(async canvas => {
             //     console.log(canvas.toDataURL('image/jpeg', 0.5));
             //     Response = await axios.post("http://localhost:5000/User/RecieveMail", {
             //       dataUrl: canvas.toDataURL('image/jpeg', 0.5),
             //     })
             //   });
-        }else{
+        } else {
             viewPopupMessage(false, "You have Failed The Exam,heads Up you can retake it later!");
         }
     }, [totalGrade])

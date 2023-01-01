@@ -25,6 +25,20 @@ const Subtitle = (props: Props) => {
   const { ContentChoosen, SetContentChoosen, WatchedVideos, SolvedExercises } = React.useContext(DataContext);
 
   const [ShowSubtitle, SetShowSubtitle] = React.useState(props.subtitle._id === ContentChoosen?.SubtitleID);
+  const [SolvedBefore, SetSolvedBefore] = React.useState(false);
+
+  useEffect(() => {
+
+    if (props.subtitle.exercise) {
+      for (let i = 0; i < SolvedExercises.length; i++) {
+        if (SolvedExercises[i].excerciseID == props.subtitle.exercise[0]?.exerciseID) {
+          SetSolvedBefore(true)
+        }
+
+      }
+    }
+  }, [])
+
 
 
   // let Hours = Math.floor(props.subtitle.totalMinutes / 60);
@@ -107,7 +121,7 @@ const Subtitle = (props: Props) => {
                 (
                   (props.subtitle._id === ContentChoosen?.SubtitleID) && (props.subtitle.exercise[0]!.exerciseID === ContentChoosen.ContentID))
                 && SelectedContent)}>
-            <input type="checkbox" checked={SolvedExercises.findIndex((Ex) => { Ex.excerciseID == props.subtitle.exercise[0]?.exerciseID }) !== -1} className={CheckBox} />
+            <input type="checkbox" checked={SolvedBefore} className={CheckBox} />
             <div className={ContentDataContainer} >
               <h1 className={ContentHeader}>{props.subtitle.contents.length + 1}.{props.subtitle.exercise[0]!.exerciseName}</h1>
               <div className={ContetnSubheaderContainer}>

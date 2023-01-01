@@ -904,8 +904,10 @@ async function takeExam(req, res, next) {
       "courseID": 1,
       "exerciseTitle": 1,
       "questions": 1,
-      "totalGrade": 1
+      "totalGrade": 1,
+      "subtitleName": 1
     });
+
     res.status(200).json(exam);
   }
   catch (err) {
@@ -966,7 +968,6 @@ async function unbuyCourse(req, res, next) {
 
 async function submitAnswer(req, res) {
   try {
-    var grade = req.body.grade;
     var user_id = req.user._id;
     var counter = 0;
     var course_id = req.body.courseID;
@@ -980,6 +981,9 @@ async function submitAnswer(req, res) {
         counter++
       }
     }
+    var grade = (counter / answers.length) * 100
+
+
 
 
     var exists = await User.findOne({ "purchasedCourses.excercises.excerciseID": excerciseID, "_id": user_id })
@@ -997,7 +1001,7 @@ async function submitAnswer(req, res) {
           }
         }
       );
-      res.send(re);
+      res.send({ grade: grade });
     }
     else {
       const re = await User.updateOne({ "_id": user_id, "purchasedCourses.courseID": course_id },
@@ -1008,7 +1012,7 @@ async function submitAnswer(req, res) {
           }
         }
       );
-      res.send(re);
+      res.send({ grade: grade });
     }
 
 
