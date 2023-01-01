@@ -528,22 +528,20 @@ async function payWithWallet(req, res, next) {
 
 const { jsPDF } = require("jspdf")
 async function RecieveMail(req, res, next) {
-  userId = req.user._id;
-  // var fs = require('fs');
+  var userId = req.user._id;
   var string = req.body.dataUrl;
-  // var email=await User.findById(userId).select({"email":1});
+  var email=await User.findById(userId).select({"email":1});
+  const doc = new jsPDF();
+  doc.addImage(string, 'JPEG', 15, 15, 170, 0);
+  doc.save("Course_Completion_Certificate.pdf");
+  ReceiveCertificate(email);
+  // var fs = require('fs');
   // var regex = /^data:.+\/(.+);base64,(.*)$/;
   // var matches = string.match(regex);
   // var ext = matches[1];
   // var data = matches[2];
   // var buffer = Buffer.from(data, 'base64');
   // fs.writeFileSync('Certificate.jpeg', buffer);
-  const doc = new jsPDF();
-  doc.addImage(string, 'JPEG', 15, 15, 170, 0);
-  doc.save("Course_Completion_Certificate.pdf");
-
-
-  ReceiveCertificate("CandianChamber123@outlook.com")
 };
 
 

@@ -129,7 +129,7 @@ viewPopupMessage(true, "Refund Rejected");
   
   return (
     <Layout>
-      <form id='course-form' className='w-full mx-4'>
+      <form id='course-form' className='w-full mx-4 h-full'>
         <div className='row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl '>
         <h6 className='text-center text-2xl text-navbar p-0'>Refund Requests</h6>
         <div className="flex flex-col p-0">

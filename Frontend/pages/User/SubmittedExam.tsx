@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import SubmittedExamCards from "../../components/exam/SubmittedExamCards";
-import ExamHeader from "../../components/exam/ExamHeader";
 import classNames from "classnames";
 import { PopupMessageContext } from '../_app';
 import { useRouter } from "next/router";
+
 
 const wrongAnswer = classNames(
     "inline-flex justify-between items-center p-5 w-full text-red-500 bg-white rounded-lg border-2 border-red-500"
@@ -45,7 +45,6 @@ const SubmittedExam = () => {
         // console.log(router.query.exerciseID);
         await axios.get('http://localhost:5000/User/viewAnswers', {
             params: {
-                userID:"6383d9da6670d09304d2b016", 
                 courseID:router.query.courseID,
                 exerciseID:router.query.exerciseID,
             },
@@ -91,6 +90,7 @@ const SubmittedExam = () => {
 
         if(Grade >= 50) {
             viewPopupMessage(true, "Congratulations You have Passed The Exerceise keep it up!");
+
         }else{
             viewPopupMessage(false, "You have Failed The Excercise!");
             console.log("sad");
@@ -112,7 +112,6 @@ const SubmittedExam = () => {
             className="row mx-4  h-full"
     
         >
-            {/* <ExamHeader></ExamHeader> */}
             {questions.map((question, index) => (
                 <SubmittedExamCards key={index} QuestionData={question} Index={index} />
             ))}

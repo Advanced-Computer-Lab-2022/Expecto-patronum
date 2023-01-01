@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import Input from "../../components/shared/Input/Input";
-import SideBar from "../../components/AdminTool/SideBar";
-import AdminHeader from "../../components/AdminTool/AdminHeader";
 import CompPagination from "../../components/shared/pagination/CompPagination";
-import Datepicker from "../../components/AdminTool/DatePicker";
+// import Datepicker from "../../components/AdminTool/DatePicker";
+import Datepicker from "react-tailwindcss-datepicker"; 
 import { PopupMessageContext } from '../_app';
-import { Layers } from "@mui/icons-material";
+
 import Layout from "./Layout";
 
 type Props = {};
@@ -229,7 +228,7 @@ const Promotions = (props: Props) => {
   }
   return (
     <Layout>
-        <form id="course-form" className="w-full mx-4">
+        <form id="course-form" className="w-full h-full mx-4">
           <div className="row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl ">
             <h6 className="text-center text-2xl text-navbar">Courses</h6>
             <div className="relative shadow-md sm:rounded-lg">

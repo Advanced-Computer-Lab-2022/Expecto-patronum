@@ -155,12 +155,12 @@ const SideBar = () => {
                <HiUsers className="w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-100"></HiUsers>
                <span
                  className="flex-1 ml-3 text-left whitespace-nowrap"
-                 sidebar-toggle-item
+    
                >
                  Users
                </span>
                <svg
-                 sidebar-toggle-item
+  
                  className="w-6 h-6"
                  fill="currentColor"
                  viewBox="0 0 20 20"
