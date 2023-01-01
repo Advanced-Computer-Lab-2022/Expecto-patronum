@@ -6,6 +6,8 @@ import AdminHeader from "../../components/AdminTool/AdminHeader";
 import CompPagination from "../../components/shared/pagination/CompPagination";
 import Datepicker from "../../components/AdminTool/DatePicker";
 import { PopupMessageContext } from '../_app';
+import { Layers } from "@mui/icons-material";
+import Layout from "./Layout";
 
 type Props = {};
 var response = null;
@@ -226,10 +228,7 @@ const Promotions = (props: Props) => {
     }
   }
   return (
-    <aside>
-      {/* <AdminHeader /> */}
-      <div className="flex">
-        <SideBar></SideBar>
+    <Layout>
         <form id="course-form" className="w-full mx-4">
           <div className="row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl ">
             <h6 className="text-center text-2xl text-navbar">Courses</h6>
@@ -449,10 +448,7 @@ const Promotions = (props: Props) => {
             />
           </div>
         </form>
-      </div>
-
-      <script src="https://unpkg.com/flowbite@1.4.5/dist/flowbite.js"></script>
-    </aside>
+        </Layout>
   );
 };
 

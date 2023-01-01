@@ -5,6 +5,7 @@ import AdminHeader from '../../components/AdminTool/AdminHeader';
 import classNames from "classnames";
 import CompPagination from "../../components/shared/pagination/CompPagination";
 import { PopupMessageContext } from '../_app';
+import Layout from './Layout';
 
 
 const pending = classNames(
@@ -127,10 +128,7 @@ viewPopupMessage(true, "Refund Rejected");
 }
   
   return (
-    <aside>
-    {/* <AdminHeader/> */}
-    <div className="flex sb-max:min-h-fit">
-      <SideBar></SideBar>
+    <Layout>
       <form id='course-form' className='w-full mx-4'>
         <div className='row tab mx-auto pt-10 bg-main h-full w-full rounded-t-2xl shadow-xl '>
         <h6 className='text-center text-2xl text-navbar p-0'>Refund Requests</h6>
@@ -227,11 +225,8 @@ viewPopupMessage(true, "Refund Rejected");
               FromLink={false}
             /></div>
         </div>
-        
       </form>
-
-    </div>
-    </aside>
+    </Layout>
   )
 }
 
