@@ -493,9 +493,8 @@ async function generateAmountOwed(req, res) {
 async function viewAmountOwned(req, res, next) {
   try {
 
-    //const Courses = await transactionTable.find({"instructorID":req.body.userID}).sort({transactionDate:1});
     let idToSearch = mongoose.Types.ObjectId(req.user._id);
-    const Courses = await transactionTable.aggregate(
+    const amount = await transactionTable.aggregate(
     [
       { "$match":{ "instructorID": idToSearch}},
       { 
