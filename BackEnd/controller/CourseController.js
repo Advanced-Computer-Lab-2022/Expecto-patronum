@@ -1,6 +1,7 @@
 const Course = require('../models/CourseSchema');
 const schedule = require('node-schedule');
 const User = require('../models/UserSchema');
+const { query } = require('express');
 
 
 schedule.scheduleJob('* * * * *', discountEndDate);
@@ -118,13 +119,14 @@ async function CourseSearch(req, res) {
   var queryCondition = {};
   // var AllfilterResults = null;
   var FinalResult = null;
+  var ratingExist = false;
 
   function Filter() {
     if (PriceFilter != null) {
       queryCondition.discountPrice = { $lte: PriceFilter };
     }
     if (RatingFilter != null) {
-      queryCondition.rating = RatingFilter;
+      ratingExist = true;
     }
     if (SubjectFilter != null) {
       if (typeof SubjectFilter === 'string') {
@@ -142,7 +144,7 @@ async function CourseSearch(req, res) {
   Filter();
   console.log(Object.keys(queryCondition).length)
   console.log(userSearch);
-  if (userSearch === "" && Object.keys(queryCondition).length === 0) {
+  if (userSearch === "" && Object.keys(queryCondition).length === 0 && ratingExist==false) {
     FinalResult = await Course.find().select({
       _id: 1,
       title: 1,
@@ -158,9 +160,26 @@ async function CourseSearch(req, res) {
 
     });;
   }
+    else if (userSearch === "" && Object.keys(queryCondition).length === 0 && ratingExist==true) {
+      FinalResult = await Course.find({"rating.avg" : RatingFilter}).select({
+        _id: 1,
+        title: 1,
+        courseHours: 1,
+        price: 1,
+        discount: 1,
+        discountPrice: 1,
+        courseImage: 1,
+        rating: 1,
+        instructorName: 1,
+        subject: 1,
+        summary: 1
+  
+      });;
+  }
   else {
-    if (userSearch !== "" && Object.keys(queryCondition).length !== 0) {
+    if (userSearch !== "" && Object.keys(queryCondition).length !== 0 && ratingExist==true  ) {
       FinalResult = await Course.find({
+        "rating.avg":RatingFilter,
         $or: [{ title: { $regex: userSearch, $options: "i" } },
         { subject: { $regex: userSearch, $options: "i" } },
         { instructorName: { $regex: userSearch, $options: "i" } }]
@@ -178,10 +197,46 @@ async function CourseSearch(req, res) {
         summary: 1
 
       });
-
+    }
+    else if (userSearch !== "" && Object.keys(queryCondition).length !== 0 && ratingExist==false  ) {
+        FinalResult = await Course.find({
+          $or: [{ title: { $regex: userSearch, $options: "i" } },
+          { subject: { $regex: userSearch, $options: "i" } },
+          { instructorName: { $regex: userSearch, $options: "i" } }]
+        }).and(queryCondition).select({
+          _id: 1,
+          title: 1,
+          courseHours: 1,
+          price: 1,
+          discount: 1,
+          discountPrice: 1,
+          courseImage: 1,
+          rating: 1,
+          instructorName: 1,
+          subject: 1,
+          summary: 1
+  
+        });
 
     } else {
-      if (userSearch === "" && Object.keys(queryCondition).length !== 0) {
+      
+      if (userSearch === "" && Object.keys(queryCondition).length !== 0 && ratingExist==true) {
+        FinalResult = await Course.find({"rating.avg" : RatingFilter }).and(queryCondition).select({
+          _id: 1,
+          title: 1,
+          courseHours: 1,
+          price: 1,
+          discount: 1,
+          discountPrice: 1,
+          courseImage: 1,
+          rating: 1,
+          instructorName: 1,
+          subject: 1,
+          summary: 1
+
+        });
+      }
+     else if (userSearch === "" && Object.keys(queryCondition).length !== 0 && ratingExist==false) {
         FinalResult = await Course.find(queryCondition).select({
           _id: 1,
           title: 1,
@@ -198,8 +253,29 @@ async function CourseSearch(req, res) {
         });
       }
       else {
-        if (userSearch !== "" && Object.keys(queryCondition).length === 0) {
+        if (userSearch !== "" && Object.keys(queryCondition).length === 0 && ratingExist==false) {
           FinalResult = await Course.find({
+            $or: [{ title: { $regex: userSearch, $options: "i" } },
+            { subject: { $regex: userSearch, $options: "i" } },
+            { instructorName: { $regex: userSearch, $options: "i" } }]
+          }).select({
+            _id: 1,
+            title: 1,
+            courseHours: 1,
+            price: 1,
+            discount: 1,
+            discountPrice: 1,
+            courseImage: 1,
+            rating: 1,
+            instructorName: 1,
+            subject: 1,
+            summary: 1
+
+          });
+        }
+       else if (userSearch !== "" && Object.keys(queryCondition).length === 0 && ratingExist==true) {
+          FinalResult = await Course.find({
+            "rating.avg":RatingFilter,
             $or: [{ title: { $regex: userSearch, $options: "i" } },
             { subject: { $regex: userSearch, $options: "i" } },
             { instructorName: { $regex: userSearch, $options: "i" } }]
