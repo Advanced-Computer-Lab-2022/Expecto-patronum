@@ -23,22 +23,15 @@ function Navbar() {
   const [isCurtainOpen, setIsCurtainOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [RoleIndex, SetRoleIndex] = useState(0);
-
-
-  const roles = ["guest", "instructor", "admin", "user"];
+  const roles = ["guest", "user", "admin", "instructor"];
   const navbarVariations = [<GuestNavbar curtainRef={curtainRef} />, <UserNavbar curtainRef={curtainRef} />, <AdminNavbar curtainRef={curtainRef} />, <InstructorNavbar curtainRef={curtainRef} />];
 
   useEffect(() => {
-    //Get the Role from localStorage if any if not then set it to Guest
-    // let LocalStorage = localStorage.getItem('Role') ? localStorage.getItem('Role') : 'Guest';
-    // let CurrentRole = JSON.parse(LocalStorage as string);
-    // console.log(CurrentRole)
-    // // let RoleIndex = roles.indexOf();
-
-    // SetRoleIndex(RoleIndex);
-
-
-  }, [])
+    let LocalStorage = localStorage.getItem('UserInfo') ? localStorage.getItem('UserInfo') : 'Guest';
+    let CurrentRole = LocalStorage === 'Guest' ? LocalStorage : JSON.parse(LocalStorage as string).role;
+    let RoleIndexData = roles.indexOf(CurrentRole.toLowerCase());
+    SetRoleIndex(RoleIndexData);
+  })
 
 
 

@@ -154,8 +154,9 @@ async function CourseSearch(req, res) {
       rating: 1,
       instructorName: 1,
       subject: 1,
-      summary: 1
-
+      summary: 1,
+      level: 1,
+      purchases: 1,
     });;
   }
   else {
@@ -175,8 +176,9 @@ async function CourseSearch(req, res) {
         rating: 1,
         instructorName: 1,
         subject: 1,
-        summary: 1
-
+        summary: 1,
+        level: 1,
+        purchases: 1,
       });
 
 
@@ -193,8 +195,9 @@ async function CourseSearch(req, res) {
           rating: 1,
           instructorName: 1,
           subject: 1,
-          summary: 1
-
+          summary: 1,
+          level: 1,
+          purchases: 1,
         });
       }
       else {
@@ -214,8 +217,9 @@ async function CourseSearch(req, res) {
             rating: 1,
             instructorName: 1,
             subject: 1,
-            summary: 1
-
+            summary: 1,
+            level: 1,
+            purchases: 1,
           });
         }
       }

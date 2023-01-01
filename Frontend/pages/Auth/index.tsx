@@ -160,9 +160,8 @@ const LoginForm = (props: { setIsLogin: any }) => {
         role: res.data.role
       }
       localStorage.setItem('UserInfo', JSON.stringify(DataToStore));
-
-      SetLoading(false)
-      router.push('/')
+      await router.push('/')
+      SetLoading(false);
 
     }
     catch (error) {

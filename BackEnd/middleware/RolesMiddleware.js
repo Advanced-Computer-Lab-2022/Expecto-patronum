@@ -32,3 +32,23 @@ module.exports.isUser = (req, res, next) => {
   }
 
 }
+
+module.exports.isCorporateTrainee = (req, res, next) => {
+  if (req.user.role === "CorporateTrainee") {
+    next();
+  } else {
+    res.status(401).send({ Error: true, Message: "You are not authorized" });
+
+  }
+
+}
+
+module.exports.isStudent = (req, res, next) => {
+  if (req.user.role === "CorporateTrainee"|| req.user.role === "User" ) {
+    next();
+  } else {
+    res.status(401).send({ Error: true, Message: "You are not authorized" });
+
+  }
+
+}
