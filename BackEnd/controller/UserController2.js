@@ -151,6 +151,8 @@ async function reportProblem(req, res, next) {
     var y = await CourseTable.findOne({ "_id": req.body.courseID }, { _id: 1, title: 1 });
     const result = await problemTable.create({
       type: req.body.type,
+      username:x.username,
+      courseTitle:y.courseTitle,
       userID: req.user._id,
       //status: req.body.status,
       body: req.body.body,
