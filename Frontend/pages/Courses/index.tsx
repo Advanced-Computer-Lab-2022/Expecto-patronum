@@ -22,6 +22,8 @@ export interface AllCoursesData {
 const Courses: NextPage<AllCoursesData> = ({ data }) => {
   const [Loading, SetLoading] = useState(false);
 
+
+
   useEffect(() => {
 
     Router.events.on("routeChangeComplete", () => {
@@ -167,7 +169,8 @@ const Courses: NextPage<AllCoursesData> = ({ data }) => {
 
 
 export async function getServerSideProps(UrlInfo: { resolvedUrl: string }) {
-  let res = await fetch(ApiUrl + UrlInfo.resolvedUrl);
+  console.log(UrlInfo.resolvedUrl)
+  let res = await fetch(ApiUrl + "/Courses");
   let CoursesData = await res.json();
   return {
     props: {

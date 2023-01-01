@@ -154,9 +154,13 @@ const LoginForm = (props: { setIsLogin: any }) => {
         password: data.password
       }, { withCredentials: true })
       //Set this res data to local storage
-      localStorage.setItem('Role', JSON.stringify(res.data.role));
-      localStorage.setItem('FirstName', JSON.stringify(res.data.firstname));
-      localStorage.setItem('LastName', JSON.stringify(res.data.lastname));
+      let DataToStore = {
+        firstname: res.data.firstname,
+        lastname: res.data.lastname,
+        role: res.data.role
+      }
+      localStorage.setItem('UserInfo', JSON.stringify(DataToStore));
+
       SetLoading(false)
       router.push('/')
 
