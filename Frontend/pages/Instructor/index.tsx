@@ -18,14 +18,7 @@ type Props = {}
 const Instructor = (props: Props) => {
 
 
-  useEffect(() => {
-    axios.get(`${ApiUrl}/Instructor`).then((res) => {
-      console.log("/////////////////////////////////")
-      console.log(res.data)
-      console.log("/////////////////////////////////")
 
-    })
-  }, [])
 
   const Amount = [
     {
