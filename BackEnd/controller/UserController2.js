@@ -159,7 +159,7 @@ async function reportProblem(req, res, next) {
       //comment: req.body.comment,
     });
     result.save();
-    
+
     res.status(200).send(result);
   }
   catch (error) {
@@ -253,6 +253,16 @@ async function viewPreviousReports(req, res, next) {
     var userID = req.user._id;
     var problems = await problemTable.find({ "userID": userID }).select({ "type": 1, "body": 1, "startDate": 1, "status": 1 });
     res.send(problems);
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+async function viewPreviousRequests(req, res, next) {
+  try {
+    var userID = req.user._id;
+    var request = await requestTable.find({ "userID": userID }).select({ "type": 1, "body": 1, "startDate": 1, "status": 1, "courseTitle": 1 });
+    res.send(request);
   }
   catch (error) {
     console.log(error);
@@ -467,149 +477,151 @@ async function lastWatched(req, res, next) {
 
 
 
-    async function payWithWallet(req,res,next){
-      try {
-        var userID=req.user._id;
-        var course=await CourseTable.findById(req.body.courseID);
-        const exists = await User.findOne({ "_id":req.user._id,"purchasedCourses.courseID":req.body.courseID });
-        if(exists){
-          res.status(400).send("Course already bought");
-          return;
-        }
-        
-        var wallet=await User.findById(userID).select({"wallet":1,"username":1});
-        if(wallet.wallet<course.price){
-          res.status(400).send("Insufficient funds.");
-        }
-        else{
-          const user = await User.findByIdAndUpdate({ "_id": req.user._id },
-          { $push: { "purchasedCourses":{courseID:req.body.courseID }} }, { new: true });
-  
-          const courses =  await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
-          { $inc: { "purchases": 1 } }, { new: true });
-          const newWallet=await User.findByIdAndUpdate({"_id":userID},{"wallet":wallet.wallet-course.price});
-          res.status(400).send(String(courses));
-  
-          const result = await transactionTable.create({
-            userID: user._id,
-            instructorID: course.instructorID,
-            courseID: course._id,
-            transactionDate: Date.now(),
-            transactionAmount : req.body.amount,
-          });
-          result.save();
-  
-          next();
-  
-        }
-        
-        
-        // }
-  
-    } catch (error) {
-      console.log(error);
-      res.status(400).send({error:error.message});
+async function payWithWallet(req, res, next) {
+  try {
+    var userID = req.user._id;
+    var course = await CourseTable.findById(req.body.courseID);
+    const exists = await User.findOne({ "_id": req.user._id, "purchasedCourses.courseID": req.body.courseID });
+    if (exists) {
+      res.status(400).send("Course already bought");
+      return;
     }
-  };
 
-  
-
-  
-
-  const { jsPDF } = require("jspdf")
-  async function RecieveMail(req, res, next) {
-    userId=req.user._id;
-    // var fs = require('fs');
-    var string =req.body.dataUrl;
-    // var email=await User.findById(userId).select({"email":1});
-    // var regex = /^data:.+\/(.+);base64,(.*)$/;
-    // var matches = string.match(regex);
-    // var ext = matches[1];
-    // var data = matches[2];
-    // var buffer = Buffer.from(data, 'base64');
-    // fs.writeFileSync('Certificate.jpeg', buffer);
-    const doc = new jsPDF();
-    doc.addImage(string, 'JPEG', 15, 15, 170, 0);
-    doc.save("Course_Completion_Certificate.pdf");
-
-  
-    ReceiveCertificate("CandianChamber123@outlook.com")
-  };
-
-
-  async function removeCourseReview(req, res, next) {
-    userId=req.user._id;
-    username = req.user.username;
-    courseId = req.body.courseId;
-    try {
-  
-        const reviewx = await CourseTable.updateOne({ "_id": courseId, "review.username": username },
-          { "$pull": { "review.$.username": username} }
-        );
-  
-        const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
-          { "$set": { "purchasedCourses.$.courseReview": null, "purchasedCourses.$.courseRating": null } }
-        );
-  
-        res.sendStatus(200);
-      
-     
-  
-    } catch (error) {
-      res.status(400).json({ error: error.message })
+    var wallet = await User.findById(userID).select({ "wallet": 1, "username": 1 });
+    if (wallet.wallet < course.price) {
+      res.status(400).send("Insufficient funds.");
     }
-  
-  };
+    else {
+      const user = await User.findByIdAndUpdate({ "_id": req.user._id },
+        { $push: { "purchasedCourses": { courseID: req.body.courseID } } }, { new: true });
+
+      const courses = await CourseTable.findByIdAndUpdate({ "_id": req.body.courseID },
+        { $inc: { "purchases": 1 } }, { new: true });
+      const newWallet = await User.findByIdAndUpdate({ "_id": userID }, { "wallet": wallet.wallet - course.price });
+      res.status(400).send(String(courses));
+
+      const result = await transactionTable.create({
+        userID: user._id,
+        instructorID: course.instructorID,
+        courseID: course._id,
+        transactionDate: Date.now(),
+        transactionAmount: req.body.amount,
+      });
+      result.save();
+
+      next();
+
+    }
 
 
-  async function removeInstructorReview(req, res, next) {
-    userId=req.user._id;
-    username = req.user.username;
-    courseId = req.body.courseId;
-    instructorId = req.body.instructorId;
-    try {
-      const reviewx = await User.updateOne({ "_id": instructorId, "instructorReview.username": username },
+    // }
+
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ error: error.message });
+  }
+};
+
+
+
+
+
+const { jsPDF } = require("jspdf")
+async function RecieveMail(req, res, next) {
+  userId = req.user._id;
+  // var fs = require('fs');
+  var string = req.body.dataUrl;
+  // var email=await User.findById(userId).select({"email":1});
+  // var regex = /^data:.+\/(.+);base64,(.*)$/;
+  // var matches = string.match(regex);
+  // var ext = matches[1];
+  // var data = matches[2];
+  // var buffer = Buffer.from(data, 'base64');
+  // fs.writeFileSync('Certificate.jpeg', buffer);
+  const doc = new jsPDF();
+  doc.addImage(string, 'JPEG', 15, 15, 170, 0);
+  doc.save("Course_Completion_Certificate.pdf");
+
+
+  ReceiveCertificate("CandianChamber123@outlook.com")
+};
+
+
+async function removeCourseReview(req, res, next) {
+  userId = req.user._id;
+  username = req.user.username;
+  courseId = req.body.courseId;
+  try {
+
+    const reviewx = await CourseTable.updateOne({ "_id": courseId, "review.username": username },
+      { "$pull": { "review.$.username": username } }
+    );
+
+    const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
+      { "$set": { "purchasedCourses.$.courseReview": null, "purchasedCourses.$.courseRating": null } }
+    );
+
+    res.sendStatus(200);
+
+
+
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+
+};
+
+
+async function removeInstructorReview(req, res, next) {
+  userId = req.user._id;
+  username = req.user.username;
+  courseId = req.body.courseId;
+  instructorId = req.body.instructorId;
+  try {
+    const reviewx = await User.updateOne({ "_id": instructorId, "instructorReview.username": username },
       { "$pull": { "instructorReview.$.username": username } }
     );
 
     const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
       { "$set": { "purchasedCourses.$.instructorReview": null, 'purchasedCourses.$.instructorRating': null } }
     );
-  
-        res.sendStatus(200);
-      
-     
-  
-    } catch (error) {
-      res.status(400).json({ error: error.message })
-    }
-  
-  };
 
-  async function viewProfileUser(req,res,next){
-    try{
-      var user1=await User.findOne({"_id":req.user._id},{
-        username:1,
-        _id: 1,
-        gender:1,
-        firstname: 1,
-        lastname: 1,
-        email: 1,
-        role:1,
-        wallet:1,
-        paymentMethods:1
-      });
-     
+    res.sendStatus(200);
 
-      res.status(200).send(user1);
-    }
-    catch(error){
-      console.log(error);
-      res.status(400).send({error:error.message});
-    }
+
+
+  } catch (error) {
+    res.status(400).json({ error: error.message })
   }
 
+};
 
-  module.exports = { SelectExercise,viewAnswer,requestCourse,reportProblem,viewPreviousReports,
-    followUpOnProblem,watchVideo,addNote,viewNotes,filterNotes,createTransaction,viewProfileUser,
-    lastWatched,payWithWallet,EditNote,DeleteNote,RecieveMail,removeCourseReview,removeInstructorReview}
+async function viewProfileUser(req, res, next) {
+  try {
+    var user1 = await User.findOne({ "_id": req.user._id }, {
+      username: 1,
+      _id: 1,
+      gender: 1,
+      firstname: 1,
+      lastname: 1,
+      email: 1,
+      role: 1,
+      wallet: 1,
+      paymentMethods: 1
+    });
+
+
+    res.status(200).send(user1);
+  }
+  catch (error) {
+    console.log(error);
+    res.status(400).send({ error: error.message });
+  }
+}
+
+
+module.exports = {
+  SelectExercise, viewAnswer, requestCourse, reportProblem, viewPreviousReports,
+  followUpOnProblem, watchVideo, addNote, viewNotes, filterNotes, createTransaction, viewProfileUser,
+  lastWatched, payWithWallet, EditNote, DeleteNote, RecieveMail, removeCourseReview, removeInstructorReview, viewPreviousRequests
+}

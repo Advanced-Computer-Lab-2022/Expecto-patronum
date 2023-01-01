@@ -28,7 +28,7 @@ function Navbar() {
   const role = roles[1];
 
   useEffect(() => {
-    global.window.location.pathname === '/Login' ? parentRef.current.classList.add('hidden'): parentRef.current.classList.remove('hidden');
+    global.window.location.pathname === '/Login' ? parentRef.current.classList.add('hidden') : parentRef.current.classList.remove('hidden');
   }, [global.window?.location.pathname])
 
   return (
@@ -37,46 +37,46 @@ function Navbar() {
         <Link href="/" className={navLogoDiv}>
           <img className={navLogo} src="/images/logo.png" />
         </Link>
-        {navbarVariations[3]}
+        {navbarVariations[0]}
       </div>
     </curtainSearchSwitching.Provider>
   );
 }
 
-const GuestNavbar = (props: {curtainRef: React.RefObject<HTMLDivElement>}) => {
-  return (
-    <div className="flex">
-          <SearchBar />
-          <div ref={props.curtainRef} className={`h-[${props.curtainRef.current?.children.length ? props.curtainRef.current?.children.length * 2: ''}rem] ${navContentDiv}`}>
-            <Link className={navWideButton} href='/Login?isLogin=false' as='/Login'>
-              Sign Up
-            </Link>
-            <hr className="nv:hidden" />
-            <a className={navLink} href="/Instructor">
-              Inspire Learners
-            </a>
-          </div>
-          <div className={navIconsDiv}>
-            <a className={navButton} href="/Login">
-              <AiOutlineUser className={navButtonIcon} />
-            </a>
-            <SelectCountry />
-            <BurgerButton curtainRef={props.curtainRef} />
-          </div>
-        </div>
-  );
-}
-
-const UserNavbar = (props: {curtainRef: React.RefObject<HTMLDivElement>}) => {
+const GuestNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => {
   return (
     <div className="flex">
       <SearchBar />
-      <div ref={props.curtainRef} className={`h-[${props.curtainRef.current?.children.length ? props.curtainRef.current?.children.length * 2: ''}rem] ${navContentDiv}`}>
-      <Link className={navLink} href='/User'>My courses</Link>
-      <Link className={navLink} href='/User'>My Wishlist</Link>
-      <hr className="nv:hidden" />
-      <Link className={navLink} href='/'>New Opportunities</Link>
-      <Link className={navLink} href="/Instructor">Inspire Learners</Link>
+      <div ref={props.curtainRef} className={`h-[${props.curtainRef.current?.children.length ? props.curtainRef.current?.children.length * 2 : ''}rem] ${navContentDiv}`}>
+        <Link className={navWideButton} href='/Login?isLogin=false' as='/Login'>
+          Sign Up
+        </Link>
+        <hr className="nv:hidden" />
+        <a className={navLink} href="/Instructor">
+          Inspire Learners
+        </a>
+      </div>
+      <div className={navIconsDiv}>
+        <a className={navButton} href="/Login">
+          <AiOutlineUser className={navButtonIcon} />
+        </a>
+        <SelectCountry />
+        <BurgerButton curtainRef={props.curtainRef} />
+      </div>
+    </div>
+  );
+}
+
+const UserNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => {
+  return (
+    <div className="flex">
+      <SearchBar />
+      <div ref={props.curtainRef} className={`h-[${props.curtainRef.current?.children.length ? props.curtainRef.current?.children.length * 2 : ''}rem] ${navContentDiv}`}>
+        <Link className={navLink} href='/User'>My courses</Link>
+        <Link className={navLink} href='/User'>My Wishlist</Link>
+        <hr className="nv:hidden" />
+        <Link className={navLink} href='/'>New Opportunities</Link>
+        <Link className={navLink} href="/Instructor">Inspire Learners</Link>
       </div>
       <div className={navIconsDiv}>
         <Link className={navButton} href='/'>
@@ -92,14 +92,14 @@ const UserNavbar = (props: {curtainRef: React.RefObject<HTMLDivElement>}) => {
   );
 }
 
-const AdminNavbar = (props: {curtainRef: React.RefObject<HTMLDivElement>}) => {
+const AdminNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => {
   return (
     <div className="flex">
       <SearchBar />
-      <div ref={props.curtainRef} className={`h-[${props.curtainRef.current?.children.length ? props.curtainRef.current?.children.length * 2: ''}rem] ${navContentDiv}`}>
+      <div ref={props.curtainRef} className={`h-[${props.curtainRef.current?.children.length ? props.curtainRef.current?.children.length * 2 : ''}rem] ${navContentDiv}`}>
         <Link className={navLink} href='/AdminTool'>My Dashboard</Link>
         <Link className={navLink} href='/'>New Opportunities</Link>
-        <hr className="nv:hidden"/>
+        <hr className="nv:hidden" />
         <Link className={navLink} href='/'>For Enterprises</Link>
         <Link className={navLink} href='/'>For Universities</Link>
       </div>
@@ -116,11 +116,11 @@ const AdminNavbar = (props: {curtainRef: React.RefObject<HTMLDivElement>}) => {
   );
 }
 
-const InstructorNavbar = (props: {curtainRef: React.RefObject<HTMLDivElement>}) => {
+const InstructorNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => {
   return (
     <div className="flex">
       <SearchBar />
-      <div ref={props.curtainRef} className={`h-[${props.curtainRef.current?.children.length ? props.curtainRef.current?.children.length * 2: ''}rem] ${navContentDiv}`}>
+      <div ref={props.curtainRef} className={`h-[${props.curtainRef.current?.children.length ? props.curtainRef.current?.children.length * 2 : ''}rem] ${navContentDiv}`}>
         <Link className={navLink} href='/Instructor'>My Dashboard</Link>
         <Link className={navLink} href='/'>New Opportunities</Link>
       </div>
