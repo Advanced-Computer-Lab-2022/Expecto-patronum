@@ -152,6 +152,8 @@ async function reportProblem(req, res, next) {
     const result = await problemTable.create({
       type: req.body.type,
       userID: req.body.userID,
+      username:x.username,
+      courseTitle:y.courseTitle,
       //status: req.body.status,
       body: req.body.body,
       courseID: req.body.courseID,
