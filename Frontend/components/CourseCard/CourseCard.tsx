@@ -5,6 +5,8 @@ import OneStar from "../shared/rating/OneStar";
 import { CourseData } from "../../Interface/CourseDataInterface";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { AES } from "crypto-js";
+import CourseID from "../../pages/User/UserCourse/[CourseID]";
 
 const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
   const {
@@ -24,9 +26,14 @@ const CourseCard: React.FC<{ CourseData: CourseData }> = ({ CourseData }) => {
   const { Rate, SetRate } = useContext(DataContext);
   let router = useRouter()
 
+  const encryptId = (str: string | CryptoJS.lib.WordArray) => {
+    const ciphertext = AES.encrypt(str, 'secretPassphrase');
+    return encodeURIComponent(ciphertext.toString());
+  }
+  const encryptedId = encryptId(CourseData._id);
 
   return (
-    <Link href={`/Courses/${CourseData._id}`} >
+    <Link href={`/Courses/${encryptedId}`} >
       <div
         onMouseEnter={() => {
           SetFlag(true);

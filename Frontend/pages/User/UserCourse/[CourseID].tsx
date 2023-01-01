@@ -1,18 +1,24 @@
 import axios from 'axios'
 import classNames from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
-import Spinner from '../../components/shared/spinner/Spinner'
-import CourseSideBar from '../../components/UserCourse/CourseSideBar/CourseSideBar'
-import WatchContent from '../../components/UserCourse/WatchContent/WatchContent'
+import Spinner from '../../../components/shared/spinner/Spinner'
+import CourseSideBar from '../../../components/UserCourse/CourseSideBar/CourseSideBar'
+import WatchContent from '../../../components/UserCourse/WatchContent/WatchContent'
 import {
   ImArrowLeft2
 } from 'react-icons/im'
-import UserCourseCard from '../../components/UserHome/UserCourseCard'
-import DataContext from '../../context/DataContext'
-import { AllCourseDataInterface } from '../../Interface/PurchasedCourse/AllCourseDataInterface'
-import ErrorComp from '../../components/shared/Error/ErrorComp'
+import UserCourseCard from '../../../components/UserHome/UserCourseCard'
+import DataContext from '../../../context/DataContext'
+import { AllCourseDataInterface } from '../../../Interface/PurchasedCourse/AllCourseDataInterface'
+import ErrorComp from '../../../components/shared/Error/ErrorComp'
+import { GetServerSidePropsContext } from 'next/types'
+import { ApiUrl } from '../../../constants/constants'
+import router from 'next/router'
+import { AES, enc } from 'crypto-js'
 
-type Props = {}
+type Props = {
+  id: string
+}
 
 const UserCourse = (props: Props) => {
   const [Course, setCourse] = useState<AllCourseDataInterface>();
@@ -24,14 +30,15 @@ const UserCourse = (props: Props) => {
   const [Loading, SetLoading] = useState(true);
   const [Error, SetError] = useState({ Message: "", hasError: false });
 
+
   useEffect(() => {
     async function fetchData() {
       try {
         SetLoading(true);
-        const res = await axios.put("http://localhost:5000/user/selectCourse", {
-          userId: "63af0d5ff8575d5598e11614",
-          courseId: "63a59c23e3b96b22a1dc829f"
+        const res = await axios.put("http://localhost:5000/User/selectCourse", {
+          courseId: props.id
         })
+        console.log(res.data)
         let Coursedata: AllCourseDataInterface = res.data.course
         let Notes = res.data.notes;
         let instructorData = res.data.instructor
@@ -246,7 +253,7 @@ const UserCourse = (props: Props) => {
   if (Course) {
     return (
       <div className={UserCourseContainer + " " + (CloseSideBar && "overflow-x-hidden")}>
-        <WatchContent Next={Next} Prev={Prev} HandleNext={HandleNext} HandlePrev={HandlePrev}></WatchContent>
+        <WatchContent CourseID={props.id} Next={Next} Prev={Prev} HandleNext={HandleNext} HandlePrev={HandlePrev}></WatchContent>
         <CourseSideBar data={Course.subtitles} SetCloseSideBar={SetCloseSideBar} CloseSideBar={CloseSideBar}></CourseSideBar>
         {CloseSideBar && <div onClick={() => { SetCloseSideBar(false) }} className='absolute bg-navbar border-2 cursor-pointer border-white w-10 h-12 border-r-0  flex items-center justify-center top-20  right-0'>
           <ImArrowLeft2 color='white' size={20}></ImArrowLeft2></div>}
@@ -258,3 +265,28 @@ const UserCourse = (props: Props) => {
 export default UserCourse
 
 const UserCourseContainer = classNames("flex justify-between items-start relative ");
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  let id = context.params?.CourseID;
+  if (!id) {
+    return {
+      props: {
+        id: ''
+      }
+    }
+  }
+  const decryptId = (str: string) => {
+    const decodedStr = decodeURIComponent(str);
+    return AES.decrypt(decodedStr, 'secretPassphrase').toString(enc.Utf8);
+  }
+  const decryptedId = decryptId(typeof id === 'string' ? id : "");
+  return {
+    props: {
+      id: decryptedId
+    }
+
+
+  }
+
+
+}

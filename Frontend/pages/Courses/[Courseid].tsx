@@ -14,6 +14,7 @@ import { CourseLearnData } from "../../Interface//NotPurchasedCourse/CourseLearn
 import axios from "axios";
 import { UserCourseDataInterface } from "../../Interface/NotPurchasedCourse/UserCourseDataInterface";
 import CourseReviewModal from "../../components/CourseContent/review/CourseReviewModal";
+import { AES, enc } from "crypto-js";
 
 
 const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
@@ -99,8 +100,15 @@ const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   let id = context.params?.Courseid;
-  let CourseData = await axios.put(ApiUrl + '/user/selectCourse', {
-    courseId: id,
+  const decryptId = (str: string) => {
+    const decodedStr = decodeURIComponent(str);
+    return AES.decrypt(decodedStr, 'secretPassphrase').toString(enc.Utf8);
+  }
+  const decryptedId = decryptId(typeof id === 'string' ? id : "");
+  console.log(decryptedId)
+
+  let CourseData = await axios.put(ApiUrl + '/User/selectCourse', {
+    courseId: decryptedId,
   })
 
   return {

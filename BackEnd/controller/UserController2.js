@@ -64,7 +64,7 @@ async function viewAnswer(req, res, next) {
       _id: 1,
       questions: 1
     });
-    var y = await User.findOne({ "_id": req.query.userID, "purchasedCourses.excercises.excerciseID": req.query.exerciseID },
+    var y = await User.findOne({ "_id": req.user._id, "purchasedCourses.excercises.excerciseID": req.query.exerciseID },
       { purchasedCourses: { $elemMatch: { courseID: req.query.courseID } } }
     );
     console.log(y);
@@ -542,7 +542,6 @@ async function RecieveMail(req, res, next) {
   doc.addImage(string, 'JPEG', 15, 15, 170, 0);
   doc.save("Course_Completion_Certificate.pdf");
 
-
   ReceiveCertificate("CandianChamber123@outlook.com")
 };
 
@@ -598,20 +597,30 @@ async function removeInstructorReview(req, res, next) {
 
 async function viewProfileUser(req, res, next) {
   try {
-    var user1 = await User.findOne({ "_id": req.user._id }, {
-      username: 1,
-      _id: 1,
-      gender: 1,
-      firstname: 1,
-      lastname: 1,
-      email: 1,
-      role: 1,
-      wallet: 1,
-      paymentMethods: 1
+    // var user1 = await User.findOne({ "_id": req.user._id }, {
+    //   username: 1,
+    //   _id: 1,
+    //   gender: 1,
+    //   firstname: 1,
+    //   lastname: 1,
+    //   email: 1,
+    //   role: 1,
+    //   wallet: 1,
+    //   paymentMethods: 1
+    // });
+    var User = req.user
+
+    res.status(200).send({
+      username: User.username,
+      _id: User._id,
+      gender: User.gender,
+      firstname: User.firstname,
+      lastname: User.lastname,
+      email: User.email,
+      role: User.role,
+      wallet: User.wallet,
+      paymentMethods: User.paymentMethods
     });
-
-
-    res.status(200).send(user1);
   }
   catch (error) {
     console.log(error);

@@ -116,7 +116,6 @@ async function CourseSearch(req, res) {
   var userSearch = req.query.keyword || "";
   var CurrentPage = req.query.page ? req.query.page : 1;
   var queryCondition = {};
-  // var AllfilterResults = null;
   var FinalResult = null;
 
   function Filter() {
@@ -227,6 +226,7 @@ async function CourseSearch(req, res) {
   //  var searchResults= ALLsearchResults.skip((CurrentPage - 1) * 5).limit(5);
 
   res.send({ FinalResult: searchFilterResult, TotalCount: TotalCount });
+
 
   // var TotalCount = ALLsearchResults.length;
   // var searchResults = ALLsearchResults.slice((CurrentPage - 1) * 5, CurrentPage * 5);

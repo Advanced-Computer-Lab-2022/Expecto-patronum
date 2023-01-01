@@ -11,6 +11,8 @@ import Router from "next/router";
 import PopupMessage from '../components/shared/PopupMessage/PopupMessage';
 import { FiAlertTriangle, FiCheckCircle } from "react-icons/fi";
 import UserCourseNavbar from "../components/shared/Navbar/UserCourseNavbar/UserCourseNavbar";
+import axios from "axios";
+axios.defaults.withCredentials = true
 
 interface ContextState {
   viewPopupMessage: any,
@@ -61,7 +63,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
           {/* <UserCourseNavbar></UserCourseNavbar> */}
           <PopupMessage ref={popupMessageRef} ticker={ticker} icon={popupIcon} setIsPopupOpen={setIsPopupOpen} />
-          <Component {...pageProps} />
+          <Component
+            {...pageProps}
+          />
           <Footer></Footer>
         </DataProvider>
       </PopupMessageContext.Provider>

@@ -1,3 +1,4 @@
+'use client';
 import React, { useRef, useState, createContext, useEffect } from "react";
 import classNames from "classnames";
 import { AiOutlineUser, AiOutlineBell } from "react-icons/ai";
@@ -6,6 +7,8 @@ import BurgerButton from "./BurgerButton/BurgerButton";
 import SelectCountry from "./SelectCountry/SelectCountry";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import UserCourseNavbar from "./UserCourseNavbar/UserCourseNavbar";
 
 interface ContextState {
   isCurtainOpen: any;
@@ -17,21 +20,21 @@ interface ContextState {
 const curtainSearchSwitching = createContext({} as ContextState);
 
 function Navbar() {
-
   const curtainRef = useRef<HTMLDivElement>(null);
   const parentRef = useRef<any>();
   const [isCurtainOpen, setIsCurtainOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [RoleIndex, SetRoleIndex] = useState(0);
+  let router = useRouter();
   const roles = ["guest", "user", "admin", "instructor"];
   const navbarVariations = [<GuestNavbar curtainRef={curtainRef} />, <UserNavbar curtainRef={curtainRef} />, <AdminNavbar curtainRef={curtainRef} />, <InstructorNavbar curtainRef={curtainRef} />];
-
   useEffect(() => {
     let LocalStorage = localStorage.getItem('UserInfo') ? localStorage.getItem('UserInfo') : 'Guest';
     let CurrentRole = LocalStorage === 'Guest' ? LocalStorage : JSON.parse(LocalStorage as string).role;
     let RoleIndexData = roles.indexOf(CurrentRole.toLowerCase());
     SetRoleIndex(RoleIndexData);
-  })
+
+  }, [])
 
 
 
@@ -39,23 +42,30 @@ function Navbar() {
 
 
 
-  useEffect(() => {
-    global.window.location.pathname === '/Login' ? parentRef.current.classList.add('hidden') : parentRef.current.classList.remove('hidden');
-  }, [global.window?.location.pathname])
+
+
+  // useEffect(() => {
+  //   global.window.location.pathname === '/Login' ? parentRef.current.classList.add('hidden') : parentRef.current.classList.remove('hidden');
+  // }, [global.window?.location.pathname])
 
   return (
-    <curtainSearchSwitching.Provider value={{ isSearchOpen, setIsSearchOpen, isCurtainOpen, setIsCurtainOpen }}>
-      <div ref={parentRef} className={navbar}>
-        <Link href="/" className={navLogoDiv}>
-          <img className={navLogo} src="/images/logo.png" />
-        </Link>
-        {navbarVariations[RoleIndex]}
-      </div>
-    </curtainSearchSwitching.Provider>
+    <div>
+      {router.pathname && router.pathname.split('/')[2] === 'UserCourse' ? <UserCourseNavbar></UserCourseNavbar> :
+        <curtainSearchSwitching.Provider value={{ isSearchOpen, setIsSearchOpen, isCurtainOpen, setIsCurtainOpen }}>
+          <div ref={parentRef} className={navbar}>
+            <Link href="/" className={navLogoDiv}>
+              <img className={navLogo} src="/images/logo.png" />
+            </Link>
+            {navbarVariations[RoleIndex]}
+          </div>
+        </curtainSearchSwitching.Provider>}
+    </div>
   );
-}
+
+};
 
 const GuestNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => {
+
   return (
     <div className="flex">
       <SearchBar />
@@ -80,6 +90,7 @@ const GuestNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => 
 }
 
 const UserNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => {
+
   return (
     <div className="flex">
       <SearchBar />

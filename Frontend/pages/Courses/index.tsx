@@ -169,9 +169,11 @@ const Courses: NextPage<AllCoursesData> = ({ data }) => {
 
 
 export async function getServerSideProps(UrlInfo: { resolvedUrl: string }) {
-  console.log(UrlInfo.resolvedUrl)
-  let res = await fetch(ApiUrl + "/Courses");
+  console.log()
+  let res = await fetch(ApiUrl + UrlInfo.resolvedUrl);
   let CoursesData = await res.json();
+
+
   return {
     props: {
       data: CoursesData,

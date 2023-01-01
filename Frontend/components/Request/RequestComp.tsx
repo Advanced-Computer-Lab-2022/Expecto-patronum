@@ -77,7 +77,7 @@ const RequestComp = (props: Props) => {
         </div>
         <p>We will Respond with in 3 to 5 working days</p>
         <p>Thank you for your patience.</p>
-        <Link href='/User/Profile'>
+        <Link href='/User/Profile?Profile=Tickets'>
           <button className={FormButton}>{props.Type === 'Report' ? "View My Reports" : "View my Refund State"}</button>
         </Link>
 
