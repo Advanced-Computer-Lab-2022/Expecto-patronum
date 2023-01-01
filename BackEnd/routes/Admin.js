@@ -5,7 +5,14 @@ const Admin = require('../models/AdminSchema');
 const { viewAllCourses, viewCourseRequests, grantOrRejectAccess, viewReportedFunctions, markReportedProblem,
   AcceptOrRejectRefund, promotion, cancelPromotion, viewRefundRequests } = require('../controller/AdminController')
 
+router.get('/', (req, res) => {
+  console.log('///////////////////////////////')
+  console.log(req.user)
+  console.log('///////////////////////////////')
 
+  res.send('Hello Admin');
+
+})
 
 router.get("/AllCourses", viewAllCourses);
 

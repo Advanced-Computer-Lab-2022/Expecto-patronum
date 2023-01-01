@@ -7,14 +7,15 @@ import { ApiUrl } from '../../constants/constants';
 
 const index = () => {
 
-  // useEffect(() => {
-  //   axios.get(`${ApiUrl}/Admin`).then((res) => {
-  //     console.log("/////////////////////////////////")
-  //     console.log(res.data)
-  //     console.log("/////////////////////////////////")
+  useEffect(() => {
+    axios.get(`${ApiUrl}/Admin`, { withCredentials: true }).then((res) => {
+      console.log("/////////////////////////////////")
+      console.log(res.data)
+      console.log("/////////////////////////////////")
 
-  //   })
-  // }, [])
+    }
+    )
+  }, [])
 
 
   return (

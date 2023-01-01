@@ -88,7 +88,7 @@ app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 // app.use(express.json({limit: '50mb'}));
 // app.use(express.urlencoded({limit: '50mb'}));
 app.use('/Courses', CoursesRoute);
-app.use('/Admin', AdminRoute);
+app.use('/Admin', isAuth, isAdmin, AdminRoute);
 app.use('/Instructor', isAuth, isInstructor, InstructorRoute);
 app.use('/User', UsersRoute);
 app.use('/CorporateTrainee', CorpTraineeRoute);
