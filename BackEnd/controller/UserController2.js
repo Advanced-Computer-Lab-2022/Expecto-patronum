@@ -530,7 +530,7 @@ const { jsPDF } = require("jspdf")
 async function RecieveMail(req, res, next) {
   var userId = req.user._id;
   var string = req.body.dataUrl;
-  var email=await User.findById(userId).select({"email":1});
+  var email=await User.findById(userId).select({email:1});
   const doc = new jsPDF();
   doc.addImage(string, 'JPEG', 15, 15, 170, 0);
   doc.save("Course_Completion_Certificate.pdf");
