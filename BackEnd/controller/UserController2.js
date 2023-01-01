@@ -73,7 +73,7 @@ async function viewAnswer(req, res, next) {
       var exe = y.purchasedCourses[0].excercises;
       for (var i = 0; i < exe.length; i++) {
         if (exe[i].excerciseID == req.query.exerciseID) {
-          if (exe[i].grade) {
+          if (exe[i].grade ||exe[i].grade==0) {
             q.yourGrade = exe[i].grade;
           }
           q.yourAnswers = exe[i].exercisesAnswers.answer;
