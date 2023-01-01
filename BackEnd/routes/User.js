@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const connection = require('../config/database');
 const { getRate, forgetPassword, ValidateUser, ChangeEmail, UseChangeEmailToken, ChangePassword, ChangeForgottenPassword,
-  giveInstructorRating, selectCourse, giveCourseReview, giveInstructorReview, submitAnswer, takeExam, test, ResendEmail } = require('../controller/UserController');
+  giveInstructorRating, selectCourse, giveCourseReview, giveInstructorReview, submitAnswer, takeExam, ResendEmail } = require('../controller/UserController');
 const { genPassword } = require('../lib/passwordUtils');
 const { VerifyTokenMiddleware } = require('../middleware/VerifyTokenMiddleware');
 const { Charge, addPaymentMethod, getPaymentMethods, deletePaymentMethod } = require('../middleware/StripePayments');
@@ -32,8 +32,6 @@ router.get('/MailVerify/:token', VerifyTokenMiddleware, ValidateUser);
 router.post('/ResendValidationEmail', ResendEmail);
 
 
-
-router.get('/test', test)
 
 router.post('/register', register)
 router.post("/forgetPassword", forgetPassword);
@@ -123,7 +121,7 @@ router.put("/selectCourse", selectCourse);
 
 router.post("/requestCourse", isAuth, isCorporateTrainee, requestCourse);
 
-router.put("/selectExercise", isAuth, SelectExercise);
+router.put("/selectExercise", SelectExercise);
 
 router.put("/giveCourseReview", isAuth, isStudent, giveCourseReview);
 

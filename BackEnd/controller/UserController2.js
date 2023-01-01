@@ -16,44 +16,48 @@ const transactionTable = require('../models/transactionSchema');
 const { ReceiveCertificate } = require("../lib/ReceiveCertificate");
 
 async function SelectExercise(req, res, next) {
-  try {
-    const x = await ExerciseTable.findOne({ "_id": req.body.exerciseID }, {
-      exerciseTitle: 1,
-      totalGrade: 1,
-      _id: 1,
-      averageGrade: { $avg: "$averageMark" }
-    });
-    let q = {};
-    const course = await CourseTable.findOne({ _id: req.body.courseID }, { _id: 1, instructorID: 1 });
-    if (course.instructorID == req.user._id) {
-      res.status(200).send(x);
-      return;
-    }
-    else {
-      var y = await User.findOne({ "_id": req.user._id, "purchasedCourses.excercises.excerciseID": req.body.exerciseID },
-        { purchasedCourses: { $elemMatch: { courseID: req.body.courseID } } }
-      );
-      if (y) {
-        var exe = y.purchasedCourses[0].excercises;
-        for (var i = 0; i < exe.length; i++) {
-          if (exe[i].excerciseID == req.body.exerciseID) {
-            console.log(exe[i]);
-            if (exe[i].grade || exe[i].grade == 0) {
-              q.yourGrade = exe[i].grade;
-            }
-            break;
-          };
-        }
-      }
-    }
-    q.exerciseTitle = x.exerciseTitle;
-    q.exerciseID = x._id;
-    q.totalGrade = x.totalGrade;
-    res.status(200).send(q);
-  } catch (error) {
-    console.log(error);
-    res.status(400).send(error.message);
-  }
+  // try {
+  //   const x = await ExerciseTable.findOne({ "_id": req.body.exerciseID }, {
+  //     exerciseTitle: 1,
+  //     totalGrade: 1,
+  //     _id: 1,
+  //     averageGrade: { $avg: "$averageMark" }
+  //   });
+  //   let q = {};
+  //   const course = await CourseTable.findOne({ _id: req.body.courseID }, { _id: 1, instructorID: 1 });
+  //   if (course.instructorID == req.user._id) {
+  //     res.status(200).send(x);
+  //     return;
+  //   }
+  //   else {
+  //     var y = await User.findOne({ "_id": req.user._id, "purchasedCourses.excercises.excerciseID": req.body.exerciseID },
+  //       { purchasedCourses: { $elemMatch: { courseID: req.body.courseID } } }
+  //     );
+  //     if (y) {
+  //       var exe = y.purchasedCourses[0].excercises;
+  //       for (var i = 0; i < exe.length; i++) {
+  //         if (exe[i].excerciseID == req.body.exerciseID) {
+  //           console.log(exe[i]);
+  //           if (exe[i].grade || exe[i].grade == 0) {
+  //             q.yourGrade = exe[i].grade;
+  //           }
+  //           break;
+  //         };
+  //       }
+  //     }
+  //   }
+  //   q.exerciseTitle = x.exerciseTitle;
+  //   q.exerciseID = x._id;
+  //   q.totalGrade = x.totalGrade;
+  //   res.status(200).send(q);
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(400).send(error.message);
+  // }
+
+  await User.updateMany({}, [{"$addFields": { "purchasedCourses.completedCourse":false }}]);
+  res.send("ok");
+
 };
 
 async function viewAnswer(req, res, next) {

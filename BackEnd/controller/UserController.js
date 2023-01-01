@@ -966,7 +966,6 @@ async function unbuyCourse(req, res, next) {
 
 async function submitAnswer(req, res) {
   try {
-    var grade = req.body.grade;
     var user_id = req.user._id;
     var counter = 0;
     var course_id = req.body.courseID;
@@ -980,11 +979,25 @@ async function submitAnswer(req, res) {
         counter++
       }
     }
+    var grade = (counter / answers.length) * 100;
 
 
     var exists = await User.findOne({ "purchasedCourses.excercises.excerciseID": excerciseID, "_id": user_id })
     console.log(actualExcercise);
     console.log(exists);
+
+    if(actualExcercise.subtitleName){
+
+    }
+    else{
+      if(grade>=50){
+        const re = await User.updateOne({ "_id": user_id, "purchasedCourses.courseID": course_id },
+        {
+          "$set": {
+            "purchasedCourses.$.completedCourse": true }
+          });
+      }
+    }
 
 
     //var user=await User.findById(user_id);
@@ -997,7 +1010,7 @@ async function submitAnswer(req, res) {
           }
         }
       );
-      res.send(re);
+      res.send({ grade: grade });
     }
     else {
       const re = await User.updateOne({ "_id": user_id, "purchasedCourses.courseID": course_id },
@@ -1008,7 +1021,7 @@ async function submitAnswer(req, res) {
           }
         }
       );
-      res.send(re);
+      res.send({ grade: grade });
     }
 
 
@@ -1019,22 +1032,11 @@ async function submitAnswer(req, res) {
 
 };
 
-async function test(req, res) {
-  try {
-    var x = await User.find()
-    res.send(x);
-
-
-  }
-  catch (error) {
-    console.log(error);
-  }
-};
 
 module.exports = {
   register, Logout, ViewAll, viewRatings, getRate, giveCourseRating,
   buyCourse, unbuyCourse, ViewMyCourses, forgetPassword, ValidateUser, ChangeForgottenPassword, ChangePassword,
-  ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview, giveInstructorReview, submitAnswer, test, takeExam, ResendEmail
+  ChangeEmail, UseChangeEmailToken, selectCourse, giveInstructorRating, giveCourseReview, giveInstructorReview, submitAnswer, takeExam, ResendEmail
 }
 
 
