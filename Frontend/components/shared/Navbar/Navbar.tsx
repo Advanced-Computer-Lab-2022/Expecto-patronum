@@ -36,6 +36,7 @@ function Navbar() {
     router.push({
       pathname: 'http://localhost:3000/Auth'
     });
+    localStorage.clear();
   }
 
   const curtainRef = useRef<HTMLDivElement>(null);
@@ -46,6 +47,7 @@ function Navbar() {
   const roles = ["guest", "user", "admin", "instructor"];
   const [userData, setUseData] = useState<any>();
   const navbarVariations = [<GuestNavbar curtainRef={curtainRef} userData={userData} logout={logout} />, <UserNavbar curtainRef={curtainRef} userData={userData} logout={logout} />, <AdminNavbar curtainRef={curtainRef} userData={userData} logout={logout} />, <InstructorNavbar curtainRef={curtainRef} userData={userData} logout={logout} />];
+  const [currentNav, setCurrentNav] = useState<any>(<GuestNavbar curtainRef={curtainRef} userData={userData} logout={logout} />);
 
   useEffect(() => {
     let LocalStorage = localStorage.getItem('UserInfo') ? localStorage.getItem('UserInfo') : 'Guest';
@@ -54,6 +56,7 @@ function Navbar() {
 
     let RoleIndexData = roles.indexOf(CurrentRole === 'CorporateTrainee' ? 'user' : CurrentRole.toLowerCase());
     SetRoleIndex(RoleIndexData);
+    setCurrentNav(navbarVariations[RoleIndexData]);
     // let data = JSON.parse(LocalStorage as string);
     // setUseData(data);
   }, [])
@@ -62,6 +65,13 @@ function Navbar() {
     if (parentRef.current) {
       router.pathname === '/Auth' ? parentRef.current.classList.add('hidden') : parentRef.current.classList.remove('hidden');
     }
+    let LocalStorage = localStorage.getItem('UserInfo') ? localStorage.getItem('UserInfo') : 'Guest';
+
+    let CurrentRole = LocalStorage === 'Guest' ? LocalStorage : JSON.parse(LocalStorage as string).role;
+
+    let RoleIndexData = roles.indexOf(CurrentRole === 'CorporateTrainee' ? 'user' : CurrentRole.toLowerCase());
+    SetRoleIndex(RoleIndexData);
+    setCurrentNav(navbarVariations[RoleIndexData]);
   }, [router.pathname])
 
   return (
@@ -72,7 +82,7 @@ function Navbar() {
             <Link href="/" className={navLogoDiv}>
               <img className={navLogo} src="/images/logo.png" />
             </Link>
-            {navbarVariations[RoleIndex]}
+            {currentNav}
           </div>
         </curtainSearchSwitching.Provider>}
     </div>

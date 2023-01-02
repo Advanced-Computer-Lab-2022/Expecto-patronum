@@ -8,8 +8,7 @@ type Props = {}
 const Support = (props: Props) => {
   return (
     <Layout>
-      <RequestComp Type={'Report'} />
-      {/* <TermsAndConditions /> */}
+      <RequestComp returnPath='/Instructor/ViewReports' Type={'Report'} />
     </Layout>
   )
 }
