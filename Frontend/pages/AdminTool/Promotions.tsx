@@ -427,7 +427,7 @@ const Promotions = (props: Props) => {
                 <button
                   onClick={viewAll}
                   type="button"
-                  className="flex justify-center text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  className="mr-4 flex justify-center text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
                   Add Promotions To All
                 </button>

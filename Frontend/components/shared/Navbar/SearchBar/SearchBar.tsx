@@ -49,26 +49,10 @@ const SearchBar = (props: Props) => {
     if (router.pathname !== "/Courses") {
       router.push("/Courses?keyword=" + searchValue);
     }
-
-    // if (router.query.search) {
-    //   router.query.search = searchValue;
-    // } else {
-    //   if (
-    //     router.query.subject ||
-    //     router.query.price ||
-    //     router.query.rating
-    //   ) {
-    //     router.push(router.asPath + "&keyword=" + searchValue);
-    //   } else {
-    //     router.push(router.asPath + "?keyword=" + searchValue);
-    //   }
-    // }
-    // e.preventDefault();
   };
 
   const setDisableAndValue = (e: { target: { value: React.SetStateAction<string> } }) => {
     setSearchValue(e.target.value);
-    e.target.value === "" ? setIsDisabled(true) : setIsDisabled(false);
   };
 
   function checkEmptySearch() {

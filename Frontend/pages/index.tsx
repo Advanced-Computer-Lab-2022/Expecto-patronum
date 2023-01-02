@@ -62,12 +62,12 @@ const Home: NextPage = () => {
       <section id="opening-text" className="flex nv-max:flex-col-reverse items-center justify-between py-8 mx-10">
         <div ref={homePageHeaderRef} className="space-y-6 text-left nv-max:text-center opacity-0 transition-all duration-[1500ms]">
           <h1 className="text-5xl nv-max:text-3xl nv-max:-indent-0 nv-max:pl-0 font-bold -indent-32 pl-32 leading-[4.5rem]">Learn a New Skill Everyday, <br /> Anytime, and Anywhere.</h1>
-          <p className="text-xl nv-max:text-lg mb-4">
-            1000+ Courses covering all tech domains for you to learn and explore
-            new opportunities. Learn from Industry Experts and land your Dream
-            Job.
-          </p>
-          <Link href='/Login?isLogin=false' as='/Login' className="rounded-md border-1.5 border-canadian-red bg-calm-red h-10 px-4 py-2.75 ml-4 text-white hover:bg-canadian-red transition-all duration-300">Join Now!</Link>
+            <p className="text-xl nv-max:text-lg mb-4">
+              1000+ Courses covering all tech domains for you to learn and explore
+              new opportunities. Learn from Industry Experts and land your Dream
+              Job.
+            </p>
+            <Link href='/Auth?isLogin=false' as='/Auth' className="rounded-md border-1.5 border-canadian-red bg-calm-red h-10 px-4 py-2.75 ml-4 text-white hover:bg-canadian-red transition-all duration-300">Join Now!</Link>
         </div>
 
         <div className="relative nv:ml-20 min-w-[24rem] min-h-[24rem] nv-max:min-h-[19rem] pointer-events-none flex justify-center">

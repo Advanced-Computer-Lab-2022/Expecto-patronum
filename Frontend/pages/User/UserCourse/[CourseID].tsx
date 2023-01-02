@@ -22,7 +22,7 @@ type Props = {
 
 const UserCourse = (props: Props) => {
   const [Course, setCourse] = useState<AllCourseDataInterface>();
-  const { ContentChoosen, SetContentChoosen, SetNotes, SetFinalExam, SetCourseName, SetProgress, WatchedVideos, SetWatchedVideos, SetSolvedExercises, SetCurrentRatings } = useContext(DataContext);
+  const { ContentChoosen, SetContentChoosen, SetNotes, SetFinalExam, SetCompleted, SetCourseName, SetProgress, WatchedVideos, SetWatchedVideos, SetSolvedExercises, SetCurrentRatings } = useContext(DataContext);
   const [Next, SetNext] = useState(false);
   const [Prev, SetPrev] = useState(false);
   const [CloseSideBar, SetCloseSideBar] = useState(false);
@@ -49,6 +49,8 @@ const UserCourse = (props: Props) => {
         let yourCourseReview = res.data.yourCourseReview
         let yourInstructorRating = res.data.yourInstructorRating
         let yourinstructorReview = res.data.yourinstructorReview
+
+        SetCompleted(res.data.completeCourse);
         SetFinalExam(Coursedata.finalExam);
         SetCourseName(Coursedata.title)
         setCourse(Coursedata);

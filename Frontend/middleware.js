@@ -14,7 +14,7 @@ export function middleware(req) {
   const RouteForAll = ['/Courses']
   const url = req.nextUrl.clone()
   let Auth = false
-  if (req.cookies['_parsed'].get('connect.sid')) {
+  if (req.cookies['_parsed'].get('user')) {
     Auth = true
   }
 
@@ -45,6 +45,13 @@ export function middleware(req) {
           return NextResponse.redirect(url)
         }
       }
+      else if (Role == 'CorporateTrainee') {
+        if (!req.nextUrl.pathname.startsWith('/User')) {
+          url.pathname = '/User'
+          return NextResponse.redirect(url)
+        }
+      }
+
     }
     else {
       if (req.nextUrl.pathname == '/') {

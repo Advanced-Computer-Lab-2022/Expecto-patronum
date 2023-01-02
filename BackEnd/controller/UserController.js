@@ -121,11 +121,10 @@ async function ResendEmail(req, res) {
 }
 
 function Logout(req, res) {
-  req.logout((err) => { if (err) console.log(`the Error is ${err}`) });
+  req.logout((err) => { if (err) res.status(400).send("Error logging out") });
   res.clearCookie('user');
+  res.clearCookie('connect.sid');
   res.send("Logged out");
-
-
 }
 
 async function ViewAll(req, res) {
@@ -666,7 +665,7 @@ async function giveInstructorReview(req, res, next) {
 }
 
 async function selectCourse(req, res, next) {
-  console.log(req.user)
+  console.log(req.user);
   try {
     console.log("No Notes")
 
@@ -696,6 +695,7 @@ async function selectCourse(req, res, next) {
           ////////////////instructor/////////////////////
           info.purchased = "yes";
           x = await CourseTable.findOne({ "_id": req.body.courseId }, { review: { "$slice": 3 } });
+
           info.course = x;
           var instructor1 = await User.findOne({ "_id": (x.instructorID) }).select({
             instructorRating: 1,
