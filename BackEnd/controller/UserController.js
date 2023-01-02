@@ -425,7 +425,7 @@ function ChangeEmail(req, res) {
       }
       else {
         let Token = CreateToken({ id: req.user._id, email: userMail, oldemail: req.user.email });
-        MailValidate(userMail, "http://localhost:3000/User/FeedBack/EmailConfirmed", Token);
+        MailValidate(userMail, "http://localhost:5000/user/resetEmail", Token);
         res.send("Verify mail sent");
       }
     }
@@ -457,7 +457,7 @@ function UseChangeEmailToken(req, res) {
                   console.log(err);
                 }
                 else {
-                  res.send("Email Changed");
+                  res.send("<h1>Email Changed<h1>");
 
                 }
               })
