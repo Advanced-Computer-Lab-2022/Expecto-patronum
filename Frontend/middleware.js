@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // If the incoming request has the "beta" cookie
 // then we'll rewrite the request to /beta
 export function middleware(req) {
+  console.log("I AM HERER")
   const RouteForAll = ['/Courses']
   const url = req.nextUrl.clone()
   let Auth = false
@@ -44,6 +45,13 @@ export function middleware(req) {
           return NextResponse.redirect(url)
         }
       }
+      else if (Role == 'CorporateTrainee') {
+        if (!req.nextUrl.pathname.startsWith('/User')) {
+          url.pathname = '/User'
+          return NextResponse.redirect(url)
+        }
+      }
+
     }
     else {
       if (req.nextUrl.pathname == '/') {

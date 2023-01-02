@@ -191,9 +191,6 @@ async function filterCourses(req, res, next) {
 };
 
 async function addCourse(req, res, next) {
-
-
-
   try {
     var exists=await CourseTable.findOne({"title":req.body.title});
     if(exists){
@@ -218,10 +215,10 @@ async function addCourse(req, res, next) {
     courseHours: req.body.courseHours,
     //exercises: req.body.exercises,
     courseVideo : req.body.courseVideo,
-    rating: req.body.rating,
+    //rating: req.body.rating,
     instructorName: name,
     discountPrice: req.body.price,
-    review:req.body.review,
+    //review:req.body.review,
     courseImage:req.body.courseImage
     });  
     newCourse.save();

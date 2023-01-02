@@ -44,7 +44,7 @@ module.exports.isCorporateTrainee = (req, res, next) => {
 }
 
 module.exports.isStudent = (req, res, next) => {
-  if (req.user.role === "CorporateTrainee"|| req.user.role === "User" ) {
+  if (req.user.role === "CorporateTrainee" || req.user.role === "User") {
     next();
   } else {
     res.status(401).send({ Error: true, Message: "You are not authorized" });

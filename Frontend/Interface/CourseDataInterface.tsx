@@ -1,6 +1,6 @@
 export interface CourseData {
-  rating: { avg: number };
-  discount: number;
+  rating: { one: number, two: number, three: number, four: number, five: number, avg: number };
+  discount: { discount: number };
   _id: string;
   title: string;
   summary: string;
@@ -9,4 +9,6 @@ export interface CourseData {
   subject: string;
   instructorName: string;
   courseHours: number;
+  level: string;
+  purchases: number;
 }

@@ -7,14 +7,18 @@ import { MdOutlineErrorOutline } from 'react-icons/md';
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import DataContext from '../../../../context/DataContext';
+import { AES } from 'crypto-js';
+import { useRouter } from 'next/router';
 
 type Props = {}
 
 const UserCourseNavbar = (props: Props) => {
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [ShowProgress, SetShowProgress] = React.useState(false);
-  const { Progress } = React.useContext(DataContext);
+  const { Progress, CourseName, FinalExam, CourseChoosen, Completed } = React.useContext(DataContext);
+  const [isCorp, setIsCorp] = React.useState(false);
 
+  let router = useRouter();
   useEffect(() => {
     if (Progress != 0) {
       SetShowProgress(true);
@@ -27,7 +31,34 @@ const UserCourseNavbar = (props: Props) => {
 
 
 
+
   }, [Progress])
+
+
+  function HandleFinalExam() {
+    const encryptId = (str: string | CryptoJS.lib.WordArray) => {
+      const ciphertext = AES.encrypt(str, 'secretPassphrase');
+      return encodeURIComponent(ciphertext.toString());
+    }
+    const encryptedExamID = encryptId(CourseChoosen.finalExam);
+    const encryptedCourseID = encryptId(CourseChoosen._id);
+    router.push(`/User/TakeExam?CourseID=${encryptedCourseID}&&ExerciseID=${encryptedExamID}`)
+  }
+  function HandleCertificate() {
+    router.push(`/User/Certificate`)
+
+  }
+
+  useEffect(() => {
+    //@ts-ignore
+    let LocalStorage = JSON.parse(localStorage.getItem('UserInfo'));
+    console.log(LocalStorage.role)
+    if (LocalStorage.role === 'CorporateTrainee') {
+      setIsCorp(true)
+    }
+
+  }, [])
+
   return (
     <div className={Container}>
       <div className={LogoContainer}>
@@ -38,12 +69,15 @@ const UserCourseNavbar = (props: Props) => {
             alt={"CGP"}
           />
         </div>
-        <div>Course Name</div>
+        <div>{CourseChoosen.title}</div>
       </div>
 
       <div className={UtilContainer}>
-        {Progress >= 100 ?
-          <button type='submit' className={submitButton} id='submit-btn'>
+        {Completed ? <button onClick={HandleCertificate} type='submit' className={submitButton} id='submit-btn'>
+          <span /><span /><span /><span />
+          Certificate
+        </button> : Progress >= 100 ?
+          <button onClick={HandleFinalExam} type='submit' className={submitButton} id='submit-btn'>
             <span /><span /><span /><span />
             Final Exam
           </button>
@@ -73,7 +107,7 @@ const UserCourseNavbar = (props: Props) => {
                   <p className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Report</p>
                 </li>
               </Link>
-              {Progress < 50 &&
+              {Progress < 50 && !isCorp &&
                 <Link href={'/User/Request?Type=Refund'}>
 
                   <li>

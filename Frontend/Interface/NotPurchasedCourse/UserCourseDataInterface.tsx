@@ -2,8 +2,9 @@ import { CourseInstructorDataInterface } from "./CourseInstructorDataInterface";
 import { OneSubtitleData } from "./OneSubtitleData";
 
 export interface UserCourseDataInterface {
-  purchased: boolean;
+  purchased: "yes" | "no" | "" | "Pending";
   course: {
+    _id: string;
     title: string;
     summary: string;
     rating: { one: number, two: number, three: number, four: number, five: number, avg: number };
