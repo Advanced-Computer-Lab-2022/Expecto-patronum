@@ -335,7 +335,7 @@ async function updateBio(req,res){
       try{var currentId= req.user._id;
         var currentBio=req.body.newBio;
         var updatedBio=await User.findByIdAndUpdate(currentId,{"biography":currentBio});
-        res.send(updatedBio);
+        res.send("success");
       }
         catch(error){
           console.log(error);

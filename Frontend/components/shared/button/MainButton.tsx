@@ -10,7 +10,7 @@ type Props = {
   Back?: boolean
   outline?: boolean
   disabled?: boolean
-  Type: 'yes' | 'no' | "" | 'Pending'
+  Type?: 'yes' | 'no' | "" | 'Pending'
 }
 
 

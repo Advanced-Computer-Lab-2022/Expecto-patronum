@@ -69,20 +69,13 @@ const AddDiscount = (props: Props) => {
 
     axios.defaults.withCredentials = true;
       await axios.post("http://localhost:5000/Instructor/discount", {
-          instructorID: '63877fb65c8dac5284aaa3c2',
           courseID: courseID,
           discount: discount,
           startDate: startDate,
           endDate: endDate,
       }).then((res: { data: any }) => {
-        console.log(res.data);
         viewPopupMessage(true, "Discount has been added successfully.");
       });
-
-    // console.log(courseID);
-    // console.log(startDate);
-    // console.log(endDate);
-    // console.log(discount);
   }
 
   const selectCourse = (e: any) => {
@@ -116,7 +109,7 @@ const AddDiscount = (props: Props) => {
           </div>
         </div>
         <div className='space-y-4 mt-4'>
-            <Input onChange={(e: any) => setDiscount(e.target.value)} placeholder='Discount %' inputDivStyle='relative bottom-2' />
+            <Input onChange={(e: any) => setDiscount(e.target.value)} type='number' placeholder='Discount %' inputDivStyle='relative bottom-2' />
             <div className='flex justify-between items-center row mx-0 sb-max:space-y-4'>
               <DateInput placeholder='Choose Start Date' date={startDate} setDate={setStartDate} />
               <DateInput placeholder='Choose End Date' date={endDate} setDate={setEndDate} minDate={startDate} />

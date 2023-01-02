@@ -25,7 +25,7 @@ router.get("/searchCourses", searchCourses);
 router.get("/viewCourseRatings", viewCourseRatings)
 router.get("/viewInstructorRatingsAndReviews", viewInstructorRatingsAndReviews);
 
-router.get("/updateBio", updateBio);
+router.post("/updateBio", updateBio);
 
 
 router.get("/viewProfile", viewProfile);
