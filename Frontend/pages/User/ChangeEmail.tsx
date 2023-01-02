@@ -21,7 +21,7 @@ interface Email {
 const ChangeEmail2 = (props: Props) => {
   const { viewPopupMessage } = useContext(PopupMessageContext);
   const [Loading, SetLoading] = React.useState(false)
-  const [ChangeEmail, SetChangeEmail] = React.useState(false)
+  const [ChangeEmail, SetChangeEmail] = React.useState(true)
 
 
 
@@ -35,15 +35,12 @@ const ChangeEmail2 = (props: Props) => {
 
   async function Submit(data: any) {
     //@ts-ignore
-    let oldEmail = props.data
     let newEmail = data.email
 
 
     try {
       SetLoading(true)
-      let res = await axios.post(`${ApiUrl}/User/ResendValidationEmail`, { OldEmail: oldEmail, NewEmail: newEmail })
-      router.push(`/User/FeedBack/SignUpFeedback?Email=${data.email}`
-      )
+      let res = await axios.post(`${ApiUrl}/User/ChangeEmail`, { email: newEmail })
       SetChangeEmail(false)
       SetLoading(false)
     } catch (error) {
@@ -68,22 +65,28 @@ const ChangeEmail2 = (props: Props) => {
           <div className='w-20 h-20 relative   animate-pulse'>
             <Image alt='email icon' src={'/images/Email.png'} fill></Image>
           </div>
-          <form action="#" method="POST" id="sign-up" className="mt-6 w-full ">
-            <div className="flex items-center w-full ">
-              <div className="flex flex-col w-full px-10 text-left">
-                <label className="text-lg text-center text-white mb-2">E-mail Address</label>
-                <input    {...register('email')} className="border-b-2  text-white text-center bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your email" type='email' />
-                <p className={ErrorP}>{errors.email?.message}</p>
+          {!ChangeEmail && <div>
 
+            <p className='text-xs mt-10 text-gray-200 text-center opacity-[0.9]'>Email is an important part of the process as you will recieve your certifcate and much more on it</p>
+
+          </div>}
+          {ChangeEmail &&
+            <form action="#" method="POST" id="sign-up" className="mt-6 w-full ">
+              <div className="flex items-center w-full ">
+                <div className="flex flex-col w-full px-10 text-left">
+                  <label className="text-lg text-center text-white mb-2">E-mail Address</label>
+                  <input    {...register('email')} className="border-b-2  text-white text-center bg-transparent border-canadian-red outline-0 focus:border-calm-red placeholder:text-sm" placeholder="Enter your email" type='email' />
+                  <p className={ErrorP}>{errors.email?.message}</p>
+
+                </div>
               </div>
-            </div>
 
 
-            {/* <button type="submit" form="sign-up" className="mx-auto my-4 bg-canadian-red text-white rounded-md px-14 py-2 hover:bg-calm-red hover:scale-[1.01] transition-all duration-200">Sign Up</button> */}
-            <div className="flex justify-center  mt-5">
-              <MainButton HandleClick={(handleSubmit(Submit))} Loading={Loading} btnText="Resend Email" Size="lg"></MainButton>
-            </div>
-          </form>}
+              {/* <button type="submit" form="sign-up" className="mx-auto my-4 bg-canadian-red text-white rounded-md px-14 py-2 hover:bg-calm-red hover:scale-[1.01] transition-all duration-200">Sign Up</button> */}
+              <div className="flex justify-center  mt-5">
+                <MainButton HandleClick={(handleSubmit(Submit))} Loading={Loading} btnText="Send Email" Size="lg"></MainButton>
+              </div>
+            </form>}
 
 
 
