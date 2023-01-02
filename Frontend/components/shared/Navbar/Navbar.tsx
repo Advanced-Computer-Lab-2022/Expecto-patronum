@@ -124,8 +124,8 @@ const UserNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, userDa
     <div className="flex">
       <SearchBar />
       <div ref={props.curtainRef} className={`h-[${props.curtainRef.current?.children.length ? props.curtainRef.current?.children.length * 2 : ''}rem] ${navContentDiv}`}>
-        <Link className={navLink} href='/User/index'>My Courses</Link>
-        <Link className={navLink} href='/User/Profile'>My Profile</Link>
+        <Link className={navLink} href='/User'>My Courses</Link>
+        <Link className={navLink} href='/User'>My Profile</Link>
         <hr className="nv:hidden" />
         <Link className={navLink} href='/'>New Opportunities</Link>
       </div>
