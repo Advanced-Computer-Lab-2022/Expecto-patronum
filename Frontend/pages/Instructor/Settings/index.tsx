@@ -27,7 +27,9 @@ const index = (props: Props) => {
     }).then(res => {
       const values = {...newInfo};
       values.biography = res.data[0].biography;
+      values.email = res.data[0].email;
       setNewInfo(values);
+      console.log(res.data[0]);
         return setInfo(res.data[0])
       });
   }
@@ -50,14 +52,37 @@ const index = (props: Props) => {
 
   const updateInfo = async (e: any) => {
     e.preventDefault();
-    
-    await axios.post("http://localhost:5000/User/updateInstructorInfo", {
-      id: '63877fb65c8dac5284aaa3c2',
-      email: newInfo.email,
-      biography: newInfo.biography,
-    }).then(res => {
-      viewPopupMessage(res.data.includes("success") ? true: false, res.data);
-    });
+    axios.defaults.withCredentials = true;
+
+    if(newInfo.email !== info.email && newInfo.biography !== info.biography) {
+
+      await axios.post("http://localhost:5000/Instructor/updateBio", {
+        newBio: newInfo.biography,
+      }).then(res => {});
+
+      await axios.post("http://localhost:5000/User/changeEmail", {
+        email: newInfo.email,
+      }).then(res => {});
+
+      viewPopupMessage(true, "Your information has been updated successfully.");
+
+    } else if(newInfo.biography !== info.biography) {
+      await axios.post("http://localhost:5000/Instructor/updateBio", {
+        newBio: newInfo.biography,
+      }).then(res => {
+        viewPopupMessage(res.data.includes("success") ? true: false, "Your biography has been updated successfully.");
+      });
+
+    } else if(newInfo.email !== info.email) {
+      await axios.post("http://localhost:5000/User/changeEmail", {
+        email: newInfo.email,
+      }).then(res => {
+        viewPopupMessage(res.data.includes("Verify mail sent") ? true: false, "A verification email has been sent.");
+      });
+      
+    } else if(newInfo.email === info.email && newInfo.biography === info.biography) {
+      viewPopupMessage(false, "No information was updated as nothing changed.");
+    }
   }
 
   return (
@@ -75,9 +100,8 @@ const index = (props: Props) => {
           <section className='sb:w-3/4 mt-8'>
             <div className='flex items-center sb:justify-between sb-max:flex-col-reverse w-full'>
               <div className='w-full'>
-                <Input onChange={setEmail} placeholder='Email' />
+                <Input onChange={setEmail} value={newInfo.email} placeholder='Email' />
               </div>
-              <p className='mt-3 sb:pr-8 sb-max:ml-4'>Current Email: <span className='ml-2 opacity-50'>{info ? info.email :'rodin.salem@gmail.com'}</span></p>
             </div>
             <Input onChange={setBiography} value={newInfo.biography} type='textarea' placeholder='Biography' />
             <a className='rounded-md bg-canadian-red p-2 mt-4 mr-8 float-right text-main border-1.5 border-canadian-red hover:bg-main hover:text-canadian-red transition-all duration-300'>Change Password</a>

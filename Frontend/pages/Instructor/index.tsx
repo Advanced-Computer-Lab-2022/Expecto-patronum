@@ -5,20 +5,15 @@ import { IoIosNotificationsOutline } from 'react-icons/io';
 import { BsChatDots, BsReply } from 'react-icons/bs';
 import DataContext from '../../context/DataContext';
 import SmallCourseCard from '../../components/shared/SmallCourseCard/SmallCourseCard';
-import { QuestionMarkSharp } from '@mui/icons-material';
-import { HiOutlineDotsVertical } from 'react-icons/hi';
 import ReviewsAndQuestions from '../../components/shared/Review/ReviewsAndQuestions';
 import axios from 'axios';
 import SmallCourseCardSkeleton from '../../components/shared/SmallCourseCard/SmallCourseCardSkeleton';
 import Skeleton from 'react-loading-skeleton';
-import { ApiUrl } from '../../constants/constants';
+import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions';
 
 type Props = {}
 
 const Instructor = (props: Props) => {
-
-
-
 
   const Amount = [
     {
@@ -42,7 +37,6 @@ const Instructor = (props: Props) => {
       month: "May '22",
     },
   ];
-
   const questions = [
     { username: 'Antonio Banderas', question: 'Where is my super-suit?' },
     { username: 'Kanye West', question: 'Who touched my Spaghetti?' },
@@ -51,7 +45,6 @@ const Instructor = (props: Props) => {
     { username: 'Michel Raouf', question: 'Is Norm a communist?' },
     { username: 'Ramy Younis', question: 'What is the difference between Real-time And Non-Real-Time Embedded Systems?' },
   ];
-
   const icons = [
     'python.png', 'structure.png', 'java.png', 'c-.png', 'c-sharp.png', 'ai.png', 'cisco.png', 'coding.png', 'cpu.png',
     'css-3.png', 'cyber-security.png', 'cyber-security (1).png', 'excel.png', 'hacker.png', 'html (1).png',
@@ -64,6 +57,8 @@ const Instructor = (props: Props) => {
   const [isTopRatedLoading, setIsTopRatedLoading] = useState<boolean>(true);
   const [amountOwed, setAmountOwed] = useState<any>([]);
   const [isAmountLoading, setIsAmountLoading] = useState<boolean>(true);
+  const [isOpened, setIsOpened] = useState<boolean>(true);
+  const [isAccepted, setIsAccepted] = useState<boolean>(false);
 
 
   async function getAmountOwed() {
@@ -157,6 +152,7 @@ const Instructor = (props: Props) => {
           </div>
         </section>
       </div>
+      <TermsAndConditions title='Accept Contract & Rights' className="-top-20" isOpened={isOpened} setIsOpened={setIsOpened} setIsAccepted={setIsAccepted} />
     </Layout>
   )
 }

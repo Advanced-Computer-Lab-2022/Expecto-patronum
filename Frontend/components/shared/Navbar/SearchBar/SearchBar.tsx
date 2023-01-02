@@ -9,7 +9,7 @@ import classNames from "classnames";
 type Props = {};
 
 const SearchBar = (props: Props) => {
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
   const searchRef = useRef<any>();

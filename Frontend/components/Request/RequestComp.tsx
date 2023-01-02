@@ -22,6 +22,12 @@ const RequestComp = (props: Props) => {
 
   let DescriptionRef = React.useRef<HTMLTextAreaElement>(null);
 
+  useEffect(() => {
+    let LocalStorage = localStorage.getItem('UserInfo') ? localStorage.getItem('UserInfo') : 'Guest';
+    
+    let CurrentRole = LocalStorage === 'Guest' ? LocalStorage : JSON.parse(LocalStorage as string).role;
+  }, [])
+
   function handleReportTypeChange(e: React.ChangeEvent<HTMLSelectElement>) {
     setReportType(e.target.value)
   }
@@ -33,7 +39,6 @@ const RequestComp = (props: Props) => {
     if (props.Type == 'Report') {
       // console.log(ReportType, Description)
       await axios.post("http://localhost:5000/user/reportProblem", {
-        userID: "63a59b15f928fa951091f381",
         courseID: "63a59c15e3b96b22a1dc828a",
         type: ReportType,
         body: DescriptionRef.current?.value || ""
@@ -43,7 +48,6 @@ const RequestComp = (props: Props) => {
     } else {
       //call refund api
       await axios.post('http://localhost:5000/user/requestCourse', {
-        userID: "63a59b15f928fa951091f381",
         courseID: "63a59c15e3b96b22a1dc828a",
         request: "Refund",
         body: DescriptionRef.current?.value || ""
