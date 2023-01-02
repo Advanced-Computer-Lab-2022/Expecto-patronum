@@ -161,7 +161,9 @@ async function CourseSearch(req, res) {
     });;
   }
     else if (userSearch === "" && Object.keys(queryCondition).length === 0 && ratingExist==true) {
-      FinalResult = await Course.find({"rating.avg" : RatingFilter}).select({
+      console.log(RatingFilter);
+      console.log("enteeer");
+      FinalResult = await Course.find({"rating.avg" : {  $lt: (parseInt(RatingFilter)+1),$gte: RatingFilter } } ).select({
         _id: 1,
         title: 1,
         courseHours: 1,
@@ -179,7 +181,7 @@ async function CourseSearch(req, res) {
   else {
     if (userSearch !== "" && Object.keys(queryCondition).length !== 0 && ratingExist==true  ) {
       FinalResult = await Course.find({
-        "rating.avg":RatingFilter,
+        "rating.avg" : {  $lt: (parseInt(RatingFilter)+1),$gte: RatingFilter },
         $or: [{ title: { $regex: userSearch, $options: "i" } },
         { subject: { $regex: userSearch, $options: "i" } },
         { instructorName: { $regex: userSearch, $options: "i" } }]
@@ -222,7 +224,7 @@ async function CourseSearch(req, res) {
     } else {
       
       if (userSearch === "" && Object.keys(queryCondition).length !== 0 && ratingExist==true) {
-        FinalResult = await Course.find({"rating.avg" : RatingFilter }).and(queryCondition).select({
+        FinalResult = await Course.find({"rating.avg" : {  $lt: (parseInt(RatingFilter)+1),$gte: RatingFilter }}).and(queryCondition).select({
           _id: 1,
           title: 1,
           courseHours: 1,
@@ -278,7 +280,7 @@ async function CourseSearch(req, res) {
         }
        else if (userSearch !== "" && Object.keys(queryCondition).length === 0 && ratingExist==true) {
           FinalResult = await Course.find({
-            "rating.avg":RatingFilter,
+            "rating.avg" : {  $lt: (parseInt(RatingFilter)+1),$gte: RatingFilter },
             $or: [{ title: { $regex: userSearch, $options: "i" } },
             { subject: { $regex: userSearch, $options: "i" } },
             { instructorName: { $regex: userSearch, $options: "i" } }]

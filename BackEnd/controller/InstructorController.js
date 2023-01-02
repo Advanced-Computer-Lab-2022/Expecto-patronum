@@ -191,9 +191,6 @@ async function filterCourses(req, res, next) {
 };
 
 async function addCourse(req, res, next) {
-
-
-
   try {
     var exists=await CourseTable.findOne({"title":req.body.title});
     if(exists){
