@@ -1,15 +1,26 @@
+import axios from 'axios';
 import { useRouter } from 'next/router';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 type Props = {
     isOpened: boolean,
     setIsOpened: React.Dispatch<React.SetStateAction<boolean>>,
     setIsAccepted: React.Dispatch<React.SetStateAction<boolean>>,
+    className?: string,
+    title?: string,
 }
 
 const TermsAndConditions = (props: Props) => {
 
     let router = useRouter();
+
+    async function logout() {
+    Response = await axios.get("http://localhost:5000/User/logout", {
+      }).then((res: { data: any; }) => { return res.data });
+      router.push({
+        pathname: 'http://localhost:3000/Auth'
+      });
+    }
 
     const termsRef = useRef<HTMLDivElement>(null);
     const popUpRef = useRef<HTMLDivElement>(null);
@@ -31,13 +42,14 @@ const TermsAndConditions = (props: Props) => {
         popUpRef.current?.classList.add('hidden');
         props.setIsOpened(false);
         props.setIsAccepted(false);
+        logout();
     }
 
 
   return (
-    <div ref={termsRef} className={`${props.isOpened ? '': 'scale-0'} absolute z-[100] backdrop-blur-sm mt-2.5 h-full right-0 left-0 top-0 text-right transition-all duration-300`}>
+    <div ref={termsRef} className={`${props.className} ${props.isOpened ? '': 'scale-0'} absolute z-[100] backdrop-blur-sm mt-2.5 h-full right-0 left-0 top-0 text-right transition-all duration-300`}>
         <div className='w-[48rem] bg-white rounded-lg pb-6 mx-auto h-[34rem] relative'>
-            <h1 className='text-center text-2xl font-bold py-2'>Terms & Conditions</h1>
+            <h1 className='text-center text-2xl font-bold py-2'>{props.title ? props.title :'Terms & Conditions'}</h1>
             <div className='overflow-x-hidden max-h-[80%] mx-6 px-3 border-1.5 rounded-lg text-center'>
                 In General
                 Canadian Chamber of Commerce - Middle East (“CanChamLearningSystem.com”) owns and operate this Website.  This document governs your relationship with [Your Online Store URL] (“Website”). Access to and use of this Website and the products and services available through this Website (collectively, the "Services") are subject to the following terms, conditions and notices (the "Terms of Service"). By using the Services, you are agreeing to all of the Terms of Service, as may be updated by us from time to time. You should check this page regularly to take notice of any changes we may have made to the Terms of Service.

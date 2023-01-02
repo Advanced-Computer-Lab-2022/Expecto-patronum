@@ -59,17 +59,16 @@ const Tickets = (props: Props) => {
     setLoading(true);
 
     if (Type == "Reports") {
-      axios.put("http://localhost:5000/user/viewPreviousReports", { userID: "63a59b15f928fa951091f381" }).then((res) => {
+      axios.put("http://localhost:5000/User/viewPreviousReports").then((res) => {
         setData(res.data);
         setLoading(false);
 
       });
     }
     else {
-      axios.put("http://localhost:5000/user/viewPreviousRequests", { userID: "63a59b15f928fa951091f381" }).then((res) => {
+      axios.put("http://localhost:5000/User/viewPreviousRequests").then((res) => {
         setData(res.data);
         setLoading(false);
-
       });
     }
 

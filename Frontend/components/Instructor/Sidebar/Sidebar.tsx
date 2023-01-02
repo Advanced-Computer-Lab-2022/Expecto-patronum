@@ -5,7 +5,7 @@ import { FiSettings } from 'react-icons/fi';
 import { BiBookAdd, BiSupport } from 'react-icons/bi';
 import { GiTeacher } from "react-icons/gi";
 import { HiOutlineMail } from 'react-icons/hi';
-import { TbLayoutDashboard } from 'react-icons/tb';
+import { TbLayoutDashboard, TbMessageReport } from 'react-icons/tb';
 import { AiOutlineAlignLeft } from 'react-icons/ai';
 import { IoMdClose } from 'react-icons/io';
 import { MdOutlineReviews } from 'react-icons/md';
@@ -134,6 +134,9 @@ const Sidebar = (props: Props) => {
           </li>
           <li id='Instructor-Settings-btn' className={listedItem} onMouseOver={autoMove} onMouseLeave={hide}>
             <Link onClick={changePrevAndCurr} href="/Instructor/Settings"><span className={link}><FiSettings className={linkIcon} /><span className={linkText}>Settings</span></span></Link>
+          </li>
+          <li id='Instructor-ViewReports-btn' className={listedItem} onMouseOver={autoMove} onMouseLeave={hide}>
+            <Link onClick={changePrevAndCurr} href="/Instructor/ViewReports"><span className={link}><TbMessageReport className={`scale-135 ${linkIcon}`} /><span className={linkText}>View Reports</span></span></Link>
           </li>
           <li id='Instructor-Support-btn' className={listedItem} onMouseOver={autoMove} onMouseLeave={hide}>
             <Link onClick={changePrevAndCurr} href="/Instructor/Support"><span className={link}><BiSupport className={linkIcon} /><span className={linkText}>Support</span></span></Link>
