@@ -17,6 +17,8 @@ const SelectCountry = (props: Props) => {
     const inputCountryRef = useRef<any>();
     const [countries, setCountries] = useState(Currency.getAllISOCodes());
     const { Rate, SetRate } = useContext(DataContext);
+    const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
+    const selectDiv = classNames(`${isOptionsOpen ? 'h-48 pb-2 border-1.5': 'h-0'} flex flex-col absolute top-14 z-18 right-16 w-48 m-2 mt-3 overflow-hidden rounded-lg transition-all duration-300 bg-white`);
 
     const filterSearch = () => {
         const includedCountries = Currency.getAllISOCodes().filter((country) => (
@@ -26,14 +28,7 @@ const SelectCountry = (props: Props) => {
     }
 
 
-    function toggleSelect() {
-        selectRef.current.classList.toggle("h-0");
-        selectRef.current.classList.toggle("h-48");
-        selectRef.current.classList.toggle("pb-2");
-        selectRef.current.classList.toggle("border-1.5");
-        if(!selectRef.current.classList.contains("h-0"))
-            selectRef.current.children[0].focus();
-    }
+   
 
     const selectCountry = async (e: any, country: any) => {
         e.preventDefault();
@@ -73,29 +68,17 @@ const SelectCountry = (props: Props) => {
       //   console.log(Currency.getAllISOCodes());
       // }, [])
 
-    useEffect(() => {
-        document.onmouseup = ((e) => {
+      const close = (e: any) => {
+        if(selectRef.current && !selectRef.current?.contains(e.target)) {
+          setIsOptionsOpen(false);
+        }
+      }
 
-            const selectCountryButton = selectCountryRef.current?.children[0].getBoundingClientRect();
-            const selectCountryData = selectCountryRef.current?.children[1].getBoundingClientRect();
-    
-            const isMouseOnButtonY = e.clientY <= (selectCountryButton.y + selectCountryButton.height - 2) && e.clientY >= (selectCountryButton.y - 2);
-            const isMouseOnButtonX = e.clientX <= (selectCountryButton.x + selectCountryButton.width + 2) && e.clientX >= Math.floor(selectCountryButton.x);
-    
-            const isMouseOnSelectY = e.clientY <= (selectCountryData.y + selectCountryData.width - 2) && e.clientY >= (selectCountryData.y);
-            const isMouseOnSelectX = e.clientX <= (selectCountryData.x + selectCountryData.width - 2) && e.clientX >= Math.floor(selectCountryData.x);
-    
-            if(!(isMouseOnButtonX && isMouseOnButtonY)) {
-                if(!(isMouseOnSelectX && isMouseOnSelectY)) {
-                    selectRef.current.classList.add("h-0");
-                    selectRef.current.classList.remove("h-48");
-                    selectRef.current.classList.remove("pb-2");
-                    selectRef.current.classList.remove("border-1.5");
-                }
-            }
-            
-        });
-    },[])
+      useEffect(() => {
+        document.addEventListener("mouseup", close);
+      }, [])
+
+
 
     async function resetRate() {
       axios.defaults.withCredentials = true;
@@ -119,7 +102,7 @@ const SelectCountry = (props: Props) => {
 
   return (
     <div ref={selectCountryRef}>
-        <button type="button" onClick={toggleSelect} className={selectButton}><GiEarthAmerica className={selectButtonIcon} /></button>
+        <button type="button" onClick={()=>setIsOptionsOpen(true)} className={selectButton}><GiEarthAmerica className={selectButtonIcon} /></button>
         <div ref={selectRef} className={selectDiv} >
             <input ref={inputCountryRef} type='text' placeholder='Search' onChange={filterSearch} className={selectSearch} />
             <button type='button' onClick={resetRate} className='absolute text-sm right-2 top-2 bg-calm-red h-4 flex items-center text-white rounded-full p-1.5 hover:bg-canadian-red transition-all duration-200'>reset</button>
@@ -135,7 +118,7 @@ const SelectCountry = (props: Props) => {
   )
 }
 
-const selectDiv = classNames("flex flex-col absolute top-14 z-10 right-0 w-48 h-0 m-2 mt-3 overflow-hidden rounded-lg transition-all duration-300 bg-main");
+
 const selectSearch = classNames('rounded-full relative pl-2 m-1 bg-white shadow-md focus:outline-0');
 const selectButton = classNames("navbar-link rounded-full border-1.5 border-black hover:text-white hover:bg-black hover:scale-110 mx-2 h-8 w-8 whitespace-nowrap z-10 transition-all duration-300 flex items-center justify-center");
 const selectButtonIcon = classNames("scale-110 pointer-events-none");

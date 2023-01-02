@@ -13,7 +13,7 @@ export function middleware(req) {
   const RouteForAll = ['/Courses']
   const url = req.nextUrl.clone()
   let Auth = false
-  if (req.cookies['_parsed'].get('connect.sid')) {
+  if (req.cookies['_parsed'].get('user')) {
     Auth = true
   }
 

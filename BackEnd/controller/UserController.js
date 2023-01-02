@@ -123,6 +123,7 @@ async function ResendEmail(req, res) {
 function Logout(req, res) {
   req.logout((err) => { if (err) console.log(`the Error is ${err}`) });
   res.clearCookie('user');
+  res.clearCookie('connect.sid');
   res.send("Logged out");
 
 

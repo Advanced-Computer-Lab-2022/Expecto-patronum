@@ -93,7 +93,7 @@ const SideBar = () => {
   }
    return (
      <aside className="w-60" aria-label="Sidebar">
-       <div className="overflow-y-auto py-4 px-3 bg-gray-50 dark:bg-[#f4f4f4] shadow-slate-500 shadow-lg border border-t-0 border-t-slate-600">
+       <div className="h-full overflow-y-auto py-4 px-3 bg-gray-50 dark:bg-[#f4f4f4] shadow-slate-500 shadow-lg border border-t-0 border-t-slate-600">
          <ul className="space-y-6">
            <li  id='Admin-Dashboard-btn' className="group">
              <Link onClick={changePrevAndCurr} href="/AdminTool">

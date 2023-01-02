@@ -67,7 +67,7 @@ const Home: NextPage = () => {
               new opportunities. Learn from Industry Experts and land your Dream
               Job.
             </p>
-            <Link href='/Login?isLogin=false' as='/Login' className="rounded-md border-1.5 border-canadian-red bg-calm-red h-10 px-4 py-2.75 ml-4 text-white hover:bg-canadian-red transition-all duration-300">Join Now!</Link>
+            <Link href='/Auth?isLogin=false' as='/Auth' className="rounded-md border-1.5 border-canadian-red bg-calm-red h-10 px-4 py-2.75 ml-4 text-white hover:bg-canadian-red transition-all duration-300">Join Now!</Link>
         </div>
         
         <div className="relative nv:ml-20 min-w-[24rem] min-h-[24rem] nv-max:min-h-[19rem] pointer-events-none flex justify-center">
