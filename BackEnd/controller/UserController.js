@@ -674,10 +674,27 @@ async function selectCourse(req, res, next) {
     let exercise = {};
     if (req.body.courseId) {
       if (req.user) {
+        if(req.user.role=="Admin"){
+          info.purchased = "yes";
+          x = await CourseTable.findOne({ "_id": req.body.courseId }, { review: { "$slice": 3 } });
+          info.course = x;
+          var instructor1 = await User.findOne({ "_id": (x.instructorID) }).select({
+            instructorRating: 1,
+            biography: 1,
+            _id: 1,
+            firstname: 1,
+            lastname: 1,
+            instructorReview: { "$slice": 3 },
+          });
+          info.instructor = instructor1;
+          info.course = x;
+          res.send(info);
+          return;
+        }
         var instructor = await CourseTable.findOne({ "instructorID": req.user._id }, { instructorID: 1 });
         if (instructor) {
           ////////////////instructor/////////////////////
-          info.Owner = "yes";
+          info.purchased = "yes";
           x = await CourseTable.findOne({ "_id": req.body.courseId }, { review: { "$slice": 3 } });
           info.course = x;
           var instructor1 = await User.findOne({ "_id": (x.instructorID) }).select({
