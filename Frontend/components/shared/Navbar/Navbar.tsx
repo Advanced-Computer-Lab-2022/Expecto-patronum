@@ -31,7 +31,7 @@ function Navbar() {
   let router = useRouter();
 
   const logout = async (e: any) => {
-  Response = await axios.get("http://localhost:5000/User/logout", {
+    Response = await axios.get("http://localhost:5000/User/logout", {
     }).then((res: { data: any; }) => { return res.data });
     router.push({
       pathname: 'http://localhost:3000/Auth'
@@ -111,7 +111,7 @@ const UserNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, userDa
 
 
   const close = (e: any) => {
-    if(userRef.current && !userRef.current?.contains(e.target)) {
+    if (userRef.current && !userRef.current?.contains(e.target)) {
       setIsOptionsOpen(false);
     }
   }
@@ -138,7 +138,7 @@ const UserNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, userDa
           <button onClick={() => setIsOptionsOpen(true)}>
             <Image width={50} height={50} src="/images/x8PhM.png" alt="" className="mx-2 min-h-[2rem] min-w-[2rem] border-black border-1.5 rounded-full hover:scale-110 transition-all duration-300" />
           </button>
-          <div ref={userRef} className={`${isOptionsOpen ? 'h-[10.625rem] py-2': 'h-0'} absolute flex flex-col rounded-md shadow-md right-4 px-2 overflow-hidden w-60 bg-white transition-all duration-300`}>
+          <div ref={userRef} className={`${isOptionsOpen ? 'h-[10.625rem] py-2' : 'h-0'} absolute flex flex-col rounded-md shadow-md right-4 px-2 overflow-hidden w-60 bg-white transition-all duration-300`}>
             <label className="underline font-bold tracking-wider text-lg">Rodin Salem</label>
             <hr className="my-1" />
             <Link href='/User' className="my-1.5 pl-2 rounded-full hover:underline">My Profile</Link>
@@ -154,13 +154,13 @@ const UserNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, userDa
 }
 
 const AdminNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, userData: any, logout: any }) => {
-  
+
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
   const adminRef = useRef<HTMLDivElement>(null);
 
 
   const close = (e: any) => {
-    if(adminRef.current && !adminRef.current?.contains(e.target)) {
+    if (adminRef.current && !adminRef.current?.contains(e.target)) {
       setIsOptionsOpen(false);
     }
   }
@@ -187,7 +187,7 @@ const AdminNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, userD
           <button onClick={() => setIsOptionsOpen(true)}>
             <Image width={50} height={50} src="/images/x8PhM.png" alt="" className="mx-2 min-h-[2rem] min-w-[2rem] border-black border-1.5 rounded-full hover:scale-110 transition-all duration-300" />
           </button>
-          <div ref={adminRef} className={`${isOptionsOpen ? 'h-[10.625rem] py-2': 'h-0'} absolute flex flex-col rounded-md shadow-md right-4 px-2 overflow-hidden w-60 bg-white transition-all duration-300`}>
+          <div ref={adminRef} className={`${isOptionsOpen ? 'h-[10.625rem] py-2' : 'h-0'} absolute flex flex-col rounded-md shadow-md right-4 px-2 overflow-hidden w-60 bg-white transition-all duration-300`}>
             <label className="underline font-bold tracking-wider text-lg">Rodin Salem</label>
             <hr className="my-1" />
             <Link href='/AdminTool' className="my-1.5 pl-2 rounded-full hover:underline">My Profile</Link>
@@ -209,7 +209,7 @@ const InstructorNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, 
 
 
   const close = (e: any) => {
-    if(instructorRef.current && !instructorRef.current?.contains(e.target)) {
+    if (instructorRef.current && !instructorRef.current?.contains(e.target)) {
       setIsOptionsOpen(false);
     }
   }
@@ -231,7 +231,7 @@ const InstructorNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, 
           <button onClick={() => setIsOptionsOpen(true)}>
             <Image width={50} height={50} src="/images/x8PhM.png" alt="" className="mx-2 min-h-[2rem] min-w-[2rem] border-black border-1.5 rounded-full hover:scale-110 transition-all duration-300" />
           </button>
-          <div ref={instructorRef} onClick={() => setIsOptionsOpen(false)} className={`${isOptionsOpen ? 'h-[10.625rem] py-2': 'h-0'} absolute flex flex-col rounded-md shadow-md right-4 px-2 overflow-hidden w-60 bg-white transition-all duration-300`}>
+          <div ref={instructorRef} onClick={() => setIsOptionsOpen(false)} className={`${isOptionsOpen ? 'h-[10.625rem] py-2' : 'h-0'} absolute flex flex-col rounded-md shadow-md right-4 px-2 overflow-hidden w-60 bg-white transition-all duration-300`}>
             <label className="underline font-bold tracking-wider text-lg">Rodin Salem</label>
             <hr className="my-1" />
             <Link href='/Instructor/Settings' className="my-1.5 pl-2 rounded-full hover:underline">My Profile</Link>

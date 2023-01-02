@@ -97,7 +97,7 @@ const TicketDetails = (props: Props) => {
         </div>
         <TextBox ShowOnly={true} Text={props.data.body} ></TextBox>
         <div>
-          {props.data.comment.map((item, index) => {
+          {props.data.comment && props.data.comment.map((item, index) => {
             return (
               <div className="mt-4" key={index}>
                 <TextBox ShowOnly Text={item} LabelTitle={"Follow Up" + " ." + index} ></TextBox>

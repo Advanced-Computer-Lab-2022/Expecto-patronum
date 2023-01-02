@@ -169,7 +169,7 @@ function forgetPassword(req, res, next) {
       else {
         if (user) {
           let Token = CreateToken({ id: user._id });
-          MailValidate(userMail, "http://localhost:3000/ForgetPassword", Token);
+          MailValidate(userMail, "http://localhost:3000/Auth/ForgetPassword", Token);
           console.log("Mail Sent");
         }
         else {
@@ -226,9 +226,10 @@ function forgetPassword(req, res, next) {
 // }
 
 
-function ChangeForgottenPassword(req, res) {
-  if (req.user._id) {
-    User.findById(req.user._id, (err, user) => {
+async function ChangeForgottenPassword(req, res) {
+  if (req.userid) {
+
+    User.findById(req.userid, (err, user) => {
       if (err) {
         res.send({ Error: true, Message: "Invalid request" });
         console.log(err);
@@ -688,7 +689,7 @@ async function selectCourse(req, res, next) {
     let exercise = {};
     if (req.body.courseId) {
       if (req.user) {
-        if(req.user.role=="Admin"){
+        if (req.user.role == "Admin") {
           info.purchased = "yes";
           x = await CourseTable.findOne({ "_id": req.body.courseId }, { review: { "$slice": 3 } });
           info.course = x;

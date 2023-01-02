@@ -201,9 +201,7 @@ const LoginForm = (props: { setIsLogin: any }) => {
           <p className={ErrorP}>{errors.password?.message}</p>
 
         </div>
-
         <MainButton className="mx-auto my-4 bg-canadian-red text-white rounded-md px-14 py-2 hover:bg-calm-red hover:scale-[1.01] transition-all duration-200" HandleClick={(handleSubmit(Submit))} Loading={Loading} btnText="Login" Size="lg"></MainButton>
-
         <div className="relative">
           <hr className="bg-slate-200 border-px" />
           <label className="relative bottom-3 bg-white px-3">Or continue with</label>
@@ -215,6 +213,11 @@ const LoginForm = (props: { setIsLogin: any }) => {
           <button className={`${colIcons} border-[#EA4335] bg-[#EA4335] text-white hover:bg-white hover:text-[#EA4335]`}><FaGoogle /></button>
           <button className={`${colIcons} border-[#0077B5] bg-[#0077B5] text-white hover:bg-white hover:text-[#0077B5]`}><FaLinkedinIn /></button>
         </div>
+        <Link href={"/Auth/ForgetPassword"}>
+          <p className='mt-40 text-canadian-red font-bold cursor-pointer'>Forget Password</p>
+        </Link>
+
+
       </form>
     </div>
   );

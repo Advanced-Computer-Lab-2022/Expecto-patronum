@@ -35,8 +35,10 @@ const AccountInfo = (props: Props) => {
           </div>
 
           <div className={ChangeDataCont}>
-            <button className={Button}>Change Email</button>
-            <Link href={"/Auth/ChangePassword"}>
+            <Link href={"/User/ChangeEmail"}>
+              <button className={Button}>Change Email</button>
+            </Link>
+            <Link href={"/User/ChangePassword2"}>
               <button className={Button}>Change Password</button>
             </Link>
           </div>

@@ -56,7 +56,7 @@ function ResetPassword(props: Props) {
   }
 
   return (
-    <AuthForm Error={Error} Success={{ ...Success, Cta: "Sign in Now", CtaLink: '/Login' }} Submit={Submit} FormTitle='Reset Password' ButtonText='Reset Password' Inputs={[passwordData, reWritePasswordData]}></AuthForm>
+    <AuthForm Error={Error} Success={{ ...Success, Cta: "Sign in Now", CtaLink: '/Auth' }} Submit={Submit} FormTitle='Reset Password' ButtonText='Reset Password' Inputs={[passwordData, reWritePasswordData]}></AuthForm>
 
   )
 
