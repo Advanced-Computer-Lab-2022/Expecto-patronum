@@ -56,7 +56,7 @@ function Navbar() {
     SetRoleIndex(RoleIndexData);
     // let data = JSON.parse(LocalStorage as string);
     // setUseData(data);
-  }, [])
+  }, [router.pathname])
 
   useEffect(() => {
     if (parentRef.current) {
