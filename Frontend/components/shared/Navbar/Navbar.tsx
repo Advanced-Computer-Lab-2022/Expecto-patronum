@@ -141,7 +141,7 @@ const UserNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, userDa
           <div ref={userRef} className={`${isOptionsOpen ? 'h-[10.625rem] py-2' : 'h-0'} absolute flex flex-col rounded-md shadow-md right-4 px-2 overflow-hidden w-60 bg-white transition-all duration-300`}>
             <label className="underline font-bold tracking-wider text-lg">Rodin Salem</label>
             <hr className="my-1" />
-            <Link href='/User' className="my-1.5 pl-2 rounded-full hover:underline">My Profile</Link>
+            <Link href='/User/Profile' className="my-1.5 pl-2 rounded-full hover:underline">My Profile</Link>
             <Link href='/' className="my-1.5 pl-2 rounded-full hover:underline">Messages</Link>
             <hr className="mb-2" />
             <button onClick={() => props.logout()} className="my-1.5 pl-2 rounded-full hover:underline text-canadian-red">Logout</button>
