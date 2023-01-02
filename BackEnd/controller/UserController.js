@@ -298,6 +298,7 @@ function ChangePassword(req, res, next) {
                 return;
               }
               else {
+                res.clearCookie('user');
                 res.send({ Error: false, Message: "Password Changed" });
                 req.logout(function (err) {
                   if (err) {
@@ -307,7 +308,7 @@ function ChangePassword(req, res, next) {
 
                   }
                 });
-                res.clearCookie('user');
+       
                 return;
 
               }
