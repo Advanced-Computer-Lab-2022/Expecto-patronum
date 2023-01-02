@@ -7,12 +7,20 @@ import OneStar from '../../components/shared/rating/OneStar';
 import { useRouter } from 'next/router';
 import DataContext from '../../context/DataContext';
 import { PopupMessageContext } from '../_app';
+import { AES, enc } from 'crypto-js';
+import { GetServerSidePropsContext } from 'next';
 
 type Props = {
 
 }
 
-const PayForCourse = (props: Props) => {
+interface dataInterface {
+    data: {
+        DeccourseID: string;
+
+    }
+}
+const PayForCourse = (props: dataInterface) => {
 
     const [course, setCourse] = useState<any>();
     const [cardDetails, setCardDetails] = useState(
@@ -35,6 +43,15 @@ const PayForCourse = (props: Props) => {
     const { viewPopupMessage } = useContext(PopupMessageContext);
 
     let router = useRouter();
+    const decryptId = (str: string) => {
+        const decodedStr = decodeURIComponent(str);
+        return AES.decrypt(decodedStr, 'secretPassphrase').toString(enc.Utf8);
+    }
+
+    const encryptId = (str: string | CryptoJS.lib.WordArray) => {
+        const ciphertext = AES.encrypt(str, 'secretPassphrase');
+        return encodeURIComponent(ciphertext.toString());
+    }
 
     useEffect(() => {
 
@@ -42,15 +59,16 @@ const PayForCourse = (props: Props) => {
             axios.defaults.withCredentials = true;
             axios.get('http://localhost:5000/Courses/GetCourse', {
                 params: {
-                    id: '638773fabbdc935c90789419',
+                    id: props.data.DeccourseID,
                 }
             }).then((res) => {
+          
                 setCourse(res.data[0]);
                 console.log(res.data[0]);
             })
         }
 
-        // getCourse();
+        getCourse();
 
         global.window.scrollTo(0, 80);
     }, [])
@@ -96,7 +114,7 @@ const PayForCourse = (props: Props) => {
                 return;
             } else {
                 await axios.put('http://localhost:5000/User/buyCourse', {
-                    courseID: '63a59c15e3b96b22a1dc828a', // Course ID
+                    courseID: props.data.DeccourseID, // Course ID
                     creditCardNumber: cardDetails.cardNumber,
                     ccv: cardDetails.securityCode,
                     cardHolderName: cardDetails.cardholderName,
@@ -108,7 +126,11 @@ const PayForCourse = (props: Props) => {
                     } else {
                         viewPopupMessage(true, 'Course Bought Successfully.');
                     }
-                    router.push(`/Courses/${'63b05af10df08615ec9108ea'}`);
+                    // router.push(`/Courses/${'63b05af10df08615ec9108ea'}`);
+                    router.push({
+                        pathname: `http://localhost:3000/Courses/${encryptId(props.data.DeccourseID)}`,
+                        // query: { courseID: encryptId(props.data.DeccourseID) }
+                    });
                 })
             }
         } else {
@@ -133,21 +155,21 @@ const PayForCourse = (props: Props) => {
                     <h1 className='text-3xl nv-max:text-center'>Payment Summary</h1>
 
                     <div className='bg-white shadow-md rounded-md nv:ml-6 mt-3 nv:mr-8 nv-max:mx-6 py-4 px-2 mb-3 nv:mb-5 relative'>
-                        <OneStar rating={4.2} className='bg-white rounded-bl-xl rounded-tr-md absolute top-0 right-0 py-2 px-3 shadow-md hover:shadow-sm transition-all duration-200' />
+                        <OneStar rating={course?.rating.avg} className='bg-white rounded-bl-xl rounded-tr-md absolute top-0 right-0 py-2 px-3 shadow-md hover:shadow-sm transition-all duration-200' />
                         <div className='flex items-center h-22 mt-3'>
                             <Image width={100} height={100} src='/images/Course Icons/python.png' className={`rounded-md mr-4 nv-max:h-18 nv-max:w-18 w-22 h-22 p-2`} alt='' />
                             <div className='flex flex-col justify-between h-full py-1'>
-                                <h1 className='text-2xl nv-max:text-lg font-bold nv:leading-tight line-clamp-2'>Learn Python: The Complete Python Programming Course</h1>
+                                <h1 className='text-2xl nv-max:text-lg font-bold nv:leading-tight line-clamp-2'>Learn {course?.title}</h1>
                                 <div className='flex items-center space-x-4'>
-                                    <label className={`bg-black px-1 text-white`}>-20%</label>
-                                    <label className={`text-lg nv-max:text-base`}>{Rate.curr} {(Rate.rate * 59.49).toFixed(2)}</label>
-                                    <label className={`line-through text-[#7580A0]`}>{Rate.curr} {(Rate.rate * 69.99).toFixed(2)}</label>
+                                    <label className={`bg-black px-1 text-white`}>{(course?.price-course?.discountPrice)/course?.price}%</label>
+                                    <label className={`text-lg nv-max:text-base`}>{Rate.curr} {(Rate.rate * course?.discountPrice).toFixed(2)}</label>
+                                    <label className={`line-through text-[#7580A0]`}>{Rate.curr} {(Rate.rate * course?.price).toFixed(2)}</label>
                                 </div>
                             </div>
                         </div>
                         <div className='nv:ml-22 px-3 mt-3 text-gray-500'>
-                            <p><span>Difficulty:</span> <span className='font-bold italic'>All Levels</span></p>
-                            <p className='ml-2 -indent-2'>Summary: <br /> Intensive practice in writing poetry. Analysis and criticism of students’ work, as well as some critical study of published verse. May be repeated once for credit.</p>
+                            <p><span>Difficulty:</span> <span className='font-bold italic'>{course?.level}</span></p>
+                            <p className='ml-2 -indent-2'>Summary: <br /> {course?.summary}</p>
                         </div>
                     </div>
                 </div>
@@ -156,7 +178,7 @@ const PayForCourse = (props: Props) => {
                     <p className='text-xs mb-3'>By selecting [Confirm Purchase], you agree to complete the purchase on accordance with the <Link className='text-blue-600 hover:text-blue-800' href=''>Terms of Service</Link> before using this course.</p>
                     <div className='flex justify-between mx-1'>
                         <p>Subtotal:</p>
-                        <p>{Rate.curr} {(Rate.rate * 69.99).toFixed(2)}</p>
+                        <p>{Rate.curr} {(Rate.rate *course?.price).toFixed(2)}</p>
                     </div>
                     <div className='flex justify-between mx-1'>
                         <p>Tax:</p>
@@ -164,11 +186,11 @@ const PayForCourse = (props: Props) => {
                     </div>
                     <div className='flex justify-between mx-1 text-blue-700'>
                         <p>Discount:</p>
-                        <p>{Rate.curr} {(Rate.rate * 10.50).toFixed(2)}</p>
+                        <p>{Rate.curr} {(Rate.rate * (course?.price-course?.discountPrice)).toFixed(2)}</p>
                     </div>
                     <div className='flex justify-between mx-1 font-bold'>
                         <p>Total Amount:</p>
-                        <p>{Rate.curr} {(Rate.rate * 59.49).toFixed(2)}</p>
+                        <p>{Rate.curr} {(Rate.rate *course?.discountPrice).toFixed(2)}</p>
                     </div>
                 </div>
             </div>}
@@ -182,9 +204,9 @@ const PayForCourse = (props: Props) => {
                             <h1 className='text-xl tracking-wider mb-2'>Cash:</h1>
                             <label className='text-3xl font-bold space-x-4'>
                                 <span>{Rate.curr}</span>
-                                <span>60.00 <span className='text-calm-red text-sm'>-{Rate.curr} 59.49</span></span>
+                                <span>4000<span className='text-calm-red text-sm'>-{Rate.curr} {course?.discountPrice}</span></span>
                             </label>
-                            <p className='text-right text-xs mr-3 mt-3 italic'>Remaining after purchase: <span className='ml-2 font-bold not-italic'>{Rate.curr} 0.41</span></p>
+                            <p className='text-right text-xs mr-3 mt-3 italic'>Remaining after purchase: <span className='ml-2 font-bold not-italic'>{Rate.curr} {4000-course?.discountPrice}</span></p>
                         </div>
                     </div>
                 </div>
@@ -255,3 +277,22 @@ const TogglePaymentMethod = (props: toggleProps) => {
 }
 
 export default PayForCourse;
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+    let { CourseID } = context.query;
+
+    const decryptId = (str: string) => {
+        const decodedStr = decodeURIComponent(str);
+        return AES.decrypt(decodedStr, 'secretPassphrase').toString(enc.Utf8);
+    }
+    const DeccourseID = decryptId(CourseID as string);
+    console.log(DeccourseID);
+
+    return {
+        props: {
+            data: { DeccourseID }
+        }
+    }
+
+
+}
