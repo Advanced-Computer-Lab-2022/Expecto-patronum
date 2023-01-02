@@ -282,7 +282,10 @@ function ChangePassword(req, res, next) {
   if (req.user._id) {
     User.findById(req.user._id, (err, user) => {
       if (err) {
-        res.send(err);
+        console.log("HEYO1")
+
+        res.send({ Error: false, Message: "Password Changed" });
+        return;
       } else if (user) {
         if (req.body.oldPassword) {
           let SameOldPassword = validPassword(req.body.oldPassword, user.hash, user.salt);
@@ -292,36 +295,48 @@ function ChangePassword(req, res, next) {
             user.hash = hash;
             user.save((err, user) => {
               if (err) {
-                console.log(err);
+                console.log("HEYO2")
+                res.status(400).send(err)
+                return;
               }
               else {
                 res.send({ Error: false, Message: "Password Changed" });
                 req.logout(function (err) {
                   if (err) {
-                    console.log(err);
+                    console.log("HEYO3")
+                    res.status(400).send(err)
+                    return;
+
                   }
                 });
                 res.clearCookie('user');
-                console.log("Password Changed");
+                return;
+
               }
             })
           }
           else {
-            res.send({ Error: true, Message: "Wrong Password" });
-            console.log("Wrong Password");
+            console.log("HEYO4")
+
+            res.status(400).send("Wrong Password")
+            return;
+
           }
 
         }
         else {
-          res.send({ Error: true, Message: "Invalid Request" });
-          console.log("old Password is not provided");
+          console.log("HEYO5")
+
+          res.status(200).send("Password Changed")
+          return;
         }
 
 
       }
       else {
-        res.send({ Error: false, Message: "user not found" });
-        console.log("user not found");
+        console.log("HEY06")
+        res.status(400).send("Password Changed")
+        return;
 
       }
     })
@@ -413,7 +428,7 @@ function ChangeEmail(req, res) {
       }
       else {
         let Token = CreateToken({ id: req.user._id, email: userMail, oldemail: req.user.email });
-        MailValidate(userMail, "http://localhost:5000/user/resetEmail", Token);
+        MailValidate(userMail, "http://localhost:3000/User/FeedBack/EmailConfirmed", Token);
         res.send("Verify mail sent");
       }
     }
