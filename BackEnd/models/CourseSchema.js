@@ -17,10 +17,6 @@ const CourseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  courseVideo: {
-    type: String,
-    required: true
-  },
   summary: {
     type: String,
     required: true
@@ -38,7 +34,7 @@ const CourseSchema = new mongoose.Schema({
       default: 0,
     },
     startDate: Date,
-    duration: Number,
+    set: Boolean,
     endDate: Date,
     //expiration: moment().add(, "days").valueOf()
   },
@@ -69,16 +65,7 @@ const CourseSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  // exercises: [{
-  //   title: String,
-  //   questions: [{
-  //     question: String,
-  //     choices: [String],
-  //     answer: Number,
-  //     isVisible: Boolean,
-  //   }],
-  //   totalGrade: Number
-  // }],
+
   subtitles: [{
     header: String,
     summary: String,
@@ -136,8 +123,23 @@ const CourseSchema = new mongoose.Schema({
     username: String,
     reviewBody: String,
     rating: Number
-  }]
+  }],
+  reviewsCounter: Number,
+  promotion: {
+    promotion: {
+      type: Number,
+      default: 0,
+    },
+    startDate: Date,
+    set: Boolean,
+    endDate: Date,
+    //expiration: moment().add(, "days").valueOf()
+  },
 
+  purchases: {
+    type: Number,
+    default: 0,
+  }
 
 });
 

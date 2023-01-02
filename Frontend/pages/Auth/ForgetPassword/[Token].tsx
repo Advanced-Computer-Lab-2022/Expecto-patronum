@@ -34,11 +34,11 @@ const Token = (props: Props) => {
 
 
 export async function getServerSideProps(UrlInfo: { resolvedUrl: string }) {
-  let res = await fetch(ApiUrl + "/User/forgetPassword/" + UrlInfo.resolvedUrl.split("/")[2]);
+  let res = await fetch(ApiUrl + "/User/forgetPassword/" + UrlInfo.resolvedUrl.split("/")[3]);
   let VerfiyTokendata = await res.json();
   return {
     props: {
-      data: [VerfiyTokendata, UrlInfo.resolvedUrl.split("/")[2]],
+      data: [VerfiyTokendata, UrlInfo.resolvedUrl.split("/")[3]],
     },
   };
 }

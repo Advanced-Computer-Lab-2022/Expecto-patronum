@@ -8,19 +8,66 @@ html {
   margin: 0px;
   padding: 0px;
   scroll-behavior: smooth;
-  background-color: #f5f5f5;
+  background-color: #F5F5F5;
+}
+
+.flip-card {
+  height: 12rem;
+  width: 19rem;
+  background-color: transparent;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg) scaleX(-100%);
+}
+
+.metallic {
+  background: -webkit-linear-gradient(#888, #EEE, #888);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.credit-card {
+  font-family: "Credit Card";
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
 }
+.FontCertif{
+  font-family: 'Dancing Script', cursive;
+}
 
 input[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
   
 }div::-webkit-scrollbar {
   width: 0.4em;
+  height: 0.4rem;
 }
 
 div::-webkit-scrollbar-track {
@@ -39,6 +86,10 @@ div::-webkit-scrollbar-thumb:hover {
 
 .react-calendar {
   border: 0px !important;
+}
+
+.react-calendar__navigation {
+  margin: 0px !important;
 }
 
 .react-calendar button {
@@ -95,7 +146,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 .react-calendar .react-calendar__tile:disabled:hover {
-  background-color: #f0f0f0 !important;
+  background-color: #F0F0F0 !important;
 }
 
 .react-calendar__tile--active.react-calendar__tile--now {
@@ -140,7 +191,7 @@ div::-webkit-scrollbar-thumb:hover {
   height: 50px;
   width: 25px;
   border-top-right-radius: 15px;
-  box-shadow: 0px -25px 0px 0px #d80621;
+  box-shadow: 0px -25px 0px 0px #D80621;
 }
 
 .delete-button-reject {
@@ -211,7 +262,7 @@ div::-webkit-scrollbar-thumb:hover {
   left: -100%;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #083248);
+  background: linear-gradient(90deg, transparent, #0B80F3);
   animation: btn-anim1 3s linear infinite;
 }
 
@@ -231,7 +282,7 @@ div::-webkit-scrollbar-thumb:hover {
   right: 0;
   width: 2px;
   height: 100%;
-  background: linear-gradient(180deg, transparent, #083248);
+  background: linear-gradient(180deg, transparent, #0B80F3);
   animation: btn-anim2 3s linear infinite;
   animation-delay: 0.75s;
 }
@@ -252,7 +303,7 @@ div::-webkit-scrollbar-thumb:hover {
   right: -100%;
   width: 100%;
   height: 2px;
-  background: linear-gradient(270deg, transparent, #083248);
+  background: linear-gradient(270deg, transparent, #0B80F3);
   animation: btn-anim3 3s linear infinite;
   animation-delay: 1.5s;
 }
@@ -273,7 +324,7 @@ div::-webkit-scrollbar-thumb:hover {
   left: 0;
   width: 2px;
   height: 100%;
-  background: linear-gradient(360deg, transparent, #083248);
+  background: linear-gradient(360deg, transparent, #0B80F3);
   animation: btn-anim4 3s linear infinite;
   animation-delay: 2.25s;
 }
@@ -289,13 +340,6 @@ div::-webkit-scrollbar-thumb:hover {
   }
 }
 
-@font-face {
-  src: url("../public/fonts/Amino-Alt\ 5/Amino Alt Medium.otf");
-  font-family: "Amino Alt";
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
 * {
   box-sizing: border-box;
 }
@@ -304,25 +348,6 @@ a {
   text-decoration: none;
   cursor: pointer;
 }
-
-html,
-body {
-  padding: 0;
-  margin: 0;
-  /* font-family: "Roboto", sans-serif; */
-}
-
-
-
-
-
-/* -----Search-filter */
-
-
-
-
-
-/* -----Pagination */
 
 .pagination-data {
   padding: 0;
@@ -335,9 +360,9 @@ body {
   padding: 15px;
 }
 .thead-primary tr th {
-  background-color: #5a8dee;
-  border-color: #5a8dee;
-  color: #fff;
+  background-color: #5A8DEE;
+  border-color: #5A8DEE;
+  color: #FFF;
 }
 
 .rc-pagination {
@@ -417,7 +442,7 @@ body {
   justify-content: center;
   font-size: 12px;
   font-weight: 500;
-  color: #656f84 !important;
+  color: #656F84 !important;
   transition: 0.3s;
   -webkit-transition: 0.3s;
   -moz-transition: 0.3s;
@@ -431,9 +456,9 @@ body {
 .rc-pagination-next.rc-pagination-item-active a:hover,
 .rc-pagination-total-text.rc-pagination-item-active a,
 .rc-pagination-total-text.rc-pagination-item-active a:hover {
-  background-color: #5a8dee;
-  border-color: #5a8dee;
-  color: #ffffff !important;
+  background-color: #5A8DEE;
+  border-color: #5A8DEE;
+  color: #FFFFFF !important;
 }
 .rc-pagination-item a:hover,
 .rc-pagination-item button:hover,
@@ -443,6 +468,22 @@ body {
 .rc-pagination-next button:hover,
 .rc-pagination-total-text a:hover,
 .rc-pagination-total-text button:hover {
-  background-color: #eceff5;
-  border-color: #eceff5;
+  background-color: #ECEFF5;
+  border-color: #ECEFF5;
+}
+
+@font-face {
+  src: url("../public/fonts/Amino-Alt\ 5/Amino Alt Medium.otf");
+  font-family: "Amino Alt";
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  src: url("../public/fonts/Credit Card/Credit Card.ttf");
+  font-family: "Credit Card";
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }

@@ -2,10 +2,12 @@ import React from "react";
 import CourseSubtitleData from "../CourseSubtitleData";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
-import { OneSubtitleData } from "../../../Interface/OneSubtitleData";
+import { OneSubtitleData } from "../../../Interface//NotPurchasedCourse/OneSubtitleData";
 
 type Props = {
   Data: OneSubtitleData
+  OpenFirst: boolean;
+  index: number;
 };
 
 const CourseSubtitle = (props: Props) => {
@@ -13,6 +15,17 @@ const CourseSubtitle = (props: Props) => {
   const [onClick, SetonClick] = React.useState(false);
   const [ShowSubtitle, SetShowSubtitle] = React.useState(false);
   let Hours = Math.floor(props.Data.totalMinutes / 60);
+  console.log("////////////////////////////")
+  console.log(props.Data)
+  console.log("////////////////////////////")
+
+  React.useEffect(() => {
+    if (props.index === 0) {
+      if (props.OpenFirst) {
+        SetShowSubtitle(true);
+      }
+    }
+  }, [props.OpenFirst]);
 
   return (
     <div className="mb-4 ">

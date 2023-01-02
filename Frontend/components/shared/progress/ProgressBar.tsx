@@ -9,11 +9,11 @@ const ProgressBar = (props: Props) => {
 
   return (
     <div className={ProgressContainer} >
-      <div className={Progress} style={{ "width": props.progressPrecentage + "%" }} ></div>
+      <div className={Progress} style={{ "width": props.progressPrecentage >= 100 ? 100 + "%" : props.progressPrecentage + "%" }} ></div>
     </div>
   )
 }
 
 export default ProgressBar
 const ProgressContainer = classNames(" w-100 bg-gray-200 h-[1.5rem] dark:bg-[#F4F4F4] rounded-full mt-2");
-const Progress = classNames(`bg-green-500  h-[1.5rem]   rounded-l-full transition-all duration-500 ease-in-out `);
+const Progress = classNames(`bg-green-500  h-[1.5rem]  rounded-full transition-all duration-500 ease-in-out `);

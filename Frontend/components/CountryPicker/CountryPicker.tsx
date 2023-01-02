@@ -24,7 +24,6 @@ const CountryPicker = () => {
 
   const [selected, setSelected] = useState("");
   async function onSelectFlag(CountryCode: string) {
-    console.log(CountryCode);
     axios.defaults.withCredentials = true;
     setSelected(CountryCode);
     response = await axios

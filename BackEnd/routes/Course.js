@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Course = require('../models/CourseSchema');
-const { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses } = require('../controller/CourseController')
+const { CourseSearch, GetPrice, GetCourse, CreateCourse, GetAllCourses, GenerateCourses, MostRated, userfilterByRatings, userViewCourseRatings, viewPopularCourses } = require('../controller/CourseController')
 
 router.get("/POP", async (req, res) => {
   var subject = "Node";
@@ -57,30 +57,37 @@ router.get("/POP", async (req, res) => {
   return ("CoursePage");
 })
 
-router.post("/", async (req, res) => {
+// router.post("/", async (req, res) => {
 
-  res.send("Added " + req.body.title + " Course");
+//   res.send("Added " + req.body.title + " Course");
 
-  const newCourse = {
-    title: req.body.title,
-    subtitle: req.body.subtitle,
-    summary: req.body.summary,
-    price: req.body.price,
-    subject: req.body.subject,
-    instructorID: req.body.instructorID,
-    instructorName: req.body.instructorName
-  }
+//   const newCourse = {
+//     title: req.body.title,
+//     subtitle: req.body.subtitle,
+//     summary: req.body.summary,
+//     price: req.body.price,
+//     subject: req.body.subject,
+//     instructorID: req.body.instructorID,
+//     instructorName: req.body.instructorName
+//   }
 
-  await Course.create(newCourse);
-})
+//   await Course.create(newCourse);
+// })
 
 router.get("/getPrice", GetPrice);
+router.get("/MostRated", MostRated);
 
 router.get("/", CourseSearch);
 router.get("/GetCourse", GetCourse);
 router.post("/CreateCourse", CreateCourse);
 router.post("/GetAllCourses", GetAllCourses);
 
+
+router.put("/userfilterByRatings", userfilterByRatings);
+router.put("/userViewCourseRatings", userViewCourseRatings);
+
 router.post("/GenerateCourses", GenerateCourses);
+
+router.get("/popularCourses", viewPopularCourses);
 
 module.exports = router;

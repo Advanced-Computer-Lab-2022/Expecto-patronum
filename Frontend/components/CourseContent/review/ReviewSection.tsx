@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import React from "react";
+import MainButton from "../../shared/button/MainButton";
 import BigRating from "../../shared/rating/BigRating";
 import ReviewCard from "./ReviewCard";
 
@@ -13,15 +14,16 @@ type Props = {
 };
 
 const ReviewSection = (props: Props) => {
+
   return (
-    <div className="w-full">
+    <div className=" w-full">
       {!props.ViewMore && <h2 className="mb-8 text-3xl font-semibold">REVIEWS</h2>}
       {props.review.map((review, index) => {
         return (
           <ReviewCard key={index} review={review}></ReviewCard>
         );
       })}
-      {props.ViewMore && <button className={Button}>View More Reviews</button>}
+      {/* {props.ViewMore && <MainButton btnText="View More Reviews" Size="lg" HandleClick={() => { }} ></MainButton>} */}
     </div>
   );
 };

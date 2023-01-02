@@ -18,6 +18,8 @@ const ForgotPassword = (props: Props) => {
 
   let FormData: [{ ref: any, name: string, placeholder: string, required: boolean }] = [emailData];
   let router = useRouter()
+
+
   async function Submit(e: any) {
     setLoading(true);
     e.preventDefault();
