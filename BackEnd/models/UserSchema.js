@@ -87,9 +87,9 @@ const UserSchema = new mongoose.Schema({
       type: mongoose.Types.ObjectId,
       ref: 'CourseSchema'
     },
-    completedCourse:{
-      type:Boolean,
-      default:false,
+    completedCourse: {
+      type: Boolean,
+      default: false,
     },
     excercises: [{
       excerciseID: {

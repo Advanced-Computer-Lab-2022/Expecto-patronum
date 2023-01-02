@@ -11,9 +11,10 @@ import VideoPlayer from "../shared/Video/VideoPlayer";
 type Props = {
   SetNavApear: Function;
   courseContentData: CourseHeroData;
-
-
-
+  IsCorp: boolean;
+  HandleClick: () => void;
+  Purchased: "yes" | "no" | "Pending" | "";
+  Loading: boolean;
 
 };
 
@@ -23,6 +24,7 @@ const CourseContentHero = (props: Props) => {
   const listInnerRef = useRef(null);
   const [VideoPictureApear, SetVideoPictureApear] = React.useState(false);
   const [VideoOpen, SetVideoOpen] = React.useState(false);
+
 
   // useEffect(() => {
   //   var path = document.getElementById("path");
@@ -96,7 +98,7 @@ const CourseContentHero = (props: Props) => {
                 {/* <button className={CTA}>ENROLL NOW</button> */}
                 <div className="mt-4">
 
-                  <MainButton btnText="Enroll Now" HandleClick={() => { }} Size='lg'></MainButton>
+                  <MainButton Loading={props.Loading} Type={props.Purchased} btnText={props.IsCorp ? props.Purchased == 'no' ? "Request Course" : props.Purchased == 'Pending' ? "Pending" : "View Course" : props.Purchased === 'no' ? "Enroll Now" : props.Purchased === 'Pending' ? 'Pending' : "View Course"} HandleClick={props.HandleClick} Size='lg'></MainButton>
                 </div>
               </div>
             </div>

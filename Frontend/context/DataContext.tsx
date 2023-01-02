@@ -34,6 +34,9 @@ export interface InterfaceDataContext {
   FinalExam: string,
   SetFinalExam: React.Dispatch<React.SetStateAction<string>>,
 
+  Completed: boolean,
+  SetCompleted: React.Dispatch<React.SetStateAction<boolean>>,
+
 
 }
 interface InterfaceRate {
@@ -126,6 +129,9 @@ const defualts = {
   FinalExam: {} as string,
   SetFinalExam: () => { },
 
+  Completed: false as boolean,
+  SetCompleted: () => { },
+
 }
 
 
@@ -151,9 +157,10 @@ export const DataProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [CurrentRatings, SetCurrentRatings] = useState<CurrentRatingsInterface>(defualts.CurrentRatings);
   const [CourseName, SetCourseName] = useState<string>(defualts.CourseName);
   const [FinalExam, SetFinalExam] = useState<string>(defualts.FinalExam);
+  const [Completed, SetCompleted] = useState<boolean>(false);
 
   return (
-    <DataContext.Provider value={{ Filter, FinalExam, SetFinalExam, CourseName, SetCourseName, SolvedExercises, CurrentRatings, SetCurrentRatings, SetSolvedExercises, WatchedVideos, SetWatchedVideos, Progress, SetProgress, CourseChoosen, Notes, SetNotes, SetCourseChoosen, SetFilter, Rate, SetRate, Profile, SetProfile, ContentChoosen, SetContentChoosen }}>
+    <DataContext.Provider value={{ Filter, FinalExam, Completed, SetCompleted, SetFinalExam, CourseName, SetCourseName, SolvedExercises, CurrentRatings, SetCurrentRatings, SetSolvedExercises, WatchedVideos, SetWatchedVideos, Progress, SetProgress, CourseChoosen, Notes, SetNotes, SetCourseChoosen, SetFilter, Rate, SetRate, Profile, SetProfile, ContentChoosen, SetContentChoosen }}>
       {children}
     </DataContext.Provider >
   );

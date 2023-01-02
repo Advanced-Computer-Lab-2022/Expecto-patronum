@@ -36,8 +36,10 @@ function Navbar(props: Props) {
   const navbarVariations = [<GuestNavbar curtainRef={curtainRef} />, <UserNavbar curtainRef={curtainRef} />, <AdminNavbar curtainRef={curtainRef} />, <InstructorNavbar curtainRef={curtainRef} />];
   useEffect(() => {
     let LocalStorage = localStorage.getItem('UserInfo') ? localStorage.getItem('UserInfo') : 'Guest';
+
     let CurrentRole = LocalStorage === 'Guest' ? LocalStorage : JSON.parse(LocalStorage as string).role;
-    let RoleIndexData = roles.indexOf(CurrentRole.toLowerCase());
+
+    let RoleIndexData = roles.indexOf(CurrentRole === 'CorporateTrainee' ? 'user' : CurrentRole.toLowerCase());
     SetRoleIndex(RoleIndexData);
 
   }, [router.pathname])
@@ -45,7 +47,6 @@ function Navbar(props: Props) {
   useEffect(() => {
     if (parentRef.current) {
       router.pathname === '/Auth' ? parentRef.current.classList.add('hidden') : parentRef.current.classList.remove('hidden');
-
     }
   }, [router.pathname])
 
