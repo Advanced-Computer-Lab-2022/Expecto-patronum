@@ -25,24 +25,19 @@ const ChangePassword = (props: Props) => {
   async function Submit(e: any) {
     setLoading(true);
     e.preventDefault();
-    await axios
-      .post("http://localhost:5000/User/ChangePassword", {
-        password: passwordRef.current.value,
-        oldpasswordData: oldpasswordRef.current.value
-      })
-      .then((res: { data: { Error: boolean, Message: string } | undefined }) => {
-        setLoading(false);
-        if (res.data) {
-          if (res.data.Error) {
-            console.log(res.data)
-            setError(res.data)
-          }
-          else {
-            router.push("/Login");
-          }
-        }
+    try {
+      let res = await axios
+        .post("http://localhost:5000/User/ChangePassword", {
+          password: passwordRef.current.value,
+          oldpasswordData: oldpasswordRef.current.value
+        })
+      router.push("/Auth");
 
-      });
+    } catch (error) {
+      //@ts-ignore
+      setError({ Error: true, Message: error.response.data || "Somthin went wrong" })
+      console.log(error)
+    }
   }
   if (Loading) {
     return (
