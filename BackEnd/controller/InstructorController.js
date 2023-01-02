@@ -223,23 +223,27 @@ async function addCourse(req, res, next) {
     });  
     newCourse.save();
    // res.send(newCourse);
-    console.log("course added succsessfully");
+    console.log("Course added successfully.");
     if(req.body.exercises){
     var z = Object.values(newCourse)[0] ;
     console.log(z._id);
     let exercises = req.body.exercises;
-    for(var i = 0;i<exercises.length;i++){
+    for(var i = 0;i < exercises.length;i++){
       var q =  exercises[i] ;
       q.courseID = z._id;
-      const newExercise = new ExerciseTable(q);
+      console.log("f:" + i);
+      console.log(q);
+      const newExercise = await new ExerciseTable(q);
       await newExercise.save();
+      console.log("added: ", i);
     }
     var courseid = z._id;
     const exe = await ExerciseTable.find({courseID:courseid}).select({"_id":1,"subtitleName":1,"exerciseTitle":1});
-    console.log(exe);
+    console.log("exe" +exe);
     //var z = Object.values(exe)[0] ;
      for(var i=0;i<exe.length;i++){
        var z = exe[i] ;
+       console.log(z.subtitleName);
        if(z.subtitleName){
         await CourseTable.updateOne({ "_id": courseid,"subtitles.header": z.subtitleName },
           { "$push": { "subtitles.$.exercise" :{

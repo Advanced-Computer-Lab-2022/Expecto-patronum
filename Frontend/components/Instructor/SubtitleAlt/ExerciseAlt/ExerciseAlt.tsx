@@ -100,11 +100,17 @@ const ExerciseAlt = (props: Props) => {
     }
   }
 
+  function setTitle(e: React.ChangeEvent<HTMLInputElement>) {
+    const values = [...props.subtitles];
+    values[props.subtitleIndex].exercise.exerciseTitle = e.target.value;
+    props.setSubtitles(values);
+  }
+
   return (
     <div className="px-2 my-1 border-2 border-gray-400 border-opacity-25 rounded-xl">
       {
         <div>
-          {/* <Input placeholder='Exercise Title' value={props.subtitles[props.subtitleIndex].exercise.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e)} /> */}
+          <Input placeholder='Exercise Title' value={props.subtitles[props.subtitleIndex].exercise.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e)} />
           <div>
             {props.subtitles[props.subtitleIndex].exercise.questions.map((q: any, questionIndex: number) => (
                 <div id={"question-" + questionIndex + "-of-subtitle-" + props.subtitleIndex} key={questionIndex} className="relative transition-all overflow-hidden px-2 my-2 sb-max:mx-6 max-h-10">

@@ -14,7 +14,7 @@ const CourseFinalExam = React.forwardRef((props: Props, ref) => {
 
   function setQuestion(index: number, e: React.ChangeEvent<HTMLInputElement>) {
     const values = {...finalExam};
-    values.questions[index].problem = e.target.value;
+    values.questions[index].question = e.target.value;
     setFinalExam(values);
   }
 
@@ -27,10 +27,11 @@ const CourseFinalExam = React.forwardRef((props: Props, ref) => {
   function addQuestion() {
     const values = {...finalExam};
     values.questions.push({
-      problem: "",
+      question: "",
       choices: [""],
       answer: "",
     });
+    values.totalGrade = values.questions.length;
     setFinalExam(values);
   }
 
@@ -81,11 +82,11 @@ const CourseFinalExam = React.forwardRef((props: Props, ref) => {
     }
   }
 
-  function setExamDuration(e: any) {
-    const values = {...finalExam};
-    values.exerciseDuration = parseInt(e.target.value);
-    setFinalExam(values);
-  }
+  // function setExamDuration(e: any) {
+  //   const values = {...finalExam};
+  //   values.exerciseDuration = parseInt(e.target.value);
+  //   setFinalExam(values);
+  // }
   
   return (
     <div ref={ref as any} className='hidden'>
@@ -100,7 +101,7 @@ const CourseFinalExam = React.forwardRef((props: Props, ref) => {
       <hr className='mb-2'/>
       {
         <div className='sb:mx-2'>
-          <Input onChange={setExamDuration} type='number' placeholder='Exam Duration (in minutes)' inputDivStyle='sb-max:ml-6' style='w-60' />
+          {/* <Input onChange={setExamDuration} type='number' placeholder='Exam Duration (in minutes)' inputDivStyle='sb-max:ml-6' style='w-60' /> */}
           <div>
             {finalExam.questions.map((q: any, questionIndex: number) => (
                 <div id={"question-" + questionIndex + "-of-final-exam"} key={questionIndex} className="relative transition-all duration-200 overflow-hidden px-2 my-2 sb-max:mx-6 max-h-10">
@@ -111,15 +112,15 @@ const CourseFinalExam = React.forwardRef((props: Props, ref) => {
                         {questionIndex + 1}
                       </span>
                       <RiArrowDropDownLine className="pointer-events-none scale-200 transition-all duration-200 ml-3 -rotate-90" />
-                      <span className={(q.problem === "" ? 'opacity-40': '') + ' ml-3 pointer-events-none'}>
-                        {q.problem === "" ? "Question " + (questionIndex + 1): q.problem }
+                      <span className={(q.question === "" ? 'opacity-40': '') + ' ml-3 pointer-events-none'}>
+                        {q.question === "" ? "Question " + (questionIndex + 1): q.question }
                       </span>
                     </button>
                     <button type="button" onClick={() => removeQuestion(questionIndex)} className='bg-calm-red hover:bg-canadian-red rounded-full p-2 text-white text-xs whitespace-nowrap shadow-md ml-4 mr-1 h-min hover:scale-110 transition-all duration-300'><FiTrash className='scale-135 pointer-events-none' /></button>
                   </div>
                   <div className="relative transition-all duration-1000 px-3">
                     <div>
-                      <Input placeholder="Enter Question" value={q.problem} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuestion(questionIndex, e)} inputDivStyle="col-12" />
+                      <Input placeholder="Enter Question" value={q.question} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuestion(questionIndex, e)} inputDivStyle="col-12" />
                       <button type="button" onClick={() => addChoice(questionIndex)} className="hover:text-input text-navlink-bg text-xs relative bottom-1 left-8 h-0 whitespace-nowrap">Add Choice</button>
                     </div>
                     <div className="row pl-4">
