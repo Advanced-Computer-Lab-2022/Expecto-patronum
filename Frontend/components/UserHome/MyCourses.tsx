@@ -33,6 +33,7 @@ const MyCourses = (props: Props) => {
 
 
   function handleCourseClick(CourseID: string) {
+
     const encryptId = (str: string | CryptoJS.lib.WordArray) => {
       const ciphertext = AES.encrypt(str, 'secretPassphrase');
       return encodeURIComponent(ciphertext.toString());

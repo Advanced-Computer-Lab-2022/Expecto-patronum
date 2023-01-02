@@ -31,6 +31,7 @@ const Exam = (props: dataInterface) => {
     const [courseID, setCourseID] = useState<string>("");
     const [totalQuestions, settotalQuestions] = useState<number>(0);
     const [skipped, setSkipped] = useState([""]);
+    const [isFinalExam, setIsFinalExam] = useState<boolean>(false);
     const { viewPopupMessage } = useContext(PopupMessageContext);
     const [questions, setQuestions] = useState([{
         problem: "",
@@ -66,7 +67,13 @@ const Exam = (props: dataInterface) => {
             },
         }).then(
             (res) => {
+                console.log("////////////////////////")
                 console.log(res.data[0]);
+                console.log("////////////////////////")
+                if (!res.data[0].subtitleName) {
+                    setIsFinalExam(true);
+                }
+
                 const q = res.data[0].questions;
                 console.log(q);
                 setQuestions(q);
@@ -152,18 +159,39 @@ const Exam = (props: dataInterface) => {
         }
         console.log(empty);
         e.preventDefault();
-        response = await axios.put("http://localhost:5000/User/submitAnswer", {
+        let response = await axios.put("http://localhost:5000/User/submitAnswer", {
             courseID: props.data.DeccourseID,
             excerciseID: props.data.DecexerciseID,
             answers: empty,
-        }).then((res: { data: any; }) => { return res.data });
-        // viewPopupMessage(true, "Answers Submitted successfully");
-        router.push({
-            pathname: 'http://localhost:3000/User/SubmittedExam',
-            query: { courseID: encryptId(props.data.DeccourseID), exerciseID: encryptId(props.data.DecexerciseID) }
-        });
-    }
+        })
+        // console.log("//////////////////////Sad///////////////////////////")
+        // console.log(response.data.grade);
+        // console.log("//////////////////////Sad///////////////////////////")
+        //check if final exam or not 
+        // if  final exam check grade if greate than 50 then route him to the certifcate page with SendMail query to true
+        //else show him a pop up saying try again or sth 
+        //if not final exam then route him to the submitted exam 
 
+        if (isFinalExam) {
+            console.log("//////////////////////Crying///////////////////////////")
+            console.log(response.data.grade);
+            console.log("//////////////////////Crying///////////////////////////")
+
+            if (response.data.grade >= 50) {
+                router.push(`/User/Certificate?SendEmail=${true}`);
+            }
+            else {
+                alert("You failed the final exam, try again");
+                router.push(`/User/UserCourse/${encryptId(props.data.DeccourseID)}`);
+            }
+        }
+        else {
+            router.push({
+                pathname: 'http://localhost:3000/User/SubmittedExam',
+                query: { courseID: encryptId(props.data.DeccourseID), exerciseID: encryptId(props.data.DecexerciseID) }
+            });
+        }
+    }
     return (
         <form
             id="Exam-form"

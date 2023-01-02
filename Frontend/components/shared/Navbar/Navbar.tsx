@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useState, createContext, useEffect } from "react";
+import React, { useRef, useState, createContext, useEffect, useContext } from "react";
 import classNames from "classnames";
 import { AiOutlineUser, AiOutlineBell } from "react-icons/ai";
 import SearchBar from "./SearchBar/SearchBar";
@@ -9,6 +9,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import UserCourseNavbar from "./UserCourseNavbar/UserCourseNavbar";
+import DataContext from "../../../context/DataContext";
+import { AES, enc } from "crypto-js";
+import { GetServerSidePropsContext } from "next";
 
 interface ContextState {
   isCurtainOpen: any;
@@ -16,10 +19,13 @@ interface ContextState {
   isSearchOpen: any;
   setIsSearchOpen: any;
 }
+type Props = {
+  data: any;
+}
 
 const curtainSearchSwitching = createContext({} as ContextState);
 
-function Navbar() {
+function Navbar(props: Props) {
   const curtainRef = useRef<HTMLDivElement>(null);
   const parentRef = useRef<any>();
   const [isCurtainOpen, setIsCurtainOpen] = useState(false);
@@ -34,15 +40,18 @@ function Navbar() {
     let RoleIndexData = roles.indexOf(CurrentRole.toLowerCase());
     SetRoleIndex(RoleIndexData);
 
-  }, [])
+  }, [router.pathname])
 
   useEffect(() => {
-    global.window.location.pathname === '/Auth' ? parentRef.current.classList.add('hidden') : parentRef.current.classList.remove('hidden');
-  }, [global.window?.location.pathname])
+    if (parentRef.current) {
+      router.pathname === '/Auth' ? parentRef.current.classList.add('hidden') : parentRef.current.classList.remove('hidden');
+
+    }
+  }, [router.pathname])
 
   return (
     <div>
-      {router.pathname && router.pathname.split('/')[2] === 'UserCourse' ? <UserCourseNavbar></UserCourseNavbar> :
+      {router.pathname && router.pathname.split('/')[2] === 'UserCourse' ? <UserCourseNavbar ></UserCourseNavbar> :
         <curtainSearchSwitching.Provider value={{ isSearchOpen, setIsSearchOpen, isCurtainOpen, setIsCurtainOpen }}>
           <div ref={parentRef} className={navbar}>
             <Link href="/" className={navLogoDiv}>
@@ -162,3 +171,4 @@ const navButtonIcon = classNames("scale-110 pointer-events-none");
 
 export default Navbar;
 export { curtainSearchSwitching };
+

@@ -88,7 +88,7 @@ async function viewAnswer(req, res, next) {
     }
     q.exerciseTitle = x.exerciseTitle;
     q.exerciseID = x._id;
-    q.totalGrade = x.totalGrade;
+    // q.totalGrade = x.totalGrade;
     q.questions = x.questions;
     res.status(200).send(q);
   } catch (error) {
@@ -534,9 +534,14 @@ async function payWithWallet(req, res, next) {
 
 const { jsPDF } = require("jspdf")
 async function RecieveMail(req, res, next) {
+
   var userId = req.user._id;
   var string = req.body.dataUrl;
-  var email = await User.findById(userId).select({ "email": 1 });
+  var email = await User.findById(userId).select({ email: 1 });
+  console.log("////////////////////")
+  console.log(email);
+  console.log("////////////////////")
+
   const doc = new jsPDF();
   doc.addImage(string, 'JPEG', 15, 15, 170, 0);
   doc.save("Course_Completion_Certificate.pdf");
@@ -557,12 +562,15 @@ async function removeCourseReview(req, res, next) {
   courseId = req.body.courseId;
   try {
 
-    const reviewx = await CourseTable.updateOne({ "_id": courseId, "review.username": username },
-      { "$pull": { "review.$.username": username } }
+    // var x=await CourseTable.findById(courseId)
+    // res.send(x.review);
+    console.log(username);
+    const reviewx = await CourseTable.updateOne({ "_id": courseId },
+      { $pull: { "review":{"username":username }}},
     );
 
     const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
-      { "$set": { "purchasedCourses.$.courseReview": null, "purchasedCourses.$.courseRating": null } }
+      { $set: { "purchasedCourses.$.courseReview": null, "purchasedCourses.$.courseRating": 0 } }
     );
 
     res.sendStatus(200);
@@ -583,7 +591,7 @@ async function removeInstructorReview(req, res, next) {
   instructorId = req.body.instructorId;
   try {
     const reviewx = await User.updateOne({ "_id": instructorId, "instructorReview.username": username },
-      { "$pull": { "instructorReview.$.username": username } }
+      { "$pull": { "instructorReview":{"username":username} } }
     );
 
     const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },

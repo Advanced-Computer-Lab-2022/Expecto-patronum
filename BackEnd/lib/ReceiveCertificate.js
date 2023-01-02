@@ -10,18 +10,20 @@ let transporter = nodemailer.createTransport({
 });
 var fs = require('fs');
 module.exports.ReceiveCertificate = async (userMail) => {
+  console.log("----------------------------------------------")
   console.log(userMail)
+  console.log("----------------------------------------------")
   let info = await transporter.sendMail({
     from: 'CandianChamber123@outlook.com', // sender address
     to: userMail, // list of receivers
     subject: "Your Certificate", // Subject line
-    text:"your Certificate is here",
+    text: "your Certificate is here",
     attachments: [
-        {
-            filename: 'Course_Completion_Certificate.pdf',
-            path: './Course_Completion_Certificate.pdf',
-            contentType: 'application/pdf'
-        }]
+      {
+        filename: 'Course_Completion_Certificate.pdf',
+        path: './Course_Completion_Certificate.pdf',
+        contentType: 'application/pdf'
+      }]
   });
   transporter.sendMail(info, (err, data) => {
     if (err) {
