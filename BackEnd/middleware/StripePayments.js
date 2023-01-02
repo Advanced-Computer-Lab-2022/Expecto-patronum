@@ -156,7 +156,11 @@ const card = await stripe.customers.retrieveSource(
   //14)if the payment fails return reverse the wallet update and remove the course from the purchase course array
   ////////////////////
   const customerId = req.body.customerId;
-  const amount = (req.body.amount*100);
+  var amount = (req.body.amount*100);
+
+  const course = await Course.findOne({ "_id": req.body.courseID });
+  amount = course.discountPrice;
+
   if(req.body.customerId){
   const charge = await stripe.charges.create({
     amount: amount,
