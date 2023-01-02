@@ -117,7 +117,7 @@ router.post('/DeleteNote', isAuth, isStudent, DeleteNote);
 
 router.put("/giveInstructorRating", isAuth, isStudent, giveInstructorRating);
 
-router.put("/selectCourse", selectCourse);
+router.put("/selectCourse", isAuth, selectCourse);
 
 router.post("/requestCourse", isAuth, isCorporateTrainee, requestCourse);
 

@@ -15,7 +15,8 @@ type Props = {}
 const UserCourseNavbar = (props: Props) => {
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [ShowProgress, SetShowProgress] = React.useState(false);
-  const { Progress, CourseName, FinalExam, CourseChoosen } = React.useContext(DataContext);
+  const { Progress, CourseName, FinalExam, CourseChoosen, Completed } = React.useContext(DataContext);
+  const [isCorp, setIsCorp] = React.useState(false);
 
   let router = useRouter();
   useEffect(() => {
@@ -43,7 +44,20 @@ const UserCourseNavbar = (props: Props) => {
     const encryptedCourseID = encryptId(CourseChoosen._id);
     router.push(`/User/TakeExam?CourseID=${encryptedCourseID}&&ExerciseID=${encryptedExamID}`)
   }
+  function HandleCertificate() {
+    router.push(`/User/Certificate`)
 
+  }
+
+  useEffect(() => {
+    //@ts-ignore
+    let LocalStorage = JSON.parse(localStorage.getItem('UserInfo'));
+    console.log(LocalStorage.role)
+    if (LocalStorage.role === 'CorporateTrainee') {
+      setIsCorp(true)
+    }
+
+  }, [])
 
   return (
     <div className={Container}>
@@ -59,7 +73,10 @@ const UserCourseNavbar = (props: Props) => {
       </div>
 
       <div className={UtilContainer}>
-        {Progress >= 100 ?
+        {Completed ? <button onClick={HandleCertificate} type='submit' className={submitButton} id='submit-btn'>
+          <span /><span /><span /><span />
+          Certificate
+        </button> : Progress >= 100 ?
           <button onClick={HandleFinalExam} type='submit' className={submitButton} id='submit-btn'>
             <span /><span /><span /><span />
             Final Exam
@@ -90,7 +107,7 @@ const UserCourseNavbar = (props: Props) => {
                   <p className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Report</p>
                 </li>
               </Link>
-              {Progress < 50 &&
+              {Progress < 50 && !isCorp &&
                 <Link href={'/User/Request?Type=Refund'}>
 
                   <li>

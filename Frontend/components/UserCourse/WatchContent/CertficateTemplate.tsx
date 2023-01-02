@@ -7,6 +7,7 @@ import axios from 'axios';
 import { PopupMessageContext } from '../../../pages/_app';
 import Spinner from '../../shared/spinner/Spinner';
 import DataContext from '../../../context/DataContext';
+import { useRouter } from 'next/router';
 
 type Props = {
   SendEmail?: boolean
@@ -17,7 +18,8 @@ const CertficateTemplate = (props: Props) => {
   const [FirstTime, setFirstTime] = React.useState(false);
   const [Data, setData] = React.useState<any>(null);
   const { CourseName } = React.useContext(DataContext);
-
+  const [Loading, SetLoading] = React.useState(false);
+  let router = useRouter();
 
   useEffect(() => {
     //@ts-ignore
@@ -55,11 +57,22 @@ const CertficateTemplate = (props: Props) => {
       ////////////Change place
     });
   };
+  const handleBack = async () => {
+    SetLoading(true);
+    router.back();
+
+  }
+
 
   if (!Data) return (<Spinner></Spinner>)
 
   return (
     <div className='w-[80vw] h-[100vh] ml-auto mr-auto'  >
+      <div className='absolute'>
+
+        <MainButton outline Size='md' btnText='Back' Loading={Loading} HandleClick={handleBack} Back  ></MainButton>
+      </div>
+
       <div id='certificate-template' className='w-[700px] h-[500px] mt-10 mb-10 relative ml-auto mr-auto  ' >
         <Image alt='certificate' className='relative object-contain' fill src={'/images/CertficateTemplate.png'}></Image>
         {/* <img className=' object-contain' src='/images/CertficateTemplate.png'></img> */}

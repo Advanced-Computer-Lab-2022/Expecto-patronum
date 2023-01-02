@@ -4,6 +4,11 @@ import CourseCTACard from "./CourseCTACard";
 
 type Props = {
   refs: React.RefObject<HTMLDivElement>[];
+  IsCorp: boolean;
+  HandleClick: () => void;
+  Purchased: "yes" | "no" | "Pending" | "";
+  Loading: boolean;
+
 };
 
 function ScrollTo(myRef: React.RefObject<HTMLDivElement>) {
@@ -23,7 +28,8 @@ const CourseContentNav = (props: Props) => {
         <p className=" cursor-pointer" onClick={() => ScrollTo(props.refs[2])}>Instructor</p>
         <p className=" cursor-pointer" onClick={() => ScrollTo(props.refs[3])}>Reviews</p>
       </div>
-      <MainButton HandleClick={() => { }} btnText="Enroll Now" Size="md"></MainButton>
+
+      <MainButton Loading={props.Loading} Type={props.Purchased} btnText={props.IsCorp ? props.Purchased == 'no' ? "Request Course" : props.Purchased == 'Pending' ? "Pending" : "View Course" : props.Purchased === 'no' ? "Enroll Now" : props.Purchased === 'Pending' ? 'Pending' : "View Course"} HandleClick={props.HandleClick} Size='lg'></MainButton>
 
       {/* <CourseCTACard></CourseCTACard> */}
     </div>

@@ -55,7 +55,7 @@ async function SelectExercise(req, res, next) {
   //   res.status(400).send(error.message);
   // }
 
-  await User.updateMany({}, [{"$addFields": { "purchasedCourses.completedCourse":false }}]);
+  await User.updateMany({}, [{ "$addFields": { "purchasedCourses.completedCourse": false } }]);
   res.send("ok");
 
 };
@@ -77,7 +77,7 @@ async function viewAnswer(req, res, next) {
       var exe = y.purchasedCourses[0].excercises;
       for (var i = 0; i < exe.length; i++) {
         if (exe[i].excerciseID == req.query.exerciseID) {
-          if (exe[i].grade ||exe[i].grade==0) {
+          if (exe[i].grade || exe[i].grade == 0) {
             q.yourGrade = exe[i].grade;
           }
           q.yourAnswers = exe[i].exercisesAnswers.answer;
