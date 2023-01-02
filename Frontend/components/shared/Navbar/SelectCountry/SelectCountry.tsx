@@ -15,9 +15,9 @@ const SelectCountry = (props: Props) => {
     const selectRef = useRef<any>();
     const selectCountryRef = useRef<any>();
     const inputCountryRef = useRef<any>();
+    const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
     const [countries, setCountries] = useState(Currency.getAllISOCodes());
     const { Rate, SetRate } = useContext(DataContext);
-    const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
     const selectDiv = classNames(`${isOptionsOpen ? 'h-48 pb-2 border-1.5': 'h-0'} flex flex-col absolute top-14 z-18 right-16 w-48 m-2 mt-3 overflow-hidden rounded-lg transition-all duration-300 bg-white`);
 
     const filterSearch = () => {
@@ -26,9 +26,6 @@ const SelectCountry = (props: Props) => {
         ));
         setCountries(includedCountries);
     }
-
-
-   
 
     const selectCountry = async (e: any, country: any) => {
         e.preventDefault();
@@ -64,21 +61,15 @@ const SelectCountry = (props: Props) => {
         }
       }, []);
 
-      // useEffect(() => {
-      //   console.log(Currency.getAllISOCodes());
-      // }, [])
-
       const close = (e: any) => {
         if(selectRef.current && !selectRef.current?.contains(e.target)) {
           setIsOptionsOpen(false);
         }
       }
-
+    
       useEffect(() => {
         document.addEventListener("mouseup", close);
       }, [])
-
-
 
     async function resetRate() {
       axios.defaults.withCredentials = true;
@@ -102,7 +93,7 @@ const SelectCountry = (props: Props) => {
 
   return (
     <div ref={selectCountryRef}>
-        <button type="button" onClick={()=>setIsOptionsOpen(true)} className={selectButton}><GiEarthAmerica className={selectButtonIcon} /></button>
+        <button type="button" onClick={() => setIsOptionsOpen(true)} className={selectButton}><GiEarthAmerica className={selectButtonIcon} /></button>
         <div ref={selectRef} className={selectDiv} >
             <input ref={inputCountryRef} type='text' placeholder='Search' onChange={filterSearch} className={selectSearch} />
             <button type='button' onClick={resetRate} className='absolute text-sm right-2 top-2 bg-calm-red h-4 flex items-center text-white rounded-full p-1.5 hover:bg-canadian-red transition-all duration-200'>reset</button>
@@ -117,7 +108,6 @@ const SelectCountry = (props: Props) => {
       </div>
   )
 }
-
 
 const selectSearch = classNames('rounded-full relative pl-2 m-1 bg-white shadow-md focus:outline-0');
 const selectButton = classNames("navbar-link rounded-full border-1.5 border-black hover:text-white hover:bg-black hover:scale-110 mx-2 h-8 w-8 whitespace-nowrap z-10 transition-all duration-300 flex items-center justify-center");

@@ -125,8 +125,6 @@ function Logout(req, res) {
   res.clearCookie('user');
   res.clearCookie('connect.sid');
   res.send("Logged out");
-
-
 }
 
 async function ViewAll(req, res) {

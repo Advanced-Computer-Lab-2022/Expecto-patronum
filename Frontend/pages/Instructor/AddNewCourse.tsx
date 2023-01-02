@@ -67,27 +67,26 @@ const AddNewCourse = (props: Props) => {
   const [subtitles, setSubtitles] = useState<any>([new Subtitle(), new Subtitle(), new Subtitle()]);
   const [finalExam, setFinalExam] = useState<any>(
     {
-      exerciseDuration: 0,  
+      exerciseTitle: 'Final Exam',
       questions: 
       [
         {
-          problem: '',
+          question: '',
           choices: [''],
           answer: '',
         },
         {
-          problem: '',
+          question: '',
           choices: [''],
           answer: '',
         },
         {
-          problem: '',
+          question: '',
           choices: [''],
           answer: '',
         }
       ],
-        
-      totalGrade: 0
+      totalGrade: 3
     }
   );
   const [courseIcon, setCourseIcon] = useState<any>('/images/Trophy.png');
@@ -103,14 +102,33 @@ const AddNewCourse = (props: Props) => {
         courseHours += subtitle.totalMinutes;
     });
 
+    var exercises = [];
+    for(var i = 0; i < subtitles.length; i++) {
+      var exercise = {
+        exerciseTitle: subtitles[i].exercise.exerciseTitle,
+        subtitleName: subtitles[i].header,
+        questions: subtitles[i].exercise.questions,
+        totalGrade: subtitles[i].exercise.questions.length,
+      };
+      exercises.push(exercise);
+      console.log(subtitles[i].header);
+    }
+
+    exercises.push(finalExam);
+
     axios.defaults.withCredentials = true;
-    response = await axios.post("http://localhost:5000/Courses/CreateCourse", {
-        instructorID: '63877fb65c8dac5284aaa3c2',
-        courseInfo: newCourseInfo,
+    response = await axios.post("http://localhost:5000/Instructor/addCourse", {
+        // courseInfo: newCourseInfo,
+        title: newCourseInfo.title,
+        subject: newCourseInfo.subject,
+        price: newCourseInfo.price,
+        courseVideo: newCourseInfo.courseVideoURL,
+        summary: newCourseInfo.summary,
+        level: newCourseInfo.level,
         courseHours: courseHours,
         subtitles: subtitles,
         courseImage: courseIcon,
-        finalExam: finalExam,
+        exercises: exercises,
     }).then(res => {
       viewPopupMessage(true, "Your course has been uploaded successfully.");
       return res.data;
@@ -141,7 +159,7 @@ export { AddNewCourseContext };
 export class Subtitle {
   header: string;
   courseSummary: string;
-  exercise: { exerciseTitle: string; questions: { question: string; choices: string[]; answer: string; }[]; };
+  exercise: { exerciseTitle: string; subtitleName: string; questions: { question: string; choices: string[]; answer: string; }[]; };
   contents: { contentTitle: string; video: string; preview: boolean; duration: number; description: string; }[];
   totalMinutes: number;
   constructor() {
@@ -179,6 +197,7 @@ export class Subtitle {
       ];
       this.exercise = {
           exerciseTitle: "",
+          subtitleName: "",
           questions: [
               {
                   question: "",

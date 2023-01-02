@@ -40,7 +40,7 @@ const SmallCourseCard = (props: Props) => {
     }
   
     return (
-    <div className={`${props.className ? props.className: 'mr-4 hover:scale-[1.01]'} rounded-2xl z-10 relative bg-white shadow-md max-w-[15rem] h-[17rem] hover:shadow-lg transition-all duration-200`}>
+    <div className={`${props.className ? props.className: 'mr-4 hover:scale-[1.01]'} rounded-2xl z-10 relative bg-white shadow-md max-w-[12.563rem] h-[17rem] hover:shadow-lg transition-all duration-200`}>
         <Link href={`/Courses/${props.course._id ? props.course._id: '638773fbbbdc935c907894ce'}`} className="cursor-pointer relative">
           <div className={`bg-gradient-to-r relative flex h-24 mb-3 justify-center items-center rounded-t-2xl ${props.courseColor(props.course.level)}`}>
             <div className={`relative rounded-full top-6 p-3`}>

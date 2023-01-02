@@ -12,6 +12,7 @@ import UserCourseNavbar from "./UserCourseNavbar/UserCourseNavbar";
 import DataContext from "../../../context/DataContext";
 import { AES, enc } from "crypto-js";
 import { GetServerSidePropsContext } from "next";
+import axios from "axios";
 
 interface ContextState {
   isCurtainOpen: any;
@@ -25,15 +26,27 @@ type Props = {
 
 const curtainSearchSwitching = createContext({} as ContextState);
 
-function Navbar(props: Props) {
+function Navbar() {
+
+  let router = useRouter();
+
+  const logout = async (e: any) => {
+  Response = await axios.get("http://localhost:5000/User/logout", {
+    }).then((res: { data: any; }) => { return res.data });
+    router.push({
+      pathname: 'http://localhost:3000/Auth'
+    });
+  }
+
   const curtainRef = useRef<HTMLDivElement>(null);
   const parentRef = useRef<any>();
   const [isCurtainOpen, setIsCurtainOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [RoleIndex, SetRoleIndex] = useState(0);
-  let router = useRouter();
   const roles = ["guest", "user", "admin", "instructor"];
-  const navbarVariations = [<GuestNavbar curtainRef={curtainRef} />, <UserNavbar curtainRef={curtainRef} />, <AdminNavbar curtainRef={curtainRef} />, <InstructorNavbar curtainRef={curtainRef} />];
+  const [userData, setUseData] = useState<any>();
+  const navbarVariations = [<GuestNavbar curtainRef={curtainRef} userData={userData} logout={logout} />, <UserNavbar curtainRef={curtainRef} userData={userData} logout={logout} />, <AdminNavbar curtainRef={curtainRef} userData={userData} logout={logout} />, <InstructorNavbar curtainRef={curtainRef} userData={userData} logout={logout} />];
+
   useEffect(() => {
     let LocalStorage = localStorage.getItem('UserInfo') ? localStorage.getItem('UserInfo') : 'Guest';
 
@@ -41,8 +54,9 @@ function Navbar(props: Props) {
 
     let RoleIndexData = roles.indexOf(CurrentRole === 'CorporateTrainee' ? 'user' : CurrentRole.toLowerCase());
     SetRoleIndex(RoleIndexData);
-
-  }, [router.pathname])
+    // let data = JSON.parse(LocalStorage as string);
+    // setUseData(data);
+  }, [])
 
   useEffect(() => {
     if (parentRef.current) {
@@ -66,8 +80,7 @@ function Navbar(props: Props) {
 
 };
 
-const GuestNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => {
-
+const GuestNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, userData: any, logout: any }) => {
   return (
     <div className="flex">
       <SearchBar />
@@ -91,7 +104,21 @@ const GuestNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => 
   );
 }
 
-const UserNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => {
+const UserNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, userData: any, logout: any }) => {
+
+  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
+  const userRef = useRef<HTMLDivElement>(null);
+
+
+  const close = (e: any) => {
+    if(userRef.current && !userRef.current?.contains(e.target)) {
+      setIsOptionsOpen(false);
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener("mouseup", close);
+  }, [])
 
   return (
     <div className="flex">
@@ -101,23 +128,47 @@ const UserNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => {
         <Link className={navLink} href='/User/Profile'>My Profile</Link>
         <hr className="nv:hidden" />
         <Link className={navLink} href='/'>New Opportunities</Link>
-        <Link className={navLink} href="/Instructor">Inspire Learners</Link>
       </div>
       <div className={navIconsDiv}>
         <Link className={navButton} href='/'>
           <AiOutlineBell className={navButtonIcon} />
         </Link>
         <SelectCountry />
-        <Link href='/User'>
-          <Image width={50} height={50} src="/images/x8PhM.png" alt="" className="mx-2 min-h-[2rem] min-w-[2rem] border-black border-1.5 rounded-full hover:scale-110 transition-all duration-300" />
-        </Link>
+        <div className="relative top-1">
+          <button onClick={() => setIsOptionsOpen(true)}>
+            <Image width={50} height={50} src="/images/x8PhM.png" alt="" className="mx-2 min-h-[2rem] min-w-[2rem] border-black border-1.5 rounded-full hover:scale-110 transition-all duration-300" />
+          </button>
+          <div ref={userRef} className={`${isOptionsOpen ? 'h-[10.625rem] py-2': 'h-0'} absolute flex flex-col rounded-md shadow-md right-4 px-2 overflow-hidden w-60 bg-white transition-all duration-300`}>
+            <label className="underline font-bold tracking-wider text-lg">Rodin Salem</label>
+            <hr className="my-1" />
+            <Link href='/User' className="my-1.5 pl-2 rounded-full hover:underline">My Profile</Link>
+            <Link href='/' className="my-1.5 pl-2 rounded-full hover:underline">Messages</Link>
+            <hr className="mb-2" />
+            <button onClick={() => props.logout()} className="my-1.5 pl-2 rounded-full hover:underline text-canadian-red">Logout</button>
+          </div>
+        </div>
         <BurgerButton curtainRef={props.curtainRef} />
       </div>
     </div>
   );
 }
 
-const AdminNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => {
+const AdminNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, userData: any, logout: any }) => {
+  
+  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
+  const adminRef = useRef<HTMLDivElement>(null);
+
+
+  const close = (e: any) => {
+    if(adminRef.current && !adminRef.current?.contains(e.target)) {
+      setIsOptionsOpen(false);
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener("mouseup", close);
+  }, [])
+
   return (
     <div className="flex">
       <SearchBar />
@@ -132,16 +183,41 @@ const AdminNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => 
         <Link className={navButton} href='/'>
           <AiOutlineBell className={navButtonIcon} />
         </Link>
-        <Link href='/AdminTool'>
-          <Image width={50} height={50} src="/images/x8PhM.png" alt="" className="mx-2 min-h-[2rem] min-w-[2rem] border-black border-1.5 rounded-full hover:scale-110 transition-all duration-300" />
-        </Link>
+        <div className="relative top-1">
+          <button onClick={() => setIsOptionsOpen(true)}>
+            <Image width={50} height={50} src="/images/x8PhM.png" alt="" className="mx-2 min-h-[2rem] min-w-[2rem] border-black border-1.5 rounded-full hover:scale-110 transition-all duration-300" />
+          </button>
+          <div ref={adminRef} className={`${isOptionsOpen ? 'h-[10.625rem] py-2': 'h-0'} absolute flex flex-col rounded-md shadow-md right-4 px-2 overflow-hidden w-60 bg-white transition-all duration-300`}>
+            <label className="underline font-bold tracking-wider text-lg">Rodin Salem</label>
+            <hr className="my-1" />
+            <Link href='/AdminTool' className="my-1.5 pl-2 rounded-full hover:underline">My Profile</Link>
+            <Link href='/' className="my-1.5 pl-2 rounded-full hover:underline">Messages</Link>
+            <hr className="mb-2" />
+            <button onClick={() => props.logout()} className="my-1.5 pl-2 rounded-full hover:underline text-canadian-red">Logout</button>
+          </div>
+        </div>
         <BurgerButton curtainRef={props.curtainRef} />
       </div>
     </div>
   );
 }
 
-const InstructorNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }) => {
+const InstructorNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement>, userData: any, logout: any }) => {
+
+  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
+  const instructorRef = useRef<HTMLDivElement>(null);
+
+
+  const close = (e: any) => {
+    if(instructorRef.current && !instructorRef.current?.contains(e.target)) {
+      setIsOptionsOpen(false);
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener("mouseup", close);
+  }, [])
+
   return (
     <div className="flex">
       <SearchBar />
@@ -151,9 +227,19 @@ const InstructorNavbar = (props: { curtainRef: React.RefObject<HTMLDivElement> }
       </div>
       <div className={navIconsDiv}>
         <SelectCountry />
-        <Link href='/Instructor/Settings'>
-          <Image width={50} height={50} src="/images/x8PhM.png" alt="" className="mx-2 min-h-[2rem] min-w-[2rem] border-black border-1.5 rounded-full hover:scale-110 transition-all duration-300" />
-        </Link>
+        <div className="relative top-1">
+          <button onClick={() => setIsOptionsOpen(true)}>
+            <Image width={50} height={50} src="/images/x8PhM.png" alt="" className="mx-2 min-h-[2rem] min-w-[2rem] border-black border-1.5 rounded-full hover:scale-110 transition-all duration-300" />
+          </button>
+          <div ref={instructorRef} onClick={() => setIsOptionsOpen(false)} className={`${isOptionsOpen ? 'h-[10.625rem] py-2': 'h-0'} absolute flex flex-col rounded-md shadow-md right-4 px-2 overflow-hidden w-60 bg-white transition-all duration-300`}>
+            <label className="underline font-bold tracking-wider text-lg">Rodin Salem</label>
+            <hr className="my-1" />
+            <Link href='/Instructor/Settings' className="my-1.5 pl-2 rounded-full hover:underline">My Profile</Link>
+            <Link href='/Instructor/Messages' className="my-1.5 pl-2 rounded-full hover:underline">Messages</Link>
+            <hr className="mb-2" />
+            <button onClick={() => props.logout()} className="my-1.5 pl-2 rounded-full hover:underline text-canadian-red">Logout</button>
+          </div>
+        </div>
         <BurgerButton curtainRef={props.curtainRef} />
       </div>
     </div>

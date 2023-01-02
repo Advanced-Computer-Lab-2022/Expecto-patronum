@@ -114,13 +114,6 @@ const MyCourses = (props: Props) => {
   function clearSearchAndFilter() {
     setIsSearch(false);
     setSearch('');
-    setFilter({
-      subject: '',
-      price: {
-        min: '',
-        max: '',
-      }
-    });
   }
 
   return ( 
