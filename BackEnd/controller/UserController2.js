@@ -156,7 +156,7 @@ async function reportProblem(req, res, next) {
     const result = await problemTable.create({
       type: req.body.type,
       username: x.username,
-      courseTitle: y.courseTitle,
+      courseTitle: y.title,
       userID: req.user._id,
       //status: req.body.status,
       body: req.body.body,
@@ -257,7 +257,7 @@ async function watchVideo(req, res) {
 async function viewPreviousReports(req, res, next) {
   try {
     var userID = req.user._id;
-    var problems = await problemTable.find({ "userID": userID }).select({ "type": 1, "body": 1, "startDate": 1, "status": 1 });
+    var problems = await problemTable.find({ "userID": userID }).select({ "type": 1, "body": 1, "startDate": 1, "status": 1, "courseTitle": 1, "comment": 1 });
     res.send(problems);
   }
   catch (error) {
@@ -267,7 +267,7 @@ async function viewPreviousReports(req, res, next) {
 async function viewPreviousRequests(req, res, next) {
   try {
     var userID = req.user._id;
-    var request = await requestTable.find({ "userID": userID }).select({ "type": 1, "body": 1, "startDate": 1, "status": 1, "courseTitle": 1 });
+    var request = await requestTable.find({ "userID": userID }).select({ "type": 1, "body": 1, "startDate": 1, "status": 1, "courseTitle": 1, "comment": 1 });
     res.send(request);
   }
   catch (error) {
@@ -282,11 +282,12 @@ async function followUpOnProblem(req, res, next) {
     var followUp = req.body.followUp
     var problem = await problemTable.findOne({ "_id": problemID });
     problem.comment.push(followUp);
-    problem.save;
+    problem.save()
     res.send(problem);
   }
   catch (error) {
-    console.log(error);
+    console.log("HIII")
+
   }
 
 
@@ -537,7 +538,7 @@ async function RecieveMail(req, res, next) {
 
   var userId = req.user._id;
   var string = req.body.dataUrl;
-  var email=await User.findById(userId).select({email:1});
+  var email = await User.findById(userId).select({ email: 1 });
   const doc = new jsPDF();
   doc.addImage(string, 'JPEG', 15, 15, 170, 0);
   doc.save("Course_Completion_Certificate.pdf");
@@ -562,7 +563,7 @@ async function removeCourseReview(req, res, next) {
     // res.send(x.review);
     console.log(username);
     const reviewx = await CourseTable.updateOne({ "_id": courseId },
-      { $pull: { "review":{"username":username }}},
+      { $pull: { "review": { "username": username } } },
     );
 
     const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
@@ -587,7 +588,7 @@ async function removeInstructorReview(req, res, next) {
   instructorId = req.body.instructorId;
   try {
     const reviewx = await User.updateOne({ "_id": instructorId, "instructorReview.username": username },
-      { "$pull": { "instructorReview":{"username":username} } }
+      { "$pull": { "instructorReview": { "username": username } } }
     );
 
     const R = await User.updateOne({ "_id": userId, "purchasedCourses.courseID": courseId },
