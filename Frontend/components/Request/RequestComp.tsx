@@ -10,6 +10,7 @@ import axios from 'axios';
 type Props = {
   Type: "Report" | "Refund",
   ShowOnly?: boolean,
+  returnPath?: string,
 }
 
 const RequestComp = (props: Props) => {
@@ -81,7 +82,7 @@ const RequestComp = (props: Props) => {
         </div>
         <p>We will Respond with in 3 to 5 working days</p>
         <p>Thank you for your patience.</p>
-        <Link href='/User/Profile?Profile=Tickets'>
+        <Link href={props.returnPath ? props.returnPath :'/User/Profile?Profile=Tickets'}>
           <button className={FormButton}>{props.Type === 'Report' ? "View My Reports" : "View my Refund State"}</button>
         </Link>
 

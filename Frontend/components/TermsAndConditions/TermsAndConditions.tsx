@@ -20,6 +20,7 @@ const TermsAndConditions = (props: Props) => {
       router.push({
         pathname: 'http://localhost:3000/Auth'
       });
+      localStorage.clear();
     }
 
     const termsRef = useRef<HTMLDivElement>(null);
