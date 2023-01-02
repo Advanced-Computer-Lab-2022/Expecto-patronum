@@ -145,11 +145,11 @@ const Instructor = (props: Props) => {
           </div>
 
           <div className='sb:max-w-[30%] sb:w-[30%] h-fit max-h-[27rem] rounded-lg border-2 shadow-lg'>
-            <h1 className='my-2 text-center'>We owe you more than Amount.<br />Here is your Amount Owed per month:</h1>
+            <h1 className='my-2 text-center'>We owe you more than money.<br />Here is your money Owed per month:</h1>
             <div className='overflow-x-hidden overflow-y-auto border-t-1.5 mb-3 sb-max:h-40 max-h-[20rem]'>
               {isAmountLoading && <MonthlyCardSkeleton count={4} />}
               {
-                amountOwed.length === 0 ? <p className='text-xl mt-3 text-center'>There are no current data to be shown.</p> : amountOwed.map((amount: any, index: number) => (
+                amountOwed.length === 0 ? <p className='text-xl mt-3 text-center'>You are up to date.</p> : amountOwed.map((amount: any, index: number) => (
                   <MonthlyCard key={index} amount={amount} />
                 ))
               }

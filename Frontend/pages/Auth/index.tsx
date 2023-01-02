@@ -152,7 +152,6 @@ const LoginForm = (props: { setIsLogin: any }) => {
   }
 
   async function Submit(data: any) {
-    console.log(data)
     try {
       SetLoading(true)
       let res = await axios.post('http://localhost:5000/User/login', {
