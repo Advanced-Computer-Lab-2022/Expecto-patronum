@@ -7,6 +7,7 @@ import DataContext from '../../../context/DataContext';
 import { SiCisco, SiCplusplus, SiHtml5, SiIntellijidea, SiJava, SiJavascript, SiNodedotjs, SiPhp, SiPython, SiReact } from 'react-icons/si';
 import { RiFileExcel2Line } from 'react-icons/ri';
 import { BsCpu } from 'react-icons/bs';
+import { AES } from 'crypto-js';
 
 type Props = {
     addToWishlist?: any,
@@ -38,10 +39,16 @@ const SmallCourseCard = (props: Props) => {
     function kFormatter(number: number) {
       return Math.abs(number) > 999 ? (Math.sign(number)*(Math.abs(number)/1000)).toFixed(0) + 'K' : Math.sign(number)*Math.abs(number);
     }
+
+    const encryptId = (str: string | CryptoJS.lib.WordArray) => {
+      const ciphertext = AES.encrypt(str, 'secretPassphrase');
+      return encodeURIComponent(ciphertext.toString());
+    }
+    const encryptedId = encryptId(props.course._id);
   
     return (
     <div className={`${props.className ? props.className: 'mr-4 hover:scale-[1.01]'} rounded-2xl z-10 relative bg-white shadow-md max-w-[12.563rem] h-[17rem] hover:shadow-lg transition-all duration-200`}>
-        <Link href={`/Courses/${props.course._id ? props.course._id: '638773fbbbdc935c907894ce'}`} className="cursor-pointer relative">
+        <Link href={`/Courses/${encryptedId}`} className="cursor-pointer relative">
           <div className={`bg-gradient-to-r relative flex h-24 mb-3 justify-center items-center rounded-t-2xl ${props.courseColor(props.course.level)}`}>
             <div className={`relative rounded-full top-6 p-3`}>
               {icons[props.index]}

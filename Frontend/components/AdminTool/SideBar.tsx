@@ -75,6 +75,8 @@ const SideBar = () => {
       }).then((res: { data: any; }) => { return res.data });
       router.push({
         pathname: 'http://localhost:3000/Auth'});
+
+        localStorage.clear();
   }
   
   const showHideDropdown = (e: any) => {

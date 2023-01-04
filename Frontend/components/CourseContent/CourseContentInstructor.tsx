@@ -49,7 +49,7 @@ const CourseContentInstructor = (props: Props) => {
             </div>
             <ul>
               <li className="flex items-center gap-2 mb-2 ">
-                <OneStar rating={props.instructorData.instructorRating.avg}></OneStar>
+                <OneStar rating={props.instructorData.instructorRating?.avg}></OneStar>
               </li>
 
               <li className="flex items-center gap-2 mb-2">
