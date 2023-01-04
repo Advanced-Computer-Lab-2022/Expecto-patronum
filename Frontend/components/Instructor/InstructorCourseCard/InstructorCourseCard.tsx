@@ -4,6 +4,7 @@ import DataContext from '../../../context/DataContext';
 import OneStar from '../../shared/rating/OneStar';
 import { TbDiscount2 } from 'react-icons/tb';
 import classNames from 'classnames';
+import { AES } from 'crypto-js';
 
 type Props = {
     course: any,
@@ -20,6 +21,12 @@ const InstructorCourseCard = (props: Props) => {
         const price = Math.max((Math.floor(props.course.discountPrice * Rate.rate) - 0.01), 0);
         return price === 0 ? 'FREE': Rate.curr + " " + price.toLocaleString();
     }
+
+    const encryptId = (str: string | CryptoJS.lib.WordArray) => {
+        const ciphertext = AES.encrypt(str, 'secretPassphrase');
+        return encodeURIComponent(ciphertext.toString());
+    }
+    const encryptedId = encryptId(props.course._id);
 
   return (
     <div className={`${!props.isViewList ? 'flex-col': 'sb-max:flex-col'} flex relative bg-white mb-10 rounded-xl shadow-md hover:shadow-lg transition-all duration-200`}>
@@ -38,7 +45,7 @@ const InstructorCourseCard = (props: Props) => {
                 <p className={`${!props.isViewList ? '' : 'sb:mr-32'} overflow-hidden whitespace-nowrap text-ellipsis`}>{props.course.summary}</p>
             </div>
         </div>
-        <Link href={`/Courses/${props.course._id}`} className='whitespace-nowrap absolute text-sm bottom-5 right-5 rounded-full bg-input text-white shadow-md hover:shadow-lg border-1.5 border-input hover:bg-white hover:text-input transition-all duration-300 px-2 py-0.5'>Open Course</Link>
+        <Link href={`/Courses/${encryptedId}`} className='whitespace-nowrap absolute text-sm bottom-5 right-5 rounded-full bg-input text-white shadow-md hover:shadow-lg border-1.5 border-input hover:bg-white hover:text-input transition-all duration-300 px-2 py-0.5'>Open Course</Link>
         <label className={`${!props.isViewList ? `top-34 ${parseInt(props.course.discount?.discount) === 0 ? 'right-4': 'left-3'}`: `sb-max:top-34 ${parseInt(props.course.discount?.discount) === 0 ? 'right-4': 'sb-max:left-3'} sb:top-1.5 sb:right-24`} whitespace-nowrap absolute text-sm font-bold text-[#038470] bg-[#D7FFE0] px-2 py-0.5 rounded-full`}>
             <span className={`${parseInt(props.course.discount?.discount) === 0 ? '': `${lineThrough} text-xs text-gray-500`} relative`}>{Rate.curr} {(Math.floor(props.course.price * Rate.rate) - 0.01).toLocaleString()}</span> <span className={`${parseInt(props.course.discount?.discount) === 0 ? 'hidden': ''} ml-2`}>{getDiscountPrice()}</span>
         </label>
