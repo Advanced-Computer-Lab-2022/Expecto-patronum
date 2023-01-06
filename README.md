@@ -168,6 +168,7 @@ npm install
 
 ```http://localhost:5000
 Admin api
+```
 1)  GET admin/viewCourseRequests
 
 | Query       | Type     | Description|
