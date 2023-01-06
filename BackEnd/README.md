@@ -46,6 +46,181 @@ https://drive.google.com/drive/folders/1mdeqfvAthBCS29tvZFpbaoFKMjAtVijp?usp=sha
 - Handles credit card transactions securly
 - A color pallet that is easy on the eyes
 
+## Code Examples:
+
+**Footer of the website**
+import React from 'react';
+import classNames from 'classnames';
+import { FiFacebook, FiTwitter, FiInstagram, FiLinkedin } from 'react-icons/fi';
+import Link from 'next/link';
+
+type Props = {}
+
+const Footer = (props: Props) => {
+
+  return (
+    <div style={{backgroundColor: '#222222'}} className='text-white mx-0 fluid-container block relative z-50'>
+        <div className='row mx-0'>
+            <div className={footerCol}>
+                <h4 className={colHeader}><div className={colHeaderText}>Website</div></h4>
+                <ul className={colData}>
+                    <li className={colItems}><Link href=''>About Us</Link></li>
+                    <li className={colItems}><Link href=''>Our Services</Link></li>
+                    <li className={colItems}><Link href=''>Privacy Policy</Link></li>
+                    <li className={colItems}><Link href=''>Affiliate Program</Link></li>
+                </ul>
+            </div>
+            <div className={footerCol}>
+                <h4 className={colHeader}><div className={colHeaderText}>Get Help</div></h4>
+                <ul className={colData}>
+                    <li className={colItems}><Link href=''>FAQ</Link></li>
+                    <li className={colItems}><Link href=''>Shopping</Link></li>
+                    <li className={colItems}><Link href=''>Returns</Link></li>
+                    <li className={colItems}><Link href=''>Order Status</Link></li>
+                    <li className={colItems}><Link href=''>Payment Options</Link></li>
+                </ul>
+            </div>
+            <div className={footerCol}>
+                <h4 className={colHeader}><div className={colHeaderText}>Online Shop</div></h4>
+                <ul className={colData}>
+                    <li className={colItems}><Link href=''>Web Applications</Link></li>
+                    <li className={colItems}><Link href=''>Mobile Applications</Link></li>
+                    <li className={colItems}><Link href=''>Desktop Applications</Link></li>
+                    <li className={colItems}><Link href=''>Other</Link></li>
+                </ul>
+            </div>
+            <div className={footerCol}>
+                <h4 className={colHeader}><div className={colHeaderText}>Follow Us</div></h4>
+                <ul className={`${colData} flex flex-wrap`}>
+                    <li><button className={colIcons}><FiFacebook /></button></li>
+                    <li><button className={colIcons}><FiTwitter /></button></li>
+                    <li><button className={colIcons}><FiInstagram /></button></li>
+                    <li><button className={colIcons}><FiLinkedin /></button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  )
+}
+
+const footerCol = classNames(`col-6 col-md-3 p-4`);
+const colHeader = classNames(`w-fit relative right-3 border-b-[3px] border-canadian-red px-1 pb-1 skew-x-[40deg]`);
+const colHeaderText = classNames(`-skew-x-[40deg] ml-2`);
+const colData = classNames(`text-left mt-3 ml-1`);
+const colItems = classNames(`text-sm text-bright-gray py-1.5 hover:scale-105 hover:text-white transition-all duration-300 w-fit`);
+const colIcons = classNames(`text-sm p-1.25 flex border-canadian-red text-canadian-red hover:text-white hover:border-white items-center justify-center m-2 z-0 scale-125 rounded-full border-1.5 before:content-[""] before:inline-block before:absolute before:z-behind before:bottom-1 before:right-2.75 before:w-6 before:h-6  before:rounded-full hover:scale-135 transition-all duration-300`);
+
+export default Footer;
+**End of footer code**
+
+**Code for instructor course card**
+import Link from 'next/link';
+import React, { useContext } from 'react';
+import DataContext from '../../../context/DataContext';
+import OneStar from '../../shared/rating/OneStar';
+import { TbDiscount2 } from 'react-icons/tb';
+import classNames from 'classnames';
+
+type Props = {
+    course: any,
+    color: any,
+    isViewList: any,
+}
+
+const InstructorCourseCard = (props: Props) => {
+
+    const { Rate } = useContext(DataContext);
+    const saleRibbon = classNames(`after:content-[""] after:rounded-br-md after:absolute ${!props.isViewList ? 'after:-top-1.5 before:-top-2.5 after:w-28 after:border-t-[15px] after:border-b-[15px]': 'sb-max:after:-top-1.5 sb-max:before:-top-2.5 sb:after:-top-1.5 sb:before:-top-2.5 sb-max:after:w-28 sb:after:w-32 sb:after:border-t-[20px] sb:after:border-b-[20px] sb-max:after:border-t-[15px] sb-max:after:border-b-[15px]'} after:-right-4 before:-right-4 after:z-behind after:bg-canadian-red after:border-l-white after:border-l-[20px] after:border-t-transparent after:border-b-transparent before:absolute before:border-l-[5px] before:border-l-red-800 before:border-t-[5px] before:border-t-transparent`);
+
+    function getDiscountPrice() {
+        const price = Math.max((Math.floor(props.course.discountPrice * Rate.rate) - 0.01), 0);
+        return price === 0 ? 'FREE': Rate.curr + " " + price.toLocaleString();
+    }
+
+  return (
+    <div className={`${!props.isViewList ? 'flex-col': 'sb-max:flex-col'} flex relative bg-white mb-10 rounded-xl shadow-md hover:shadow-lg transition-all duration-200`}>
+        <div className={`${props.color} ${!props.isViewList ? 'w-full rounded-t-xl px-3': 'sb-max:w-full sb-max:rounded-t-xl sb-max:px-3 w-52 min-w-[13rem] sb:rounded-l-xl pl-8 pr-4'} bg-gradient-to-br text-white py-3 h-auto flex flex-col`}>
+            <p className='opacity-70 mt-auto'>COURSE SUBJECT</p>
+            <p className={`text-2xl my-2 pl-2 -indent-2 ${!props.isViewList ? 'line-clamp-1' : 'sb-max:line-clamp-1'}`}>{props.course.subject}</p>
+            <p className='opacity-70 mb-auto'>{parseInt(props.course.courseHours)} HOURS</p>
+        </div>
+        <div className={`${!props.isViewList ? 'mb-10': 'sb-max:mb-10 mb-10'} px-8 flex w-full min-w-0 justify-between h-full`}>
+            <div className='py-4 space-y-2 min-w-0'>
+                <div className={`${!props.isViewList ? '': 'sb:mr-22'} mt-3`}>
+                    <p className='opacity-50'>TITLE</p>
+                    <h1 className='text-2xl'>{props.course.title}</h1>
+                </div>
+                <p>Difficulty: <span className='italic'>{props.course.level === 'AllLevels' ? 'All Levels': props.course.level}</span></p>
+                <p className={`${!props.isViewList ? '' : 'sb:mr-32'} overflow-hidden whitespace-nowrap text-ellipsis`}>{props.course.summary}</p>
+            </div>
+        </div>
+        <Link href={`/Courses/${props.course._id}`} className='whitespace-nowrap absolute text-sm bottom-5 right-5 rounded-full bg-input text-white shadow-md hover:shadow-lg border-1.5 border-input hover:bg-white hover:text-input transition-all duration-300 px-2 py-0.5'>Open Course</Link>
+        <label className={`${!props.isViewList ? `top-34 ${parseInt(props.course.discount?.discount) === 0 ? 'right-4': 'left-3'}`: `sb-max:top-34 ${parseInt(props.course.discount?.discount) === 0 ? 'right-4': 'sb-max:left-3'} sb:top-1.5 sb:right-24`} whitespace-nowrap absolute text-sm font-bold text-[#038470] bg-[#D7FFE0] px-2 py-0.5 rounded-full`}>
+            <span className={`${parseInt(props.course.discount?.discount) === 0 ? '': `${lineThrough} text-xs text-gray-500`} relative`}>{Rate.curr} {(Math.floor(props.course.price * Rate.rate) - 0.01).toLocaleString()}</span> <span className={`${parseInt(props.course.discount?.discount) === 0 ? 'hidden': ''} ml-2`}>{getDiscountPrice()}</span>
+        </label>
+        <label className={`${!props.isViewList ? 'top-[10.6rem]': 'sb-max:top-[10.6rem] sb:top-[3.9rem]'} right-3 text-white absolute px-1 py-0.5 rounded-full z-0 ${parseInt(props.course.discount?.discount) === 0 ? 'hidden': saleRibbon}`}><span className={`${!props.isViewList ? 'bottom-1.25 left-4': 'sb-max:bottom-1.25 sb-max:left-4 left-3'} relative`}>SAVE {props.course.discount?.discount}%</span></label>
+        <Link href={`/Instructor/Settings/AddDiscount?courseID=${props.course._id}`} as='/Instructor/Settings/AddDiscount/' className={`${(!props.isViewList ? 'bottom-5 left-4': 'sb:bottom-5 sb:right-38 sb-max:bottom-5 sb-max:left-4')} whitespace-nowrap absolute text-sm rounded-full text-input bg-white shadow-md hover:shadow-lg border-1.5 border-input hover:text-white hover:bg-input transition-all duration-300 px-2 py-0.5`}>Add Discount</Link>
+        <OneStar className='bg-white rounded-tr-xl rounded-bl-xl absolute top-0 right-0 py-2 px-3 shadow-md hover:shadow-sm transition-all duration-200' rating={props.course.rating === undefined ? 3.8: props.course.rating.avg} />
+    </div>
+  )
+}
+
+const lineThrough = classNames('after:content-[""] after:pointer-events-none after:absolute after:h-[0.075rem] after:w-full after:bg-gray-500 after:left-0 after:rotate-[-10deg] after:top-1');
+
+export default InstructorCourseCard;
+**End of code for instructor course card**
+
+**Register Function**
+async function register(req, res) {
+  console.log("req.body.password");
+  const saltHash = genPassword(req.body.password);
+
+  const salt = saltHash.salt;
+  const hash = saltHash.hash;
+  let EmailLowerCase = req.body.email.toLowerCase();
+  var exists1 = await User.findOne({ "email": EmailLowerCase });
+
+  var exists2 = await User.findOne({ "username": req.body.username });
+  if (exists1 || exists2) {
+    if (exists1 && exists2) {
+      res.status(400).send("username and email already used");
+    }
+    else if (exists1) {
+      res.status(400).send("email already used");
+    }
+    else {
+      res.status(400).send("username already used");
+    }
+  }
+  else {
+    const newUser = new User({
+      username: req.body.username,
+      hash: hash,
+      salt: salt,
+      gender: req.body.gender,
+      email: EmailLowerCase,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      role: req.body.role
+    });
+
+
+    newUser.save((err, newUser) => {
+      if (err) {
+        console.log(err);
+        res.status(400).send("Error registering new user please try again.");
+      }
+      else {
+        let token = CreateToken({ id: newUser._id, email: newUser.email });
+        MailValidate(newUser.email, "http://localhost:3000/Auth/FeedBack/EmailConfirmed", token);
+        res.status(200).send("Verify your email");
+      }
+
+    })
+  }
+
+};
+**End of register function**
 
 ## Installation
 
