@@ -23,16 +23,30 @@ This project is currently in build 1.0, with no known bugs or issues.
 - Spaces and indentations are used to identify loops,fuctions,conditions,..ets
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
 
 https://drive.google.com/drive/folders/1mdeqfvAthBCS29tvZFpbaoFKMjAtVijp?usp=sharing
 
 ![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc1.png?raw=true "Optional Title")
-
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc2.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc3.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc4.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc5.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc6.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc7.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc8.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc9.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc10.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc11.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc12.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc13.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc14.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc15.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc16.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc17.png?raw=true)
 
 ## Tech Stack
 
-**Client:** Next.js, TailwindCSS, Typescript
+**Client:** Next.js(React Framework), TailwindCSS, Typescript
 
 **Server:** Node, Express,Mongoose,Mongodb
 
@@ -154,6 +168,7 @@ npm install
 
 ```http://localhost:5000
 Admin api
+```
 1)  GET admin/viewCourseRequests
 
 | Query       | Type     | Description|
@@ -493,6 +508,9 @@ will not increase the progress
 - StackOverflow 
 - The 5 team members who created this project
 
+
+## How the project was divided
+
 --------The Team was divided into 3 members who worked on the front end(Radwan, David, Mohamed) and 2 members who worked on the backend and the readme file (Ahmad, Mostafa)
 
 
@@ -558,6 +576,7 @@ edit his/her mini biography or email,view the questions with the correct solutio
 Mostafa Ashraf: open all the items inside a course he/she is registered for including videos and excercises, create a multiple choice exam with 4 choices per question,
 define a promotion for the course (% discount) and for how long,change his/her password,receive an email to change a forgotten password,rate an instructor
 rate a course,watch a video from a course he/she is registered for
+
 --------------------------------------------------------------------------------------------------------------------------------------
 
 -------Sprint 2:
