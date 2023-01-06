@@ -28,23 +28,23 @@ const CertficateTemplate = (props: Props) => {
   }, [])
 
 
-  // useEffect(() => {
-  //   if (props.SendEmail && FirstTime) {
-  //     //@ts-ignore
-  //     html2canvas(document.querySelector('#certificate-template')).then(async canvas => {
-  //       console.log(canvas.toDataURL('image/jpeg', 0.5));
-  //       Response = await axios.post("http://localhost:5000/User/RecieveMail", {
-  //         dataUrl: canvas.toDataURL('image/jpeg', 0.5),
-  //       })
-  //       viewPopupMessage(true, "Congratulations You have Passed The Exam and Received certificate on Your Mail!");
+  useEffect(() => {
+    if (props.SendEmail && FirstTime) {
+      //@ts-ignore
+      html2canvas(document.querySelector('#certificate-template')).then(async canvas => {
+        console.log(canvas.toDataURL('image/jpeg', 0.5));
+        Response = await axios.post("http://localhost:5000/User/RecieveMail", {
+          dataUrl: canvas.toDataURL('image/jpeg', 0.5),
+        })
+        viewPopupMessage(true, "Congratulations You have Passed The Exam and Received certificate on Your Mail!");
 
-  //     }).catch(err => console.log(err));
+      }).catch(err => console.log(err));
 
-  //   }
-  //   else {
-  //     setFirstTime(true);
-  //   }
-  // }, [])
+    }
+    else {
+      setFirstTime(true);
+    }
+  }, [])
 
 
   const handleDownload = () => {

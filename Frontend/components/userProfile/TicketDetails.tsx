@@ -46,16 +46,15 @@ const TicketDetails = (props: Props) => {
     SetShowFollowUp(true)
   }
   async function HandleFollowBack() {
+    console.log("I AM HERE")
 
     const value = FollowUpRef.current?.value || "";
     setLoading(true);
-    console.log(props.data._id)
     try {
       await axios.put("http://localhost:5000/user/followUpOnProblem", {
         problemID: props.data._id,
         followUp: FollowUpRef.current?.value || ""
       })
-
 
       props.data.comment.push(value);
       SetShowFollowUp(false)
@@ -97,7 +96,7 @@ const TicketDetails = (props: Props) => {
         </div>
         <TextBox ShowOnly={true} Text={props.data.body} ></TextBox>
         <div>
-          {props.data.comment.map((item, index) => {
+          {props.data.comment && props.data.comment.map((item, index) => {
             return (
               <div className="mt-4" key={index}>
                 <TextBox ShowOnly Text={item} LabelTitle={"Follow Up" + " ." + index} ></TextBox>

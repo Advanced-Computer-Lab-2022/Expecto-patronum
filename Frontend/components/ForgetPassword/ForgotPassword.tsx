@@ -11,7 +11,7 @@ type Props = {}
 const ForgotPassword = (props: Props) => {
 
   const [Success, setSuccess] = React.useState<{ Success: boolean, Message: string }>({ Success: false, Message: "" });
-  let emailRef = React.useRef<any>();
+  let emailRef = React.useRef<HTMLInputElement>(null);
 
   const [Loading, setLoading] = React.useState(false);
   let emailData = { ref: emailRef, name: "Email", placeholder: "Type your Email", required: true };
@@ -21,6 +21,7 @@ const ForgotPassword = (props: Props) => {
 
 
   async function Submit(e: any) {
+    console.log(emailRef.current.value)
     setLoading(true);
     e.preventDefault();
     await axios

@@ -100,9 +100,9 @@ const CourseCard2 = (props: Props) => {
                     <h1 className={`${!props.isViewList ? '' : 'sb:mr-22'} mt-3 text-xl w-full font-bold tracking-wide`}>{props.course.title}</h1>
                     <div className='min-w-0 row p-0 flex items-center justify-between text-sm'>
                         <div className='flex col items-center justify-center mb-0.5 -space-x-8'>
-                            <label className='text-sm mt-0.5 font-bold'>{props.course.rating.avg.toFixed(1)}</label>
-                            <BigRating className='scale-50 whitespace-nowrap' Rate={props.course.rating.avg} RateAction={false} />
-                            <label className='text-xs text-[#b2b6bb] mt-px whitespace-nowrap'>({getTotalRatings()} ratings)</label>
+                            <label className={`${props.course.rating.avg === 0.0 ? 'hidden': ''} text-sm mt-0.5 font-bold`}>{props.course.rating.avg.toFixed(1)}</label>
+                            <div className={`${props.course.rating.avg === 0.0 ? 'hidden': ''}`}><BigRating className='scale-50 whitespace-nowrap' Rate={props.course.rating.avg} RateAction={false} /></div>
+                            <label className='text-xs text-[#b2b6bb] mt-px whitespace-nowrap'>{props.course.rating.avg === 0.0 ? 'Not yet rated': `(${getTotalRatings()} ratings)`}</label>
                         </div>
                         <p className='whitespace-nowrap text-[#8d95a1] col'>Level: <span className='italic font-bold text-[#384557] tracking-wide'>{props.course.level === 'AllLevels' ? 'All Levels' : props.course.level}</span></p>
                         <label className='whitespace-nowrap text-[#8d95a1] col'>Time: <span className='font-bold text-[#384557]'>{getCourseHours()}</span></label>

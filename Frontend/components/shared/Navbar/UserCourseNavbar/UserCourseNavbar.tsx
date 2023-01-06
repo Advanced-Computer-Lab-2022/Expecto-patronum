@@ -62,13 +62,15 @@ const UserCourseNavbar = (props: Props) => {
   return (
     <div className={Container}>
       <div className={LogoContainer}>
-        <div className={imageContainer}>
-          <img
-            className='object-contain'
-            src="/images/logo2.png"
-            alt={"CGP"}
-          />
-        </div>
+        <Link href={"/User"}>
+          <div className={imageContainer}>
+            <img
+              className='object-contain'
+              src="/images/logo2.png"
+              alt={"CGP"}
+            />
+          </div>
+        </Link>
         <div>{CourseChoosen.title}</div>
       </div>
 

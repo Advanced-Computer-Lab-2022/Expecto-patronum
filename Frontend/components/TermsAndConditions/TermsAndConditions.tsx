@@ -20,6 +20,7 @@ const TermsAndConditions = (props: Props) => {
       router.push({
         pathname: 'http://localhost:3000/Auth'
       });
+      localStorage.clear();
     }
 
     const termsRef = useRef<HTMLDivElement>(null);
@@ -47,8 +48,8 @@ const TermsAndConditions = (props: Props) => {
 
 
   return (
-    <div ref={termsRef} className={`${props.className} ${props.isOpened ? '': 'scale-0'} absolute z-[100] backdrop-blur-sm mt-2.5 h-full right-0 left-0 top-0 text-right transition-all duration-300`}>
-        <div className='w-[48rem] bg-white rounded-lg pb-6 mx-auto h-[34rem] relative'>
+    <div ref={termsRef} className={`${props.className} ${props.isOpened ? '': 'scale-0'} fixed z-[100] backdrop-blur-sm mt-2.5 h-full right-0 left-0 top-0 text-right transition-all duration-300`}>
+        <div className='w-[48rem] nv-max:w-screen bg-white rounded-lg pb-6 mx-auto h-[34rem] relative'>
             <h1 className='text-center text-2xl font-bold py-2'>{props.title ? props.title :'Terms & Conditions'}</h1>
             <div className='overflow-x-hidden max-h-[80%] mx-6 px-3 border-1.5 rounded-lg text-center'>
                 In General

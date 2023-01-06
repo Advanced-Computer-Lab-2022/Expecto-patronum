@@ -152,7 +152,7 @@ const Instructor = (props: Props) => {
           </div>
         </section>
       </div>
-      <TermsAndConditions title='Accept Contract & Rights' className="-top-20" isOpened={isOpened} setIsOpened={setIsOpened} setIsAccepted={setIsAccepted} />
+      <TermsAndConditions title='Accept Contract & Rights' className="" isOpened={isOpened} setIsOpened={setIsOpened} setIsAccepted={setIsAccepted} />
     </Layout>
   )
 }

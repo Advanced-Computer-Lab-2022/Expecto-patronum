@@ -10,13 +10,13 @@ const ProblemSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'UserSchema'
     },
-    username:{
-        type:String
+    username: {
+        type: String
     },
-    status:{
-        type:String,
-        enum:['unseen','resolved','pending'],
-        default:'unseen'
+    status: {
+        type: String,
+        enum: ['unseen', 'resolved', 'pending'],
+        default: 'unseen'
     },
     body: {
         type: String
@@ -25,11 +25,11 @@ const ProblemSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'CourseSchema'
     },
-    courseTitle:{
-        type:String
+    courseTitle: {
+        type: String
     },
-    startDate:{
-        type:Date
+    startDate: {
+        type: Date
     },
     courseTitle: {
         type: String

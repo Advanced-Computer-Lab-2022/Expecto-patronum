@@ -62,6 +62,7 @@ const Tickets = (props: Props) => {
       axios.put("http://localhost:5000/User/viewPreviousReports").then((res) => {
         setData(res.data);
         setLoading(false);
+        console.log(res.data)
 
       });
     }
