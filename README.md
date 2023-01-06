@@ -38,7 +38,11 @@ https://drive.google.com/drive/folders/1mdeqfvAthBCS29tvZFpbaoFKMjAtVijp?usp=sha
 ![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc10.png?raw=true)
 ![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc11.png?raw=true)
 ![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc12.png?raw=true)
-
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc13.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc14.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc15.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc16.png?raw=true)
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc17.png?raw=true)
 
 ## Tech Stack
 
