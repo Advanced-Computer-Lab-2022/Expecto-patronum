@@ -1,0 +1,138 @@
+--------The Team was divided into 3 members who worked on the front end(Radwan, David, Mohamed) and 2 members who worked on the backend and the readme file (Ahmad, Mostafa)
+
+
+-------Sprint 1:
+
+Front End:
+
+Mohamed Salem: Select Country, view all the titles of the courses available including the total hours of the course and course rating, filter the courses based on a subject and/or rating,
+filter the courses based on price (price can be FREE),search for a course based on course title or subject or instructor
+
+Radwan Waleed: view all the titles of the courses given by him/her, filter the courses given by him/her based on a subject or price,search for a course given by him/her based on course title or subject or instructor
+create a new course and fill in all its details inclding title, subtitles, price and short summary about the entire course
+
+David Samy: add another administrator with a set username and password,add instructors and create their usernames and passwords, add corporate trainees and create their usernames and passwords,
+(choose a course from the results and view (but not open) its details including course subtitles, excercises , total hours of each subtitle, total hours of the course and price (including % discount if applicable) according to the country selected),
+
+
+Back End:
+
+Mostafa Ashraf:Select Country,  filter the courses based on a subject and/or rating,
+filter the courses based on a subject and/or rating, filter the courses given by him/her based on a subject or price
+filter the courses based on price (price can be FREE)
+search for a course based on course title or subject or instructor
+choose a course from the results and view (but not open) its details including course subtitles, excercises , total hours of each subtitle, total hours of the course and price (including % discount if applicable) according to the country selected
+
+
+Ahmad Haytham: view all the titles of the courses available including the total hours of the course and course rating, view all the titles of the courses given by him/her
+search for a course given by him/her based on course title or subject or instructor
+create a new course and fill in all its details inclding title, subtitles, price and short summary about the entire course
+add another administrator with a set username and password
+add instructors and create their usernames and passwords,
+add corporate trainees and create their usernames and passwords
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+-------Sprint 2:
+
+Front End:
+
+Mohamed Salem:view and accept the contract which includes all the rights to the posted videos and materials as well as the % taken by the company on each video per registered trainee,
+upload a video link from YouTube under each subtitle and enter a short description of the video
+upload a video link from YouTube as a preview to the course,view the ratings and reviews on all his/her courses,
+receive an email to change a forgotten password
+
+Radwan Waleed:open all the items inside a course he/she is registered for including videos and excercises,edit his/her mini biography or email
+define a promotion for the course (% discount) and for how long
+change his/her password,view his/her rating and reviews as an instructor,view the ratings and reviews on all his/her courses
+
+David Samy: create a multiple choice exam with 4 choices per question, set the answers (not visible for the trainee) for multiple choice exercises,
+solve a multiple choice exercise by choosing the correct answer
+submit the answers to the exercise after completing it
+view his/her grade from the exercise
+view the questions with the correct solution to view the incorrect answers
+
+
+Back End:
+
+Ahmad Haytham: view his/her rating and reviews as an instructor,solve a multiple choice exercise by choosing the correct answer,submit the answers to the exercise after completing it
+view his/her grade from the exercise,view the ratings and reviews on all his/her courses
+edit his/her mini biography or email,view the questions with the correct solution to view the incorrect answers
+
+
+Mostafa Ashraf: open all the items inside a course he/she is registered for including videos and excercises, create a multiple choice exam with 4 choices per question,
+define a promotion for the course (% discount) and for how long,change his/her password,receive an email to change a forgotten password,rate an instructor
+rate a course,watch a video from a course he/she is registered for
+--------------------------------------------------------------------------------------------------------------------------------------
+
+-------Sprint 3:
+
+Front End: 
+
+Mohamed Salem:view a preview video of the course and the course outline before registering for it,view the most viewed/ most popular courses,write notes while watching the video
+download the notes as a PDF,request access to a specific course they do not have access to,sign up for an account as an individual trainee using a username, email, password, first name, last name and gender
+view and accept the website/ company refund/ payment policy while signing up,view a preview video of the course and the course outline before registering for it
+view the most viewed/ most popular courses
+
+
+
+David Samy: view reported problems - should automaticalled be marked as "unseen",mark reported problems as "resolved" or "pending",refund an amount to a trainee to their wallet,
+view course requests from corporate trainees, download the certificate as a PDF from the website
+grant corporate trainees access to specific courses,
+set a promotion (% sale) for specific courses, several courses or all courses,receive a certificate as a PDF after completing the course via email
+
+
+Radwan Waleed: enter their credit card details to pay for a course they want to register for,pay for a course,view the amount available in their wallet from refunded courses
+see his/her progress in the course as a percentage of how much of the course has been completed so far,log in using a username and password,log out
+view the amount of money owed per month,report a problem with a course. The problem can be "technical", "financial" or "other"
+see all previously repoted problems and their statuses,follow up on an unresolved problem
+
+
+Back End:
+
+Ahmad Haytham :view reported problems - should automaticalled be marked as "unseen",mark reported problems as "resolved" or "pending",report a problem with a course. The problem can be "technical", "financial" or "other"
+see all previously repoted problems and their statuses,follow up on an unresolved problem,write notes while watching the video
+download the notes as a PDF,see a list of all the courses he/she is enrolled in on their profile, pay for a course,
+view the amount available in their wallet from refunded courses
+
+
+Mostafa Ashraf: refund an amount to a trainee to their wallet,view course requests from corporate trainees,grant corporate trainees access to specific courses
+set a promotion (% sale) for specific courses, several courses or all courses,request access to a specific course they do not have access to,sign up for an account as an individual trainee using a username, email, password, first name, last name and gender
+view the most viewed/ most popular courses,enter their credit card details to pay for a course they want to register for,request a refund only if less than 50% of the course has been attended,
+see his/her progress in the course as a percentage of how much of the course has been completed so far,see a list of all the courses he/she is enrolled in on their profile
+log in using a username and password,log out
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
