@@ -27,6 +27,8 @@ This project is currently in build 1.0, with no known bugs or issues.
 
 https://drive.google.com/drive/folders/1mdeqfvAthBCS29tvZFpbaoFKMjAtVijp?usp=sharing
 
+![Alt text](https://github.com/Advanced-Computer-Lab-2022/Expecto-patronum/blob/main/ACL%20screenshots/sc1.png?raw=true "Optional Title")
+
 
 ## Tech Stack
 
