@@ -62,7 +62,7 @@ async function goToPage(Page: any) {
     })
     .then((res) => {
       console.log(res.data);
-      const q = res.data;
+      const q = res.data.problems;
       console.log(q);
       setReports(q);
     });

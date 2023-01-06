@@ -159,7 +159,7 @@ const card = await stripe.customers.retrieveSource(
   var amount = (req.body.amount*100);
 
   const course = await Course.findOne({ "_id": req.body.courseID });
-  amount = course.discountPrice;
+  amount = (course.discountPrice*100);
 
   if(req.body.customerId){
   const charge = await stripe.charges.create({

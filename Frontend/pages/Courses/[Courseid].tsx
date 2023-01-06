@@ -30,8 +30,8 @@ const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
   useEffect(() => {
     //@ts-ignore
     let LocalStorage = JSON.parse(localStorage.getItem('UserInfo'));
-    console.log(LocalStorage.role)
-    if (LocalStorage.role === 'CorporateTrainee') {
+    console.log(LocalStorage?.role)
+    if (LocalStorage?.role === 'CorporateTrainee') {
       setIsCorp(true)
 
     }
@@ -63,10 +63,10 @@ const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
   }
 
   const instructorData = {
-    instructorRating: props.data.instructor.instructorRating,
+    instructorRating: props.data.instructor?.instructorRating,
     biography: props.data.instructor?.biography,
-    firstname: props.data.instructor.firstname,
-    lastname: props.data.instructor.lastname,
+    firstname: props.data.instructor?.firstname,
+    lastname: props.data.instructor?.lastname,
 
   }
   const RatingData: { one: number, two: number, three: number, four: number, five: number, avg: number } = props.data.course.rating
