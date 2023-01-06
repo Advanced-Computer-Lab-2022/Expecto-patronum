@@ -508,6 +508,9 @@ will not increase the progress
 - StackOverflow 
 - The 5 team members who created this project
 
+
+## How the project was divided
+
 --------The Team was divided into 3 members who worked on the front end(Radwan, David, Mohamed) and 2 members who worked on the backend and the readme file (Ahmad, Mostafa)
 
 
@@ -573,6 +576,7 @@ edit his/her mini biography or email,view the questions with the correct solutio
 Mostafa Ashraf: open all the items inside a course he/she is registered for including videos and excercises, create a multiple choice exam with 4 choices per question,
 define a promotion for the course (% discount) and for how long,change his/her password,receive an email to change a forgotten password,rate an instructor
 rate a course,watch a video from a course he/she is registered for
+
 --------------------------------------------------------------------------------------------------------------------------------------
 
 -------Sprint 2:
