@@ -696,8 +696,10 @@ will not increase the progress
 
 - Back end testing was done using postman to check the correctness of data and table updates
 - front end testing was done by running the front end and seeing the look and functionality
+- to run: open postman, import, link, paste any link
 - collection 1: https://api.postman.com/collections/22942928-6bc72154-d208-4a13-bd38-61f621bbfec9?access_key=PMAT-01GP48Y1GHBN6JQZQ5G0WR9YD9
-- collection 2: https://api.postman.com/collections/18649877-6b518462-e4cc-4465-9aec-90e68994a48f?access_key=PMAT-01GP49C3XGY6SN694Q3TJCES7W
+- collection 2: https://api.postman.com/collections/18649877-b4d6dcf5-8f86-4ebd-8b01-d85ff843aff8?access_key=PMAT-01GP4A0KHPNPMJW9507DGEVAPQ
+- collection 3: https://api.postman.com/collections/24528147-1441a56e-fb32-403e-8d6e-ec912ff125bc?access_key=PMAT-01GP4AXC0WP2QSJY55QMSXTGX0
 
 
 
