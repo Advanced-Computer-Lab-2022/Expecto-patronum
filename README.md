@@ -690,6 +690,17 @@ of the student in the course.if video is watched before it
 will not increase the progress
 
 -----------------------------------------------------------------
+
+
+## Tests
+
+- Back end testing was done using postman to check the correctness of data and table updates
+- front end testing was done by running the front end and seeing the look and functionality
+
+
+
+
+
 ## Acknowledgements
 
  - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
