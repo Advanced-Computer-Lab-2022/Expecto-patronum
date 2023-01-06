@@ -46,7 +46,7 @@ https://drive.google.com/drive/folders/1mdeqfvAthBCS29tvZFpbaoFKMjAtVijp?usp=sha
 
 ## Tech Stack
 
-**Client:** Next.js, TailwindCSS, Typescript
+**Client:** React.js with Next.js library, TailwindCSS, Typescript
 
 **Server:** Node, Express,Mongoose,Mongodb
 
