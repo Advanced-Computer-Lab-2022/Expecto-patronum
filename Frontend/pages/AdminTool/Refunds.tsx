@@ -75,7 +75,7 @@ const Refunds = (props: Props) => {
       })
       .then((res) => {
         console.log(res.data);
-        const q = res.data.courses;
+        const q = res.data.refunds;
         console.log(q);
         setRefunds(q);
       });
