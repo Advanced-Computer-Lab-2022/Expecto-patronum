@@ -30,8 +30,7 @@ const Course: NextPage<{ data: UserCourseDataInterface }> = (props) => {
   useEffect(() => {
     //@ts-ignore
     let LocalStorage = JSON.parse(localStorage.getItem('UserInfo'));
-    console.log(LocalStorage.role)
-    if (LocalStorage.role === 'CorporateTrainee') {
+    if (LocalStorage && LocalStorage.role === 'CorporateTrainee') {
       setIsCorp(true)
 
     }

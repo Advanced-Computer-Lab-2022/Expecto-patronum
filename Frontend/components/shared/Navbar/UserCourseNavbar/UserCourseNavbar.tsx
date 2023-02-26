@@ -52,7 +52,6 @@ const UserCourseNavbar = (props: Props) => {
   useEffect(() => {
     //@ts-ignore
     let LocalStorage = JSON.parse(localStorage.getItem('UserInfo'));
-    console.log(LocalStorage.role)
     if (LocalStorage.role === 'CorporateTrainee') {
       setIsCorp(true)
     }
